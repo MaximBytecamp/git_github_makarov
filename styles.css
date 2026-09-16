@@ -433,3 +433,32 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
   .who__head, .who__row { grid-template-columns: minmax(0, 1fr) 62px 62px; }
   .who__row > span { padding: 9px 10px; }
 }
+
+/* ── 10. Блоки главы «Как Git хранит историю» ────────────────── */
+/* Содержимое и его хеш: слева строка, справа имя, которое Git ей дал.
+   Отличающийся символ подсвечивается, чтобы разница была видна сразу. */
+.hashes { margin: 22px 0; border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); background: var(--page); overflow-x: auto; }
+.hashes__row { display: grid; grid-template-columns: minmax(180px, 1fr) 34px minmax(0, 1.2fr); align-items: center; border-bottom: 2px solid var(--rule); }
+.hashes__row:last-child { border-bottom: 0; }
+.hashes__row > * { padding: 11px 15px; font: 400 13.5px/1.5 var(--mono); white-space: nowrap; }
+.hashes__row .arrow { text-align: center; color: var(--ink-faint); padding: 0; }
+.hashes__row .sum { color: var(--fire-deep); font-weight: 700; }
+.hashes mark { background: var(--fire-pale); color: var(--fire-deep); padding: 0 2px; }
+.hashes__head { display: grid; grid-template-columns: minmax(180px, 1fr) 34px minmax(0, 1.2fr); background: var(--ink); color: var(--fire-pale); font: 600 10.5px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; }
+.hashes__head > span { padding: 9px 15px; }
+
+/* Нумерованные шаги: крупная цифра слева, действие справа. */
+.steps { list-style: none; counter-reset: step; margin: 20px 0; padding: 0; }
+.steps li { counter-increment: step; position: relative; margin: 0 0 10px; padding: 11px 16px 11px 58px; border: 2px solid var(--ink); background: var(--page); font-size: 15px; line-height: 1.5; }
+.steps li::before {
+  content: counter(step);
+  position: absolute; left: 0; top: 0; bottom: 0; width: 42px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--ink); color: var(--fire);
+  font: 700 15px/1 var(--mono);
+}
+
+@media (max-width: 560px) {
+  .hashes__row, .hashes__head { grid-template-columns: minmax(150px, 1fr) 26px minmax(0, 1fr); }
+  .hashes__row > *, .hashes__head > span { padding: 9px 10px; font-size: 12px; }
+}

@@ -1,0 +1,22 @@
+{
+  "hash-function.svg": {
+    "title": "File:Cryptographic Hash Function.svg",
+    "caption": "Схема хеш-функции: разные строки дают разные хеши",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Cryptographic_Hash_Function.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Cryptographic_Hash_Function.svg/960px-Cryptographic_Hash_Function.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Cryptographic_Hash_Function.svg",
+    "author": "User:Jorge Stolfi based on Image:Hash_function.svg by Helix84",
+    "license": "Public domain",
+    "credit": "Original work for Wikipedia"
+  },
+  "git.svg": {
+    "title": "File:Git-logo.svg",
+    "caption": "Логотип Git",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Git-logo.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Git-logo.svg/960px-Git-logo.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Git-logo.svg",
+    "author": "Jason Long",
+    "license": "CC BY 3.0",
+    "credit": "Own work using: http://git-scm.com/downloads/logos"
+  }
+}

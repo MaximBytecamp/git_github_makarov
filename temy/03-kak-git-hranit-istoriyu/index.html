@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>1.3 Как Git хранит историю · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Модуль 1 · Что такое контроль версий</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 1 · что такое контроль версий</p>
+          <p class="running__folio">Глава 1.3</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">1.3</span>
+          <h1>Как Git<br>хранит историю</h1>
+          <p class="lead">Внутри Git нет ничего загадочного: он складывает содержимое файлов в папку <code>.git</code> и даёт каждому куску имя, вычисленное из самого содержимого. Разберём это устройство на настоящем репозитории — все выводы в главе получены запуском команд, а не придуманы.</p>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Устройство инструмента</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный, с заглядыванием внутрь</dd></div>
+          <div><dt>Связанные темы</dt><dd>Коммит, индекс, ветки</dd></div>
+          <div><dt>Зачем это знать</dt><dd>Понимать, что происходит при нажатии Commit и почему историю нельзя подменить</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>В этой главе</b>
+          <ol>
+            <li><a href="#s1">Учебный репозиторий</a></li>
+            <li><a href="#s2">Что лежит в папке .git</a></li>
+            <li><a href="#s3">Снимок вместо разницы</a></li>
+            <li><a href="#s4">Хеш: имя из содержимого</a></li>
+            <li><a href="#s5">Четыре вида объектов</a></li>
+            <li><a href="#s6">Цепочка коммитов</a></li>
+            <li><a href="#s7">Опыт: меняем старый коммит</a></li>
+            <li><a href="#s8">Три места и три состояния файла</a></li>
+            <li><a href="#s9">Ветка — это указатель</a></li>
+            <li><a href="#s10">Что происходит при коммите</a></li>
+            <li><a href="#s11">Частые заблуждения</a></li>
+            <li><a href="#s12">Проверьте себя</a></li>
+            <li><a href="#s13">Шпаргалка по главе</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Учебный репозиторий</h2>
+        <p>Всё, что показано дальше, сделано в одном маленьком репозитории. В нём два файла и два коммита — этого достаточно, чтобы увидеть устройство целиком. Повторять команды не обязательно: смотреть на выводы можно и просто так, а понадобится — вернётесь к главе позже, когда будете работать в VS Code.</p>
+        <figure class="code">
+          <figcaption><span>Терминал</span><span>как собран учебный репозиторий</span></figcaption>
+<pre><span class="f">git</span> init
+<span class="c"># создали privet.txt и README.md</span>
+<span class="f">git</span> add .
+<span class="f">git</span> commit -m <span class="s">"Первый коммит: приветствие и описание"</span>
+<span class="c"># дописали в privet.txt вторую строку</span>
+<span class="f">git</span> add privet.txt
+<span class="f">git</span> commit -m <span class="s">"Добавлена вторая строка"</span></pre>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>git log --oneline</span><span>что получилось</span></figcaption>
+<pre><span class="n">ac70c9b</span> Добавлена вторая строка
+<span class="n">4aaadb4</span> Первый коммит: приветствие и описание</pre>
+        </figure>
+        <p>Семь символов слева — это начало <span class="term">хеша</span> коммита, его полного имени. Откуда берётся такое имя и почему оно выглядит как случайный набор букв и цифр, разберём в §4.</p>
+
+        <h2 id="s2"><span class="sec">§2</span>Что лежит в папке .git</h2>
+        <p>После <code>git init</code> в папке проекта появляется скрытый каталог <code>.git</code>. Это и есть репозиторий: ваши рабочие файлы лежат рядом, как обычно, а вся история — внутри него.</p>
+        <figure class="code code--out">
+          <figcaption><span>ls .git</span><span>содержимое каталога</span></figcaption>
+<pre>COMMIT_EDITMSG
+HEAD
+config
+description
+hooks
+index
+info
+logs
+objects
+refs</pre>
+        </figure>
+        <p>Из этого списка нам нужны четыре записи, остальные — служебные:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Запись</th><th>Что это</th></tr></thead>
+            <tbody>
+              <tr><td><code>objects</code></td><td>Хранилище содержимого: все версии всех файлов и сами коммиты</td></tr>
+              <tr><td><code>refs</code></td><td>Ветки и метки — по файлу на каждую, внутри один хеш</td></tr>
+              <tr><td><code>HEAD</code></td><td>Файл с одной строкой: на какой ветке вы сейчас находитесь</td></tr>
+              <tr><td><code>index</code></td><td>Индекс — список того, что войдёт в следующий коммит</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="margin-note margin-note--warn">
+          <b>На полях: эту папку не трогают руками</b>
+          <p>Удалите <code>.git</code> — исчезнет вся история, останутся только текущие файлы. Отменить это нельзя. Заглядывать внутрь можно и полезно, а редактировать файлы вручную не нужно: для всех изменений есть команды и кнопки.</p>
+        </div>
+
+        <h2 id="s3"><span class="sec">§3</span>Снимок вместо разницы</h2>
+        <p>Большинство старых систем контроля версий хранили <strong>разницу</strong>: первая версия файла целиком, а дальше — список строк, которые добавили и убрали. Чтобы получить состояние на прошлый вторник, такая система брала исходный файл и применяла к нему все изменения по очереди.</p>
+        <p>Git устроен иначе. При каждом коммите он сохраняет <strong>содержимое файлов целиком</strong> — как фотографию всего проекта на этот момент. Файл не изменился с прошлого раза — новая копия не создаётся, коммит просто ссылается на уже сохранённую.</p>
+        <div class="versus">
+          <div class="versus__side">
+            <p class="versus__head">Как было: цепочка изменений</p>
+            <div class="versus__art">
+              <svg viewBox="0 0 260 130" role="img" aria-label="Схема: исходный файл и три набора изменений, которые нужно применить по очереди">
+                <rect x="10" y="40" width="58" height="48" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/>
+                <text x="39" y="60" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink)">файл</text>
+                <text x="39" y="74" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink)">целиком</text>
+                <g stroke="var(--ink)" stroke-width="3">
+                  <line x1="68" y1="64" x2="96" y2="64"/><line x1="146" y1="64" x2="174" y2="64"/>
+                </g>
+                <rect x="96" y="46" width="50" height="36" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+                <text x="121" y="68" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink)">+3 −1</text>
+                <rect x="174" y="46" width="50" height="36" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+                <text x="199" y="68" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink)">+1 −4</text>
+                <text x="130" y="112" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-soft)">чтобы получить версию —</text>
+                <text x="130" y="124" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-soft)">применить всё по очереди</text>
+              </svg>
+            </div>
+            <div class="versus__body">
+              <p>Так работали RCS, CVS и Subversion. Чем дальше версия от начала, тем больше шагов нужно проделать, чтобы её собрать.</p>
+            </div>
+          </div>
+          <div class="versus__side versus__side--new">
+            <p class="versus__head">Как в Git: снимки состояний</p>
+            <div class="versus__art">
+              <svg viewBox="0 0 260 130" role="img" aria-label="Схема: три снимка проекта, во втором и третьем часть файлов — ссылки на прежние">
+                <g stroke="var(--ink)" stroke-width="3" fill="var(--fire-pale)">
+                  <rect x="10" y="26" width="62" height="70"/><rect x="99" y="26" width="62" height="70"/><rect x="188" y="26" width="62" height="70"/>
+                </g>
+                <g font-family="Roboto Mono, monospace" font-size="9" fill="var(--ink)" text-anchor="middle">
+                  <text x="41" y="46">A</text><text x="41" y="66">B</text><text x="41" y="86">C</text>
+                  <text x="130" y="46">A′</text><text x="130" y="66">B</text><text x="130" y="86">C</text>
+                  <text x="219" y="46">A′</text><text x="219" y="66">B′</text><text x="219" y="86">C</text>
+                </g>
+                <g stroke="var(--ink)" stroke-width="3">
+                  <line x1="72" y1="61" x2="99" y2="61"/><line x1="161" y1="61" x2="188" y2="61"/>
+                </g>
+                <text x="130" y="118" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-soft)">B и C не менялись — хранятся один раз</text>
+              </svg>
+            </div>
+            <div class="versus__body">
+              <p>Любое состояние берётся сразу, без пересчёта цепочки. Место при этом не расходуется впустую: одинаковое содержимое хранится один раз.</p>
+            </div>
+          </div>
+        </div>
+        <p>Отсюда и скорость, о которой шла речь в главе 1.1: переключение между версиями — это выкладывание готового снимка, а не вычисление.</p>
+
+        <h2 id="s4"><span class="sec">§4</span>Хеш: имя из содержимого</h2>
+        <p>Чтобы разложить снимки по полкам, каждому куску содержимого нужно имя. Git не нумерует версии — он вычисляет имя из самого содержимого функцией SHA-1. Такая функция называется <span class="term">хеш-функцией</span>: она берёт данные любой длины и выдаёт строку фиксированной длины, 40 шестнадцатеричных символов.</p>
+        <figure class="shot">
+          <img src="img/hash-function.svg" alt="Схема: пять похожих строк на входе хеш-функции дают совершенно разные результаты">
+          <figcaption>Слева — вход, справа — результат. Строки отличаются одной буквой, а результаты не имеют между собой ничего общего: это главное свойство хеш-функции. <span class="credit">Jorge Stolfi, общественное достояние · <a href="https://commons.wikimedia.org/wiki/File:Cryptographic_Hash_Function.svg">Wikimedia Commons</a></span></figcaption>
+        </figure>
+        <p>Проверим это на настоящем Git. Команда <code>git hash-object</code> считает имя для содержимого, ничего никуда не записывая:</p>
+        <figure class="code">
+          <figcaption><span>Терминал</span><span>считаем хеш трёх похожих строк</span></figcaption>
+<pre><span class="f">echo</span> <span class="s">"Привет, мир!"</span> | <span class="f">git</span> hash-object --stdin
+<span class="f">echo</span> <span class="s">"Привет, мир"</span>  | <span class="f">git</span> hash-object --stdin   <span class="c"># убрали восклицательный знак</span>
+<span class="f">echo</span> <span class="s">"привет, мир!"</span> | <span class="f">git</span> hash-object --stdin   <span class="c"># строчная «п»</span></pre>
+        </figure>
+        <div class="hashes">
+          <div class="hashes__head"><span>Содержимое</span><span></span><span>Имя, которое даёт Git</span></div>
+          <div class="hashes__row"><span>Привет, мир!</span><span class="arrow">→</span><span class="sum">d496f993c18242332b89c667180eb35b26572de5</span></div>
+          <div class="hashes__row"><span>Привет, мир<mark>&nbsp;</mark></span><span class="arrow">→</span><span class="sum">5cba4908870f041cad8c155b5221ac633a8f952f</span></div>
+          <div class="hashes__row"><span><mark>п</mark>ривет, мир!</span><span class="arrow">→</span><span class="sum">2d70f87180af4132ec306e7ff6eeebffb6bd67a2</span></div>
+        </div>
+        <p>Три следствия, которые пригодятся дальше:</p>
+        <ul>
+          <li><strong>Одинаковое содержимое — одинаковое имя.</strong> Один и тот же текст в двух файлах сохранится в хранилище один раз.</li>
+          <li><strong>Любая правка меняет имя целиком.</strong> Не на один символ — полностью, как видно в таблице.</li>
+          <li><strong>По имени можно проверить содержимое.</strong> Посчитали хеш заново, сравнили с именем — и точно знаете, что данные не испортились и не подменены.</li>
+        </ul>
+        <div class="margin-note">
+          <b>На полях: почему хеш пишут семью символами</b>
+          <p>Полное имя — 40 символов, но в журнале и в интерфейсе показывают первые семь: <code>ac70c9b</code>. Этого хватает, чтобы отличить коммит от соседних, а перепутать два коммита с одинаковым началом в учебном проекте невозможно. Если начало совпадёт, Git попросит написать больше символов.</p>
+        </div>
+
+        <h2 id="s5"><span class="sec">§5</span>Четыре вида объектов</h2>
+        <p>Всё, что Git хранит в <code>objects</code>, — это объекты четырёх видов. Каждый лежит под своим хешем.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Вид</th><th>Что хранит</th><th>Пример из нашего репозитория</th></tr></thead>
+            <tbody>
+              <tr><td><code>blob</code></td><td>Содержимое файла, без имени и без прав доступа</td><td>текст <code>privet.txt</code></td></tr>
+              <tr><td><code>tree</code></td><td>Список: имя файла или папки → хеш её содержимого</td><td>корень проекта с двумя файлами</td></tr>
+              <tr><td><code>commit</code></td><td>Ссылку на дерево, родителя, автора, дату и пояснение</td><td><code>ac70c9b</code></td></tr>
+              <tr><td><code>tag</code></td><td>Помеченный коммит с подписью — метка версии</td><td>в учебном репозитории нет</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Посмотрим на настоящий коммит. Команда <code>git cat-file -p</code> печатает содержимое объекта по его имени:</p>
+        <figure class="code">
+          <figcaption><span>Терминал</span><span>заглядываем в последний коммит</span></figcaption>
+<pre><span class="f">git</span> cat-file -p HEAD</pre>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>Вывод</span><span>объект commit</span></figcaption>
+<pre>tree <span class="n">24b4504ba08ad760134a32ff97c80172a54588d8</span>
+parent <span class="n">4aaadb41d076a53a1805396518b7d9989fc0ee4c</span>
+author Иван Петров &lt;ivan@example.com&gt; 1789542720 +0300
+committer Иван Петров &lt;ivan@example.com&gt; 1789542720 +0300
+
+Добавлена вторая строка</pre>
+        </figure>
+        <p>Коммит оказался маленькой запиской из пяти частей: на какое дерево он указывает, какой коммит был перед ним, кто автор, кто зафиксировал и что сделано. Самих файлов внутри нет — есть ссылка на дерево. Развернём и его:</p>
+        <figure class="code code--out">
+          <figcaption><span>git cat-file -p HEAD^{tree}</span><span>объект tree</span></figcaption>
+<pre>100644 blob <span class="n">2f772b5ac1dca38c2e8cadd921541cdd51c164b7</span>	README.md
+100644 blob <span class="n">87aef6aa7495837046c161ace26b2115d4e7c84f</span>	privet.txt</pre>
+        </figure>
+        <p>Дерево — это оглавление: имя файла и хеш его содержимого. А по хешу лежит сам текст:</p>
+        <figure class="code code--out">
+          <figcaption><span>git cat-file -p 87aef6a</span><span>объект blob</span></figcaption>
+<pre>Привет, мир!
+Вторая строка.</pre>
+        </figure>
+        <p>Получается цепочка ссылок: коммит → дерево → содержимое файлов. Каждое звено названо по своему содержимому.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 660 230" role="img" aria-label="Схема: коммит ссылается на дерево и на предыдущий коммит, дерево ссылается на содержимое файлов">
+            <rect x="12" y="70" width="150" height="86" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="12" y="70" width="150" height="26" fill="var(--ink)"/>
+            <text x="87" y="88" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12" fill="#FBE0D8">commit 4aaadb4</text>
+            <text x="87" y="118" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">первый коммит</text>
+            <text x="87" y="138" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">родителя нет</text>
+
+            <rect x="212" y="70" width="150" height="86" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="212" y="70" width="150" height="26" fill="var(--fire-deep)"/>
+            <text x="287" y="88" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12" fill="#FFFDF9">commit ac70c9b</text>
+            <text x="287" y="118" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink)">parent 4aaadb4</text>
+            <text x="287" y="138" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink)">tree 24b4504</text>
+
+            <line x1="212" y1="113" x2="162" y2="113" stroke="var(--ink)" stroke-width="3"/>
+            <polygon points="162,113 174,107 174,119" fill="var(--ink)"/>
+            <text x="187" y="99" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9" fill="var(--ink-soft)">родитель</text>
+
+            <rect x="412" y="16" width="150" height="70" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="412" y="16" width="150" height="26" fill="var(--ink)"/>
+            <text x="487" y="34" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12" fill="#FBE0D8">tree 24b4504</text>
+            <text x="487" y="60" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">README.md → 2f772b5</text>
+            <text x="487" y="76" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">privet.txt → 87aef6a</text>
+
+            <line x1="362" y1="113" x2="412" y2="60" stroke="var(--ink)" stroke-width="3"/>
+            <polygon points="412,60 400,62 406,71" fill="var(--ink)"/>
+
+            <rect x="412" y="116" width="150" height="44" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="487" y="134" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink)">blob 2f772b5</text>
+            <text x="487" y="150" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-soft)"># Учебный проект</text>
+
+            <rect x="412" y="172" width="150" height="44" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="487" y="190" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink)">blob 87aef6a</text>
+            <text x="487" y="206" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-soft)">Привет, мир!…</text>
+
+            <g stroke="var(--ink)" stroke-width="3">
+              <line x1="562" y1="60" x2="600" y2="60"/><line x1="600" y1="60" x2="600" y2="138"/><line x1="600" y1="138" x2="562" y2="138"/>
+              <line x1="600" y1="138" x2="600" y2="194"/><line x1="600" y1="194" x2="562" y2="194"/>
+            </g>
+            <polygon points="562,138 574,132 574,144" fill="var(--ink)"/>
+            <polygon points="562,194 574,188 574,200" fill="var(--ink)"/>
+          </svg>
+          <figcaption>Каждая стрелка — это хеш, записанный внутри объекта. Коммит знает своего родителя и своё дерево, дерево знает содержимое файлов. Ничего, кроме этих ссылок, в истории нет.</figcaption>
+        </figure>
+        <p>Проверим, сколько объектов накопил наш репозиторий из двух коммитов:</p>
+        <figure class="code code--out">
+          <figcaption><span>объекты репозитория по видам</span><span>всего семь</span></figcaption>
+<pre>3 blob     <span class="c"># README.md, privet.txt в двух версиях</span>
+2 tree     <span class="c"># корень проекта на момент каждого коммита</span>
+2 commit   <span class="c"># сами коммиты</span></pre>
+        </figure>
+        <p><code>README.md</code> между коммитами не менялся, поэтому его содержимое лежит в хранилище один раз, и оба дерева ссылаются на один и тот же <code>blob</code>.</p>
+
+        <h2 id="s6"><span class="sec">§6</span>Цепочка коммитов</h2>
+        <p>В выводе <code>cat-file</code> вы видели строку <code>parent</code>. Это и есть история: каждый коммит помнит предыдущий, и от последнего можно дойти до самого первого. У первого коммита строки <code>parent</code> нет — ему некуда ссылаться:</p>
+        <figure class="code code--out">
+          <figcaption><span>git cat-file -p 4aaadb4</span><span>первый коммит</span></figcaption>
+<pre>tree <span class="n">278ffdf57274af9c5f63a8ee7851a4993d58ed7a</span>
+author Иван Петров &lt;ivan@example.com&gt; 1789542000 +0300
+committer Иван Петров &lt;ivan@example.com&gt; 1789542000 +0300
+
+Первый коммит: приветствие и описание</pre>
+        </figure>
+        <p>Теперь соберём два факта вместе. Имя коммита вычисляется из его содержимого, а в содержимое входит имя родителя. Значит, изменить что-то в старом коммите, не тронув все последующие, невозможно: у старого сменится имя, и ссылка из следующего перестанет быть верной.</p>
+
+        <h2 id="s7"><span class="sec">§7</span>Опыт: меняем старый коммит</h2>
+        <p>Проверим это на нашем репозитории. Возьмём первый коммит и уберём из его пояснения два слова — сам код при этом не трогаем.</p>
+        <figure class="code code--out">
+          <figcaption><span>было</span><span>git log --oneline</span></figcaption>
+<pre><span class="n">ac70c9b</span> Добавлена вторая строка
+<span class="n">4aaadb4</span> Первый коммит: приветствие и описание</pre>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>стало</span><span>после правки текста первого коммита</span></figcaption>
+<pre><span class="n">19b02ae</span> Добавлена вторая строка
+<span class="n">23395b4</span> Первый коммит: приветствие</pre>
+        </figure>
+        <p>Обратите внимание на верхнюю строку: второй коммит мы не редактировали, а его имя всё равно изменилось — с <code>ac70c9b</code> на <code>19b02ae</code>. Так и работает защита истории: правка в любой точке отзывается на всех коммитах после неё. Тихо подменить строку в коммите годовой давности нельзя — изменится каждое имя вплоть до последнего, и это сразу заметят все, у кого есть копия репозитория.</p>
+        <div class="margin-note margin-note--warn">
+          <b>На полях: почему нельзя переписывать отправленную историю</b>
+          <p>Из этого свойства следует правило, о котором пойдёт речь в третьем модуле: коммиты, уже отправленные на GitHub, не переписывают. У коллег останется прежняя цепочка имён, у вас — новая, и Git не сможет их совместить. Пока коммиты лежат только на вашем компьютере, менять их безопасно.</p>
+        </div>
+
+        <h2 id="s8"><span class="sec">§8</span>Три места и три состояния файла</h2>
+        <p>Коммит собирается не сразу из папки проекта. Между папкой и хранилищем есть промежуточная ступень — <span class="term">индекс</span>, список того, что войдёт в следующий коммит. Отсюда три места, в которых одновременно живут файлы проекта.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 660 190" role="img" aria-label="Схема: рабочая папка, индекс и репозиторий, между ними переходы">
+            <rect x="12" y="34" width="180" height="96" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="12" y="34" width="180" height="28" fill="var(--ink)"/>
+            <text x="102" y="53" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12" fill="#FBE0D8">РАБОЧАЯ ПАПКА</text>
+            <text x="102" y="82" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink)">файлы, которые</text>
+            <text x="102" y="98" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink)">вы редактируете</text>
+            <text x="102" y="118" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-soft)">состояние: изменён</text>
+
+            <rect x="240" y="34" width="180" height="96" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="240" y="34" width="180" height="28" fill="var(--steel)"/>
+            <text x="330" y="53" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12" fill="#FFFDF9">ИНДЕКС</text>
+            <text x="330" y="82" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink)">что войдёт</text>
+            <text x="330" y="98" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink)">в следующий коммит</text>
+            <text x="330" y="118" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-soft)">состояние: подготовлен</text>
+
+            <rect x="468" y="34" width="180" height="96" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="468" y="34" width="180" height="28" fill="var(--fire-deep)"/>
+            <text x="558" y="53" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12" fill="#FFFDF9">РЕПОЗИТОРИЙ .git</text>
+            <text x="558" y="82" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink)">снимки и коммиты</text>
+            <text x="558" y="98" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink)">навсегда</text>
+            <text x="558" y="118" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-soft)">состояние: зафиксирован</text>
+
+            <line x1="192" y1="74" x2="240" y2="74" stroke="var(--ink)" stroke-width="3"/>
+            <polygon points="240,74 228,68 228,80" fill="var(--ink)"/>
+            <text x="216" y="64" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink)">add</text>
+
+            <line x1="420" y1="74" x2="468" y2="74" stroke="var(--ink)" stroke-width="3"/>
+            <polygon points="468,74 456,68 456,80" fill="var(--ink)"/>
+            <text x="444" y="64" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink)">commit</text>
+
+            <path d="M 558 130 L 558 162 L 102 162 L 102 130" fill="none" stroke="var(--ink-faint)" stroke-width="3" stroke-dasharray="7 5"/>
+            <polygon points="102,130 96,142 108,142" fill="var(--ink-faint)"/>
+            <text x="330" y="178" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-soft)">checkout — выложить сохранённое состояние обратно в папку</text>
+          </svg>
+          <figcaption>В VS Code переход «add» — это кнопка с плюсом у файла (Stage Changes), а «commit» — синяя кнопка Commit. Состояния файла показаны буквами справа от имени: <b>U</b> — новый, <b>M</b> — изменён, <b>D</b> — удалён.</figcaption>
+        </figure>
+        <p>Посмотрим на все три состояния сразу. В учебном репозитории мы дописали третью строку в <code>privet.txt</code>, подготовили его к коммиту, а ещё создали файл <code>zametki.txt</code> и не трогали его:</p>
+        <figure class="code code--out">
+          <figcaption><span>git status</span><span>что видит Git</span></figcaption>
+<pre>On branch main
+Changes to be committed:
+  (use "git restore --staged &lt;file&gt;..." to unstage)
+	modified:   privet.txt
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+	zametki.txt</pre>
+        </figure>
+        <p>Git разделил файлы на две группы. <code>privet.txt</code> подготовлен — он попадёт в следующий коммит. <code>zametki.txt</code> назван <i>untracked</i>, то есть неотслеживаемым: Git видит файл в папке, но ничего о нём не знает и в коммит не возьмёт, пока не попросят.</p>
+        <figure class="shot">
+          <img src="img/vscode-stage.png" alt="Панель Source Control в VS Code: список изменённых файлов и кнопка с плюсом">
+          <figcaption>То же самое в VS Code: изменённые файлы в разделе Changes, плюс у файла переносит его в Staged Changes — это и есть подготовка к коммиту.</figcaption>
+        </figure>
+        <p>Зачем нужна промежуточная ступень, если можно было бы фиксировать всю папку целиком? Затем, что за один заход вы обычно правите несколько разных вещей. Индекс позволяет собрать коммит из части правок: исправление ошибки — отдельно, заметки для себя — потом или никогда.</p>
+
+        <h2 id="s9"><span class="sec">§9</span>Ветка — это указатель</h2>
+        <p>Слово «ветка» звучит внушительно, но внутри это текстовый файл с одной строкой. Посмотрим на ветку <code>main</code> нашего репозитория:</p>
+        <figure class="code code--out">
+          <figcaption><span>cat .git/refs/heads/main</span><span>вся ветка целиком</span></figcaption>
+<pre><span class="n">ac70c9bc848f367d592ed7fbe4378dcf9a9f9c34</span></pre>
+        </figure>
+        <p>Внутри — имя одного коммита, последнего в этой линии. Всё остальное Git узнаёт по цепочке <code>parent</code>. Отсюда и дешевизна веток: создать ветку значит записать 40 символов в новый файл, а не скопировать проект.</p>
+        <p>А где находитесь вы сами, хранит файл <code>HEAD</code>:</p>
+        <figure class="code code--out">
+          <figcaption><span>cat .git/HEAD</span><span>текущее положение</span></figcaption>
+<pre>ref: refs/heads/main</pre>
+        </figure>
+        <p>Строка читается так: «сейчас я на ветке main». Переключение на другую ветку меняет эту строку и выкладывает в рабочую папку файлы из её последнего коммита. Никакого копирования папок при этом не происходит — поэтому переключение занимает доли секунды.</p>
+
+        <h2 id="s10"><span class="sec">§10</span>Что происходит при коммите</h2>
+        <p>Соберём главу воедино. Вот что делает Git, когда вы нажимаете Commit в VS Code:</p>
+        <ol class="steps">
+          <li>Берёт содержимое каждого подготовленного файла и сохраняет его как объект <code>blob</code> под именем-хешем. Если такое содержимое уже есть — ничего не записывает.</li>
+          <li>Строит объект <code>tree</code> — оглавление проекта: имя файла или папки и хеш содержимого.</li>
+          <li>Создаёт объект <code>commit</code>: ссылка на дерево, ссылка на предыдущий коммит, автор, дата и ваше пояснение.</li>
+          <li>Считает хеш этого коммита и записывает его в файл ветки — теперь она указывает на новый коммит.</li>
+          <li>Очищает индекс: подготовленных изменений больше нет, они стали частью истории.</li>
+        </ol>
+        <p>Всё это происходит на вашем диске и занимает доли секунды. Никакой сети на этом этапе не нужно — отправка на GitHub будет отдельным действием.</p>
+
+        <h2 id="s11"><span class="sec">§11</span>Частые заблуждения</h2>
+        <div class="myths">
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Git хранит разницу между версиями.</div>
+            <div class="myth__yes"><b>На самом деле</b>Он хранит содержимое целиком — снимками. Разницу между версиями Git вычисляет в момент показа, когда вы её запросили.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Снимки занимают много места: каждый коммит — копия всего проекта.</div>
+            <div class="myth__yes"><b>На самом деле</b>Неизменившиеся файлы хранятся один раз: коммиты ссылаются на одно и то же содержимое по его хешу.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Хеш — это случайный номер, который Git выдаёт коммиту.</div>
+            <div class="myth__yes"><b>На самом деле</b>Хеш вычисляется из содержимого. Тот же текст даст то же имя на любом компьютере, а любая правка меняет имя целиком.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Сохранил файл в редакторе — Git его запомнил.</div>
+            <div class="myth__yes"><b>На самом деле</b>Сохранение меняет файл только в рабочей папке. В историю он попадёт после подготовки и коммита — это два отдельных действия.</div>
+          </div>
+        </div>
+
+        <h2 id="s12"><span class="sec">§12</span>Проверьте себя</h2>
+        <details>
+          <summary>Вы скопировали один и тот же текст в два файла с разными именами. Сколько объектов <code>blob</code> создаст Git?</summary>
+          <p>Один. Имя объекта вычисляется из содержимого, а содержимое одинаковое — значит, и хеш совпадёт. Имена файлов хранятся не в <code>blob</code>, а в дереве: там будут две записи, указывающие на один и тот же объект.</p>
+        </details>
+        <details>
+          <summary>Почему нельзя незаметно исправить коммит месячной давности?</summary>
+          <p>В хеш коммита входит имя его родителя. Поправив старый коммит, вы измените его имя — и все коммиты после него получат новые имена, потому что каждый ссылается на предыдущий. Изменится вся цепочка до последнего коммита, и это видно любому, у кого есть копия репозитория.</p>
+        </details>
+        <details>
+          <summary>Что произойдёт, если удалить папку <code>.git</code>?</summary>
+          <p>Останутся текущие файлы проекта и ничего больше: ни истории, ни веток, ни возможности вернуться к прошлому состоянию. Папка проекта превратится в обычную папку. Восстановить историю можно будет только из другой копии репозитория — например, с GitHub.</p>
+        </details>
+        <details>
+          <summary>Чем состояние «изменён» отличается от «подготовлен»?</summary>
+          <p>«Изменён» — файл правили в рабочей папке, но в следующий коммит он не войдёт. «Подготовлен» — файл добавлен в индекс кнопкой с плюсом и войдёт в коммит, который вы сейчас создадите. Между этими состояниями файл можно править дальше: тогда он окажется в обоих сразу — подготовлена старая версия, в папке лежит новая.</p>
+        </details>
+        <details>
+          <summary>Почему создание ветки в Git происходит мгновенно?</summary>
+          <p>Ветка — файл с одним хешем: именем коммита, на который она указывает. Создание ветки записывает 40 символов, не копируя ни файлы, ни историю. Само содержимое уже лежит в хранилище и общее для всех веток.</p>
+        </details>
+        <details>
+          <summary>Объясните своими словами, зачем Git показывает первые семь символов хеша, а не весь.</summary>
+          <p>Полное имя из сорока символов нужно программе, а человеку достаточно короткого начала, чтобы отличить один коммит от другого и назвать его в разговоре или команде. Если начало окажется одинаковым у двух коммитов, Git сообщит об этом и попросит указать больше символов.</p>
+        </details>
+
+        <h2 id="s13"><span class="sec">§13</span>Шпаргалка по главе</h2>
+        <div class="cheat">
+          <div>
+            <b>Как хранится</b>
+            <code>снимки, а не разница</code>
+            <code>одинаковое содержимое — один раз</code>
+          </div>
+          <div>
+            <b>Объекты</b>
+            <code>blob — содержимое файла</code>
+            <code>tree — оглавление</code>
+            <code>commit — записка со ссылками</code>
+          </div>
+          <div>
+            <b>Три места</b>
+            <code>рабочая папка → индекс → .git</code>
+            <code>add, затем commit</code>
+          </div>
+          <div>
+            <b>Указатели</b>
+            <code>ветка — файл с одним хешем</code>
+            <code>HEAD — где вы сейчас</code>
+          </div>
+          <div>
+            <b>Заглянуть внутрь</b>
+            <code>git cat-file -p HEAD</code>
+            <code>git hash-object --stdin</code>
+            <code>git status</code>
+          </div>
+          <div>
+            <b>Главное следствие</b>
+            <code>правка старого коммита</code>
+            <code>меняет все имена после него</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Git хранит содержимое файлов снимками в папке <code>.git</code> и даёт каждому объекту имя, вычисленное из содержимого. Коммит — это записка со ссылками на дерево файлов и на предыдущий коммит; из этих ссылок и складывается история. Поэтому правка старого коммита меняет имена всех следующих, а ветка, которая внутри всего лишь файл с одним хешем, создаётся мгновенно. Между рабочей папкой и историей стоит индекс: он позволяет собрать коммит из части сделанных правок. Дальше мы поставим Git и VS Code и начнём делать всё это кнопками.</p>
+
+        <div class="sources">
+          <b>Откуда взяты факты</b>
+          <ol>
+            <li>Все выводы команд получены запуском в учебном репозитории из §1 на Git версии 2.x; хеши в тексте — настоящие.</li>
+            <li>Устройство объектов и ссылок — глава «Git изнутри» книги <a href="https://git-scm.com/book/ru/v2">Pro Git</a>.</li>
+            <li>Описание команд <code>hash-object</code>, <code>cat-file</code> и <code>status</code> — <a href="https://git-scm.com/docs">официальная документация Git</a>.</li>
+            <li>Схема хеш-функции — Wikimedia Commons, автор Jorge Stolfi, общественное достояние.</li>
+            <li>Кадр панели Source Control снят в Visual Studio Code на учебном проекте.</li>
+          </ol>
+        </div>
+
+        <div class="pager"><a href="../02-git-i-github/index.html">← 1.2 Git и GitHub: кто что делает</a><a href="../../index.html">К содержанию справочника</a></div>
+
+        <div class="colophon">
+          <span>Глава 1.3 · Как Git хранит историю · Справочник по Git и GitHub</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../../book.js"></script>
+</body>
+</html>
