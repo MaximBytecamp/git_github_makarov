@@ -1,0 +1,162 @@
+{
+  "git.svg": {
+    "title": "File:Git-logo.svg",
+    "caption": "Логотип Git",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Git-logo.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Git-logo.svg/960px-Git-logo.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Git-logo.svg",
+    "author": "Jason Long",
+    "license": "CC BY 3.0",
+    "credit": "Own work using: http://git-scm.com/downloads/logos"
+  },
+  "torvalds.jpg": {
+    "title": "File:LinuxCon Europe Linus Torvalds 03.jpg",
+    "caption": "Линус Торвальдс, LinuxCon Europe",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/5/52/LinuxCon_Europe_Linus_Torvalds_03.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/LinuxCon_Europe_Linus_Torvalds_03.jpg/960px-LinuxCon_Europe_Linus_Torvalds_03.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:LinuxCon_Europe_Linus_Torvalds_03.jpg",
+    "author": "Krd",
+    "license": "CC BY-SA 4.0",
+    "credit": "Own work"
+  },
+  "hamano.jpg": {
+    "title": "File:Gitster1.jpeg",
+    "caption": "Джунио Хамано, сопровождающий Git",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Gitster1.jpeg",
+    "thumb": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Gitster1.jpeg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gitster1.jpeg",
+    "author": "Junio Hamano",
+    "license": "CC BY-SA 3.0",
+    "credit": "http://www.livejournal.com/allpics.bml?user=gitster"
+  },
+  "mcvoy.jpg": {
+    "title": "File:Larry McVoy.jpg",
+    "caption": "Ларри Маквой, автор BitKeeper",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/03/Larry_McVoy.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Larry_McVoy.jpg/960px-Larry_McVoy.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Larry_McVoy.jpg",
+    "author": "Eugene Zelenko",
+    "license": "CC BY-SA 4.0",
+    "credit": "Own work"
+  },
+  "tux.svg": {
+    "title": "File:Tux.svg",
+    "caption": "Tux — талисман Linux",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Tux.svg/960px-Tux.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Tux.svg",
+    "author": "Larry Ewing, Simon Budig, Garrett LeSage",
+    "license": "Attribution",
+    "credit": "https://isc.tamu.edu/~lewing/linux/, http://www.home.unix-ag.org/simon/penguin/, garrett/Tux on GitHub"
+  },
+  "github.svg": {
+    "title": "File:Octicons-mark-github.svg",
+    "caption": "Знак GitHub",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/960px-Octicons-mark-github.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Octicons-mark-github.svg",
+    "author": "GitHub",
+    "license": "MIT",
+    "credit": "https://github.com/github/octicons"
+  },
+  "gitlab.svg": {
+    "title": "File:GitLab logo.svg",
+    "caption": "Логотип GitLab",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e1/GitLab_logo.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/GitLab_logo.svg/960px-GitLab_logo.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:GitLab_logo.svg",
+    "author": "GitLab B.V.",
+    "license": "MIT",
+    "credit": "gitlab.com/gitlab-org/gitlab-ce/blob/master/app/assets/images/logo wordmark.svg"
+  },
+  "bitbucket.svg": {
+    "title": "File:Bitbucket-blue-logomark-only.svg",
+    "caption": "Логотип Bitbucket",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Bitbucket-blue-logomark-only.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Bitbucket-blue-logomark-only.svg/960px-Bitbucket-blue-logomark-only.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Bitbucket-blue-logomark-only.svg",
+    "author": "Atlassian",
+    "license": "Public domain",
+    "credit": "https://atlassian.design/guidelines/marketing/resources/logo-files"
+  },
+  "subversion.svg": {
+    "title": "File:Subversion.svg",
+    "caption": "Логотип Apache Subversion",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Subversion.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Subversion.svg/960px-Subversion.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Subversion.svg",
+    "author": "RRZEicons",
+    "license": "CC BY-SA 3.0",
+    "credit": "Own work"
+  },
+  "vscode.svg": {
+    "title": "File:Visual Studio Code 1.35 icon.svg",
+    "caption": "Значок Visual Studio Code",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/960px-Visual_Studio_Code_1.35_icon.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Visual_Studio_Code_1.35_icon.svg",
+    "author": "Microsoft",
+    "license": "Public domain",
+    "credit": "https://code.visualstudio.com/brand"
+  },
+  "google.svg": {
+    "title": "File:Google 2015 logo.svg",
+    "caption": "Логотип Google",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/960px-Google_2015_logo.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Google_2015_logo.svg",
+    "author": "Google LLC",
+    "license": "Public domain",
+    "credit": "https://gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg"
+  },
+  "microsoft.svg": {
+    "title": "File:Microsoft logo (2012).svg",
+    "caption": "Логотип Microsoft",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/960px-Microsoft_logo_%282012%29.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Microsoft_logo_(2012).svg",
+    "author": "Microsoft Corporation — Jason Wells",
+    "license": "Public domain",
+    "credit": "Flipgrid (english). Microsoft (June 18, 2025). Retrieved on May 21, 2025. (Direct link)."
+  },
+  "yandex.svg": {
+    "title": "File:Yandex icon.svg",
+    "caption": "Значок Яндекса",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/58/Yandex_icon.svg/960px-Yandex_icon.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Yandex_icon.svg",
+    "author": "Yandex LLC",
+    "license": "Public domain",
+    "credit": "https://yastatic.net/s3/home-static/_/Z/6/nfVezDRqofwQZ5e669DSK84Tw.svg"
+  },
+  "netflix.svg": {
+    "title": "File:Netflix 2015 logo.svg",
+    "caption": "Логотип Netflix",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/960px-Netflix_2015_logo.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Netflix_2015_logo.svg",
+    "author": "TM/®Netflix Inc.",
+    "license": "Public domain",
+    "credit": "Extracted by Goo16 and modified by Corkythehornetfan from https://www.netflix.com/"
+  },
+  "android.svg": {
+    "title": "File:Android robot.svg",
+    "caption": "Робот Android",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Android_robot.svg/960px-Android_robot.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Android_robot.svg",
+    "author": "Google Inc., employer for hire; designed by Irina Blok",
+    "license": "CC BY 3.0",
+    "credit": "Android Goodies (GIF and PS files):"
+  },
+  "nasa.svg": {
+    "title": "File:NASA logo.svg",
+    "caption": "Логотип NASA",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/960px-NASA_logo.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:NASA_logo.svg",
+    "author": "National Aeronautics and Space Administration",
+    "license": "Public domain",
+    "credit": "https://www.nasa.gov/wp-content/themes/nasa/assets/images/nasa-logo.svg"
+  }
+}

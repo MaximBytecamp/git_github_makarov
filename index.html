@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>Справочник по Git и GitHub · Макаров Максим Николаевич</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .cover { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(260px, .8fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+    .cover h1 { margin: 12px 0 10px; font-family: var(--display); font-size: clamp(36px, 5.6vw, 74px); line-height: 1.02; letter-spacing: -.5px; }
+    .cover__sub { margin: 0 0 22px; font-family: var(--display); font-size: clamp(17px, 1.8vw, 26px); color: var(--fire-deep); }
+    .cover__meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 0; }
+    .cover__meta span { padding: 8px 12px; border: 2px solid var(--ink); background: #fff; font: 600 11px/1 var(--pixel); letter-spacing: 1px; }
+
+    /* Обложка справа: панель Source Control, как её видит студент. */
+    .panel { border: 3px solid var(--ink); background: var(--page); box-shadow: 7px 7px 0 var(--ink); overflow: hidden; }
+    .panel__bar { display: flex; align-items: center; gap: 8px; padding: 9px 13px; background: var(--ink); color: var(--fire-pale); font: 600 10px/1.4 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; }
+    .panel__bar b { margin-left: auto; padding: 2px 7px; background: var(--fire); color: var(--ink); }
+    .panel__row { display: grid; grid-template-columns: 22px minmax(0, 1fr) 20px; gap: 9px; align-items: center; padding: 8px 13px; border-bottom: 1px solid var(--rule); font: 400 13px/1.4 var(--mono); }
+    .panel__row:last-of-type { border-bottom: 0; }
+    .panel__row i { font-style: normal; font: 700 12px/1 var(--pixel); color: var(--fire-deep); }
+    .panel__row em { font-style: normal; text-align: right; font: 700 12px/1 var(--mono); }
+    .panel__row em.m { color: var(--fire-deep); }
+    .panel__row em.a { color: var(--moss); }
+    .panel__row em.d { color: var(--ink-faint); }
+    .panel__send { padding: 11px 13px; border-top: 3px solid var(--ink); background: var(--fire-pale); font: 600 11px/1.4 var(--pixel); letter-spacing: 1px; text-transform: uppercase; color: var(--fire-deep); }
+
+    .modules { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(330px, 100%), 1fr)); gap: 16px; margin-top: 22px; }
+    .module { display: grid; grid-template-columns: 40px minmax(0, 1fr); border: 3px solid var(--ink); background: var(--page); box-shadow: 6px 6px 0 var(--ink); }
+    .module__spine { background: var(--ink); color: var(--fire); display: flex; align-items: center; justify-content: center; }
+    .module__spine b { writing-mode: vertical-rl; transform: rotate(180deg); font: 700 12px/1 var(--mono); letter-spacing: 2px; }
+    .module__body { padding: 18px 20px 16px; }
+    .module h3 { margin: 0 0 6px; font-family: var(--display); font-size: 19px; }
+    .module > .module__body > p { margin: 0 0 12px; font-size: 14.5px; line-height: 1.45; color: var(--ink-soft); }
+    .toc { margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--rule); }
+    .toc li { border-bottom: 2px solid var(--rule); }
+    .toc li:last-child { border-bottom: 0; }
+    .toc a, .toc s { display: flex; align-items: baseline; gap: 10px; padding: 9px 0; text-decoration: none; font-size: 15px; }
+    .toc a { color: var(--ink); font-weight: 600; }
+    .toc a:hover { color: var(--fire-deep); }
+    .toc s { color: var(--ink-faint); text-decoration: none; }
+    .toc i { flex: 0 0 auto; font-style: normal; font: 600 12px/1.4 var(--mono); color: var(--ink-faint); }
+    .toc span { flex: 1 1 auto; min-width: 0; line-height: 1.35; }
+    .toc em { flex: 0 0 auto; margin-left: auto; font: 600 10px/1 var(--pixel); letter-spacing: 1px; text-transform: uppercase; font-style: normal; color: var(--fire-deep); }
+    .toc s em { color: var(--ink-faint); }
+  </style>
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Справочник по Git и GitHub · Макаров М. Н.</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow">Учебное издание · для студентов колледжа и первых курсов вуза</p>
+          <p class="running__folio">Макаров Максим Николаевич</p>
+        </div>
+
+        <section class="cover">
+          <div>
+            <h1>Справочник<br>по Git и GitHub</h1>
+            <p class="cover__sub">От первого коммита до канбан-доски,<br>сайта на Pages и настроенного репозитория</p>
+            <p>Вся работа с Git показана через панель Source Control в Visual Studio Code: где нажать, что при этом происходит и какая команда выполняется под кнопкой. Командная строка не исчезает — она идёт рядом, чтобы нажатие не оставалось загадкой.</p>
+            <p>Вторая половина книги — про GitHub: задачи и метки, pull request и ревью, канбан-доска в Projects, публикация сайта через Pages, автоматические проверки в Actions и настройки репозитория до последнего переключателя.</p>
+            <p>Порядок глав — это порядок изучения: ни одна кнопка не встретится раньше, чем объяснено, что она делает с историей проекта.</p>
+            <div class="cover__meta">
+              <span>VS Code</span><span>Git</span><span>GitHub</span><span>8 модулей</span><span>скриншоты каждого шага</span>
+            </div>
+          </div>
+
+          <aside class="panel">
+            <div class="panel__bar"><span>Source Control</span><b>3</b></div>
+            <div class="panel__row"><i>M</i><span>index.html</span><em class="m">M</em></div>
+            <div class="panel__row"><i>+</i><span>styles.css</span><em class="a">A</em></div>
+            <div class="panel__row"><i>−</i><span>старая-версия.txt</span><em class="d">D</em></div>
+            <div class="panel__send">Commit → Sync Changes</div>
+          </aside>
+        </section>
+
+        <h2><span class="sec">План</span>Модули и главы</h2>
+        <p>Отмеченные словом «читать» главы готовы. Остальные пишутся: порядок в списке — это и есть порядок изучения.</p>
+
+        <div class="modules">
+          <article class="module">
+            <div class="module__spine"><b>МОДУЛЬ 1</b></div>
+            <div class="module__body">
+              <h3>Что такое контроль версий</h3>
+              <p>Откуда взялся Git, как он хранит историю и чем отличается от GitHub. Пока без кнопок.</p>
+              <ul class="toc">
+                <li><a href="temy/01-otkuda-vzyalsya-git/index.html"><i>1.1</i><span>Откуда взялся Git</span><em>читать</em></a></li>
+                <li><s><i>1.2</i><span>Git и GitHub: кто что делает</span><em>в работе</em></s></li>
+                <li><s><i>1.3</i><span>Как Git хранит историю: снимок, хеш, три состояния файла</span><em>в работе</em></s></li>
+                <li><s><i>1.4</i><span>Установка Git и VS Code, первое представление</span><em>в работе</em></s></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="module">
+            <div class="module__spine"><b>МОДУЛЬ 2</b></div>
+            <div class="module__body">
+              <h3>Первый репозиторий в VS Code</h3>
+              <p>Панель Source Control: от пустой папки до истории, в которой видно каждое изменение.</p>
+              <ul class="toc">
+                <li><s><i>2.1</i><span>Панель Source Control: что где находится</span><em>в работе</em></s></li>
+                <li><s><i>2.2</i><span>Свой проект и чужой: init и clone</span><em>в работе</em></s></li>
+                <li><s><i>2.3</i><span>Изменения, индекс, коммит: почему два шага</span><em>в работе</em></s></li>
+                <li><s><i>2.4</i><span>История и граф коммитов</span><em>в работе</em></s></li>
+                <li><s><i>2.5</i><span>Служебные файлы: .gitignore, .gitkeep, README</span><em>в работе</em></s></li>
+                <li><s><i>2.6</i><span>Отмена: discard, amend, revert, reset</span><em>в работе</em></s></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="module">
+            <div class="module__spine"><b>МОДУЛЬ 3</b></div>
+            <div class="module__body">
+              <h3>Ветки</h3>
+              <p>Параллельная работа: как разойтись, как сойтись обратно и что делать с конфликтом.</p>
+              <ul class="toc">
+                <li><s><i>3.1</i><span>Зачем нужны ветки и как они устроены</span><em>в работе</em></s></li>
+                <li><s><i>3.2</i><span>Создать, переключиться, убедиться в независимости</span><em>в работе</em></s></li>
+                <li><s><i>3.3</i><span>Слияние: fast-forward и обычное</span><em>в работе</em></s></li>
+                <li><s><i>3.4</i><span>Конфликты: как получить и как разобрать</span><em>в работе</em></s></li>
+                <li><s><i>3.5</i><span>Перебазирование, cherry-pick, stash</span><em>в работе</em></s></li>
+                <li><s><i>3.6</i><span>Сообщения коммитов, в том числе через ИИ</span><em>в работе</em></s></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="module">
+            <div class="module__spine"><b>МОДУЛЬ 4</b></div>
+            <div class="module__body">
+              <h3>GitHub: аккаунт и связь с ним</h3>
+              <p>Как локальный репозиторий оказывается в интернете и что для этого нужно настроить.</p>
+              <ul class="toc">
+                <li><s><i>4.1</i><span>Аккаунт, профиль и его README, двухфакторная защита</span><em>в работе</em></s></li>
+                <li><s><i>4.2</i><span>Как VS Code пускают на GitHub: вход, токены, SSH-ключи</span><em>в работе</em></s></li>
+                <li><s><i>4.3</i><span>Публикация, push, pull, fetch и Sync</span><em>в работе</em></s></li>
+                <li><s><i>4.4</i><span>Если ветки разошлись</span><em>в работе</em></s></li>
+                <li><s><i>4.5</i><span>Форки: работа с чужим проектом</span><em>в работе</em></s></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="module">
+            <div class="module__spine"><b>МОДУЛЬ 5</b></div>
+            <div class="module__body">
+              <h3>Командная работа</h3>
+              <p>Задачи, обсуждения и правила, по которым чужой код попадает в проект.</p>
+              <ul class="toc">
+                <li><s><i>5.1</i><span>Issues: метки, исполнители, вехи</span><em>в работе</em></s></li>
+                <li><s><i>5.2</i><span>Pull Request: обсуждение, ревью, замечания к строкам</span><em>в работе</em></s></li>
+                <li><s><i>5.3</i><span>Защита веток, обязательное ревью, CODEOWNERS</span><em>в работе</em></s></li>
+                <li><s><i>5.4</i><span>Шаблоны задач и запросов, Discussions</span><em>в работе</em></s></li>
+                <li><s><i>5.5</i><span>Доступы: соавторы, роли, организации и команды</span><em>в работе</em></s></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="module">
+            <div class="module__spine"><b>МОДУЛЬ 6</b></div>
+            <div class="module__body">
+              <h3>Канбан внутри GitHub</h3>
+              <p>Доска, на которой карточки двигаются сами, потому что связаны с задачами и коммитами.</p>
+              <ul class="toc">
+                <li><s><i>6.1</i><span>Projects: доска, колонки, свои поля, виды</span><em>в работе</em></s></li>
+                <li><s><i>6.2</i><span>Связь доски с задачами и pull request</span><em>в работе</em></s></li>
+                <li><s><i>6.3</i><span>Автоматические переходы карточек</span><em>в работе</em></s></li>
+                <li><s><i>6.4</i><span>Вехи и планирование спринта</span><em>в работе</em></s></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="module">
+            <div class="module__spine"><b>МОДУЛЬ 7</b></div>
+            <div class="module__body">
+              <h3>Публикация и автоматика</h3>
+              <p>Сайт прямо из репозитория и проверки, которые запускаются без человека.</p>
+              <ul class="toc">
+                <li><s><i>7.1</i><span>GitHub Pages: из ветки, из папки docs, свой домен</span><em>в работе</em></s></li>
+                <li><s><i>7.2</i><span>Actions: из чего состоит workflow</span><em>в работе</em></s></li>
+                <li><s><i>7.3</i><span>Сборка и выкладка сайта через Actions</span><em>в работе</em></s></li>
+                <li><s><i>7.4</i><span>Теги и релизы</span><em>в работе</em></s></li>
+                <li><s><i>7.5</i><span>Секреты, Dependabot, вкладка Security</span><em>в работе</em></s></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="module">
+            <div class="module__spine"><b>МОДУЛЬ 8</b></div>
+            <div class="module__body">
+              <h3>Настройки репозитория целиком</h3>
+              <p>Вкладка Settings сверху донизу: что можно включить и чем это обернётся.</p>
+              <ul class="toc">
+                <li><s><i>8.1</i><span>Видимость, переименование, перенос, архивация</span><em>в работе</em></s></li>
+                <li><s><i>8.2</i><span>Шаблоны репозиториев и файлы в папке .github</span><em>в работе</em></s></li>
+                <li><s><i>8.3</i><span>Гисты, звёзды, подписки, лента</span><em>в работе</em></s></li>
+                <li><s><i>8.4</i><span>Codespaces: редактор прямо в браузере</span><em>в работе</em></s></li>
+              </ul>
+            </div>
+          </article>
+        </div>
+
+        <div class="colophon">
+          <span>Справочник по Git и GitHub · учебное издание</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

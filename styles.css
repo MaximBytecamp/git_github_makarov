@@ -1,0 +1,392 @@
+/* Справочник по Git и GitHub — типографика, книжная вёрстка и блоки главы.
+   Автор: Макаров Максим Николаевич
+
+   Части файла:
+     1. переменные и основа          5. лента лет и досье
+     2. книга: корешок и страница    6. схемы: развилка, было-стало, мифы
+     3. типографика главы            7. витрина логотипов и кадры
+     4. код, таблицы, врезки         8. адаптив и печать                    */
+
+/* ── 1. Переменные и основа ──────────────────────────────────── */
+:root {
+  --ink: #1B1A19;          /* угольный: текст, рамки, корешок */
+  --ink-soft: #4A4644;
+  --ink-faint: #918A85;
+  --fire: #F05133;         /* фирменный оранжевый Git */
+  --fire-deep: #C8380F;
+  --fire-pale: #FBE0D8;
+  --steel: #2C5D8F;        /* синий: второй акцент, ссылки на GitHub */
+  --steel-pale: #DDE7F1;
+  --moss: #2F7D4F;         /* «стало лучше» */
+  --paper: #F4F1EC;
+  --page: #FFFDF9;
+  --rule: rgba(27, 26, 25, .16);
+  --pixel: "Pixelify Sans", "Roboto Mono", monospace;
+  --body: Inter, system-ui, -apple-system, sans-serif;
+  --display: Literata, "PT Serif", Georgia, "Times New Roman", serif;
+  --mono: "Roboto Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  /* Фон-«миллиметровка»: намёк на разлинованную тетрадь, а не на экран. */
+  background-image:
+    linear-gradient(rgba(27, 26, 25, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 26, 25, .05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--fire-deep); }
+a:hover { color: var(--ink); }
+code, kbd, samp { font-family: var(--mono); }
+:target { scroll-margin-top: 24px; }
+img { max-width: 100%; }
+
+kbd {
+  padding: 1px 6px;
+  border: 2px solid var(--ink);
+  border-bottom-width: 3px;
+  background: var(--page);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.eyebrow {
+  margin: 0;
+  font: 600 11px/1.4 var(--pixel);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--fire-deep);
+}
+.author-line {
+  font: 600 11px/1.5 var(--pixel);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ── 2. Книга: корешок и блок страниц ────────────────────────── */
+.book { max-width: 1180px; margin: 0 auto; padding: 5vh 24px 8vh; }
+.book__body {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  border: 3px solid var(--ink);
+  box-shadow: 10px 10px 0 var(--ink);
+  background: var(--page);
+}
+
+.spine {
+  position: relative;
+  background: var(--ink);
+  color: var(--fire-pale);
+  display: flex; align-items: center; justify-content: center;
+  padding: 22px 0;
+  overflow: hidden;
+}
+.spine span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font: 600 11px/1 var(--pixel);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--fire);
+}
+/* Прошивка корешка — две пунктирные линии. */
+.spine::before, .spine::after {
+  content: "";
+  position: absolute; top: 16px; bottom: 16px;
+  border-left: 2px dotted rgba(251, 224, 216, .45);
+}
+.spine::before { left: 16px; }
+.spine::after { right: 16px; }
+
+.leaf { padding: clamp(28px, 4vw, 64px); min-width: 0; }
+
+.running {
+  display: flex; flex-wrap: wrap; row-gap: 10px;
+  justify-content: space-between; align-items: baseline; gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: clamp(24px, 3vw, 44px);
+}
+.running .eyebrow { flex: 1 1 0; min-width: 0; }
+.running__folio { margin: 0; font: 600 11px/1.4 var(--pixel); letter-spacing: 1.4px; text-transform: uppercase; color: var(--ink-soft); }
+
+/* ── 3. Типографика главы ────────────────────────────────────── */
+.chapter-head { margin-bottom: 34px; }
+.chapter-num {
+  display: inline-block;
+  padding: 5px 12px 4px;
+  background: var(--ink); color: var(--fire);
+  font: 700 13px/1 var(--pixel); letter-spacing: 2px;
+}
+.chapter-head h1 {
+  margin: 14px 0 12px;
+  font-family: var(--display);
+  font-size: clamp(34px, 5vw, 58px);
+  line-height: 1.04;
+  font-weight: 700;
+  letter-spacing: -.5px;
+}
+.lead { margin: 0 0 18px; font-size: clamp(18px, 1.5vw, 21px); line-height: 1.5; color: var(--ink-soft); }
+
+h2 {
+  display: flex; align-items: center; gap: 14px;
+  margin: 52px 0 16px;
+  font-family: var(--display); font-size: clamp(24px, 2.6vw, 32px); line-height: 1.2;
+}
+h2 .sec {
+  flex: 0 0 auto;
+  padding: 4px 9px 3px;
+  background: var(--ink); color: var(--fire);
+  font: 700 12px/1 var(--pixel); letter-spacing: 1px;
+}
+h3 { margin: 32px 0 10px; font-family: var(--display); font-size: 21px; }
+.leaf h1, .leaf h2, .leaf h3 { overflow-wrap: break-word; hyphens: auto; }
+p { margin: 0 0 14px; }
+ul, ol { margin: 0 0 16px; padding-left: 22px; }
+li { margin-bottom: 7px; }
+.term { font-weight: 700; border-bottom: 2px solid var(--fire); }
+:not(pre) > code { overflow-wrap: break-word; }
+
+/* Паспорт темы — шапка главы в четыре колонки. */
+.passport {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 0 30px;
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  background: var(--page);
+}
+.passport > div { padding: 13px 15px; border-right: 2px solid var(--rule); }
+.passport > div:last-child { border-right: 0; }
+.passport dt { font: 600 10px/1.3 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; color: var(--fire-deep); margin-bottom: 5px; }
+.passport dd { margin: 0; font-size: 15px; line-height: 1.4; }
+
+.contents { margin: 0 0 34px; padding: 16px 20px; border: 2px dashed var(--ink); }
+.contents b { display: block; font: 600 10px/1.3 var(--pixel); letter-spacing: 1.3px; text-transform: uppercase; color: var(--fire-deep); margin-bottom: 9px; }
+.contents ol { columns: 2; column-gap: 34px; margin: 0; padding-left: 20px; font-size: 15px; }
+.contents li { margin-bottom: 4px; break-inside: avoid; }
+.contents a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+.contents a:hover { border-bottom-color: var(--fire); }
+
+/* ── 4. Код, таблицы, врезки ─────────────────────────────────── */
+figure.code { margin: 20px 0; border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); background: var(--page); overflow: hidden; }
+figure.code figcaption {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 8px 14px;
+  background: var(--ink); color: var(--fire-pale);
+  font: 600 10.5px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase;
+}
+figure.code pre { margin: 0; padding: 15px 18px; overflow-x: auto; font: 400 14px/1.65 var(--mono); }
+figure.code--out pre { background: #1B1A19; color: #F0E7E1; }
+figure.code--out figcaption { background: var(--ink-soft); }
+.c { color: var(--ink-faint); }                  /* комментарий  */
+.k { color: var(--steel); font-weight: 700; }    /* ключевое слово */
+.s { color: var(--fire-deep); }                  /* строка       */
+.n { color: var(--moss); font-weight: 700; }     /* число, хеш   */
+.f { color: var(--ink); font-weight: 700; }      /* команда      */
+.u { color: var(--steel); font-weight: 700; }    /* ввод человека */
+
+.table-scroll { overflow-x: auto; margin: 18px 0; border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); }
+table { width: 100%; border-collapse: collapse; background: var(--page); font-size: 15px; }
+th, td { padding: 9px 13px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--rule); }
+th { background: var(--fire-pale); font: 600 11px/1.4 var(--pixel); letter-spacing: 1px; text-transform: uppercase; }
+tbody tr:last-child td { border-bottom: 0; }
+td code { font-size: 13.5px; }
+
+.margin-note {
+  margin: 20px 0; padding: 13px 17px;
+  border-left: 6px solid var(--fire);
+  background: var(--fire-pale);
+  font-size: 15.5px;
+}
+.margin-note > b { display: block; font: 600 10.5px/1.3 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 6px; }
+.margin-note p:last-child { margin-bottom: 0; }
+.margin-note--steel { border-left-color: var(--steel); background: var(--steel-pale); }
+
+details { margin: 0 0 10px; padding: 11px 16px; border: 2px solid var(--ink); background: var(--page); }
+summary { cursor: pointer; font-weight: 600; }
+details[open] summary { margin-bottom: 9px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+details p:last-child, details ul:last-child { margin-bottom: 0; }
+
+.cheat { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin: 20px 0; }
+.cheat > div { padding: 13px 15px; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); background: var(--page); }
+.cheat > div > b { display: block; font: 600 10.5px/1.3 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; color: var(--fire-deep); margin-bottom: 8px; }
+.cheat > div > code { display: block; margin-bottom: 4px; font-size: 13px; white-space: pre-wrap; word-break: break-word; }
+.cheat > div > p { margin: 8px 0 0; font-size: 14.5px; line-height: 1.45; color: var(--ink-soft); }
+
+.pager { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 46px 0 22px; padding-top: 18px; border-top: 2px solid var(--ink); }
+.pager a { font-weight: 600; text-decoration: none; }
+.pager a:hover { text-decoration: underline; }
+.colophon { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--ink-soft); }
+
+/* ── 5. Лента лет и досье ────────────────────────────────────── */
+/* Лента лет: вертикальная рельса, год пиксельным шрифтом слева,
+   карточка события справа. Точка на рельсе отмечает событие. */
+.era { position: relative; margin: 24px 0 28px; padding-left: 108px; }
+.era::before {
+  content: ""; position: absolute; left: 92px; top: 6px; bottom: 6px;
+  border-left: 3px solid var(--ink);
+}
+.era__item { position: relative; margin-bottom: 16px; }
+.era__item::before {
+  content: ""; position: absolute; left: -22px; top: 15px;
+  width: 13px; height: 13px;
+  background: var(--page); border: 3px solid var(--ink);
+}
+.era__item--key::before { background: var(--fire); }
+/* Даты — моноширинным, а не пиксельным: в пиксельном шрифте «2» и «8»
+   на мелком кегле путаются, и «26 июля» читается как «86 июля». */
+.era__year {
+  position: absolute; left: -108px; top: 10px; width: 78px;
+  text-align: right;
+  font: 700 16px/1.25 var(--mono); letter-spacing: -.2px; color: var(--ink);
+}
+.era__year small { display: block; margin-top: 2px; font: 600 10px/1.4 var(--mono); letter-spacing: .6px; color: var(--ink-faint); text-transform: uppercase; }
+.era__card { padding: 11px 16px; border: 3px solid var(--ink); background: var(--page); box-shadow: 5px 5px 0 var(--ink); }
+.era__item--key .era__card { box-shadow: 5px 5px 0 var(--fire); border-color: var(--fire-deep); }
+.era__card b { display: block; font-family: var(--display); font-size: 17px; margin-bottom: 4px; }
+.era__card p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--ink-soft); }
+.era__card p + p { margin-top: 6px; }
+.era--days .era__year { font-size: 13.5px; }
+
+/* Досье: карточка человека с портретом. Фото обрезается по верху —
+   иначе на портретах в полный рост лицо уезжает за край. */
+.dossier { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin: 22px 0; }
+.card-person { border: 3px solid var(--ink); background: var(--page); box-shadow: 6px 6px 0 var(--ink); overflow: hidden; }
+.card-person img { display: block; width: 100%; height: 190px; object-fit: cover; object-position: 50% 12%; background: var(--paper); }
+/* Карточка с рисунком, а не с фотографией: логотип нельзя обрезать. */
+.card-person--art img { object-fit: contain; padding: 16px; }
+/* Маленький исходник (100×100 — других на Викискладе нет) не растягиваем:
+   показываем как есть, иначе лицо расплывается. */
+.card-person--small img { height: 190px; object-fit: contain; padding: 12px 0; }
+.card-person__body { padding: 12px 15px 14px; border-top: 3px solid var(--ink); }
+.card-person__role { display: inline-block; margin-bottom: 7px; padding: 3px 8px; background: var(--ink); color: var(--fire); font: 600 9.5px/1.4 var(--pixel); letter-spacing: 1px; text-transform: uppercase; }
+.card-person h4 { margin: 0 0 6px; font-family: var(--display); font-size: 18px; }
+.card-person p { margin: 0; font-size: 14.5px; line-height: 1.45; color: var(--ink-soft); }
+.card-person .credit { margin-top: 8px; }
+
+/* Подпись с лицензией под любой картинкой из интернета. */
+.credit { display: block; font: 400 11px/1.4 var(--mono); color: var(--ink-faint); }
+.credit a { color: var(--ink-faint); }
+
+/* Витрина логотипов: кто держит код в Git. */
+.wall { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 12px; margin: 22px 0; }
+.wall__cell {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  min-height: 108px; padding: 16px 12px;
+  border: 3px solid var(--ink); background: var(--page); box-shadow: 4px 4px 0 var(--ink);
+}
+/* height, а не max-height: у логотипов разный собственный размер, и мелкие
+   значки без этого остаются мелкими. */
+.wall__cell img { height: 38px; width: auto; max-width: 100%; object-fit: contain; filter: grayscale(1); opacity: .78; transition: filter .2s ease, opacity .2s ease; }
+.wall__cell:hover img { filter: none; opacity: 1; }
+.wall__cell span { font: 600 10.5px/1.35 var(--mono); letter-spacing: .4px; text-transform: uppercase; color: var(--ink-soft); text-align: center; }
+
+/* ── 6. Схемы: развилка, было-стало, мифы, стопка версий ─────── */
+/* Развилка: две модели рядом. Схема рисуется инлайновым SVG в главе. */
+.versus { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 24px 0; }
+.versus__side { border: 3px solid var(--ink); background: var(--page); box-shadow: 6px 6px 0 var(--ink); overflow: hidden; }
+.versus__head { padding: 9px 15px; background: var(--ink); color: var(--fire-pale); font: 600 10.5px/1.4 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; }
+.versus__side--new .versus__head { background: var(--fire-deep); }
+.versus__art { padding: 18px 16px 6px; }
+.versus__art svg { display: block; width: 100%; height: auto; }
+.versus__body { padding: 4px 16px 14px; }
+.versus__body p { margin: 0 0 8px; font-size: 15px; line-height: 1.5; }
+.versus__body ul { margin: 0; padding-left: 20px; font-size: 14.5px; }
+.versus__body li { margin-bottom: 5px; color: var(--ink-soft); }
+
+/* Было → стало: строка из двух половин со стрелкой посередине. */
+.swap { margin: 22px 0; border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); background: var(--page); }
+.swap__row { display: grid; grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr); align-items: center; border-bottom: 2px solid var(--rule); }
+.swap__row:last-child { border-bottom: 0; }
+.swap__row > div { padding: 12px 16px; font-size: 15px; line-height: 1.5; }
+.swap__old { color: var(--ink-soft); }
+.swap__old b, .swap__new b { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; margin-bottom: 5px; color: var(--ink-faint); }
+.swap__new { background: var(--fire-pale); }
+.swap__new b { color: var(--fire-deep); }
+.swap__arrow { align-self: stretch; display: flex; align-items: center; justify-content: center; border-left: 2px solid var(--rule); border-right: 2px solid var(--rule); font: 700 18px/1 var(--pixel); color: var(--fire-deep); }
+
+/* Мифы: что обычно думают и как на самом деле. */
+.myths { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 22px 0; }
+.myth { border: 3px solid var(--ink); background: var(--page); box-shadow: 5px 5px 0 var(--ink); }
+.myth__no { padding: 10px 15px; border-bottom: 3px solid var(--ink); background: var(--steel-pale); font-size: 15px; }
+.myth__no b { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; color: var(--steel); margin-bottom: 4px; }
+.myth__yes { padding: 11px 15px; font-size: 15px; line-height: 1.5; }
+.myth__yes b { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; color: var(--fire-deep); margin-bottom: 4px; }
+
+/* Стопка версий: как выглядит история проекта без контроля версий. */
+.mess { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0; }
+.mess span {
+  padding: 9px 13px;
+  border: 2px solid var(--ink); background: var(--page);
+  font: 400 13.5px/1.4 var(--mono);
+  box-shadow: 3px 3px 0 rgba(27, 26, 25, .22);
+}
+.mess span:nth-child(2n) { transform: rotate(-1.2deg); }
+.mess span:nth-child(3n) { transform: rotate(1.4deg); }
+.mess span.final { border-color: var(--fire-deep); box-shadow: 3px 3px 0 var(--fire); }
+
+/* Крупная цитата с указанием источника. */
+.pull-quote { margin: 26px 0; padding: 20px 24px; border: 3px solid var(--ink); border-left-width: 10px; border-left-color: var(--fire); background: var(--page); box-shadow: 6px 6px 0 var(--ink); }
+.pull-quote p { margin: 0 0 12px; font-family: var(--display); font-size: clamp(18px, 1.9vw, 23px); font-style: italic; line-height: 1.45; }
+.pull-quote footer { font: 600 11px/1.5 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; color: var(--ink-soft); }
+.pull-quote cite { font-style: normal; }
+
+/* ── 7. Картинки из интернета и увеличение ───────────────────── */
+.shot { margin: 22px 0; border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); background: var(--page); }
+.shot img { display: block; width: 100%; height: auto; background: #fff; cursor: zoom-in; }
+.shot figcaption { padding: 9px 14px; border-top: 2px solid var(--ink); font: 600 11px/1.5 var(--mono); color: var(--ink-soft); }
+.shot--logo { display: flex; align-items: center; gap: 20px; padding: 18px 20px; }
+.shot--logo img { width: auto; max-height: 96px; cursor: default; }
+.shot--logo figcaption { padding: 0; border: 0; font: 400 15px/1.55 var(--body); color: var(--ink-soft); }
+
+.lightbox { position: fixed; inset: 0; z-index: 90; display: none; place-items: center; padding: clamp(14px, 3vw, 42px); background: rgba(27, 26, 25, .92); cursor: zoom-out; }
+.lightbox.is-open { display: grid; }
+.lightbox figure { margin: 0; max-width: 100%; max-height: 100%; border: 3px solid var(--page); background: var(--page); }
+.lightbox img { display: block; max-width: 100%; max-height: 86vh; width: auto; }
+.lightbox figcaption { padding: 9px 14px; border-top: 2px solid var(--ink); font: 600 11px/1.5 var(--mono); color: var(--ink-soft); }
+.lightbox__hint { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); color: var(--fire-pale); font: 600 10px/1 var(--pixel); letter-spacing: 1.4px; text-transform: uppercase; }
+
+/* Список источников в конце главы. */
+.sources { margin: 26px 0 0; padding: 14px 18px; border: 2px dashed var(--ink-faint); font-size: 14px; }
+.sources b { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 8px; }
+.sources ol { margin: 0; padding-left: 20px; }
+.sources li { margin-bottom: 5px; color: var(--ink-soft); }
+
+/* ── 8. Адаптив и печать ─────────────────────────────────────── */
+@media (max-width: 900px) {
+  body { font-size: 16px; }
+  .book { padding: 3vh 12px 6vh; }
+  .book__body { grid-template-columns: 34px minmax(0, 1fr); box-shadow: 6px 6px 0 var(--ink); }
+  .passport { grid-template-columns: 1fr 1fr; }
+  .contents ol { columns: 1; }
+  .swap__row { grid-template-columns: 1fr; }
+  .swap__arrow { border: 0; border-top: 2px solid var(--rule); border-bottom: 2px solid var(--rule); padding: 4px; transform: rotate(90deg); }
+  .shot--logo { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 560px) {
+  .era { padding-left: 74px; }
+  .era::before { left: 58px; }
+  .era__year { left: -74px; width: 52px; font-size: 14px; }
+}
+@media (max-width: 480px) {
+  .passport { grid-template-columns: 1fr; }
+  .passport > div { border-right: 0; border-bottom: 2px solid var(--rule); }
+  .passport > div:last-child { border-bottom: 0; }
+}
+
+@media print {
+  body { background: #fff; }
+  .book__body, .passport, .shot, figure.code, .table-scroll, .era__card, .card-person, .versus__side, .myth, .swap, .pull-quote { box-shadow: none; }
+  .lightbox { display: none !important; }
+}
