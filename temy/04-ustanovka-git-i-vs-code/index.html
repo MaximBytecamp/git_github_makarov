@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>1.4 Установка Git и VS Code · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <script>
+    /* Система проставляется до отрисовки: иначе при загрузке мелькает чужая инструкция. */
+    try {
+      var saved = localStorage.getItem('git-book-os');
+      if (!saved) {
+        var p = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+        saved = /win/i.test(p) ? 'win' : (/mac|iphone|ipad/i.test(p) ? 'mac' : 'linux');
+      }
+      document.documentElement.dataset.os = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Модуль 1 · Что такое контроль версий</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 1 · что такое контроль версий</p>
+          <p class="running__folio">Глава 1.4</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">1.4</span>
+          <h1>Установка Git<br>и VS Code</h1>
+          <p class="lead">Ставим две программы и настраиваем их так, чтобы дальше всё работало без сюрпризов. Шаги расписаны по порядку и отдельно для каждой системы — переключите её кнопкой в шапке, если определилась не та.</p>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Рабочее место</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Связанные темы</dt><dd>Панель Source Control, первый репозиторий</dd></div>
+          <div><dt>Зачем это знать</dt><dd>Подготовить компьютер к работе и подписать коммиты своим именем</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>В этой главе</b>
+          <ol>
+            <li><a href="#s1">Что именно мы ставим</a></li>
+            <li><a href="#s2">Шаг 1. Скачать Git</a></li>
+            <li><a href="#s3">Шаг 2. Установить Git</a></li>
+            <li><a href="#s4">Шаг 3. Проверить, что Git на месте</a></li>
+            <li><a href="#s5">Шаг 4. Установить VS Code</a></li>
+            <li><a href="#s6">Шаг 5. Осмотреть окно VS Code</a></li>
+            <li><a href="#s7">Шаг 6. Представиться Git</a></li>
+            <li><a href="#s8">Шаг 7. Войти в аккаунт GitHub</a></li>
+            <li><a href="#s9">Шаг 8. Две настройки на будущее</a></li>
+            <li><a href="#s10">Проверка готовности</a></li>
+            <li><a href="#s11">Что делать, если не работает</a></li>
+            <li><a href="#s12">Проверьте себя</a></li>
+            <li><a href="#s13">Шпаргалка по главе</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Что именно мы ставим</h2>
+        <p>Программы две, и они разные по назначению. <strong>Git</strong> — сам инструмент контроля версий: он ведёт историю и выполняет все операции с ней. У Git нет окна, он работает в командной строке и отвечает на запросы других программ. <strong>Visual Studio Code</strong> — редактор кода, в котором мы будем писать и нажимать кнопки; работу с историей он передаёт установленному Git.</p>
+        <p>Порядок важен: сначала Git, потом редактор. VS Code ищет Git при запуске, и если поставить его вторым, панель Source Control останется пустой до перезапуска.</p>
+        <div class="margin-note">
+          <b>На полях: на учебном компьютере они уже могут стоять</b>
+          <p>Если за компьютером до вас работали, обе программы, скорее всего, установлены. Проверка занимает минуту — §4. Тогда переходите сразу к §6: настройки Git привязаны к учётной записи, и ваши придётся задать заново.</p>
+        </div>
+
+        <h2 id="s2"><span class="sec">§2</span>Шаг 1. Скачать Git</h2>
+        <p>Единственный правильный адрес — <a href="https://git-scm.com/downloads">git-scm.com/downloads</a>. Это сайт самого проекта; всё, что предлагают поисковики поверх него, — чужие сборки с непонятным содержимым.</p>
+        <div data-os="win">
+          <figure class="shot">
+            <img src="img/git-win.png" alt="Страница загрузки Git для Windows на git-scm.com">
+            <figcaption>Страница <code>git-scm.com/downloads/win</code>. Верхняя ссылка <b>Click here to download</b> сразу отдаёт нужный установщик — версия и разрядность подобраны сайтом.</figcaption>
+          </figure>
+          <p>Скачается файл вида <code>Git-2.55.0-64-bit.exe</code> размером около 70 МБ. Номер версии у вас будет свежее — это нормально.</p>
+        </div>
+        <div data-os="mac">
+          <figure class="shot">
+            <img src="img/git-mac.png" alt="Страница загрузки Git для macOS на git-scm.com">
+            <figcaption>Страница <code>git-scm.com/downloads/mac</code>. На macOS способов несколько, и скачивать установщик обычно не нужно — подробности на следующем шаге.</figcaption>
+          </figure>
+          <p>На macOS Git проще поставить командой, а не файлом: система умеет это сама. Установщик с сайта пригодится, только если командная строка почему-то недоступна.</p>
+        </div>
+        <div data-os="linux">
+          <p>В Linux Git ставится из репозитория дистрибутива одной командой — скачивать с сайта ничего не нужно. Команды для разных систем на следующем шаге.</p>
+        </div>
+
+        <h2 id="s3"><span class="sec">§3</span>Шаг 2. Установить Git</h2>
+        <div data-os="win">
+          <p>Запустите скачанный файл. Установщик задаст около десяти вопросов; почти везде подходит предложенный вариант, но четыре экрана стоит пройти внимательно.</p>
+          <ol class="steps">
+            <li><b>Select Components</b> — оставьте как есть. Пункт <code>Windows Explorer integration</code> добавляет в контекстное меню папки команду «Open Git Bash here», она пригодится.</li>
+            <li><b>Choosing the default editor</b> — выберите <code>Use Visual Studio Code as Git's default editor</code>, если редактор уже стоит. Иначе оставьте Vim и вернитесь к этому позже: Vim закрывается сочетанием <kbd>Esc</kbd>, затем <code>:q!</code> и <kbd>Enter</kbd>, и это первое, обо что спотыкаются.</li>
+            <li><b>Adjusting the name of the initial branch</b> — выберите <code>Override the default branch name</code> и оставьте <code>main</code>. Так называется главная ветка на GitHub; со старым именем <code>master</code> придётся каждый раз переименовывать.</li>
+            <li><b>Adjusting your PATH environment</b> — оставьте средний вариант <code>Git from the command line and also from 3rd-party software</code>. Это то, что позволяет VS Code найти Git.</li>
+          </ol>
+          <p>Остальные экраны — про библиотеку SSL, окончания строк и терминал — проходите с предложенными значениями. Про окончания строк мы поговорим в §9: там есть тонкость, из-за которой файлы иногда выглядят изменёнными целиком.</p>
+        </div>
+        <div data-os="mac">
+          <p>Способ зависит от того, что у вас уже есть. Проще всего начать с первого — часто Git ставится вместе с инструментами разработчика, которые система предлагает сама.</p>
+          <figure class="code">
+            <figcaption><span>Терминал</span><span>вариант 1: инструменты разработчика Apple</span></figcaption>
+<pre><span class="f">xcode-select</span> --install</pre>
+          </figure>
+          <p>Откроется окно системы с предложением установить Command Line Tools. Нажмите <b>Install</b> и дождитесь конца — Git будет в комплекте.</p>
+          <figure class="code">
+            <figcaption><span>Терминал</span><span>вариант 2: через Homebrew</span></figcaption>
+<pre><span class="f">brew</span> install git</pre>
+          </figure>
+          <p>Этот вариант даёт более свежую версию и удобное обновление. Он подходит, если Homebrew уже установлен; ставить его ради одного Git не обязательно.</p>
+        </div>
+        <div data-os="linux">
+          <figure class="code">
+            <figcaption><span>Терминал</span><span>Debian, Ubuntu и производные</span></figcaption>
+<pre><span class="f">sudo</span> apt update
+<span class="f">sudo</span> apt install git</pre>
+          </figure>
+          <figure class="code">
+            <figcaption><span>Терминал</span><span>Fedora, RHEL</span></figcaption>
+<pre><span class="f">sudo</span> dnf install git</pre>
+          </figure>
+          <p>Пакет называется одинаково почти везде. В Arch — <code>sudo pacman -S git</code>, в openSUSE — <code>sudo zypper install git</code>.</p>
+        </div>
+
+        <h2 id="s4"><span class="sec">§4</span>Шаг 3. Проверить, что Git на месте</h2>
+        <p>Откройте терминал <span data-os="win">(<kbd>Win</kbd> + <kbd>R</kbd>, наберите <code>cmd</code>, или запустите Git Bash из меню «Пуск»)</span><span data-os="mac">(<kbd>Cmd</kbd> + <kbd>Пробел</kbd>, наберите «Терминал»)</span><span data-os="linux">(<kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>)</span> и выполните одну команду:</p>
+        <figure class="code">
+          <figcaption><span>Терминал</span><span>проверка установки</span></figcaption>
+<pre><span class="f">git</span> --version</pre>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>Вывод</span><span>Git установлен и отвечает</span></figcaption>
+<pre>git version 2.51.1</pre>
+        </figure>
+        <p>Номер версии может отличаться — важно, что команда вообще ответила. Если вместо этого вы видите <span data-os="win">«"git" не является внутренней или внешней командой»</span><span data-os="mac linux">«command not found: git»</span>, загляните в §11: там разобраны причины.</p>
+
+        <h2 id="s5"><span class="sec">§5</span>Шаг 4. Установить VS Code</h2>
+        <p>Адрес тот же принцип: <a href="https://code.visualstudio.com/download">code.visualstudio.com/download</a>, сайт разработчика.</p>
+        <figure class="shot">
+          <img src="img/vscode-site.png" alt="Страница загрузки Visual Studio Code с вариантами для Windows, Linux и Mac">
+          <figcaption>Три колонки — три системы. Выбирайте свою: <span data-os="win">Windows 10, 11 — синяя кнопка слева</span><span data-os="mac">Mac, macOS 12.0+ — кнопка справа</span><span data-os="linux">.deb для Debian и Ubuntu, .rpm для Fedora и RHEL — по центру</span>.</figcaption>
+        </figure>
+        <div data-os="win">
+          <p>Запустите установщик. Единственный экран, где нужно задержаться, — <b>Выбор дополнительных задач</b>. Отметьте три пункта:</p>
+          <ol class="steps">
+            <li><b>Add "Open with Code" action to Windows Explorer file context menu</b> — правый клик по файлу откроет его в редакторе.</li>
+            <li><b>Add "Open with Code" action to Windows Explorer directory context menu</b> — то же для папки. Это самый частый способ открыть проект.</li>
+            <li><b>Add to PATH</b> — позволит запускать редактор командой <code>code</code> из терминала.</li>
+          </ol>
+        </div>
+        <div data-os="mac">
+          <p>Скачается архив. Распакуйте его двойным кликом и перетащите <b>Visual Studio Code</b> в папку <b>Программы</b> — иначе редактор будет запускаться из папки «Загрузки» и потеряется при первой уборке.</p>
+          <p>Затем добавьте команду <code>code</code> в терминал: откройте редактор, нажмите <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>, наберите <code>shell command</code> и выберите <b>Install 'code' command in PATH</b>. После этого любую папку можно открыть из терминала командой <code>code .</code></p>
+        </div>
+        <div data-os="linux">
+          <p>Скачанный пакет ставится менеджером пакетов:</p>
+          <figure class="code">
+            <figcaption><span>Терминал</span><span>Debian, Ubuntu</span></figcaption>
+<pre><span class="f">sudo</span> apt install ./code_*.deb</pre>
+          </figure>
+          <p>В Fedora и RHEL — <code>sudo dnf install ./code-*.rpm</code>. Команда <code>code</code> появится в терминале сразу.</p>
+        </div>
+
+        <h2 id="s6"><span class="sec">§6</span>Шаг 5. Осмотреть окно VS Code</h2>
+        <p>Запустите редактор. Пока проект не открыт, окно выглядит так:</p>
+        <figure class="shot">
+          <img src="img/vscode-empty.png" alt="Окно VS Code без открытого проекта: панель Source Control слева, приветственная вкладка справа">
+          <figcaption>Слева открыта панель Source Control: она сообщает, что проекта ещё нет, и предлагает открыть папку или склонировать репозиторий. Справа — приветственная вкладка со списком последних проектов.</figcaption>
+        </figure>
+        <p>Четыре места, которые понадобятся с первого занятия:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что</th><th>Где</th><th>Как открыть</th></tr></thead>
+            <tbody>
+              <tr><td>Проводник (Explorer)</td><td>верхний значок на левой полосе</td><td><kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>E</kbd></td></tr>
+              <tr><td>Source Control</td><td>значок с развилкой на левой полосе</td><td><kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>G</kbd></td></tr>
+              <tr><td>Терминал</td><td>нижняя часть окна</td><td><kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Ctrl</span></kbd> + <kbd>~</kbd></td></tr>
+              <tr><td>Палитра команд</td><td>выпадает сверху</td><td><kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="shot">
+          <img src="img/vscode-source-control.png" alt="Панель Source Control в VS Code">
+          <figcaption>Панель Source Control — место, где пройдёт почти вся работа второго модуля: список изменённых файлов, поле для пояснения и кнопка Commit.</figcaption>
+        </figure>
+        <p>Палитра команд заменяет поиск по меню: открыли, набрали часть названия — получили список подходящих команд. Все действия с Git доступны и через неё, если набрать <code>git</code>.</p>
+
+        <h2 id="s7"><span class="sec">§7</span>Шаг 6. Представиться Git</h2>
+        <p>Каждый коммит подписан именем и почтой автора — мы видели это в прошлой главе, когда разбирали содержимое коммита. Пока подпись не задана, Git либо откажется делать коммит, либо подставит случайное имя из системы. Вот как выглядит отказ:</p>
+        <figure class="code code--out">
+          <figcaption><span>Вывод</span><span>коммит без представления</span></figcaption>
+<pre>Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email <span class="s">"you@example.com"</span>
+  git config --global user.name <span class="s">"Your Name"</span>
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.</pre>
+        </figure>
+        <p>Git сам подсказывает, что делать. Выполните две команды, подставив своё имя и почту:</p>
+        <figure class="code">
+          <figcaption><span>Терминал</span><span>выполняется один раз на компьютере</span></figcaption>
+<pre><span class="f">git</span> config --global user.name <span class="s">"Иван Петров"</span>
+<span class="f">git</span> config --global user.email <span class="s">"ivan.petrov@example.com"</span></pre>
+        </figure>
+        <p>Ключ <code>--global</code> означает «для всех моих проектов на этом компьютере». Настройки лягут в файл <code>.gitconfig</code> в домашней папке. Проверить, что получилось:</p>
+        <figure class="code code--out">
+          <figcaption><span>git config --global --list</span><span>как выглядит результат</span></figcaption>
+<pre>user.name=Иван Петров
+user.email=ivan.petrov@example.com
+init.defaultbranch=main</pre>
+        </figure>
+        <p>Теперь коммит создаётся и подписывается вашим именем:</p>
+        <figure class="code code--out">
+          <figcaption><span>git log</span><span>подпись в готовом коммите</span></figcaption>
+<pre><span class="n">7d861b0</span> Иван Петров &lt;ivan.petrov@example.com&gt;
+Проба</pre>
+        </figure>
+        <div class="margin-note margin-note--warn">
+          <b>На полях: почта должна совпадать с той, что на GitHub</b>
+          <p>GitHub связывает коммит с вашим профилем по адресу почты. Указали другой — коммиты появятся в репозитории, но будут числиться за незнакомцем: без ссылки на профиль и без отметки в вашей активности. Берите тот же адрес, что и в аккаунте. Если адрес скрыт настройкой приватности, GitHub выдаёт служебный вида <code>12345678+login@users.noreply.github.com</code> — он подходит.</p>
+        </div>
+        <p>Имя пишите настоящее и полностью: по нему преподаватель и коллеги будут понимать, чей коммит. Ник вроде <code>xXx_coder_xXx</code> в истории проекта выглядит ровно так, как вы представляете.</p>
+
+        <h2 id="s8"><span class="sec">§8</span>Шаг 7. Войти в аккаунт GitHub</h2>
+        <p>Настройка Git и вход в GitHub — разные вещи. Первое подписывает коммиты, второе даёт редактору право отправлять их на сайт. На учебном компьютере начните с проверки: в редакторе может быть открыт чужой аккаунт.</p>
+        <figure class="shot">
+          <img src="img/vscode-account-menu.png" alt="Меню аккаунта в VS Code: значок человечка внизу слева">
+          <figcaption>Значок человечка в самом низу левой полосы открывает меню аккаунта. Если в нём стоит чужое имя — выйдите через <b>Sign out</b>, иначе ваши коммиты уйдут в чужой репозиторий.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="img/vscode-signin.png" alt="Пункт Sign in в меню аккаунта VS Code">
+          <figcaption>Вход — тот же значок, пункт <b>Sign in with GitHub</b>. Откроется браузер, там нужно нажать <b>Authorize</b>: так редактор получает разрешение работать с вашими репозиториями.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="img/vscode-account-check.png" alt="Проверка: в меню аккаунта стоит имя пользователя">
+          <figcaption>Проверка после входа: в меню стоит ваш логин. Это единственный надёжный способ убедиться, что отправка пойдёт от вашего имени.</figcaption>
+        </figure>
+        <p>Пароль при этом нигде не вводится и не хранится: редактор получает от GitHub временный ключ доступа. Как это устроено и что делать, когда ключ нужен вручную, разберём в четвёртом модуле.</p>
+
+        <h2 id="s9"><span class="sec">§9</span>Шаг 8. Две настройки на будущее</h2>
+        <p>Эти две строки избавляют от двух типовых неприятностей. Выполните их сразу — потом придётся разбираться с последствиями.</p>
+        <figure class="code">
+          <figcaption><span>Терминал</span><span>имя главной ветки</span></figcaption>
+<pre><span class="f">git</span> config --global init.defaultBranch main</pre>
+        </figure>
+        <p>Новые репозитории будут начинаться с ветки <code>main</code> — так же, как на GitHub. Без этой настройки Git старых версий создаёт ветку <code>master</code>, и при первой отправке на сайт появляются две главные ветки вместо одной.</p>
+        <div data-os="win">
+          <figure class="code">
+            <figcaption><span>Терминал</span><span>окончания строк, Windows</span></figcaption>
+<pre><span class="f">git</span> config --global core.autocrlf true</pre>
+          </figure>
+          <p>Windows завершает строки двумя символами, Linux и macOS — одним. Без этой настройки файл, пришедший от однокурсника с другой системой, Git покажет как изменённый целиком: каждая строка «поменялась», хотя текст тот же. Значение <code>true</code> означает «в репозиторий записывать как в Linux, в рабочей папке держать как в Windows» — обе стороны довольны.</p>
+        </div>
+        <div data-os="mac linux">
+          <figure class="code">
+            <figcaption><span>Терминал</span><span>окончания строк, macOS и Linux</span></figcaption>
+<pre><span class="f">git</span> config --global core.autocrlf input</pre>
+          </figure>
+          <p>Windows завершает строки двумя символами, а macOS и Linux — одним. Значение <code>input</code> означает «записывать в репозиторий по-своему, чужие окончания не портить». Без этого файл, пришедший с Windows, Git показывает как изменённый целиком: каждая строка «поменялась», хотя текст тот же.</p>
+        </div>
+        <p>Полезна и третья настройка — она касается редактора, а не Git. Откройте в VS Code меню <b>File → Preferences → Settings</b> <span data-os="mac">(или <kbd>Cmd</kbd> + <kbd>,</kbd>)</span><span data-os="win linux">(или <kbd>Ctrl</kbd> + <kbd>,</kbd>)</span>, найдите <code>Git: Autofetch</code> и включите. Редактор будет сам проверять, не появились ли изменения на GitHub, и покажет их стрелкой в нижней строке — вы не станете работать поверх устаревшего состояния.</p>
+
+        <h2 id="s10"><span class="sec">§10</span>Проверка готовности</h2>
+        <p>Пройдите список: всё должно выполняться без ошибок. Если что-то не сходится — §11.</p>
+        <div class="checklist">
+          <p class="checklist__head">Рабочее место готово, когда</p>
+          <div class="checklist__item"><span><b>Git отвечает</b>Команда <code>git --version</code> печатает номер версии.</span></div>
+          <div class="checklist__item"><span><b>Подпись задана</b><code>git config --global --list</code> показывает ваши <code>user.name</code> и <code>user.email</code>.</span></div>
+          <div class="checklist__item"><span><b>Почта совпадает с GitHub</b>Тот же адрес, что в настройках вашего аккаунта, или служебный <code>noreply</code>.</span></div>
+          <div class="checklist__item"><span><b>VS Code запускается и видит Git</b>Панель Source Control предлагает открыть папку или склонировать репозиторий, а не сообщает об отсутствии Git.</span></div>
+          <div class="checklist__item"><span><b>В аккаунте вы</b>В меню человечка внизу слева стоит ваш логин GitHub, а не чужой.</span></div>
+          <div class="checklist__item"><span><b>Ветка по умолчанию — main</b>В выводе конфигурации есть <code>init.defaultbranch=main</code>.</span></div>
+        </div>
+
+        <h2 id="s11"><span class="sec">§11</span>Что делать, если не работает</h2>
+        <div class="table-scroll errors-table">
+          <table>
+            <thead><tr><th>Что видно</th><th>Почему</th><th>Что сделать</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span data-os="win"><code>"git" не является внутренней или внешней командой</code></span><span data-os="mac linux"><code>command not found: git</code></span></td>
+                <td>Терминал не знает, где лежит программа: он запомнил пути при запуске</td>
+                <td>Закройте и откройте терминал заново<span data-os="win">; если не помогло — переустановите Git, выбрав на экране PATH средний вариант</span></td>
+              </tr>
+              <tr>
+                <td>VS Code пишет <code>Git not found</code></td>
+                <td>Редактор искал Git при запуске, а тот появился позже</td>
+                <td>Перезапустите VS Code целиком, не только окно</td>
+              </tr>
+              <tr>
+                <td><code>Please tell me who you are</code></td>
+                <td>Не заданы имя и почта</td>
+                <td>Выполните две команды из §7</td>
+              </tr>
+              <tr>
+                <td><code>detected dubious ownership in repository</code></td>
+                <td>Папка проекта принадлежит другой учётной записи — обычное дело на учебном компьютере</td>
+                <td>Скопируйте проект в свою домашнюю папку. Если нужен именно этот путь: <code>git config --global --add safe.directory путь</code></td>
+              </tr>
+              <tr>
+                <td>Коммиты на GitHub без вашего аватара, автор — незнакомое имя</td>
+                <td>Почта в настройках Git не совпадает с почтой аккаунта</td>
+                <td>Исправьте <code>user.email</code> и сделайте новый коммит. Прежние подписи не изменятся: они уже часть истории</td>
+              </tr>
+              <tr>
+                <td>Каждый файл показан изменённым целиком после клонирования</td>
+                <td>Разные окончания строк</td>
+                <td>Задайте <code>core.autocrlf</code> из §9 и склонируйте проект заново</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="s12"><span class="sec">§12</span>Проверьте себя</h2>
+        <details>
+          <summary>Почему Git ставят раньше VS Code?</summary>
+          <p>Редактор ищет Git при запуске. Если поставить его первым, панель Source Control сообщит, что Git не найден, и будет так считать до перезапуска. Порядок «сначала Git, потом редактор» избавляет от лишнего шага.</p>
+        </details>
+        <details>
+          <summary>Чем отличается вход в аккаунт GitHub от команды <code>git config user.name</code>?</summary>
+          <p>Это разные вещи. <code>user.name</code> и <code>user.email</code> — подпись, которая попадает внутрь каждого коммита на вашем компьютере; она работает и без интернета. Вход в аккаунт даёт редактору право отправлять коммиты на сайт. Можно быть подписанным одним именем и войти под другим аккаунтом — тогда коммиты окажутся в репозитории, но не свяжутся с профилем.</p>
+        </details>
+        <details>
+          <summary>Что делает ключ <code>--global</code> в командах настройки?</summary>
+          <p>Записывает настройку в файл <code>.gitconfig</code> в домашней папке, то есть применяет её ко всем вашим проектам на этом компьютере. Без ключа настройка попадёт в <code>.git/config</code> текущего репозитория и будет действовать только в нём — это удобно, когда для одного проекта нужна другая почта.</p>
+        </details>
+        <details>
+          <summary>Зачем менять имя начальной ветки на <code>main</code>?</summary>
+          <p>Чтобы оно совпадало с именем, которое использует GitHub. Иначе после первой отправки в репозитории окажутся две ветки — <code>master</code> с вашей работой и <code>main</code>, созданная сайтом, — и придётся разбираться, какая главная.</p>
+        </details>
+        <details>
+          <summary>Вы сделали коммиты, а на GitHub автор указан как незнакомый человек. Что произошло и что теперь делать?</summary>
+          <p>В настройках Git стоит не та почта: сайт связывает коммит с профилем именно по ней. Задайте правильный адрес командой из §7 — следующие коммиты подпишутся верно. Уже сделанные останутся как есть: подпись входит в содержимое коммита, а менять историю ради этого не стоит.</p>
+        </details>
+        <details>
+          <summary>Объясните своими словами, зачем настраивать окончания строк.</summary>
+          <p>Windows и остальные системы помечают конец строки по-разному. Если это не согласовать, Git будет считать, что при переходе файла между системами изменилась каждая строка, — и вместо трёх ваших правок покажет весь файл целиком. Настройка <code>core.autocrlf</code> приводит записи в репозитории к одному виду.</p>
+        </details>
+
+        <h2 id="s13"><span class="sec">§13</span>Шпаргалка по главе</h2>
+        <div class="cheat">
+          <div>
+            <b>Проверить установку</b>
+            <code>git --version</code>
+            <code>code --version</code>
+          </div>
+          <div>
+            <b>Представиться</b>
+            <code>git config --global user.name "Имя"</code>
+            <code>git config --global user.email "почта"</code>
+          </div>
+          <div>
+            <b>Посмотреть настройки</b>
+            <code>git config --global --list</code>
+            <code>git config --global --show-origin --get user.name</code>
+          </div>
+          <div>
+            <b>На будущее</b>
+            <code>git config --global init.defaultBranch main</code>
+            <code data-os="win">git config --global core.autocrlf true</code>
+            <code data-os="mac linux">git config --global core.autocrlf input</code>
+          </div>
+          <div>
+            <b>Сочетания клавиш</b>
+            <code><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span>+Shift+G — Source Control</code>
+            <code>Ctrl+~ — терминал</code>
+            <code><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span>+Shift+P — палитра команд</code>
+          </div>
+          <div>
+            <b>Если сломалось</b>
+            <code>перезапустить терминал</code>
+            <code>перезапустить VS Code</code>
+            <code>проверить PATH</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Рабочее место готово: Git ведёт историю, VS Code даёт кнопки, коммиты подписаны вашим именем и почтой, а редактор знает ваш аккаунт GitHub. Две дополнительные настройки — имя начальной ветки и окончания строк — сняли две типовые причины непонятных изменений в проекте. На этом теоретический модуль закончен: дальше открываем первый репозиторий и начинаем работать в панели Source Control.</p>
+
+        <div class="sources">
+          <b>Откуда взяты факты</b>
+          <ol>
+            <li>Страницы загрузки и номера версий — <a href="https://git-scm.com/downloads">git-scm.com/downloads</a> и <a href="https://code.visualstudio.com/download">code.visualstudio.com/download</a>, кадры сняты 16 сентября 2026 года.</li>
+            <li>Тексты ошибок и выводы команд получены запуском Git на чистой учётной записи; версия 2.51.1.</li>
+            <li>Настройки <code>user.name</code>, <code>user.email</code>, <code>init.defaultBranch</code>, <code>core.autocrlf</code> — <a href="https://git-scm.com/docs/git-config">документация git config</a>.</li>
+            <li>Связь коммитов с профилем по адресу почты и служебный адрес <code>noreply</code> — <a href="https://docs.github.com/ru/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences">документация GitHub</a>.</li>
+            <li>Кадры VS Code сняты на учебном компьютере курса.</li>
+          </ol>
+        </div>
+
+        <div class="pager"><a href="../03-kak-git-hranit-istoriyu/index.html">← 1.3 Как Git хранит историю</a><a href="../../index.html">К содержанию справочника</a></div>
+
+        <div class="colophon">
+          <span>Глава 1.4 · Установка Git и VS Code · Справочник по Git и GitHub</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../../book.js"></script>
+</body>
+</html>
