@@ -390,3 +390,46 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
   .book__body, .passport, .shot, figure.code, .table-scroll, .era__card, .card-person, .versus__side, .myth, .swap, .pull-quote { box-shadow: none; }
   .lightbox { display: none !important; }
 }
+
+/* ── 9. Блоки главы «Git и GitHub» ───────────────────────────── */
+/* Разделение обязанностей: строка — действие, две колонки — кто его делает.
+   Отметка ставится квадратом, а не галочкой: галочка мельчает при печати. */
+.who { margin: 22px 0; border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); background: var(--page); overflow: hidden; }
+.who__head, .who__row { display: grid; grid-template-columns: minmax(0, 1fr) 96px 96px; align-items: center; }
+.who__head { background: var(--ink); color: var(--fire-pale); font: 600 10.5px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; }
+.who__head > span { padding: 9px 14px; text-align: center; border-left: 2px solid rgba(251, 224, 216, .25); }
+.who__head > span:first-child { text-align: left; border-left: 0; }
+.who__row { border-bottom: 2px solid var(--rule); font-size: 15px; }
+.who__row:last-child { border-bottom: 0; }
+.who__row > span { padding: 10px 14px; }
+.who__row > b, .who__row > i {
+  padding: 10px 14px; text-align: center; font-style: normal;
+  border-left: 2px solid var(--rule); align-self: stretch;
+}
+.who__row > b { color: var(--fire-deep); }
+.who__row > b::before { content: "■"; font-size: 15px; }
+.who__row > i { color: var(--ink-faint); }
+.who__row > i::before { content: "·"; font-size: 20px; line-height: 1; }
+
+/* Схема на всю ширину: рисунок в рамке с подписью снизу. */
+.scheme { margin: 24px 0; border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); background: var(--page); }
+.scheme svg { display: block; width: 100%; height: auto; padding: 20px 18px 6px; }
+.scheme figcaption { padding: 10px 16px; border-top: 2px solid var(--ink); font-size: 14.5px; line-height: 1.5; color: var(--ink-soft); }
+
+/* Разбор фразы: как говорят в жизни и что это значит на самом деле. */
+.speech { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; margin: 22px 0; }
+.speech__item { border: 3px solid var(--ink); background: var(--page); box-shadow: 5px 5px 0 var(--ink); }
+.speech__said { position: relative; margin: 14px 15px 18px; padding: 11px 14px; border: 2px solid var(--ink-faint); background: var(--paper); font-size: 15px; line-height: 1.45; }
+/* Хвостик реплики — два треугольника, чтобы была видна рамка. */
+.speech__said::after, .speech__said::before {
+  content: ""; position: absolute; left: 22px; top: 100%;
+  border: 9px solid transparent; border-top-color: var(--ink-faint);
+}
+.speech__said::after { border-width: 8px; border-top-color: var(--paper); margin-left: 1px; }
+.speech__note { padding: 0 15px 14px; font-size: 14.5px; line-height: 1.5; }
+.speech__note b { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; color: var(--fire-deep); margin-bottom: 5px; }
+
+@media (max-width: 560px) {
+  .who__head, .who__row { grid-template-columns: minmax(0, 1fr) 62px 62px; }
+  .who__row > span { padding: 9px 10px; }
+}

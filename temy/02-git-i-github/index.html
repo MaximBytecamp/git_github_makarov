@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>1.2 Git и GitHub: кто что делает · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Модуль 1 · Что такое контроль версий</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 1 · что такое контроль версий</p>
+          <p class="running__folio">Глава 1.2</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">1.2</span>
+          <h1>Git и GitHub:<br>кто что делает</h1>
+          <p class="lead">Эти два названия постоянно употребляют как одно. Git — программа на вашем компьютере, GitHub — сайт, на котором хранят копию репозитория. Разберём, что делает каждый, что будет работать без интернета и почему GitHub можно заменить другим сервисом или не использовать вовсе.</p>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>История и основные понятия</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Связанные темы</dt><dd>Откуда взялся Git, удалённые репозитории</dd></div>
+          <div><dt>Зачем это знать</dt><dd>Понимать, где выполняется каждое действие и что от чего зависит</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>В этой главе</b>
+          <ol>
+            <li><a href="#s1">Откуда берётся путаница</a></li>
+            <li><a href="#s2">Git: программа на вашем компьютере</a></li>
+            <li><a href="#s3">GitHub: сайт с копией репозитория</a></li>
+            <li><a href="#s4">Кто что делает: таблица</a></li>
+            <li><a href="#s5">Как они соединяются</a></li>
+            <li><a href="#s6">Что работает без интернета</a></li>
+            <li><a href="#s7">Откуда взялся GitHub</a></li>
+            <li><a href="#s8">Сервисов много, Git один</a></li>
+            <li><a href="#s9">Разбор привычных фраз</a></li>
+            <li><a href="#s10">Частые заблуждения</a></li>
+            <li><a href="#s11">Проверьте себя</a></li>
+            <li><a href="#s12">Шпаргалка по главе</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Откуда берётся путаница</h2>
+        <p>Студент говорит: «я залил работу на гит», «скачай с гита», «у меня гит не открывается». Во всех трёх фразах речь про сайт GitHub, а слово сказано про программу Git. Путаница живучая, и причина простая: у большинства знакомство начинается с сайта. Человек регистрируется на GitHub, нажимает зелёную кнопку, получает ссылку — и всё это время считает, что пользуется Git.</p>
+        <p>Разница видна, как только что-то ломается. Пропал интернет — работать с Git можно, а с GitHub нельзя. Удалили репозиторий на сайте — история на диске осталась. Не вошли в аккаунт — коммиты всё равно создаются. Чтобы такие ситуации не удивляли, разберём обе стороны по отдельности.</p>
+        <figure class="shot shot--logo">
+          <img src="img/git.svg" alt="Логотип Git">
+          <figcaption>Git — программа для контроля версий. Ставится на компьютер, работает с папкой проекта, никакого отношения к конкретному сайту не имеет. <span class="credit">Jason Long, CC BY 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Git-logo.svg">Wikimedia Commons</a></span></figcaption>
+        </figure>
+        <figure class="shot shot--logo">
+          <img src="img/github-word.svg" alt="Логотип GitHub">
+          <figcaption>GitHub — сайт компании Microsoft, на котором размещают репозитории Git и работают над ними вместе. Один из нескольких таких сервисов. <span class="credit">GitHub, общественное достояние · <a href="https://commons.wikimedia.org/wiki/File:GitHub_logo_2013_padded.svg">Wikimedia Commons</a></span></figcaption>
+        </figure>
+
+        <h2 id="s2"><span class="sec">§2</span>Git: программа на вашем компьютере</h2>
+        <p>Git устанавливается как обычная программа и запускается локально. Он следит за одной папкой — той, в которой вы создали репозиторий, — и хранит её историю в скрытом каталоге <code>.git</code> внутри этой же папки.</p>
+        <p>Вот что Git делает целиком у вас на диске:</p>
+        <ul>
+          <li>записывает коммиты — сохранённые состояния проекта с автором, датой и пояснением;</li>
+          <li>показывает, какие строки изменились с прошлого коммита;</li>
+          <li>создаёт ветки и объединяет их, в том числе с разбором конфликтов;</li>
+          <li>возвращает файлы к любому сохранённому состоянию;</li>
+          <li>ищет, в каком коммите появилась конкретная строка.</li>
+        </ul>
+        <p>Для всего перечисленного не нужны ни интернет, ни аккаунт, ни регистрация. Git не знает, что такое GitHub: для него это просто адрес, по которому лежит ещё одна копия репозитория.</p>
+        <div class="margin-note">
+          <b>На полях: где именно лежит история</b>
+          <p>Откройте папку проекта и включите показ скрытых файлов — увидите каталог <code>.git</code>. В нём и хранятся все коммиты. Скопируете папку проекта на флешку вместе с <code>.git</code> — перенесёте и всю историю. Удалите <code>.git</code> — останутся только текущие файлы, без единой прошлой версии.</p>
+        </div>
+
+        <h2 id="s3"><span class="sec">§3</span>GitHub: сайт с копией репозитория</h2>
+        <p>GitHub — веб-сервис, принадлежащий Microsoft. Его основная работа — хранить копию вашего репозитория на своих серверах и отдавать её по запросу. Всё остальное надстроено вокруг этой копии и к самому Git отношения не имеет.</p>
+        <p>Что добавляет сервис:</p>
+        <ul>
+          <li>страницу проекта, где код виден в браузере, без установки чего-либо;</li>
+          <li>задачи (Issues) с метками, исполнителями и обсуждением;</li>
+          <li>pull request — предложение внести изменения, с ревью и замечаниями к конкретным строкам;</li>
+          <li>права доступа: кто может читать, кто писать, кто менять настройки;</li>
+          <li>канбан-доски в Projects, автоматические проверки в Actions, публикацию сайта через Pages.</li>
+        </ul>
+        <p>Ни одной из этих возможностей в Git нет. Pull request, метки и доски придуманы сервисом; Git о них не знает и работает точно так же, если вы ими не пользуетесь.</p>
+
+        <h2 id="s4"><span class="sec">§4</span>Кто что делает: таблица</h2>
+        <p>Самый быстрый способ запомнить разделение — посмотреть, где выполняется каждое действие.</p>
+        <div class="who">
+          <div class="who__head"><span>Действие</span><span>Git</span><span>GitHub</span></div>
+          <div class="who__row"><span>Создать репозиторий в папке проекта</span><b></b><i></i></div>
+          <div class="who__row"><span>Сделать коммит</span><b></b><i></i></div>
+          <div class="who__row"><span>Посмотреть, что изменилось со вчера</span><b></b><i></i></div>
+          <div class="who__row"><span>Создать ветку и слить её обратно</span><b></b><i></i></div>
+          <div class="who__row"><span>Вернуть файл к прошлому состоянию</span><b></b><i></i></div>
+          <div class="who__row"><span>Отправить коммиты в общую копию</span><b></b><b></b></div>
+          <div class="who__row"><span>Открыть код в браузере с телефона</span><i></i><b></b></div>
+          <div class="who__row"><span>Завести задачу и назначить исполнителя</span><i></i><b></b></div>
+          <div class="who__row"><span>Предложить правку через pull request</span><i></i><b></b></div>
+          <div class="who__row"><span>Обсудить конкретную строку кода</span><i></i><b></b></div>
+          <div class="who__row"><span>Дать доступ одногруппнику</span><i></i><b></b></div>
+          <div class="who__row"><span>Опубликовать сайт на Pages</span><i></i><b></b></div>
+        </div>
+        <p>Строка «отправить коммиты» отмечена в обеих колонках: команду выполняет Git, а принимает и сохраняет их сервис. Это единственное место, где они работают вместе, — и именно поэтому его разберём подробнее.</p>
+
+        <h2 id="s5"><span class="sec">§5</span>Как они соединяются</h2>
+        <p>Связь между вашим компьютером и сервисом устроена просто. В настройках репозитория Git хранит список <span class="term">удалённых репозиториев</span> — это адреса копий, с которыми вы обмениваетесь коммитами. У первого такого адреса принято имя <code>origin</code>; никакого особого смысла в нём нет, это просто короткое имя, чтобы не писать ссылку целиком.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 640 220" role="img" aria-label="Схема: локальный репозиторий на компьютере, удалённый репозиторий на GitHub, между ними push и pull">
+            <rect x="14" y="30" width="250" height="150" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="14" y="30" width="250" height="30" fill="var(--ink)"/>
+            <text x="139" y="50" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="13" fill="#FBE0D8">ВАШ КОМПЬЮТЕР</text>
+            <text x="139" y="88" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="13" fill="var(--ink)">папка проекта</text>
+            <text x="139" y="112" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="13" fill="var(--ink)">.git — вся история</text>
+            <text x="139" y="150" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12" fill="var(--ink-soft)">коммиты, ветки, откаты</text>
+            <text x="139" y="168" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12" fill="var(--ink-soft)">работают без сети</text>
+
+            <rect x="376" y="30" width="250" height="150" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="376" y="30" width="250" height="30" fill="var(--fire-deep)"/>
+            <text x="501" y="50" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="13" fill="#FFFDF9">GITHUB · origin</text>
+            <text x="501" y="88" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="13" fill="var(--ink)">копия репозитория</text>
+            <text x="501" y="112" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="13" fill="var(--ink)">задачи, PR, доски</text>
+            <text x="501" y="150" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12" fill="var(--ink-soft)">доступ для других людей</text>
+            <text x="501" y="168" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12" fill="var(--ink-soft)">нужен интернет</text>
+
+            <line x1="264" y1="84" x2="376" y2="84" stroke="var(--ink)" stroke-width="3"/>
+            <polygon points="376,84 364,78 364,90" fill="var(--ink)"/>
+            <text x="320" y="76" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12" fill="var(--ink)">push</text>
+
+            <line x1="376" y1="126" x2="264" y2="126" stroke="var(--ink)" stroke-width="3"/>
+            <polygon points="264,126 276,120 276,132" fill="var(--ink)"/>
+            <text x="320" y="146" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12" fill="var(--ink)">pull</text>
+          </svg>
+          <figcaption>Коммиты создаются слева и живут там постоянно. Команда <code>push</code> отправляет накопленные коммиты в копию на сервисе, <code>pull</code> забирает оттуда чужие. В VS Code обе операции спрятаны за кнопкой <b>Sync Changes</b> в панели Source Control.</figcaption>
+        </figure>
+        <p>Важное следствие: пока вы не нажали <b>Sync</b>, на GitHub ничего нового нет. Работа, сделанная за вечер, лежит только на вашем диске — и если диск откажет, восстанавливать будет нечего. Отправка коммитов и есть тот момент, когда сервис начинает что-то знать о вашем проекте.</p>
+
+        <h2 id="s6"><span class="sec">§6</span>Что работает без интернета</h2>
+        <p>Проверить своё понимание разницы проще всего одним вопросом: что останется работать, если выдернуть сетевой кабель.</p>
+        <div class="who">
+          <div class="who__head"><span>Ситуация</span><span>Работает</span><span>Нет</span></div>
+          <div class="who__row"><span>Сделать коммит в поезде без связи</span><b></b><i></i></div>
+          <div class="who__row"><span>Посмотреть историю за прошлый месяц</span><b></b><i></i></div>
+          <div class="who__row"><span>Создать ветку и переключиться на неё</span><b></b><i></i></div>
+          <div class="who__row"><span>Вернуть файл к состоянию трёхдневной давности</span><b></b><i></i></div>
+          <div class="who__row"><span>Отправить коммиты на GitHub</span><i></i><b></b></div>
+          <div class="who__row"><span>Открыть задачу или pull request</span><i></i><b></b></div>
+          <div class="who__row"><span>Скачать чужой проект в первый раз</span><i></i><b></b></div>
+        </div>
+        <p>Отсюда привычка, которая экономит нервы: коммиты делать по ходу работы, а отправку — когда появится сеть. Git для этого и создавался: разработчики ядра Linux работали в самолётах и поездах задолго до повсеместного интернета.</p>
+
+        <h2 id="s7"><span class="sec">§7</span>Откуда взялся GitHub</h2>
+        <p>Git появился в 2005 году, а сервис вокруг него — через три года. Идея была в том, что публиковать репозиторий на своём сервере умеют не все, а показать проект и принять правку хочется каждому.</p>
+        <div class="era">
+          <div class="era__item era__item--key">
+            <span class="era__year">2008<small>запуск</small></span>
+            <div class="era__card">
+              <b>GitHub открывается для всех</b>
+              <p>Крис Ванстрат, Том Престон-Вернер и Пи Джей Хайетт делают сайт, где репозиторий Git размещается за пару кликов. Главное изобретение сервиса — pull request: механизм предложить чужому проекту свою правку и обсудить её.</p>
+            </div>
+          </div>
+          <div class="era__item">
+            <span class="era__year">2008<small>Pages</small></span>
+            <div class="era__card">
+              <b>Сайт прямо из репозитория</b>
+              <p>Появляется GitHub Pages: страницы проекта публикуются из той же ветки, где лежит код. Этим справочником вы пользуетесь именно так.</p>
+            </div>
+          </div>
+          <div class="era__item">
+            <span class="era__year">2018<small>Microsoft</small></span>
+            <div class="era__card">
+              <b>Покупка за 7,5 млрд долларов</b>
+              <p>Microsoft покупает GitHub. Руководителем становится Нат Фридман. Бесплатные приватные репозитории, которые раньше стоили денег, открывают для всех.</p>
+            </div>
+          </div>
+          <div class="era__item">
+            <span class="era__year">2019<small>Actions</small></span>
+            <div class="era__card">
+              <b>Автоматические проверки</b>
+              <p>GitHub Actions запускает сборку и тесты при каждом изменении. Отдельный сервер для этого больше не нужен — разберём в седьмом модуле.</p>
+            </div>
+          </div>
+          <div class="era__item">
+            <span class="era__year">2023<small>масштаб</small></span>
+            <div class="era__card">
+              <b>Больше 100 миллионов пользователей</b>
+              <p>По данным самого сервиса, на нём зарегистрировано свыше ста миллионов разработчиков. Это делает GitHub самой заметной, но не единственной площадкой.</p>
+            </div>
+          </div>
+        </div>
+        <div class="dossier">
+          <figure class="card-person">
+            <img src="img/wanstrath.jpg" alt="Крис Ванстрат, сооснователь GitHub">
+            <figcaption class="card-person__body">
+              <span class="card-person__role">Сооснователь</span>
+              <h4>Крис Ванстрат</h4>
+              <p>Один из основателей GitHub и его руководитель до 2018 года. Сервис начинался как побочный проект нескольких программистов, которым надоело настраивать серверы для репозиториев.</p>
+              <span class="credit">Фото: Dave Fayram, CC BY 2.0 · <a href="https://commons.wikimedia.org/wiki/File:Chris_Wanstrath.jpg">Wikimedia Commons</a></span>
+            </figcaption>
+          </figure>
+          <figure class="card-person">
+            <img src="img/preston-werner.jpg" alt="Том Престон-Вернер, сооснователь GitHub">
+            <figcaption class="card-person__body">
+              <span class="card-person__role">Сооснователь</span>
+              <h4>Том Престон-Вернер</h4>
+              <p>Придумал название и участвовал в запуске сервиса в 2008 году. Он же автор генератора сайтов Jekyll, на котором долго работал GitHub Pages.</p>
+              <span class="credit">Фото: Tim Bray, CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Tom_Preston-Werner.jpg">Wikimedia Commons</a></span>
+            </figcaption>
+          </figure>
+        </div>
+        <p>Для нас из этой истории важно одно: GitHub — коммерческий продукт конкретной компании. Он может менять правила, тарифы и внешний вид, и это никак не затрагивает Git. Репозиторий, который лежит у вас на диске, от решений Microsoft не зависит.</p>
+
+        <h2 id="s8"><span class="sec">§8</span>Сервисов много, Git один</h2>
+        <p>GitHub — не единственное место, куда можно положить репозиторий. Все перечисленные сервисы работают с тем же самым Git: команды одинаковые, меняется только адрес.</p>
+        <div class="wall">
+          <div class="wall__cell"><img src="img/github.svg" alt="GitHub"><span>GitHub · Microsoft</span></div>
+          <div class="wall__cell"><img src="img/gitlab.svg" alt="GitLab"><span>GitLab · можно свой сервер</span></div>
+          <div class="wall__cell"><img src="img/bitbucket.svg" alt="Bitbucket"><span>Bitbucket · Atlassian</span></div>
+          <div class="wall__cell"><img src="img/gitea.svg" alt="Gitea"><span>Gitea · лёгкий, свой</span></div>
+          <div class="wall__cell"><img src="img/codeberg.svg" alt="Codeberg"><span>Codeberg · некоммерческий</span></div>
+        </div>
+        <p class="credit">Логотипы: GitHub — MIT; GitLab — MIT; Bitbucket — Atlassian, общественное достояние; Gitea — MIT; Codeberg — CC0. Источник — Wikimedia Commons.</p>
+        <p>Больше того, сервис не обязателен вовсе. Общей копией может быть папка на сетевом диске, репозиторий на арендованном сервере или флешка: Git умеет обмениваться коммитами и так. Поэтому правильная формулировка — «репозиторий размещён на GitHub», а не «проект написан на GitHub».</p>
+        <div class="margin-note margin-note--steel">
+          <b>На полях: почему в учёбе всё-таки GitHub</b>
+          <p>На нём лежит большинство открытых проектов, он бесплатен для учебных задач, поддерживается Visual Studio Code без настройки и даёт всё, что нужно курсу: задачи, pull request, доски и публикацию сайта. Переход на другой сервис после этого занимает один вечер — команды те же.</p>
+        </div>
+
+        <h2 id="s9"><span class="sec">§9</span>Разбор привычных фраз</h2>
+        <p>Эти фразы вы услышите и на парах, и на работе. Разберём, что в них имеется в виду и как сказать точнее.</p>
+        <div class="speech">
+          <div class="speech__item">
+            <p class="speech__said">«Залил работу на гит»</p>
+            <div class="speech__note"><b>Что произошло</b>Коммиты отправлены командой Git в копию репозитория на GitHub. Точнее: «отправил коммиты на GitHub» или «сделал push».</div>
+          </div>
+          <div class="speech__item">
+            <p class="speech__said">«Скачай проект с гита»</p>
+            <div class="speech__note"><b>Что произошло</b>Речь про клонирование репозитория с GitHub. Точнее: «склонируй репозиторий с GitHub».</div>
+          </div>
+          <div class="speech__item">
+            <p class="speech__said">«У меня гит не открывается»</p>
+            <div class="speech__note"><b>Что произошло</b>Не открывается сайт: пропал интернет или лежит сервис. Git на компьютере при этом работает, коммиты делать можно.</div>
+          </div>
+          <div class="speech__item">
+            <p class="speech__said">«Сохрани на гитхаб, чтобы не потерялось»</p>
+            <div class="speech__note"><b>Что произошло</b>Сначала нужен коммит — иначе отправлять нечего. Порядок такой: сохранить файлы, сделать коммит, нажать Sync.</div>
+          </div>
+        </div>
+
+        <h2 id="s10"><span class="sec">§10</span>Частые заблуждения</h2>
+        <div class="myths">
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Без аккаунта на GitHub пользоваться Git нельзя.</div>
+            <div class="myth__yes"><b>На самом деле</b>Git ставится и работает без всякой регистрации. Аккаунт нужен только для того, чтобы хранить копию на сервисе и работать вместе с другими.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Удалил репозиторий на GitHub — потерял проект.</div>
+            <div class="myth__yes"><b>На самом деле</b>Полная копия истории осталась на вашем диске, в папке <code>.git</code>. Проект можно разместить заново — хоть на GitHub, хоть в другом месте.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Pull request — это возможность Git.</div>
+            <div class="myth__yes"><b>На самом деле</b>Pull request придуман сервисами. В Git есть ветки и слияние, а обсуждение правки с ревью и кнопкой «влить» добавляет GitHub.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Файлы на сайте и файлы на компьютере — это одно и то же.</div>
+            <div class="myth__yes"><b>На самом деле</b>Это две копии. Они совпадают только после отправки и получения изменений; между этими действиями расходятся.</div>
+          </div>
+        </div>
+
+        <h2 id="s11"><span class="sec">§11</span>Проверьте себя</h2>
+        <details>
+          <summary>Интернет пропал на весь день. Что из работы с репозиторием останется доступным?</summary>
+          <p>Всё, кроме обмена с сервисом: коммиты, просмотр истории, ветки, слияния, откаты к прошлым состояниям. Не сработают отправка коммитов, получение чужих изменений, клонирование нового проекта и любые действия на сайте — задачи, pull request, доски.</p>
+        </details>
+        <details>
+          <summary>Что такое <code>origin</code>?</summary>
+          <p>Имя удалённого репозитория — короткая замена его адресу. По традиции так называют первую удалённую копию, обычно ту, что на GitHub. Имя можно поменять, и удалённых копий может быть несколько.</p>
+        </details>
+        <details>
+          <summary>Вы весь вечер делали коммиты, но не нажимали Sync. Что видит преподаватель на GitHub?</summary>
+          <p>Состояние на момент последней отправки. Коммиты вечера лежат только на вашем компьютере: пока не выполнен push, сервис о них не знает.</p>
+        </details>
+        <details>
+          <summary>Чем pull request отличается от слияния веток в Git?</summary>
+          <p>Слияние — операция Git: она объединяет две ветки на вашем компьютере. Pull request — страница на сервисе, где предложенное изменение обсуждают, просматривают построчно и одобряют, а слияние выполняется уже после этого. Без сервиса можно слить ветки, но нельзя обсудить правку в таком виде.</p>
+        </details>
+        <details>
+          <summary>Одногруппник говорит: «перенеси проект с гитхаба на гитлаб — придётся всё переделывать». Он прав?</summary>
+          <p>Нет. Оба сервиса работают с одним и тем же Git: нужно добавить второй адрес удалённого репозитория и отправить туда коммиты. Переносить придётся не код, а то, что принадлежит сервису: задачи, доски, настройки доступа.</p>
+        </details>
+        <details>
+          <summary>Объясните своими словами, почему фраза «программа написана на GitHub» неверна.</summary>
+          <p>GitHub — место хранения репозитория и площадка для совместной работы, а не язык и не среда разработки. Программа написана на каком-то языке, в каком-то редакторе, а её история хранится в Git; GitHub держит копию этой истории и даёт к ней доступ другим людям.</p>
+        </details>
+
+        <h2 id="s12"><span class="sec">§12</span>Шпаргалка по главе</h2>
+        <div class="cheat">
+          <div>
+            <b>Git</b>
+            <code>программа на компьютере</code>
+            <code>коммиты, ветки, история</code>
+            <code>работает без сети</code>
+          </div>
+          <div>
+            <b>GitHub</b>
+            <code>сайт с копией репозитория</code>
+            <code>задачи, PR, доски, Pages</code>
+            <code>нужен интернет и аккаунт</code>
+          </div>
+          <div>
+            <b>Связь между ними</b>
+            <code>origin — имя удалённой копии</code>
+            <code>push — отправить коммиты</code>
+            <code>pull — забрать чужие</code>
+          </div>
+          <div>
+            <b>Как говорить точно</b>
+            <code>не «залил на гит»</code>
+            <code>а «отправил на GitHub»</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Git и GitHub — разные вещи с похожими названиями. Git хранит историю проекта на вашем диске и выполняет все операции с ней локально. GitHub хранит копию этой истории на своих серверах и добавляет то, чего в Git нет: задачи, pull request, права доступа, доски и публикацию сайта. Соединяет их список удалённых репозиториев: <code>push</code> отправляет коммиты в копию, <code>pull</code> забирает чужие. Сервис при этом заменим, а Git — общая основа для всех таких площадок. Следующая глава — о том, как именно Git хранит историю внутри папки <code>.git</code>.</p>
+
+        <div class="sources">
+          <b>Откуда взяты факты</b>
+          <ol>
+            <li>История и возможности сервиса — статья <a href="https://ru.wikipedia.org/wiki/GitHub">«GitHub» в Википедии</a>.</li>
+            <li>Покупка компанией Microsoft за 7,5 млрд долларов, 2018 год — <a href="https://news.microsoft.com/2018/06/04/microsoft-to-acquire-github-for-7-5-billion/">официальное сообщение Microsoft</a>.</li>
+            <li>Число пользователей сервиса — годовой отчёт <a href="https://github.blog/news-insights/octoverse/octoverse-2023-the-state-of-open-source-and-ai/">GitHub Octoverse</a>.</li>
+            <li>Удалённые репозитории, <code>push</code> и <code>pull</code> — раздел «Работа с удалёнными репозиториями» книги <a href="https://git-scm.com/book/ru/v2">Pro Git</a>.</li>
+            <li>Все изображения — Wikimedia Commons, лицензии указаны под каждым.</li>
+          </ol>
+        </div>
+
+        <div class="pager"><a href="../01-otkuda-vzyalsya-git/index.html">← 1.1 Откуда взялся Git</a><a href="../../index.html">К содержанию справочника</a></div>
+
+        <div class="colophon">
+          <span>Глава 1.2 · Git и GitHub: кто что делает · Справочник по Git и GitHub</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../../book.js"></script>
+</body>
+</html>

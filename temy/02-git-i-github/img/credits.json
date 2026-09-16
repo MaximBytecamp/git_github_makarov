@@ -1,0 +1,92 @@
+{
+  "github.svg": {
+    "title": "File:Octicons-mark-github.svg",
+    "caption": "Знак GitHub",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/960px-Octicons-mark-github.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Octicons-mark-github.svg",
+    "author": "GitHub",
+    "license": "MIT",
+    "credit": "https://github.com/github/octicons"
+  },
+  "github-word.svg": {
+    "title": "File:GitHub logo 2013 padded.svg",
+    "caption": "Логотип GitHub с надписью",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/2/29/GitHub_logo_2013.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/GitHub_logo_2013.svg/960px-GitHub_logo_2013.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:GitHub_logo_2013.svg",
+    "author": "GitHub",
+    "license": "Public domain",
+    "credit": "Own work using: https://github.com/logos"
+  },
+  "git.svg": {
+    "title": "File:Git-logo.svg",
+    "caption": "Логотип Git",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Git-logo.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Git-logo.svg/960px-Git-logo.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Git-logo.svg",
+    "author": "Jason Long",
+    "license": "CC BY 3.0",
+    "credit": "Own work using: http://git-scm.com/downloads/logos"
+  },
+  "gitlab.svg": {
+    "title": "File:GitLab logo.svg",
+    "caption": "Логотип GitLab",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e1/GitLab_logo.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/GitLab_logo.svg/960px-GitLab_logo.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:GitLab_logo.svg",
+    "author": "GitLab B.V.",
+    "license": "MIT",
+    "credit": "gitlab.com/gitlab-org/gitlab-ce/blob/master/app/assets/images/logo wordmark.svg"
+  },
+  "bitbucket.svg": {
+    "title": "File:Bitbucket-blue-logomark-only.svg",
+    "caption": "Логотип Bitbucket",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Bitbucket-blue-logomark-only.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Bitbucket-blue-logomark-only.svg/960px-Bitbucket-blue-logomark-only.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Bitbucket-blue-logomark-only.svg",
+    "author": "Atlassian",
+    "license": "Public domain",
+    "credit": "https://atlassian.design/guidelines/marketing/resources/logo-files"
+  },
+  "gitea.svg": {
+    "title": "File:Gitea Logo.svg",
+    "caption": "Логотип Gitea",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Gitea_Logo.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Gitea_Logo.svg/960px-Gitea_Logo.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Gitea_Logo.svg",
+    "author": "Lauris BH",
+    "license": "MIT",
+    "credit": "https://github.com/go-gitea/gitea/blob/main/assets/logo.svg"
+  },
+  "codeberg.svg": {
+    "title": "File:Codeberg logo.svg",
+    "caption": "Логотип Codeberg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Codeberg_logo.svg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Codeberg_logo.svg/960px-Codeberg_logo.svg.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Codeberg_logo.svg",
+    "author": "Codeberg e.V",
+    "license": "CC0",
+    "credit": "https://codeberg.org/Codeberg/Design/src/branch/main/logo/vertical/svg/codeberg-logo_vertical_blue.svg"
+  },
+  "preston-werner.jpg": {
+    "title": "File:Tom Preston-Werner.jpg",
+    "caption": "Том Престон-Вернер",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Tom_Preston-Werner.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Tom_Preston-Werner.jpg/960px-Tom_Preston-Werner.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tom_Preston-Werner.jpg",
+    "author": "TimBray",
+    "license": "CC BY-SA 3.0",
+    "credit": "Own work"
+  },
+  "wanstrath.jpg": {
+    "title": "File:Chris Wanstrath.jpg",
+    "caption": "Крис Ванстрат",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e2/Chris_Wanstrath.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Chris_Wanstrath.jpg/960px-Chris_Wanstrath.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Chris_Wanstrath.jpg",
+    "author": "Dave Fayram",
+    "license": "CC BY 2.0",
+    "credit": "https://www.flickr.com/photos/davefayram/4858487193"
+  }
+}
