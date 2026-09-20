@@ -593,3 +593,44 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
 @media (prefers-reduced-motion: reduce) {
   .flowline__step::after { animation: none; transform: scaleX(1); background: var(--rule); }
 }
+
+/* ── 15. Макет панели VS Code для пошагового разбора ─────────── */
+/* Точная перерисовка интерфейса, а не кадр экрана: нужна там, где
+   показывается состояние шаг за шагом на одном учебном проекте. */
+.vsc { margin: 18px 0; border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); background: #1F1F1F; overflow: hidden; font-family: var(--body); }
+.vsc__bar { display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: #181818; border-bottom: 1px solid #2B2B2B; }
+.vsc__bar span { color: #CCC; font: 600 11px/1.4 var(--mono); letter-spacing: 1.2px; text-transform: uppercase; }
+.vsc__bar i { margin-left: auto; font-style: normal; color: #8B8B8B; font: 700 13px/1 var(--mono); }
+.vsc__body { padding: 12px 14px 14px; }
+.vsc__note { margin: 0 0 10px; padding: 10px 12px; border: 1px solid #3A3A3A; background: #232323; color: #CCC; font-size: 13.5px; line-height: 1.5; }
+.vsc__field { margin: 0 0 8px; padding: 8px 11px; border: 1px solid #454545; background: #2A2A2A; color: #8B8B8B; font-size: 13px; }
+.vsc__field--filled { color: #E6E6E6; border-color: #0078D4; }
+.vsc__btn { display: block; width: 100%; margin: 0 0 12px; padding: 9px 12px; background: #0078D4; color: #fff; text-align: center; font-size: 13.5px; font-weight: 600; }
+.vsc__btn--ghost { background: #2A2A2A; color: #CCC; border: 1px solid #454545; }
+.vsc__group { display: flex; align-items: center; gap: 8px; margin: 12px 0 4px; color: #CCC; font-size: 13px; font-weight: 600; }
+.vsc__group b { margin-left: auto; min-width: 20px; padding: 1px 7px; border-radius: 9px; background: #3A3A3A; color: #DDD; font: 600 11px/1.6 var(--mono); text-align: center; }
+.vsc__file { display: flex; align-items: center; gap: 9px; padding: 5px 4px 5px 18px; color: #DDD; font-size: 13.5px; }
+.vsc__file em { margin-left: auto; font-style: normal; font: 700 12px/1 var(--mono); }
+.vsc__file .u { color: #6FCF97; }   /* новый файл      */
+.vsc__file .m { color: #E2C08D; }   /* изменён         */
+.vsc__file .d { color: #F14C4C; }   /* удалён          */
+.vsc__file .a { color: #6FCF97; }   /* подготовлен     */
+.vsc__file--gone span { text-decoration: line-through; color: #8B8B8B; }
+.vsc__empty { padding: 10px 4px; color: #8B8B8B; font-size: 13px; }
+/* Строка состояния внизу окна. */
+.vsc__status { display: flex; align-items: center; gap: 16px; padding: 7px 14px; background: #181818; border-top: 1px solid #2B2B2B; color: #CCC; font: 400 12px/1.4 var(--mono); }
+.vsc__status b { color: var(--fire); font-weight: 700; }
+/* Подпись под макетом: сразу видно, что это перерисовка. */
+.vsc__caption { padding: 9px 14px; border-top: 3px solid var(--ink); background: var(--page); font-size: 14.5px; line-height: 1.5; color: var(--ink-soft); }
+.vsc__caption b { color: var(--ink); }
+/* Подсветка того, на что смотреть на этом шаге. */
+.vsc .is-hi { outline: 2px solid var(--fire); outline-offset: 2px; }
+/* Окно сравнения версий внутри макета. */
+.vsc__diff { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid #3A3A3A; background: #1F1F1F; font: 400 12.5px/1.7 var(--mono); }
+.vsc__diff > div { padding: 8px 10px; }
+.vsc__diff > div:first-child { border-right: 1px solid #3A3A3A; }
+.vsc__diff u { display: block; margin-bottom: 6px; text-decoration: none; color: #8B8B8B; font: 600 10.5px/1.4 var(--pixel); letter-spacing: 1px; text-transform: uppercase; }
+.vsc__diff .add { background: rgba(111, 207, 151, .16); color: #C9EFD8; }
+.vsc__diff .del { background: rgba(241, 76, 76, .16); color: #F3C4C4; }
+.vsc__diff .nil { color: #6B6B6B; }
+@media (max-width: 560px) { .vsc__diff { grid-template-columns: 1fr; } .vsc__diff > div:first-child { border-right: 0; border-bottom: 1px solid #3A3A3A; } }
