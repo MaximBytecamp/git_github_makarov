@@ -542,3 +542,16 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
   .tree__row { grid-template-columns: 1fr; gap: 0; }
   .tree__row em { display: block; margin: -4px 0 6px; }
 }
+
+/* ── 13. Зачем это нужно в работе ────────────────────────────── */
+/* Блок связывает понятие с рабочей ситуацией: не «так устроено»,
+   а «вот когда это спасает». Ставится после объяснения, а не вместо него. */
+.why { margin: 24px 0; border: 3px solid var(--moss); box-shadow: 6px 6px 0 rgba(47, 125, 79, .28); background: var(--page); }
+.why__head { padding: 9px 16px; background: var(--moss); color: #FFFDF9; font: 600 10.5px/1.4 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; }
+.why__list { margin: 0; padding: 6px 0; list-style: none; }
+/* Стрелка позиционируется абсолютно: в сетке текстовый узел после <b>
+   попадал в третью ячейку и сыпался в колонку шириной в один символ. */
+.why__list li { position: relative; padding: 9px 16px 9px 42px; font-size: 15px; line-height: 1.5; }
+.why__list li::before { content: "→"; position: absolute; left: 16px; top: 9px; color: var(--moss); font: 700 15px/1.5 var(--mono); }
+.why__list b { color: var(--ink); }
+.why__foot { padding: 10px 16px; border-top: 2px solid var(--rule); font-size: 14.5px; line-height: 1.5; color: var(--ink-soft); }
