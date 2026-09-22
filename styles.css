@@ -311,6 +311,8 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
 .swap__row:last-child { border-bottom: 0; }
 .swap__row > div { padding: 12px 16px; font-size: 15px; line-height: 1.5; }
 .swap__old { color: var(--ink-soft); }
+/* Длинные адреса и пути переносятся, а не выезжают за край ячейки. */
+.swap__row > div { overflow-wrap: anywhere; }
 .swap__old b, .swap__new b { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; margin-bottom: 5px; color: var(--ink-faint); }
 .swap__new { background: var(--fire-pale); }
 .swap__new b { color: var(--fire-deep); }
