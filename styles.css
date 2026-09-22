@@ -209,7 +209,7 @@ td code { font-size: 13.5px; }
   background: var(--fire-pale);
   font-size: 15.5px;
 }
-.margin-note > b { display: block; font: 600 10.5px/1.3 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 6px; }
+.margin-note > b:first-child { display: block; font: 600 10.5px/1.3 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 6px; }
 .margin-note p:last-child { margin-bottom: 0; }
 .margin-note--steel { border-left-color: var(--steel); background: var(--steel-pale); }
 
@@ -254,7 +254,7 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
 .era__year small { display: block; margin-top: 2px; font: 600 10px/1.4 var(--mono); letter-spacing: .6px; color: var(--ink-faint); text-transform: uppercase; }
 .era__card { padding: 11px 16px; border: 3px solid var(--ink); background: var(--page); box-shadow: 5px 5px 0 var(--ink); }
 .era__item--key .era__card { box-shadow: 5px 5px 0 var(--fire); border-color: var(--fire-deep); }
-.era__card b { display: block; font-family: var(--display); font-size: 17px; margin-bottom: 4px; }
+.era__card > b:first-child { display: block; font-family: var(--display); font-size: 17px; margin-bottom: 4px; }
 .era__card p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--ink-soft); }
 .era__card p + p { margin-top: 6px; }
 .era--days .era__year { font-size: 13.5px; }
@@ -313,7 +313,7 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
 .swap__old { color: var(--ink-soft); }
 /* Длинные адреса и пути переносятся, а не выезжают за край ячейки. */
 .swap__row > div { overflow-wrap: anywhere; }
-.swap__old b, .swap__new b { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; margin-bottom: 5px; color: var(--ink-faint); }
+.swap__old > b:first-child, .swap__new > b:first-child { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; margin-bottom: 5px; color: var(--ink-faint); }
 .swap__new { background: var(--fire-pale); }
 .swap__new b { color: var(--fire-deep); }
 .swap__arrow { align-self: stretch; display: flex; align-items: center; justify-content: center; border-left: 2px solid var(--rule); border-right: 2px solid var(--rule); font: 700 18px/1 var(--pixel); color: var(--fire-deep); }
@@ -322,9 +322,9 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
 .myths { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 22px 0; }
 .myth { border: 3px solid var(--ink); background: var(--page); box-shadow: 5px 5px 0 var(--ink); }
 .myth__no { padding: 10px 15px; border-bottom: 3px solid var(--ink); background: var(--steel-pale); font-size: 15px; }
-.myth__no b { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; color: var(--steel); margin-bottom: 4px; }
+.myth__no > b:first-child { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; color: var(--steel); margin-bottom: 4px; }
 .myth__yes { padding: 11px 15px; font-size: 15px; line-height: 1.5; }
-.myth__yes b { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; color: var(--fire-deep); margin-bottom: 4px; }
+.myth__yes > b:first-child { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; color: var(--fire-deep); margin-bottom: 4px; }
 
 /* Стопка версий: как выглядит история проекта без контроля версий. */
 .mess { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0; }
@@ -438,7 +438,7 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
 }
 .speech__said::after { border-width: 8px; border-top-color: var(--paper); margin-left: 1px; }
 .speech__note { padding: 0 15px 14px; font-size: 14.5px; line-height: 1.5; }
-.speech__note b { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; color: var(--fire-deep); margin-bottom: 5px; }
+.speech__note > b:first-child { display: block; font: 600 10px/1.4 var(--pixel); letter-spacing: 1.1px; text-transform: uppercase; color: var(--fire-deep); margin-bottom: 5px; }
 
 @media (max-width: 560px) {
   .who__head, .who__row { grid-template-columns: minmax(0, 1fr) 62px 62px; }
@@ -506,7 +506,7 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
 .checklist__item { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding: 11px 16px; border-bottom: 2px solid var(--rule); font-size: 15px; line-height: 1.5; }
 .checklist__item:last-child { border-bottom: 0; }
 .checklist__item::before { content: ""; width: 18px; height: 18px; margin-top: 2px; border: 3px solid var(--ink); background: var(--page); }
-.checklist__item b { display: block; margin-bottom: 3px; }
+.checklist__item > span > b:first-child { display: block; margin-bottom: 3px; }
 .checklist__item code { font-size: 13.5px; }
 
 /* ── 12. Определения с картинкой и ассоциации ────────────────── */
@@ -575,7 +575,7 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
 .flowline__track { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .flowline__step { position: relative; padding: 15px 16px 16px; border-right: 2px solid var(--rule); }
 .flowline__step:last-child { border-right: 0; }
-.flowline__step b { display: block; margin-bottom: 6px; font: 700 13px/1.3 var(--mono); color: var(--ink); }
+.flowline__step > b:first-child { display: block; margin-bottom: 6px; font: 700 13px/1.3 var(--mono); color: var(--ink); }
 .flowline__step span { display: block; font-size: 14px; line-height: 1.45; color: var(--ink-soft); }
 .flowline__step em { display: block; margin-top: 8px; font-style: normal; font: 600 10px/1.4 var(--pixel); letter-spacing: 1px; text-transform: uppercase; color: var(--fire-deep); }
 /* Полоса подсветки: идёт по шагам, по 1.6 с на каждый. */

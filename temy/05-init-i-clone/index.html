@@ -127,12 +127,12 @@
         </div>
 
         <h2 id="s2"><span class="sec">§2</span>Путь А, шаг 1. Завести репозиторий в своей папке</h2>
-        <p>Создайте пустую папку проекта и откройте её в VS Code: <b>File → Open Folder</b>. Затем панель Source Control — <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>.</p>
+        <p><b>Что делаем.</b> Создаём пустую папку проекта и открываем её в VS Code: <b>File → Open Folder</b>. Затем панель Source Control — <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>.</p>
         <figure class="shot shot--panel">
           <img src="img/step1-init.png" alt="Панель Source Control в пустой папке: текст об отсутствии репозитория и кнопка Initialize Repository">
           <figcaption>До нажатия: репозитория в папке нет, история не ведётся.</figcaption>
         </figure>
-        <p>Нажмите <b>Initialize Repository</b>:</p>
+        <p><b>Нажимаем Initialize Repository.</b> Подтверждать ничего не нужно, панель меняется сразу:</p>
         <figure class="shot shot--panel">
           <img src="img/step2-empty.png" alt="Панель после инициализации: поле Message и кнопка Commit, списков изменений нет">
           <figcaption>После нажатия: появились поле сообщения и кнопка Commit, внизу окна — имя ветки <code>main</code>. История заведена и пока пуста.</figcaption>
@@ -195,7 +195,7 @@ nothing to commit (create/copy files and use "git add" to track)</pre>
         <p>Отличается одним окончанием. Git принимает и ссылку без <code>.git</code> — сам достроит, — но копировать надёжнее из того поля, где адрес дан целиком.</p>
 
         <h2 id="s5"><span class="sec">§5</span>Путь Б, шаг 2. Вызвать команду Git: Clone</h2>
-        <p>В VS Code откройте палитру команд: <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>. Начните набирать <code>Git: Clone</code> — список сам сузится до двух пунктов.</p>
+        <p><b>Что делаем.</b> Открываем палитру команд: <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>. Начните набирать <code>Git: Clone</code> — список сам сузится до двух пунктов.</p>
         <figure class="shot shot--wide">
           <img src="img/clone1-palette.png" alt="Палитра команд VS Code с набранным Git: Clone и двумя найденными командами">
           <figcaption>Нужен верхний пункт — <b>Git: Clone</b>. Нижний, <b>Clone (Recursive)</b>, понадобится только на проектах с вложенными репозиториями.</figcaption>
@@ -203,14 +203,14 @@ nothing to commit (create/copy files and use "git add" to track)</pre>
         <p>То же самое делает кнопка <b>Clone Repository</b> на стартовом экране пустого окна VS Code — если ни одна папка не открыта, проще нажать её.</p>
 
         <h2 id="s6"><span class="sec">§6</span>Путь Б, шаг 3. Вставить адрес</h2>
-        <p>Выберите пункт — поле сменится на «Provide repository URL». Вставьте скопированный адрес и нажмите <kbd>Enter</kbd>.</p>
+        <p><b>Что делаем.</b> Выбираем пункт <b>Git: Clone</b> — поле сменится на «Provide repository URL». Вставляем скопированный адрес и нажимаем <kbd>Enter</kbd>.</p>
         <figure class="shot shot--wide">
           <img src="img/clone2-url.png" alt="Поле ввода адреса репозитория в VS Code с вставленной ссылкой и пунктами Clone from URL и Clone from GitHub">
           <figcaption>Первая строка под полем — <b>Clone from URL</b>, это ваш адрес. Пункт <b>Clone from GitHub</b> ниже позволяет выбрать проект списком, не вводя адрес, — работает после входа в аккаунт, это модуль 4.</figcaption>
         </figure>
 
         <h2 id="s7"><span class="sec">§7</span>Путь Б, шаг 4. Выбрать папку и открыть проект</h2>
-        <p>Откроется окно выбора папки. Выбирайте папку, <em>в которой</em> появится проект: сама папка проекта создастся внутри и получит имя репозитория. Заводить её заранее не нужно.</p>
+        <p><b>Что делаем.</b> Откроется окно выбора папки. Выбираем папку, <em>в которой</em> появится проект: сама папка проекта создастся внутри и получит имя репозитория. Заводить её заранее не нужно.</p>
         <p>Когда загрузка закончится, VS Code спросит, открыть ли скачанный проект. Нажмите <b>Open</b> — и в проводнике появятся файлы:</p>
         <figure class="shot shot--panel">
           <img src="img/clone3-files.png" alt="Проводник VS Code со списком файлов склонированного проекта: папки chernoviki, temy, tools и файлы index.html, styles.css, README.md">
@@ -228,7 +228,7 @@ nothing to commit (create/copy files and use "git add" to track)</pre>
         </figure>
 
         <h2 id="s8"><span class="sec">§8</span>Путь Б, шаг 5. Убедиться, что пришла история</h2>
-        <p>Главное отличие клона от скачанной папки — вместе с файлами приехали все прошлые версии. Проверяется двумя командами в терминале проекта.</p>
+        <p><b>Что проверяем.</b> Главное отличие клона от скачанной папки — вместе с файлами приехали все прошлые версии. Это видно двумя командами в терминале проекта.</p>
         <figure class="code code--out">
           <figcaption><span>терминал в склонированной папке</span><span>git log --oneline -5</span></figcaption>
 <pre>12f15c3 Глава 2.1: пошаговый разбор на одном проекте и кадры строки состояния
