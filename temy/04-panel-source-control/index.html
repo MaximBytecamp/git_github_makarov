@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#F4F1EC">
-  <title>2.1 Панель Source Control · Справочник по Git и GitHub</title>
+  <title>2.1 Панель Source Control: первый коммит шаг за шагом · Справочник по Git и GitHub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -33,61 +33,39 @@
 
         <header class="chapter-head">
           <span class="chapter-num">2.1</span>
-          <h1>Панель Source&nbsp;Control:<br>что где находится</h1>
-          <p class="lead">Вся работа с историей проекта в VS Code идёт через одну панель. В главе разобран каждый её элемент: счётчик на значке, поле сообщения, кнопка Commit, разделы Changes и Staged Changes, буквы у имён файлов и меню с остальными командами.</p>
+          <h1>Панель Source&nbsp;Control:<br>первый коммит шаг за шагом</h1>
+          <p class="lead">Глава построена как одно занятие за компьютером. Пустая папка, восемь действий подряд — и в проекте появляется первая сохранённая версия. После каждого действия показан кадр экрана: что именно изменилось в панели и почему. Все кадры сняты на этом самом проекте, посторонних файлов в них нет.</p>
         </header>
 
         <dl class="passport">
           <div><dt>Категория</dt><dd>Рабочее место</dd></div>
           <div><dt>Уровень</dt><dd>Начальный</dd></div>
-          <div><dt>Связанные темы</dt><dd>Первый репозиторий, коммит</dd></div>
-          <div><dt>Зачем это знать</dt><dd>Понимать, что показывает панель, и не нажимать кнопки наугад</dd></div>
+          <div><dt>Что получится</dt><dd>Проект с двумя коммитами и понимание, из чего состоит панель</dd></div>
+          <div><dt>Сколько занимает</dt><dd>Около двадцати минут за компьютером</dd></div>
         </dl>
 
         <nav class="contents">
-          <b>В этой главе</b>
+          <b>Порядок действий</b>
           <ol>
-            <li><a href="#s1">Зачем отдельная панель</a></li>
-            <li><a href="#s2">Карта окна VS Code</a></li>
-            <li><a href="#s3">Папка открыта, репозитория ещё нет</a></li>
-            <li><a href="#s4">Панель работающего репозитория</a></li>
-            <li><a href="#s5">Буквы у имён файлов</a></li>
-            <li><a href="#s6">Changes и Staged Changes</a></li>
-            <li><a href="#s7">Что меняется после Commit</a></li>
-            <li><a href="#s8">Меню с остальными командами</a></li>
-            <li><a href="#s9">Счётчик и строка состояния</a></li>
-            <li><a href="#s10">Пошаговый разбор: от пустой папки до коммита</a></li>
-            <li><a href="#s11">Частые вопросы</a></li>
-            <li><a href="#s12">Проверьте себя</a></li>
-            <li><a href="#s13">Шпаргалка по главе</a></li>
+            <li><a href="#s1">Что показывает панель и зачем она нужна</a></li>
+            <li><a href="#s2">Шаг 1. Открыть папку проекта</a></li>
+            <li><a href="#s3">Шаг 2. Нажать Initialize Repository</a></li>
+            <li><a href="#s4">Шаг 3. Создать первый файл</a></li>
+            <li><a href="#s5">Шаг 4. Посмотреть, что изменилось</a></li>
+            <li><a href="#s6">Шаг 5. Подготовить файл к коммиту</a></li>
+            <li><a href="#s7">Шаг 6. Написать пояснение</a></li>
+            <li><a href="#s8">Шаг 7. Сделать коммит</a></li>
+            <li><a href="#s9">Шаг 8. Изменить файл ещё раз</a></li>
+            <li><a href="#s10">Справка: буквы у имён файлов</a></li>
+            <li><a href="#s11">Справка: счётчик, строка состояния, меню</a></li>
+            <li><a href="#s12">Частые вопросы</a></li>
+            <li><a href="#s13">Проверьте себя</a></li>
+            <li><a href="#s14">Шпаргалка по главе</a></li>
           </ol>
         </nav>
 
-        <h2 id="s1"><span class="sec">§1</span>Зачем отдельная панель</h2>
+        <h2 id="s1"><span class="sec">§1</span>Что показывает панель и зачем она нужна</h2>
         <p>Редактор показывает файлы такими, какие они сейчас. Вопросы «что я изменил за сегодня», «какие файлы готовы к сохранению» и «что уйдёт в историю по кнопке Commit» из обычного списка файлов не видны. На них отвечает <span class="term">панель Source Control</span> — вкладка VS Code, которая всё время сравнивает папку проекта с последним сохранённым состоянием и показывает разницу.</p>
-        <p>Открывается она значком с развилкой на левой полосе или сочетанием клавиш:</p>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>Действие</th><th>Как</th></tr></thead>
-            <tbody>
-              <tr><td>Открыть панель Source Control</td><td><kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>G</kbd></td></tr>
-              <tr><td>Открыть проводник (список файлов)</td><td><kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>E</kbd></td></tr>
-              <tr><td>Открыть терминал внутри редактора</td><td><kbd>Ctrl</kbd> + <kbd>~</kbd></td></tr>
-              <tr><td>Найти любую команду по названию</td><td><kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="why">
-          <p class="why__head">Зачем это нужно в работе</p>
-          <ul class="why__list">
-            <li><b>Перед сохранением видно, что именно уходит в историю.</b> Панель показывает список изменённых файлов до нажатия кнопки, поэтому случайно закоммитить черновик или чужой файл сложнее.</li>
-            <li><b>Не нужно помнить, что вы трогали.</b> После дня работы список изменений собран за вас — по нему же пишется пояснение к коммиту.</li>
-            <li><b>Ошибка видна сразу.</b> Если в списке лежит файл, которого там быть не должно — пароль, ключ, гигабайтный архив, — это заметно до отправки, а не после.</li>
-          </ul>
-        </div>
-
-        <h2 id="s2"><span class="sec">§2</span>Карта окна VS Code</h2>
-        <p>Прежде чем разбирать панель, полезно договориться о названиях зон окна: дальше они встречаются постоянно.</p>
         <figure class="scheme">
           <svg viewBox="0 0 660 330" role="img" aria-label="Схема окна VS Code: полоса значков слева, боковая панель, редактор, терминал внизу и строка состояния">
             <rect x="10" y="10" width="640" height="310" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
@@ -120,97 +98,100 @@
             <text x="455" y="280" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">если понадобится</text>
 
             <rect x="10" y="295" width="640" height="25" fill="var(--ink)"/>
-            <text x="120" y="312" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--fire)">main ⟳ 0↓ 1↑</text>
+            <text x="120" y="312" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--fire)">main</text>
             <text x="420" y="312" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--fire-pale)">СТРОКА СОСТОЯНИЯ: текущая ветка и обмен с сервером</text>
           </svg>
           <figcaption>Оранжевой рамкой отмечен значок Source Control. Нажали — в боковой панели открывается работа с историей; сам файл при этом остаётся в редакторе справа.</figcaption>
         </figure>
+        <div class="why">
+          <p class="why__head">Зачем это нужно в работе</p>
+          <ul class="why__list">
+            <li><b>Перед сохранением видно, что именно уходит в историю.</b> Панель показывает список изменённых файлов до нажатия кнопки, поэтому случайно закоммитить черновик или чужой файл сложнее.</li>
+            <li><b>Не нужно помнить, что вы трогали.</b> После дня работы список изменений собран за вас — по нему же пишется пояснение к коммиту.</li>
+            <li><b>Ошибка видна сразу.</b> Если в списке лежит файл, которого там быть не должно — пароль, ключ, гигабайтный архив, — это заметно до отправки, а не после.</li>
+          </ul>
+        </div>
+        <div class="margin-note margin-note--steel">
+          <b>На полях: что понадобится</b>
+          <p>Установленный Git и VS Code — это глава 1.3. Проверка: в терминале <code>git --version</code> печатает номер версии. Проект в этой главе называется <code>proba-git</code> и состоит из одного файла, так что заводить его можно рядом с учебными работами.</p>
+        </div>
 
-        <h2 id="s3"><span class="sec">§3</span>Папка открыта, репозитория ещё нет</h2>
-        <p>Откройте любую папку через <b>File → Open Folder</b> и загляните в панель. Пока Git в этой папке не заведён, она предлагает ровно два действия:</p>
-        <figure class="shot">
-          <img src="img/panel-init.png" alt="Панель Source Control в папке без репозитория: кнопки Initialize Repository и Publish to GitHub">
-          <figcaption>Текст сверху сообщает, что в открытой папке репозитория нет. <b>Initialize Repository</b> заводит его на вашем компьютере. <b>Publish to GitHub</b> делает то же самое и сразу создаёт копию на сайте.</figcaption>
+        <h2 id="s2"><span class="sec">§2</span>Шаг 1. Открыть папку проекта</h2>
+        <p>Создайте пустую папку <code>proba-git</code> там, где держите учебные работы. В VS Code: <b>File → Open Folder</b>, выбрать её, <b>Open</b>. Затем откройте панель Source Control — значком с развилкой на левой полосе или сочетанием <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>.</p>
+        <figure class="shot shot--panel">
+          <img src="img/step1-init.png" alt="Панель Source Control в пустой папке: текст об отсутствии репозитория, кнопки Initialize Repository и Publish to GitHub">
+          <figcaption>Панель сообщает: в открытой папке репозитория нет. Пока это просто папка на диске, история не ведётся.</figcaption>
         </figure>
-        <p>Разница между кнопками — в главе 1.2: первая создаёт папку <code>.git</code> на диске, вторая дополнительно заводит репозиторий на сервисе и отправляет туда файлы. Для учебного проекта обычно нажимают первую, а публикуют позже, когда есть что показывать.</p>
+        <p>Две кнопки делают разное. <b>Initialize Repository</b> заводит историю на вашем компьютере. <b>Publish to GitHub</b> делает то же самое и сразу создаёт копию проекта на сайте. Сейчас нажимаем первую: публикацией займёмся в модуле 4, когда будет что показывать.</p>
         <div class="margin-note margin-note--warn">
           <b>На полях: не открывайте домашнюю папку целиком</b>
-          <p>Если нажать Initialize Repository в папке <code>Documents</code> или в домашней папке пользователя, Git начнёт отслеживать все ваши файлы разом — тысячи документов, загрузок и настроек. Открывайте папку конкретного проекта: в ней должны лежать только файлы этого проекта.</p>
+          <p>Если нажать Initialize Repository в папке <code>Documents</code> или в домашней папке пользователя, Git начнёт отслеживать все ваши файлы разом — тысячи документов, загрузок и настроек. Открывайте папку конкретного проекта.</p>
         </div>
 
-        <h2 id="s4"><span class="sec">§4</span>Панель работающего репозитория</h2>
-        <p>Как только репозиторий заведён и в папке появились изменения, панель наполняется. Вот она с разметкой по элементам:</p>
-        <figure class="shot">
-          <img src="img/panel-changes.png" alt="Панель Source Control с тремя изменёнными файлами, полем сообщения и кнопкой Commit">
-          <figcaption>Кадр учебного проекта: три новых файла ждут первого коммита. Цифры на кадре разобраны ниже.</figcaption>
+        <h2 id="s3"><span class="sec">§3</span>Шаг 2. Нажать Initialize Repository</h2>
+        <p>Нажмите синюю кнопку. На диске появится скрытая папка <code>.git</code> — в ней Git будет хранить историю. Панель сразу меняет вид:</p>
+        <figure class="shot shot--panel">
+          <img src="img/step2-empty.png" alt="Панель после инициализации: поле Message, кнопка Commit, списков изменений нет">
+          <figcaption>Появились поле <b>Message</b> и кнопка <b>Commit</b>. Списков файлов нет: папка пуста, менять пока нечего.</figcaption>
         </figure>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>Элемент</th><th>Что делает</th><th>Что важно знать</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><b>Значок со счётчиком</b></td>
-                <td>Открывает панель, цифра — сколько файлов изменилось с прошлого коммита</td>
-                <td>Счётчик виден с любой вкладки: удобно замечать, что вы что-то правили и забыли сохранить в историю</td>
-              </tr>
-              <tr>
-                <td><b>Поле Message</b></td>
-                <td>Пояснение к коммиту: что именно сделано</td>
-                <td>Без пояснения коммит не создастся. Пишут не «правки», а «добавил форму обратной связи»</td>
-              </tr>
-              <tr>
-                <td><b>Кнопка Commit</b></td>
-                <td>Сохраняет отмеченные изменения в историю на вашем компьютере</td>
-                <td>Это ещё не отправка на GitHub: коммит остаётся локальным, пока не нажат Sync</td>
-              </tr>
-              <tr>
-                <td><b>Раздел Changes</b></td>
-                <td>Файлы, которые Git видит изменёнными</td>
-                <td>Справа от имени — буква состояния, а при наведении появляются кнопки с плюсом и стрелкой отмены</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>Наведите указатель на файл в списке — справа появятся три значка. Плюс переносит файл в подготовленные, круговая стрелка отменяет правки, а значок открытой книги показывает файл целиком.</p>
-        <figure class="shot">
-          <img src="img/panel-stage.png" alt="Всплывающая подсказка Stage Changes у кнопки с плюсом">
-          <figcaption>Плюс у файла переносит в следующий коммит только его. Плюс у строки <b>Changes</b> — сразу все файлы списка.</figcaption>
+        <p>Одновременно внизу окна, в строке состояния, появляется имя ветки:</p>
+        <figure class="shot shot--bar">
+          <img src="img/status-main.png" alt="Строка состояния: имя ветки main и значок публикации">
+          <figcaption><b>main</b> — ветка, в которой вы работаете. Значок облака рядом означает, что копии проекта на сервере ещё нет.</figcaption>
+        </figure>
+        <p>Имя <code>main</code> Git подставил сам: так называется основная ветка нового репозитория. Пока веток одна, об этом можно не думать — в модуле 3 разберём, зачем их бывает несколько.</p>
+
+        <h2 id="s4"><span class="sec">§4</span>Шаг 3. Создать первый файл</h2>
+        <p>Откройте проводник VS Code (<kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>E</kbd>), нажмите значок нового файла, назовите его <code>privet.html</code> и напишите одну строку:</p>
+        <figure class="code">
+          <figcaption><span>privet.html</span><span>первая строка проекта</span></figcaption>
+<pre>&lt;<span class="k">h1</span>&gt;Привет, это моя страница&lt;/<span class="k">h1</span>&gt;</pre>
+        </figure>
+        <p>Сохраните файл (<kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>S</kbd>) и вернитесь в панель Source Control.</p>
+        <figure class="shot shot--panel">
+          <img src="img/step3-u.png" alt="Панель: раздел Changes с одним файлом privet.html и буквой U справа">
+          <figcaption>Файл попал в раздел <b>Changes</b>. Цифра <b>1</b> справа от слова — сколько файлов в этом списке. Буква <b>U</b> у имени означает <i>untracked</i>: файл новый, в истории его ещё нет.</figcaption>
+        </figure>
+        <p>На левой полосе на значке Source Control появился синий кружок с той же единицей:</p>
+        <figure class="shot shot--bar" style="max-width:86px">
+          <img src="img/badge.png" alt="Значок Source Control на левой полосе с синим кружком и цифрой 1">
+          <figcaption>Счётчик виден с любой вкладки: один файл разошёлся с историей.</figcaption>
+        </figure>
+        <p>И в строке состояния у имени ветки появилась звёздочка — признак того, что в папке есть несохранённые в историю изменения:</p>
+        <figure class="shot shot--bar">
+          <img src="img/status-star.png" alt="Строка состояния: main со звёздочкой">
+          <figcaption><code>main*</code> — в папке что-то изменилось с последнего коммита.</figcaption>
+        </figure>
+
+        <h2 id="s5"><span class="sec">§5</span>Шаг 4. Посмотреть, что изменилось</h2>
+        <p>Нажмите на имя файла в списке. Справа откроется его содержимое:</p>
+        <figure class="shot shot--wide">
+          <img src="img/step4-diff.png" alt="Открытый файл privet.html с буквой U на вкладке и одной строкой кода">
+          <figcaption>Для нового файла показывается он сам: сравнивать не с чем, прошлой версии не существует. Буква <b>U</b> стоит и на вкладке.</figcaption>
+        </figure>
+        <p>У файла, который уже был в истории, по тому же клику открывается окно сравнения: слева прошлая версия, справа текущая, изменения подсвечены. Это увидим на шаге 8.</p>
+
+        <h2 id="s6"><span class="sec">§6</span>Шаг 5. Подготовить файл к коммиту</h2>
+        <p>Наведите указатель на файл в списке — справа появятся три значка:</p>
+        <figure class="shot shot--panel">
+          <img src="img/step5-hover.png" alt="Строка файла под курсором: значки открытия файла, отмены правок и плюса, справа буква U">
+          <figcaption>Слева направо: открыть файл, отменить правки (круговая стрелка), подготовить к коммиту (<b>+</b>).</figcaption>
         </figure>
         <div class="margin-note margin-note--warn">
           <b>На полях: круговая стрелка не отменяется</b>
-          <p>Кнопка <b>Discard Changes</b> возвращает файл к состоянию последнего коммита, а сделанные правки удаляет без корзины. Git их не сохранял, поэтому восстановить нечего. Перед нажатием посмотрите, что именно в файле изменилось.</p>
+          <p>Кнопка <b>Discard Changes</b> возвращает файл к состоянию последнего коммита, а сделанные правки удаляет без корзины. Git их не сохранял, поэтому восстанавливать нечего. Перед нажатием посмотрите, что именно в файле изменилось.</p>
         </div>
-
-        <h2 id="s5"><span class="sec">§5</span>Буквы у имён файлов</h2>
-        <p>Справа от каждого файла стоит буква — состояние этого файла с точки зрения Git. Их пять, и они цветные.</p>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>Буква</th><th>Значит</th><th>Когда появляется</th></tr></thead>
-            <tbody>
-              <tr><td><b>U</b> — untracked</td><td>Новый файл, Git о нём ещё не знает</td><td>Создали файл в папке проекта</td></tr>
-              <tr><td><b>M</b> — modified</td><td>Файл был в истории и изменён</td><td>Открыли и поправили существующий файл</td></tr>
-              <tr><td><b>D</b> — deleted</td><td>Файл удалён из папки</td><td>Удалили файл, который был в прошлом коммите</td></tr>
-              <tr><td><b>A</b> — added</td><td>Новый файл уже подготовлен к коммиту</td><td>Нажали плюс у файла с буквой U</td></tr>
-              <tr><td><b>R</b> — renamed</td><td>Файл переименован</td><td>Сменили имя файла, содержимое осталось прежним</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <figure class="shot">
-          <img src="img/panel-statuses.png" alt="Панель: файл test_new.py с буквой U и зачёркнутый test.py с буквой D">
-          <figcaption>Здесь файл переименовали вручную: Git увидел это как два события — появился <code>test_new.py</code> (<b>U</b>), исчез <code>test.py</code> (<b>D</b>, имя зачёркнуто). После коммита он сам поймёт, что содержимое совпадает, и покажет это как переименование.</figcaption>
+        <p>Нажмите <b>+</b>. Файл переезжает в новый раздел:</p>
+        <figure class="shot shot--panel">
+          <img src="img/step6-a.png" alt="Панель: раздел Staged Changes с файлом privet.html и буквой A, раздел Changes с нулём">
+          <figcaption>Появился раздел <b>Staged Changes</b> — «отобрано для коммита». Буква сменилась с <b>U</b> на <b>A</b> (<i>added</i>). В <b>Changes</b> теперь ноль.</figcaption>
         </figure>
-
-        <h2 id="s6"><span class="sec">§6</span>Changes и Staged Changes</h2>
-        <p>В панели два списка, и разница между ними — главное, что нужно понять про коммит.</p>
+        <p>Это и есть главное различие в панели, ради которого сделаны два списка:</p>
         <ul>
           <li><span class="term">Changes</span> — всё, что изменилось в папке. В коммит это не попадёт.</li>
           <li><span class="term">Staged Changes</span> — то, что вы отобрали для следующего коммита. Попадёт именно это.</li>
         </ul>
-        <figure class="shot">
-          <img src="img/panel-staged.png" alt="Панель: раздел Staged Changes с одним файлом и раздел Changes с двумя">
-          <figcaption>Отобран один файл — <code>test.py</code>, он в <b>Staged Changes</b>. Два других остались в <b>Changes</b> и в этот коммит не войдут. Такое разделение позволяет сохранить одну законченную правку, не смешивая её с незаконченными.</figcaption>
-        </figure>
-        <p>Путь файла от сохранения в редакторе до истории проходит четыре состояния:</p>
+        <p>Передумали — наведите на файл в <b>Staged Changes</b> и нажмите <b>−</b> (<b>Unstage Changes</b>): он вернётся обратно. Подготовку можно отменять сколько угодно раз, история от этого не меняется.</p>
         <div class="flowline">
           <p class="flowline__head">Путь одного файла</p>
           <div class="flowline__track">
@@ -252,21 +233,91 @@
           <p class="analogy__limit"><b>Где не совпадает</b>Коробка уезжает, а файл остаётся на месте и его можно править дальше. Коммит забирает не сам файл, а его состояние на этот момент.</p>
         </div>
 
-        <h2 id="s7"><span class="sec">§7</span>Что меняется после Commit</h2>
-        <p>Нажали Commit — панель перестраивается. Подготовленные файлы уходят из списка, счётчик обнуляется, поле сообщения очищается.</p>
-        <figure class="shot">
-          <img src="img/panel-committed.png" alt="Панель после коммита: Staged Changes с двумя файлами и Changes с нулём">
-          <figcaption>Момент перед нажатием: пояснение написано, два файла подготовлены (<b>A</b> — новые), в <b>Changes</b> ноль. После коммита оба списка опустеют, а работа окажется в истории проекта.</figcaption>
+        <h2 id="s7"><span class="sec">§7</span>Шаг 6. Написать пояснение</h2>
+        <p>Щёлкните в поле <b>Message</b> над кнопкой и напишите, что сделано. Не «правки» и не «коммит», а по существу:</p>
+        <figure class="shot shot--panel">
+          <img src="img/step7-message.png" alt="Панель: в поле сообщения набрано «Добавил страницу с приветствием», ниже кнопка Commit и подготовленный файл">
+          <figcaption>Пояснение останется в истории навсегда. Через месяц по нему будет понятно, зачем этот коммит, — в том числе вам самим.</figcaption>
         </figure>
-        <p>Если пояснение не написано, VS Code откроет отдельную вкладку <code>COMMIT_EDITMSG</code> и попросит его ввести — коммит без пояснения не создаётся. Это не придирка редактора: пояснение хранится внутри коммита и потом отвечает на вопрос «зачем это изменение».</p>
+        <p>Без пояснения коммит не создастся: VS Code откроет отдельную вкладку <code>COMMIT_EDITMSG</code> и попросит его ввести. Это не придирка редактора — текст хранится внутри коммита и отвечает на вопрос «зачем это изменение».</p>
 
-        <h2 id="s8"><span class="sec">§8</span>Меню с остальными командами</h2>
-        <p>Кнопок в панели немного — остальное спрятано под значком с тремя точками справа от слова CHANGES. Там собраны все команды Git, которые понадобятся дальше.</p>
-        <figure class="shot">
-          <img src="img/panel-menu.png" alt="Открытое меню трёх точек в панели Source Control со списком команд Git">
-          <figcaption>Меню <b>Views and More Actions</b>. Верхняя часть — обмен с сервером (Pull, Push, Clone, Fetch), нижняя — работа с ветками, спрятанными правками и метками. Подменю <b>Branch</b> раскрыто: создание, переименование, удаление веток.</figcaption>
+        <h2 id="s8"><span class="sec">§8</span>Шаг 7. Сделать коммит</h2>
+        <p>Нажмите <b>✓ Commit</b>. Панель опустеет:</p>
+        <figure class="shot shot--panel">
+          <img src="img/step8-commit.png" alt="Панель после коммита: поле сообщения пустое, списков изменений нет">
+          <figcaption>Списки пусты, поле сообщения очищено, счётчик на значке погас. Папка проекта совпадает с последней сохранённой версией.</figcaption>
         </figure>
-        <p>Сейчас запоминать эти пункты не нужно. Важно другое: если команда не нашлась среди кнопок, она в этом меню или в палитре команд по слову <code>git</code>. Ничего дополнительно устанавливать не придётся — работа с Git встроена в редактор.</p>
+        <figure class="shot shot--bar">
+          <img src="img/status-after.png" alt="Строка состояния после коммита: main без звёздочки">
+          <figcaption>Звёздочка у имени ветки исчезла. Значок облака остался: коммит сохранён на вашем компьютере, на GitHub его пока нет.</figcaption>
+        </figure>
+        <p>Первая версия проекта готова. Проверить это можно в терминале — Git покажет тот самый коммит:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>git log --oneline</span></figcaption>
+<pre>ceabd0d Добавил страницу с приветствием</pre>
+        </figure>
+        <p>Слева короткое имя коммита, справа ваше пояснение. Набирать эту команду не обязательно — то же самое показывает раздел <b>Graph</b> под списками файлов, но в терминале видно короче.</p>
+
+        <h2 id="s9"><span class="sec">§9</span>Шаг 8. Изменить файл ещё раз</h2>
+        <p>Откройте <code>privet.html</code>, допишите вторую строку и сохраните:</p>
+        <figure class="code">
+          <figcaption><span>privet.html</span><span>после правки</span></figcaption>
+<pre>&lt;<span class="k">h1</span>&gt;Привет, это моя страница&lt;/<span class="k">h1</span>&gt;
+&lt;<span class="k">p</span>&gt;Учусь работать с Git.&lt;/<span class="k">p</span>&gt;</pre>
+        </figure>
+        <figure class="shot shot--panel">
+          <img src="img/step9-m.png" alt="Панель: файл privet.html снова в разделе Changes, но с буквой M">
+          <figcaption>Тот же файл снова в <b>Changes</b>, но буква теперь <b>M</b> (<i>modified</i>) — изменён, а не новый. Git уже знает этот файл и следит за ним.</figcaption>
+        </figure>
+        <p>Нажмите на файл — теперь открывается окно сравнения, потому что есть с чем сравнивать:</p>
+        <figure class="shot shot--wide">
+          <img src="img/step10-diff.png" alt="Окно сравнения: первая строка без подсветки, вторая подсвечена зелёным как добавленная">
+          <figcaption>Слева номера строк прошлой версии, справа текущей. Первая строка не изменилась и не подсвечена, вторая добавлена — зелёная. Так же выглядит просмотр чужой работы: смотрят не весь файл, а подсвеченные строки.</figcaption>
+        </figure>
+        <p>Повторите шаги 5–7 для этой правки: плюс, пояснение «Добавил строку про учёбу», Commit. В истории проекта станет два коммита — на этом сквозной сценарий закончен.</p>
+        <div class="checklist">
+          <p class="checklist__head">Что должно получиться</p>
+          <div class="checklist__item"><span><b>Панель пустая</b>Ни в <b>Changes</b>, ни в <b>Staged Changes</b> файлов нет.</span></div>
+          <div class="checklist__item"><span><b>Звёздочки у ветки нет</b>Внизу слева написано <code>main</code> без звёздочки.</span></div>
+          <div class="checklist__item"><span><b>Коммитов два</b><code>git log --oneline</code> печатает две строки с вашими пояснениями.</span></div>
+          <div class="checklist__item"><span><b>Файл на месте</b><code>privet.html</code> лежит в папке и содержит обе строки.</span></div>
+        </div>
+
+        <h2 id="s10"><span class="sec">§10</span>Справка: буквы у имён файлов</h2>
+        <p>Две буквы уже встретились по ходу работы — <b>U</b> у нового файла и <b>M</b> у изменённого. Всего их пять, и они цветные.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Буква</th><th>Значит</th><th>Когда появляется</th></tr></thead>
+            <tbody>
+              <tr><td><b>U</b> — untracked</td><td>Новый файл, Git о нём ещё не знает</td><td>Создали файл в папке проекта</td></tr>
+              <tr><td><b>M</b> — modified</td><td>Файл был в истории и изменён</td><td>Открыли и поправили существующий файл</td></tr>
+              <tr><td><b>D</b> — deleted</td><td>Файл удалён из папки</td><td>Удалили файл, который был в прошлом коммите</td></tr>
+              <tr><td><b>A</b> — added</td><td>Новый файл уже подготовлен к коммиту</td><td>Нажали плюс у файла с буквой U</td></tr>
+              <tr><td><b>R</b> — renamed</td><td>Файл переименован</td><td>Сменили имя файла, содержимое осталось прежним</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Переименование Git замечает не сразу: сначала он видит два события — исчез старый файл (<b>D</b>) и появился новый (<b>U</b>). После коммита он сравнивает содержимое, понимает, что оно то же самое, и показывает это как переименование.</p>
+
+        <h2 id="s11"><span class="sec">§11</span>Справка: счётчик, строка состояния, меню</h2>
+        <p><b>Синий кружок на значке Source Control</b> — сколько файлов изменилось с последнего коммита. Ноль означает, что папка совпадает с историей.</p>
+        <p><b>Строка состояния внизу окна.</b> Слева имя текущей ветки и значок обмена с сервером. Три состояния, которые встречаются чаще всего:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что видно</th><th>Что это значит</th></tr></thead>
+            <tbody>
+              <tr><td><code>main</code> и значок облака</td><td>Всё сохранено в историю, копии на GitHub у проекта нет</td></tr>
+              <tr><td><code>main*</code></td><td>В папке есть изменения, которых нет в истории: коммит не сделан</td></tr>
+              <tr><td><code>main ⟳ 3↓ 2↑</code></td><td>Проект связан с GitHub: два ваших коммита не отправлены, три чужих не забраны</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Третье состояние появится в модуле 4, когда проект окажется на сайте. Привычка смотреть на стрелки перед началом работы экономит разбирательства со слияниями: сначала забрать чужое, потом делать своё.</p>
+        <p><b>Меню с остальными командами</b> спрятано под значком с тремя точками справа от слова CHANGES. Там собраны все команды Git, которые понадобятся дальше.</p>
+        <figure class="shot shot--wide">
+          <img src="img/panel-menu.png" alt="Открытое меню трёх точек в панели Source Control со списком команд Git">
+          <figcaption>Верхняя часть меню — обмен с сервером (Pull, Push, Clone, Fetch), нижняя — ветки, отложенные правки и метки. Подменю <b>Branch</b> раскрыто.</figcaption>
+        </figure>
         <div class="table-scroll">
           <table>
             <thead><tr><th>Пункт меню</th><th>Что делает</th><th>В какой главе</th></tr></thead>
@@ -280,174 +331,13 @@
             </tbody>
           </table>
         </div>
+        <p>Запоминать эти пункты сейчас не нужно. Важно другое: если команда не нашлась среди кнопок, она в этом меню или в палитре команд (<kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>) по слову <code>git</code>.</p>
 
-        <h2 id="s9"><span class="sec">§9</span>Счётчик и строка состояния</h2>
-        <p>Два места показывают состояние проекта, даже когда панель закрыта.</p>
-        <p><b>Синий кружок на значке Source Control</b> — сколько файлов изменилось с последнего коммита. Ноль означает, что папка совпадает с историей.</p>
-        <p><b>Строка состояния внизу окна</b> — слева имя текущей ветки и значок обмена с сервером. Три состояния, которые встречаются чаще всего:</p>
-
-        <div class="vsc">
-          <div class="vsc__status"><span>⎇</span><b>main</b><span>⟳ 0↓ 0↑</span><span style="margin-left:auto">privet.html</span></div>
-          <p class="vsc__caption"><b>Всё сохранено и отправлено.</b> Рядом с именем ветки нет звёздочки, обе стрелки на нуле: папка, история и копия на GitHub совпадают.</p>
-        </div>
-
-        <div class="vsc">
-          <div class="vsc__status"><span>⎇</span><b>main*</b><span>⟳ 0↓ 0↑</span><span style="margin-left:auto">privet.html</span></div>
-          <p class="vsc__caption"><b>Звёздочка у имени ветки.</b> В папке есть изменения, которых нет в истории: коммит ещё не сделан.</p>
-        </div>
-
-        <div class="vsc">
-          <div class="vsc__status"><span>⎇</span><b>main</b><span>⟳ 3↓ 2↑</span><span style="margin-left:auto">privet.html</span></div>
-          <p class="vsc__caption"><b>Стрелки показывают обмен с сервером.</b> <code>2↑</code> — два ваших коммита ещё не отправлены. <code>3↓</code> — на GitHub есть три чужих коммита, которых нет у вас. Нажатие на эту область запускает обмен.</p>
-        </div>
-
-        <p>Привычка смотреть на стрелки перед началом работы экономит разбирательства со слияниями: сначала забрать чужое, потом делать своё.</p>
-
-        <h2 id="s10"><span class="sec">§10</span>Пошаговый разбор: от пустой папки до коммита</h2>
-        <p>Дальше — сквозной сценарий на одном учебном проекте. Повторяйте по шагам у себя: после каждого действия показано, что должно появиться в панели. Проект называется <code>proba-git</code>, в нём будет один файл.</p>
-        <div class="margin-note margin-note--steel">
-          <b>На полях: почему интерфейс нарисован, а не снят</b>
-          <p>Картинки в этом параграфе — точная перерисовка панели, а не кадры экрана. Так каждый шаг показан на одном и том же проекте, без посторонних файлов: у вас на экране будет ровно то же самое, вплоть до имён и букв.</p>
-        </div>
-
-        <h3>Шаг 1. Создать папку и открыть её</h3>
-        <p>Создайте на рабочем столе папку <code>proba-git</code> — пустую, без файлов. Откройте её в VS Code: <b>File → Open Folder</b>, выбрать папку, <b>Open</b>. Затем откройте панель: <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>.</p>
-        <div class="vsc">
-          <div class="vsc__bar"><span>Source Control</span><i>…</i></div>
-          <div class="vsc__body">
-            <p class="vsc__note">The folder currently open doesn't have a Git repository. You can initialize a repository which will enable source control features powered by Git.</p>
-            <p class="vsc__btn is-hi">Initialize Repository</p>
-            <p class="vsc__btn vsc__btn--ghost">Publish to GitHub</p>
-          </div>
-          <div class="vsc__status"><span>⎇</span><span>нет репозитория</span></div>
-          <p class="vsc__caption"><b>Что видно:</b> Git в этой папке ещё не заведён, поэтому панель предлагает его создать. В строке состояния имени ветки нет.</p>
-        </div>
-
-        <h3>Шаг 2. Нажать Initialize Repository</h3>
-        <p>Нажмите подсвеченную кнопку. На диске появится скрытая папка <code>.git</code>, а панель сменит вид.</p>
-        <div class="vsc">
-          <div class="vsc__bar"><span>Source Control</span><i>…</i></div>
-          <div class="vsc__body">
-            <p class="vsc__field">Message (⌘Enter to commit on "main")</p>
-            <p class="vsc__btn">✓ Commit</p>
-            <p class="vsc__empty">Изменений нет — папка пуста.</p>
-          </div>
-          <div class="vsc__status"><span>⎇</span><b>main</b><span>⟳ 0↓ 0↑</span></div>
-          <p class="vsc__caption"><b>Что изменилось:</b> появились поле сообщения и кнопка Commit, а внизу — имя ветки <code>main</code>. Списки пустые: в папке пока нет ни одного файла.</p>
-        </div>
-
-        <h3>Шаг 3. Создать первый файл</h3>
-        <p>В проводнике VS Code (<kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>E</kbd>) нажмите значок нового файла, назовите его <code>privet.html</code> и напишите одну строку:</p>
-        <figure class="code">
-          <figcaption><span>privet.html</span><span>первая строка проекта</span></figcaption>
-<pre>&lt;<span class="k">h1</span>&gt;Привет, это моя страница&lt;/<span class="k">h1</span>&gt;</pre>
-        </figure>
-        <p>Сохраните файл: <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>S</kbd>. Вернитесь в панель.</p>
-        <div class="vsc">
-          <div class="vsc__bar"><span>Source Control</span><i>1</i></div>
-          <div class="vsc__body">
-            <p class="vsc__field">Message (⌘Enter to commit on "main")</p>
-            <p class="vsc__btn">✓ Commit</p>
-            <p class="vsc__group">Changes <b>1</b></p>
-            <p class="vsc__file is-hi"><span>privet.html</span><em class="u">U</em></p>
-          </div>
-          <div class="vsc__status"><span>⎇</span><b>main*</b><span>⟳ 0↓ 0↑</span></div>
-          <p class="vsc__caption"><b>Что видно:</b> файл появился в разделе <b>Changes</b> с буквой <b>U</b> — новый, Git о нём ещё не знает. Справа вверху счётчик <b>1</b>, внизу у имени ветки появилась звёздочка.</p>
-        </div>
-
-        <h3>Шаг 4. Посмотреть, что именно изменилось</h3>
-        <p>Нажмите на имя файла в панели. В правой части откроется окно сравнения: слева прошлая версия, справа текущая.</p>
-        <div class="vsc">
-          <div class="vsc__bar"><span>privet.html · Working Tree</span><i>↔</i></div>
-          <div class="vsc__body">
-            <div class="vsc__diff">
-              <div><u>Было</u><span class="nil">файла не существовало</span></div>
-              <div><u>Стало</u><span class="add">&lt;h1&gt;Привет, это моя страница&lt;/h1&gt;</span></div>
-            </div>
-          </div>
-          <p class="vsc__caption"><b>Что видно:</b> зелёным показаны добавленные строки, красным были бы удалённые. Для нового файла левая часть пуста — сравнивать не с чем.</p>
-        </div>
-
-        <h3>Шаг 5. Подготовить файл к коммиту</h3>
-        <p>Наведите указатель на файл в списке и нажмите значок <b>+</b> (подсказка <b>Stage Changes</b>).</p>
-        <div class="vsc">
-          <div class="vsc__bar"><span>Source Control</span><i>1</i></div>
-          <div class="vsc__body">
-            <p class="vsc__field">Message (⌘Enter to commit on "main")</p>
-            <p class="vsc__btn">✓ Commit</p>
-            <p class="vsc__group">Staged Changes <b>1</b></p>
-            <p class="vsc__file is-hi"><span>privet.html</span><em class="a">A</em></p>
-            <p class="vsc__group">Changes <b>0</b></p>
-          </div>
-          <div class="vsc__status"><span>⎇</span><b>main*</b><span>⟳ 0↓ 0↑</span></div>
-          <p class="vsc__caption"><b>Что изменилось:</b> появился раздел <b>Staged Changes</b>, файл переехал туда, буква сменилась с <b>U</b> на <b>A</b> — подготовлен к коммиту. В <b>Changes</b> теперь ноль.</p>
-        </div>
-        <p>Передумали — наведите на файл в <b>Staged Changes</b> и нажмите <b>−</b> (<b>Unstage Changes</b>): он вернётся обратно. Подготовку можно отменять сколько угодно раз, история от этого не меняется.</p>
-
-        <h3>Шаг 6. Написать пояснение</h3>
-        <p>Щёлкните в поле <b>Message</b> и напишите, что сделано. Не «правки» и не «коммит», а по существу:</p>
-        <div class="vsc">
-          <div class="vsc__bar"><span>Source Control</span><i>1</i></div>
-          <div class="vsc__body">
-            <p class="vsc__field vsc__field--filled is-hi">Добавил страницу с приветствием</p>
-            <p class="vsc__btn">✓ Commit</p>
-            <p class="vsc__group">Staged Changes <b>1</b></p>
-            <p class="vsc__file"><span>privet.html</span><em class="a">A</em></p>
-          </div>
-          <div class="vsc__status"><span>⎇</span><b>main*</b><span>⟳ 0↓ 0↑</span></div>
-          <p class="vsc__caption"><b>Что видно:</b> поле заполнено, кнопка Commit готова к нажатию. Пояснение останется в истории навсегда — через месяц по нему будет понятно, зачем этот коммит.</p>
-        </div>
-
-        <h3>Шаг 7. Сделать коммит</h3>
-        <p>Нажмите <b>✓ Commit</b>. Панель опустеет.</p>
-        <div class="vsc">
-          <div class="vsc__bar"><span>Source Control</span><i>0</i></div>
-          <div class="vsc__body">
-            <p class="vsc__field">Message (⌘Enter to commit on "main")</p>
-            <p class="vsc__btn">✓ Commit</p>
-            <p class="vsc__empty">Изменений нет: папка совпадает с историей.</p>
-          </div>
-          <div class="vsc__status"><span>⎇</span><b>main</b><span class="is-hi">⟳ 0↓ 1↑</span></div>
-          <p class="vsc__caption"><b>Что изменилось:</b> списки пусты, счётчик на значке погас, звёздочка у ветки исчезла. Появилось <code>1↑</code> — один коммит сделан, но ещё не отправлен на GitHub.</p>
-        </div>
-
-        <h3>Шаг 8. Изменить файл ещё раз</h3>
-        <p>Откройте <code>privet.html</code>, допишите вторую строку и сохраните:</p>
-        <figure class="code">
-          <figcaption><span>privet.html</span><span>после правки</span></figcaption>
-<pre>&lt;<span class="k">h1</span>&gt;Привет, это моя страница&lt;/<span class="k">h1</span>&gt;
-&lt;<span class="k">p</span>&gt;Учусь работать с Git.&lt;/<span class="k">p</span>&gt;</pre>
-        </figure>
-        <div class="vsc">
-          <div class="vsc__bar"><span>Source Control</span><i>1</i></div>
-          <div class="vsc__body">
-            <p class="vsc__field">Message (⌘Enter to commit on "main")</p>
-            <p class="vsc__btn">✓ Commit</p>
-            <p class="vsc__group">Changes <b>1</b></p>
-            <p class="vsc__file is-hi"><span>privet.html</span><em class="m">M</em></p>
-          </div>
-          <div class="vsc__status"><span>⎇</span><b>main*</b><span>⟳ 0↓ 1↑</span></div>
-          <p class="vsc__caption"><b>Что видно:</b> тот же файл снова в <b>Changes</b>, но буква теперь <b>M</b> — изменён, а не новый. Git уже знает этот файл и следит за ним.</p>
-        </div>
-        <p>Нажмите на файл — в окне сравнения будет видно, что именно добавилось:</p>
-        <div class="vsc">
-          <div class="vsc__bar"><span>privet.html · Working Tree</span><i>↔</i></div>
-          <div class="vsc__body">
-            <div class="vsc__diff">
-              <div><u>Было</u><span>&lt;h1&gt;Привет, это моя страница&lt;/h1&gt;</span></div>
-              <div><u>Стало</u><span>&lt;h1&gt;Привет, это моя страница&lt;/h1&gt;</span><span class="add">&lt;p&gt;Учусь работать с Git.&lt;/p&gt;</span></div>
-            </div>
-          </div>
-          <p class="vsc__caption"><b>Что видно:</b> первая строка одинаковая и не подсвечена, вторая добавлена — зелёная. Именно так выглядит ревью чужой работы: смотрят не весь файл, а подсвеченные строки.</p>
-        </div>
-        <p>Повторите шаги 5–7 для этой правки — и в истории проекта будет два коммита. На этом панель разобрана полностью: всё остальное в ней делается теми же четырьмя действиями.</p>
-
-
-        <h2 id="s11"><span class="sec">§11</span>Частые вопросы</h2>
+        <h2 id="s12"><span class="sec">§12</span>Частые вопросы</h2>
         <div class="myths">
           <div class="myth">
             <div class="myth__no"><b>Обычно думают</b>Файл сохранён в редакторе — значит, он в истории.</div>
-            <div class="myth__yes"><b>На самом деле</b>Сохранение меняет файл на диске. В историю он попадёт после подготовки и коммита: это шаги 3 и 4 из §6.</div>
+            <div class="myth__yes"><b>На самом деле</b>Сохранение меняет файл на диске. В историю он попадёт после подготовки и коммита: это шаги 5–7 из этой главы.</div>
           </div>
           <div class="myth">
             <div class="myth__no"><b>Обычно думают</b>Кнопка Commit отправляет работу на GitHub.</div>
@@ -455,7 +345,7 @@
           </div>
           <div class="myth">
             <div class="myth__no"><b>Обычно думают</b>Панель пустая — значит, Git не работает.</div>
-            <div class="myth__yes"><b>На самом деле</b>Пустая панель означает, что папка совпадает с последним коммитом: изменений нет. Это нормальное состояние сразу после коммита.</div>
+            <div class="myth__yes"><b>На самом деле</b>Пустая панель означает, что папка совпадает с последним коммитом. Это нормальное состояние сразу после коммита — как на шаге 7.</div>
           </div>
           <div class="myth">
             <div class="myth__no"><b>Обычно думают</b>Если нажать плюс у всех файлов, будет быстрее.</div>
@@ -463,7 +353,7 @@
           </div>
         </div>
 
-        <h2 id="s12"><span class="sec">§12</span>Проверьте себя</h2>
+        <h2 id="s13"><span class="sec">§13</span>Проверьте себя</h2>
         <details>
           <summary>На значке Source Control стоит цифра 4. Что это означает?</summary>
           <p>Четыре файла в папке проекта отличаются от последнего коммита: изменены, созданы или удалены. Это не число коммитов и не количество файлов проекта — только то, что разошлось с историей.</p>
@@ -474,23 +364,30 @@
         </details>
         <details>
           <summary>Рядом с файлом стоит буква <b>U</b>. Что это за файл и что с ним делать?</summary>
-          <p>Файл новый: он лежит в папке, но в истории его ещё нет. Чтобы он попал в проект, нажмите плюс — буква сменится на <b>A</b>, файл окажется в Staged Changes, — и сделайте коммит. Если файл попал в папку случайно, его можно просто удалить или внести в <code>.gitignore</code>.</p>
+          <p>Файл новый: он лежит в папке, но в истории его ещё нет. Чтобы он попал в проект, нажмите плюс — буква сменится на <b>A</b>, файл окажется в Staged Changes, — и сделайте коммит. Если файл попал в папку случайно, его можно удалить или внести в <code>.gitignore</code>.</p>
+        </details>
+        <details>
+          <summary>Почему при первом клике по новому файлу открылся сам файл, а не сравнение?</summary>
+          <p>Сравнивать было не с чем: прошлой версии у нового файла не существует. Окно сравнения появляется у файла, который уже есть в истории, — как на шаге 8, где подсветилась добавленная строка.</p>
         </details>
         <details>
           <summary>Вы сделали коммит, но на GitHub изменений не видно. Почему?</summary>
-          <p>Коммит сохраняется на вашем компьютере. Чтобы он оказался на сайте, нужна отправка: кнопка <b>Sync Changes</b> или пункт <code>Push</code> в меню. В строке состояния при этом видно <code>↑ 1</code> — один коммит ждёт отправки.</p>
+          <p>Коммит сохраняется на вашем компьютере. Чтобы он оказался на сайте, нужна отправка: кнопка <b>Sync Changes</b> или пункт <code>Push</code> в меню. Пока проект не опубликован, в строке состояния стоит значок облака.</p>
         </details>
         <details>
           <summary>Что произойдёт, если нажать круговую стрелку у изменённого файла?</summary>
           <p>Файл вернётся к состоянию последнего коммита, а все правки после него исчезнут без возможности вернуть. Git их не сохранял, поэтому восстанавливать нечего. Если правки нужны, но мешают — их откладывают через <code>Stash</code>, а не отменяют.</p>
         </details>
-        <details>
-          <summary>Объясните своими словами, зачем в панели два списка, а не один.</summary>
-          <p>Чтобы коммит описывал одно законченное изменение. За час работы обычно правится несколько разных вещей: одна готова, другая нет. Отбор через Staged Changes позволяет сохранить в историю только готовое, а незаконченное оставить в работе.</p>
-        </details>
 
-        <h2 id="s13"><span class="sec">§13</span>Шпаргалка по главе</h2>
+        <h2 id="s14"><span class="sec">§14</span>Шпаргалка по главе</h2>
         <div class="cheat">
+          <div>
+            <b>Порядок действий</b>
+            <code>открыть папку</code>
+            <code>Initialize Repository</code>
+            <code>создать файл → плюс</code>
+            <code>пояснение → Commit</code>
+          </div>
           <div>
             <b>Открыть панель</b>
             <code><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span>+Shift+G</code>
@@ -517,23 +414,18 @@
           <div>
             <b>Строка состояния</b>
             <code>main — текущая ветка</code>
-            <code>↑ 2 — не отправлено коммитов</code>
-            <code>↓ 3 — не забрано чужих</code>
-          </div>
-          <div>
-            <b>Остальные команды</b>
-            <code>значок «…» у слова CHANGES</code>
-            <code>палитра команд, слово git</code>
+            <code>main* — есть несохранённое</code>
+            <code>облако — проект не опубликован</code>
           </div>
         </div>
 
         <h3>Итог главы</h3>
-        <p>Панель Source Control показывает разницу между папкой проекта и последним коммитом. Изменённые файлы попадают в список Changes, отобранные кнопкой с плюсом — в Staged Changes, и в коммит уходит только второй список. Буква справа от имени говорит, что именно случилось с файлом, счётчик на значке — сколько файлов разошлось с историей, а строка состояния внизу показывает ветку и сколько коммитов ждут обмена с сервером. Остальные команды спрятаны под тремя точками и в палитре команд. В следующей главе заведём репозиторий двумя способами: свой с нуля и чужой через клонирование.</p>
+        <p>Один проход по восьми шагам даёт всю рабочую схему: открыть папку, завести репозиторий, создать файл, посмотреть изменения, подготовить их плюсом, написать пояснение, нажать Commit. Панель показывает разницу между папкой проекта и последним коммитом: изменённые файлы попадают в Changes, отобранные — в Staged Changes, и в историю уходит только второй список. Буква справа от имени говорит, что случилось с файлом, счётчик на значке — сколько файлов разошлось с историей, строка состояния — на какой вы ветке и опубликован ли проект. В следующей главе разберём, откуда репозиторий берётся: свой заводят с нуля, чужой скачивают клонированием.</p>
 
         <div class="sources">
           <b>Откуда взяты факты</b>
           <ol>
-            <li>Кадры панели сняты в Visual Studio Code на учебных проектах курса.</li>
+            <li>Кадры сняты в Visual Studio Code на учебном проекте <code>proba-git</code>, собранном специально для этой главы: в нём один файл и два коммита.</li>
             <li>Назначение элементов панели и список команд меню — <a href="https://code.visualstudio.com/docs/sourcecontrol/overview">документация VS Code, раздел Source Control</a>.</li>
             <li>Буквы состояний файлов соответствуют выводу <code>git status</code> — <a href="https://git-scm.com/docs/git-status">документация Git</a>.</li>
           </ol>
