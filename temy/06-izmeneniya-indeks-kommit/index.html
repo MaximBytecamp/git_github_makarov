@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>2.3 Изменения, индекс, коммит: почему два шага · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <script>
+    try {
+      var saved = localStorage.getItem('git-book-os');
+      if (!saved) {
+        var p = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+        saved = /win/i.test(p) ? 'win' : (/mac|iphone|ipad/i.test(p) ? 'mac' : 'linux');
+      }
+      document.documentElement.dataset.os = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Модуль 2 · Первый репозиторий в VS Code</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 2 · первый репозиторий в VS Code</p>
+          <p class="running__folio">Глава 2.3</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">2.3</span>
+          <h1>Изменения, индекс, коммит:<br>почему два шага</h1>
+          <p class="lead">В прошлых главах плюс нажимали сразу перед коммитом, и казалось, что это лишняя кнопка. В этой главе видно, зачем она: за полчаса работы в проекте накапливаются правки о разном, а в историю они должны уйти по отдельности. Разбираем накопленные правки и раскладываем их на два осмысленных коммита.</p>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Основы работы</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Что получится</dt><dd>Два коммита с понятными сообщениями вместо одной общей свалки</dd></div>
+          <div><dt>Сколько занимает</dt><dd>Около двадцати пяти минут за компьютером</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>Порядок действий</b>
+          <ol>
+            <li><a href="#s1">Три места, где живут ваши правки</a></li>
+            <li><a href="#s2">Готовим площадку: правки в трёх файлах</a></li>
+            <li><a href="#s3">Шаг 1. Посмотреть, что накопилось</a></li>
+            <li><a href="#s4">Шаг 2. Разложить правки по смыслу</a></li>
+            <li><a href="#s5">Шаг 3. Отобрать первую пару файлов</a></li>
+            <li><a href="#s6">Шаг 4. Написать сообщение из двух частей</a></li>
+            <li><a href="#s7">Шаг 5. Сделать первый коммит и проверить его</a></li>
+            <li><a href="#s8">Шаг 6. Второй коммит из остатка</a></li>
+            <li><a href="#s9">Шаг 7. Подготовить часть файла</a></li>
+            <li><a href="#s10">Справка: три зоны и команды</a></li>
+            <li><a href="#s11">Как писать сообщения коммитов</a></li>
+            <li><a href="#s12">Частые вопросы</a></li>
+            <li><a href="#s13">Проверьте себя</a></li>
+            <li><a href="#s14">Шпаргалка по главе</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Три места, где живут ваши правки</h2>
+        <p>Между текстом в редакторе и записью в истории правка проходит через три места. У каждого своё название, и путаница между ними — причина почти всех вопросов новичков.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 250" role="img" aria-label="Схема: рабочая папка, индекс и история, между ними кнопки плюс и Commit">
+            <rect x="8" y="40" width="200" height="120" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="108" y="70" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="13" fill="var(--ink)">РАБОЧАЯ ПАПКА</text>
+            <text x="108" y="96" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">файлы на диске</text>
+            <text x="108" y="118" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">то, что вы правите</text>
+            <text x="108" y="144" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--fire-deep)">раздел Changes</text>
+
+            <rect x="250" y="40" width="200" height="120" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="350" y="70" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="13" fill="var(--ink)">ИНДЕКС</text>
+            <text x="350" y="96" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">черновик коммита:</text>
+            <text x="350" y="118" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">что уйдёт в историю</text>
+            <text x="350" y="144" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--fire-deep)">раздел Staged Changes</text>
+
+            <rect x="492" y="40" width="200" height="120" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="592" y="70" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="13" fill="var(--ink)">ИСТОРИЯ</text>
+            <text x="592" y="96" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">цепочка коммитов</text>
+            <text x="592" y="118" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">внутри папки .git</text>
+            <text x="592" y="144" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--fire-deep)">меняется только коммитом</text>
+
+            <path d="M212 100 h34" stroke="var(--fire-deep)" stroke-width="3"/>
+            <path d="M240 93 l8 7 -8 7" fill="none" stroke="var(--fire-deep)" stroke-width="3"/>
+            <text x="229" y="88" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="14" fill="var(--fire-deep)">+</text>
+
+            <path d="M454 100 h34" stroke="var(--fire-deep)" stroke-width="3"/>
+            <path d="M482 93 l8 7 -8 7" fill="none" stroke="var(--fire-deep)" stroke-width="3"/>
+            <text x="471" y="88" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--fire-deep)">✓</text>
+
+            <text x="229" y="185" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">кнопка «плюс»</text>
+            <text x="229" y="203" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-faint)">git add</text>
+            <text x="471" y="185" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">кнопка Commit</text>
+            <text x="471" y="203" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-faint)">git commit</text>
+          </svg>
+          <figcaption>Правка идёт слева направо и только по нажатию кнопок. Сама она никуда не перемещается: ни сохранение файла, ни закрытие редактора историю не меняют.</figcaption>
+        </figure>
+        <p><span class="term">Индекс</span> — среднее место, куда складывают то, что войдёт в следующий коммит. В панели VS Code он называется <b>Staged Changes</b>, в командах Git — <i>index</i> или <i>staging area</i>. Это черновик: пока коммит не сделан, содержимое индекса можно менять сколько угодно.</p>
+        <div class="why">
+          <p class="why__head">Зачем это нужно в работе</p>
+          <ul class="why__list">
+            <li><b>Один коммит — одна законченная мысль.</b> За час правится и вёрстка, и текст, и настройки. Если свалить всё в один коммит, потом невозможно откатить только одно.</li>
+            <li><b>Черновик не мешает готовому.</b> Незаконченный кусок остаётся в работе, а готовый уходит в историю: не нужно ждать, пока всё будет доделано.</li>
+            <li><b>Проверка перед отправкой.</b> Индекс показывает ровно то, что уйдёт в коммит. Это последняя точка, где видно случайный файл с паролем или отладочную строку.</li>
+            <li><b>Понятная история для команды.</b> По списку коммитов коллеги читают, что происходило с проектом. «Правки» и «фиксы» не говорят ничего, а «Добавил страницу контактов» — говорит.</li>
+          </ul>
+        </div>
+
+        <h2 id="s2"><span class="sec">§2</span>Готовим площадку: правки в трёх файлах</h2>
+        <p>Работаем на проекте <code>sait-vizitka</code>, который склонировали в главе 2.2. Если его нет, склонируйте заново — адрес там же.</p>
+        <p><b>Что делаем.</b> Вносим четыре правки в трёх файлах — как будто это полчаса обычной работы. Правки про разное, и это здесь главное.</p>
+        <ol class="steps">
+          <li>В <code>index.html</code> меняем заголовок вкладки: <code>&lt;title&gt;Сайт-визитка · Максим&lt;/title&gt;</code>.</li>
+          <li>Там же, ниже абзаца, добавляем ссылку: <code>&lt;p&gt;&lt;a href="kontakty.html"&gt;Контакты&lt;/a&gt;&lt;/p&gt;</code>.</li>
+          <li>Создаём файл <code>kontakty.html</code> — копию главной страницы с заголовком «Контакты» и строкой с почтой.</li>
+          <li>В <code>styles.css</code> увеличиваем отступ: <code>padding: 60px;</code> вместо <code>40px</code>.</li>
+        </ol>
+        <p>Сохраняем всё (<kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>S</kbd> в каждом файле) и открываем панель Source Control.</p>
+
+        <h2 id="s3"><span class="sec">§3</span>Шаг 1. Посмотреть, что накопилось</h2>
+        <p><b>Что видно.</b> В разделе <b>Changes</b> три файла — ровно те, которые мы трогали:</p>
+        <figure class="shot shot--panel">
+          <img src="img/01-three-changes.png" alt="Панель Source Control: раздел Changes с тремя файлами — index.html M, kontakty.html U, styles.css M">
+          <figcaption>Счётчик показывает <b>3</b>. Буквы разные: <b>M</b> у двух изменённых файлов, <b>U</b> у нового <code>kontakty.html</code>.</figcaption>
+        </figure>
+        <p>То же самое словами Git — команда <code>git status</code> печатает подробнее, но об одном и том же:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>git status --short</span></figcaption>
+<pre> M index.html
+?? kontakty.html
+ M styles.css</pre>
+        </figure>
+        <p><b>Что важно.</b> Все три файла лежат в одном списке, и пока ни один из них в коммит не попадёт. Кнопка <b>Commit</b> сейчас нажалась бы вхолостую: индекс пуст.</p>
+        <p>Посмотрим, что именно изменилось в <code>index.html</code> — нажимаем на его имя:</p>
+        <figure class="shot shot--wide">
+          <img src="img/02-diff-two-blocks.png" alt="Окно сравнения index.html: изменённая строка title показана красной и зелёной, ниже добавленная строка со ссылкой">
+          <figcaption>Изменённая строка показана дважды: красным — как было, зелёным — как стало. Ниже, отдельным участком, добавленная ссылка на страницу контактов.</figcaption>
+        </figure>
+
+        <h2 id="s4"><span class="sec">§4</span>Шаг 2. Разложить правки по смыслу</h2>
+        <p>Три файла — но сколько здесь законченных дел? Считаем не файлы, а смысл:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что сделано</th><th>Какие файлы затронуты</th><th>Это одно дело?</th></tr></thead>
+            <tbody>
+              <tr><td>Появилась страница контактов и ссылка на неё</td><td><code>kontakty.html</code> — новый, <code>index.html</code> — ссылка</td><td>Да: без ссылки страницу никто не найдёт, без страницы ссылка ведёт в никуда</td></tr>
+              <tr><td>Заголовок вкладки стал понятнее</td><td><code>index.html</code></td><td>Отдельное мелкое дело, но лежит в том же файле</td></tr>
+              <tr><td>Увеличены отступы</td><td><code>styles.css</code></td><td>Да, это оформление — к контактам отношения не имеет</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Получается два коммита: первый — страница контактов со ссылкой, второй — оформление. Заголовок вкладки поедет вместе с первым: он в том же файле, и разделять его отдельно ради одной строки смысла нет.</p>
+        <div class="analogy">
+          <p class="analogy__head">Ассоциация: две коробки для переезда</p>
+          <div class="analogy__pair">
+            <div class="analogy__side">
+              <b>В жизни</b>
+              <p>Вещи со стола не сваливают в одну коробку. Посуду — в одну, книги — в другую, и каждую подписывают. Потом на новом месте не придётся перерывать всё, чтобы найти чашку.</p>
+            </div>
+            <div class="analogy__side">
+              <b>В Git</b>
+              <p>Плюс у файла кладёт его в коробку — индекс. Commit заклеивает и подписывает её. Следующая правка пойдёт в новую коробку со своей подписью.</p>
+            </div>
+          </div>
+          <p class="analogy__limit"><b>Где не совпадает</b>Коробок одновременно одна: пока не заклеили первую, вторую собирать нельзя. Поэтому коммиты делают по очереди, а не параллельно.</p>
+        </div>
+
+        <h2 id="s5"><span class="sec">§5</span>Шаг 3. Отобрать первую пару файлов</h2>
+        <p><b>Что делаем.</b> Наводим курсор на <code>index.html</code>, нажимаем <b>+</b>. То же самое для <code>kontakty.html</code>. Файл <code>styles.css</code> не трогаем — он поедет вторым коммитом.</p>
+        <figure class="shot shot--panel">
+          <img src="img/03-staged-two.png" alt="Панель: в Staged Changes два файла — index.html M и kontakty.html A, в Changes остался styles.css">
+          <figcaption>Появились два раздела. В <b>Staged Changes</b> — то, что войдёт в коммит: <code>index.html</code> и <code>kontakty.html</code>. В <b>Changes</b> остался <code>styles.css</code> — он подождёт.</figcaption>
+        </figure>
+        <p><b>Почему буквы разные.</b> У <code>index.html</code> осталась <b>M</b>: файл был в истории и изменён. У <code>kontakty.html</code> буква сменилась с <b>U</b> на <b>A</b> — новый файл теперь отобран, Git начнёт за ним следить.</p>
+        <p>Проверить отбор можно и командой: <code>git diff --staged</code> показывает построчно, что лежит в индексе, а <code>git diff</code> — что осталось за его пределами. Два разных ответа на вопрос «что изменилось».</p>
+
+        <h2 id="s6"><span class="sec">§6</span>Шаг 4. Написать сообщение из двух частей</h2>
+        <p><b>Что делаем.</b> Щёлкаем в поле <b>Message</b> и пишем первую строку — коротко, о деле. Затем <kbd>Shift</kbd> + <kbd>Enter</kbd> дважды и пишем пояснение обычным предложением.</p>
+        <figure class="shot shot--panel">
+          <img src="img/04-message.png" alt="Панель: в поле сообщения две части — заголовок «Добавил страницу контактов» и пояснение ниже">
+          <figcaption>Первая строка — заголовок коммита, она видна в списках истории. После пустой строки идёт пояснение: его читают, когда открывают коммит целиком.</figcaption>
+        </figure>
+        <div class="margin-note">
+          <b>На полях: почему Shift + Enter</b>
+          <p>Просто <kbd>Enter</kbd> в этом поле переводит строку, а <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Enter</kbd> сразу делает коммит. Привычка нажимать <kbd>Shift</kbd> + <kbd>Enter</kbd> избавляет от случайных коммитов с половиной сообщения.</p>
+        </div>
+
+        <h2 id="s7"><span class="sec">§7</span>Шаг 5. Сделать первый коммит и проверить его</h2>
+        <p><b>Что делаем.</b> Нажимаем <b>✓ Commit</b>. Два подготовленных файла уходят в историю, <code>styles.css</code> остаётся на месте.</p>
+        <figure class="shot shot--panel">
+          <img src="img/05-after-first-commit.png" alt="Панель после коммита: раздел Staged Changes исчез, в Changes остался styles.css">
+          <figcaption>Раздел <b>Staged Changes</b> исчез — индекс пуст. В <b>Changes</b> по-прежнему <code>styles.css</code>: он в коммит не входил.</figcaption>
+        </figure>
+        <p><b>Что записалось.</b> Посмотреть последний коммит целиком — вместе с автором, датой, сообщением и списком файлов — можно одной командой:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал</span><span>git log -1 --stat</span></figcaption>
+<pre>commit 3e4a2c6cec5fd5501bfbcf9d14b11dd308d49cb4
+Author: Student &lt;student@example.com&gt;
+Date:   Wed Sep 23 05:45:56 2026 +0300
+
+    Добавил страницу контактов
+
+    Новая страница kontakty.html и ссылка на неё с главной.
+
+ index.html    |  3 ++-
+ kontakty.html | 12 ++++++++++++
+ 2 files changed, 14 insertions(+), 1 deletion(-)</pre>
+        </figure>
+        <p>В коммите сохранилось всё, что понадобится потом: длинное имя (хеш), кто сделал, когда, зачем, какие файлы затронуты и сколько строк добавлено и убрано. Имя автора и почта берутся из настроек, которые задавали при установке в главе 1.3, — вот где они пригождаются.</p>
+
+        <h2 id="s8"><span class="sec">§8</span>Шаг 6. Второй коммит из остатка</h2>
+        <p><b>Что делаем.</b> В разделе <b>Changes</b> остался один файл. Наводим курсор на заголовок раздела — у него свои значки:</p>
+        <figure class="shot shot--panel">
+          <img src="img/06-stage-all-hover.png" alt="Панель: курсор на заголовке Changes, справа появились значки, включая плюс">
+          <figcaption>Плюс у заголовка <b>Changes</b> — это <code>Stage All Changes</code>: отбирает сразу все файлы списка. Удобно, когда в списке только то, что нужно.</figcaption>
+        </figure>
+        <p>Нажимаем плюс у заголовка, пишем сообщение «Увеличил отступы страницы» и делаем коммит. В истории проекта теперь два коммита вместо одного общего — и каждый описывает своё дело.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал</span><span>git log --oneline -3</span></figcaption>
+<pre>9e3c858 Увеличил отступы страницы
+3e4a2c6 Добавил страницу контактов
+745f2e1 Добавил README с описанием проекта</pre>
+        </figure>
+        <p>Сравните с тем, что получилось бы при нажатии «отобрать всё и закоммитить одним махом»: одна строка «Правки по сайту», из которой через месяц не понять ничего.</p>
+
+        <h2 id="s9"><span class="sec">§9</span>Шаг 7. Подготовить часть файла</h2>
+        <p>Бывает, что в одном файле лежат правки о разном: подправили отступ и заодно начали новый блок стилей. В коммит нужно только первое. Git умеет отбирать не файл целиком, а отдельный участок.</p>
+        <p><b>Что делаем.</b> Открываем окно сравнения (клик по файлу в панели) и наводим курсор на изменённый участок. Слева, в поле с номерами строк, появляются два значка:</p>
+        <figure class="shot shot--wide">
+          <img src="img/07-stage-block.png" alt="Окно сравнения: у изменённого участка всплывает подсказка Stage Block рядом со значком плюса">
+          <figcaption>Подсказка <b>Stage Block</b> у значка <b>+</b>: отобрать в коммит только этот участок. Значок выше (круговая стрелка) — отменить только этот участок.</figcaption>
+        </figure>
+        <p><b>Что получилось.</b> Нажали плюс — и один и тот же файл оказался сразу в двух списках:</p>
+        <figure class="shot shot--panel">
+          <img src="img/08-same-file-both.png" alt="Панель: styles.css одновременно в разделе Staged Changes и в разделе Changes">
+          <figcaption>В <b>Staged Changes</b> — отобранный участок файла, в <b>Changes</b> — оставшийся. Один файл, два разных состояния.</figcaption>
+        </figure>
+        <p>Это и есть доказательство, что индекс — отдельное место, а не просто галочка у файла. Git подтверждает то же самое двумя буквами в строке состояния:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал</span><span>git status --short</span></figcaption>
+<pre>MM styles.css</pre>
+        </figure>
+        <p>Первая <b>M</b> — изменение в индексе, вторая — изменение в папке, которое туда не попало. После коммита первая буква исчезнет, а вторая останется ждать своей очереди.</p>
+        <div class="margin-note margin-note--steel">
+          <b>На полях: когда это действительно нужно</b>
+          <p>Частичная подготовка — инструмент на случай, когда правки перемешались. Специально разносить каждую строку по коммитам не надо: проще с самого начала делать одно дело за раз и коммитить сразу, как оно закончено.</p>
+        </div>
+
+        <h2 id="s10"><span class="sec">§10</span>Справка: три зоны и команды</h2>
+        <p>Одно и то же действие называется по-разному в панели и в командах. Таблица связывает названия:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Действие</th><th>В панели VS Code</th><th>Команда</th><th>Что меняется</th></tr></thead>
+            <tbody>
+              <tr><td>Посмотреть, что изменилось</td><td>Список <b>Changes</b></td><td><code>git status</code></td><td>Ничего, только показывает</td></tr>
+              <tr><td>Отобрать файл в коммит</td><td><b>+</b> у файла</td><td><code>git add имя-файла</code></td><td>Файл копируется в индекс</td></tr>
+              <tr><td>Отобрать всё</td><td><b>+</b> у заголовка Changes</td><td><code>git add .</code></td><td>В индекс уходит весь список</td></tr>
+              <tr><td>Вернуть из индекса</td><td><b>−</b> у файла в Staged</td><td><code>git restore --staged имя</code></td><td>Файл убирается из индекса, правки целы</td></tr>
+              <tr><td>Посмотреть, что в индексе</td><td>Список <b>Staged Changes</b></td><td><code>git diff --staged</code></td><td>Ничего, только показывает</td></tr>
+              <tr><td>Записать в историю</td><td><b>✓ Commit</b></td><td><code>git commit -m "текст"</code></td><td>Индекс становится новым коммитом</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Команды приведены, чтобы вы узнавали их в чужих инструкциях и на форумах. Набирать их не обязательно: кнопки делают ровно то же самое.</p>
+
+        <h2 id="s11"><span class="sec">§11</span>Как писать сообщения коммитов</h2>
+        <p>Сообщение пишется не для Git, а для человека, который через месяц будет искать, где всё сломалось. Работающее правило: первая строка отвечает на вопрос «что изменилось в проекте».</p>
+        <div class="swap">
+          <div class="swap__row">
+            <div class="swap__old"><b>Не говорит ничего</b>правки</div>
+            <div class="swap__arrow">→</div>
+            <div class="swap__new"><b>Понятно через месяц</b>Добавил страницу контактов</div>
+          </div>
+          <div class="swap__row">
+            <div class="swap__old"><b>Не говорит ничего</b>фикс</div>
+            <div class="swap__arrow">→</div>
+            <div class="swap__new"><b>Понятно через месяц</b>Починил ссылку на стили: путь был с опечаткой</div>
+          </div>
+          <div class="swap__row">
+            <div class="swap__old"><b>Не говорит ничего</b>работа за вторник</div>
+            <div class="swap__arrow">→</div>
+            <div class="swap__new"><b>Понятно через месяц</b>Увеличил отступы страницы</div>
+          </div>
+        </div>
+        <div class="checklist">
+          <p class="checklist__head">Проверка сообщения перед коммитом</p>
+          <div class="checklist__item"><span><b>Первая строка короткая</b>Примерно до <code>50–70</code> символов: она целиком видна в списках истории и на GitHub.</span></div>
+          <div class="checklist__item"><span><b>Сказано, что сделано, а не какие файлы тронуты</b>Список файлов Git и так хранит — его видно командой <code>git log --stat</code>.</span></div>
+          <div class="checklist__item"><span><b>Одно дело — одно сообщение</b>Если в сообщении появляется слово «и», проверьте: может быть, это два коммита.</span></div>
+          <div class="checklist__item"><span><b>Пояснение — отдельным абзацем</b>После пустой строки. Туда идёт «почему так сделано», если это неочевидно.</span></div>
+        </div>
+
+        <h2 id="s12"><span class="sec">§12</span>Частые вопросы</h2>
+        <div class="myths">
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Индекс — лишний шаг, придуманный чтобы усложнить.</div>
+            <div class="myth__yes"><b>На самом деле</b>Это место, где собирается будущий коммит. Без него пришлось бы коммитить всю папку целиком и разбирать потом, что с чем связано.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Если файл в Staged Changes, его больше нельзя править.</div>
+            <div class="myth__yes"><b>На самом деле</b>Править можно. Новые правки попадут в <b>Changes</b>, а в индексе останется то состояние, которое вы отобрали. Тот же файл окажется в двух списках сразу.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Чем чаще коммиты, тем хуже: история засоряется.</div>
+            <div class="myth__yes"><b>На самом деле</b>Мешают не частые коммиты, а бессмысленные. Коммит на каждое законченное дело — это нормально и удобно: откатывать и искать причину поломки проще по мелким шагам.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Кнопка «плюс» сохраняет файл.</div>
+            <div class="myth__yes"><b>На самом деле</b>Сохраняет редактор по <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>S</kbd>. Плюс только отбирает уже сохранённое состояние в индекс, а в историю его записывает Commit.</div>
+          </div>
+        </div>
+
+        <h2 id="s13"><span class="sec">§13</span>Проверьте себя</h2>
+        <details>
+          <summary>В панели три файла в Changes и ноль в Staged Changes. Что произойдёт по нажатию Commit?</summary>
+          <p>Ничего не запишется: индекс пуст, коммитить нечего. VS Code предложит сначала отобрать изменения — или, если согласиться, отберёт все файлы сам. Правильный порядок — сначала плюс у нужных файлов, потом сообщение, потом Commit.</p>
+        </details>
+        <details>
+          <summary>Один и тот же файл оказался и в Staged Changes, и в Changes. Как это возможно?</summary>
+          <p>В индекс отобрана часть правок файла — например, один участок кнопкой <b>Stage Block</b>, — а остальное осталось в рабочей папке. В коммит уйдёт только отобранное. Git показывает это двумя буквами: <code>MM</code>.</p>
+        </details>
+        <details>
+          <summary>Вы отобрали файл в индекс, а потом передумали. Как вернуть, не потеряв правки?</summary>
+          <p>Навести курсор на файл в <b>Staged Changes</b> и нажать <b>−</b> (<code>Unstage Changes</code>). Файл вернётся в <b>Changes</b>, текст останется прежним. Это не то же самое, что круговая стрелка: та стирает правки.</p>
+        </details>
+        <details>
+          <summary>За утро вы поправили вёрстку шапки, исправили опечатку в тексте и добавили новую картинку. Сколько коммитов делать?</summary>
+          <p>Три — по числу законченных дел. Так через месяц можно будет откатить, например, только вёрстку шапки, не трогая остальное. Если всё уйдёт одним коммитом, откат заберёт заодно и опечатку, и картинку.</p>
+        </details>
+        <details>
+          <summary>Чем <code>git diff</code> отличается от <code>git diff --staged</code>?</summary>
+          <p>Первая показывает правки, которые ещё не отобраны, — то, что лежит в <b>Changes</b>. Вторая показывает содержимое индекса, то есть <b>Staged Changes</b>: ровно то, что уйдёт в следующий коммит.</p>
+        </details>
+        <details>
+          <summary>Почему в сообщении коммита первую строку делают короткой?</summary>
+          <p>Её показывают списком: в панели истории, в выводе <code>git log --oneline</code>, на странице проекта на GitHub. Длинная строка обрезается, и смысл теряется. Подробности пишут ниже, после пустой строки.</p>
+        </details>
+
+        <h2 id="s14"><span class="sec">§14</span>Шпаргалка по главе</h2>
+        <div class="cheat">
+          <div>
+            <b>Три зоны</b>
+            <code>рабочая папка — Changes</code>
+            <code>индекс — Staged Changes</code>
+            <code>история — коммиты</code>
+          </div>
+          <div>
+            <b>Отобрать</b>
+            <code>+ у файла — один файл</code>
+            <code>+ у заголовка — все</code>
+            <code>Stage Block — участок</code>
+          </div>
+          <div>
+            <b>Вернуть</b>
+            <code>− у файла в Staged</code>
+            <code>правки при этом целы</code>
+          </div>
+          <div>
+            <b>Сообщение</b>
+            <code>короткая первая строка</code>
+            <code>Shift+Enter — перенос</code>
+            <code>пояснение после пустой строки</code>
+          </div>
+          <div>
+            <b>Проверить</b>
+            <code>git status --short</code>
+            <code>git diff — не отобрано</code>
+            <code>git diff --staged — в индексе</code>
+          </div>
+          <div>
+            <b>Посмотреть коммит</b>
+            <code>git log -1 --stat</code>
+            <code>git log --oneline</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Между папкой и историей есть третье место — индекс, он же <b>Staged Changes</b>. Кнопка с плюсом кладёт туда правки, кнопка Commit превращает содержимое индекса в новую версию проекта. Нужен этот шаг ради отбора: из трёх накопленных правок мы собрали два осмысленных коммита вместо одной свалки. Отбирать можно файл целиком, все файлы разом или отдельный участок внутри файла — тогда один файл оказывается в обоих списках сразу. Сообщение пишется человеку: короткая первая строка о том, что изменилось, пояснение — ниже. В следующей главе посмотрим на получившуюся историю: как её читать, искать нужный коммит и видеть, кто что менял.</p>
+
+        <div class="sources">
+          <b>Откуда взяты факты</b>
+          <ol>
+            <li>Кадры и ответы команд получены на клоне учебного проекта <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a> в Git версии 2.51.1.</li>
+            <li>Работа разделов Changes и Staged Changes, кнопка <b>Stage Block</b> — <a href="https://code.visualstudio.com/docs/sourcecontrol/overview">документация VS Code, раздел Source Control</a>.</li>
+            <li>Назначение индекса и команд <code>git add</code>, <code>git restore</code>, <code>git commit</code> — <a href="https://git-scm.com/docs/git-add">документация git-add</a> и <a href="https://git-scm.com/docs/git-commit">git-commit</a>.</li>
+          </ol>
+        </div>
+
+        <div class="pager"><a href="../05-init-i-clone/index.html">← 2.2 Свой проект и чужой</a><a href="../../index.html">К содержанию справочника</a></div>
+
+        <div class="colophon">
+          <span>Глава 2.3 · Изменения, индекс, коммит · Справочник по Git и GitHub</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../../book.js"></script>
+</body>
+</html>
