@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<title>Проверка кодов · тест по главам 1.2, 2.1, 2.2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="chrome">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark">git</span>
+    <span>СПРАВОЧНИК ПО GIT И GITHUB<br><b>Проверка кодов</b></span>
+  </a>
+</header>
+
+<main class="wrap">
+
+  <section id="gate">
+    <p class="eyebrow">служебная страница</p>
+    <h1>Доступ по паролю</h1>
+    <div class="panel">
+      <p>Страница проверки результатов теста по главам 1.2, 2.1 и 2.2 справочника «Git и GitHub». Она предназначена для преподавателя.</p>
+      <label class="field">
+        <span>Пароль</span>
+        <input id="pw" type="password" autocomplete="current-password" autofocus>
+      </label>
+      <p id="pw-err" class="err" role="alert"></p>
+      <button id="pw-btn" class="btn">Войти</button>
+    </div>
+  </section>
+
+  <section id="tool" class="hidden">
+    <p class="eyebrow">для преподавателя</p>
+    <h1>Проверка кодов результата</h1>
+
+    <div class="notice">
+      Вставьте один или несколько кодов — по одному в строке. Страница пересчитает баллы из ответов,
+      зашитых в код, сверит контрольную сумму и покажет, сколько раз студент уходил со вкладки.
+      Если от одного студента пришло несколько кодов, засчитывается первый — страница такие повторы подсветит.
+      Номера заданий — в исходном порядке, как в файле ключей.
+    </div>
+
+    <div class="panel">
+      <label class="field">
+        <span>Коды результатов</span>
+        <textarea id="in" rows="6" class="codes" spellcheck="false" placeholder="GH22.…&#10;GH22.…"></textarea>
+      </label>
+      <button id="btn" class="btn">Проверить</button>
+      <button id="btn-tsv" class="btn ghost hidden">Скопировать сводку для таблицы</button>
+    </div>
+
+    <div id="summary"></div>
+    <div id="out"></div>
+  </section>
+
+</main>
+
+<script src="quiz-data.js"></script>
+<script src="check.js"></script>
+</body>
+</html>
