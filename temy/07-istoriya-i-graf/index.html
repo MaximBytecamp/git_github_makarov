@@ -78,6 +78,7 @@
 
         <div class="part" role="separator"><span><b>1</b>История в VS Code</span></div>
         <h2 id="s2"><span class="sec">§2</span>Шаг 1. Открыть раздел Graph</h2>
+        <p>Коммиты из главы 2.3 сделаны. Начнём с того, где их увидеть.</p>
         <p>Открываем панель Source Control. Под списком изменений есть второй раздел — <b>GRAPH</b>. Если он занимает мало места, сверните раздел <b>CHANGES</b> щелчком по его заголовку.</p>
         <figure class="shot shot--panel">
           <img src="img/graph.png" alt="Раздел Graph в панели Source Control: шесть коммитов, у двух верхних метки main и origin/main">
@@ -90,7 +91,10 @@
         </figure>
         <p>Строка <b>Outgoing Changes</b> в самом верху графа — это те же два неотправленных коммита, собранные вместе.</p>
 
+        <p class="step-done"><b>Что получилось.</b>Видна вся история: шесть коммитов, метки <code>main</code> и <code>origin/main</code>.</p>
+
         <h2 id="s3"><span class="sec">§3</span>Шаг 2. Посмотреть, что внутри коммита</h2>
+        <p>Граф показывает список коммитов. Каждый из них можно раскрыть.</p>
         <p>Нажимаем на коммит <b>Добавил страницу контактов</b>. Строка раскрывается, под ней появляется список файлов, которые в этот коммит вошли.</p>
         <figure class="shot shot--panel">
           <img src="img/commit-files.png" alt="Раскрытый коммит в графе: под ним файлы index.html с буквой M и kontakty.html с буквой A">
@@ -98,7 +102,10 @@
         </figure>
         <p>По этому списку проверяют коммит: всё ли нужное в нём есть и нет ли лишнего файла.</p>
 
+        <p class="step-done"><b>Что получилось.</b>Видны файлы коммита «Добавил страницу контактов»: <code>index.html</code> и <code>kontakty.html</code>.</p>
+
         <h2 id="s4"><span class="sec">§4</span>Шаг 3. Открыть изменения построчно</h2>
+        <p>Список файлов показывает, что изменилось. Сами изменения видны построчно.</p>
         <p>Дважды щёлкаем по файлу внутри коммита. Открывается то же окно сравнения, что и в прошлых главах. Разница в том, что сравниваются два коммита: версия файла до этого коммита и после него.</p>
         <figure class="shot shot--wide">
           <img src="img/commit-diff.png" alt="Окно сравнения: заголовок вкладки index.html (745f2e1) ↔ index.html (2e4864c), изменённая строка title и добавленная ссылка">
@@ -106,11 +113,14 @@
         </figure>
         <p>Наборы букв и цифр в скобках — имена коммитов: сначала предыдущий, потом тот, который вы открыли. Откуда они берутся, разберём в следующем параграфе.</p>
 
+        <p class="step-done"><b>Что получилось.</b>Видно построчно, что этот коммит изменил в <code>index.html</code>.</p>
+
         <h2 id="s5"><span class="sec">§5</span>Справка: имя коммита</h2>
         <p>У каждого коммита есть имя — длинная строка из букв и цифр, которую Git вычисляет по содержимому. Это <span class="term">хеш</span>. В полном виде он выглядит так:</p>
         <figure class="code code--out">
-          <figcaption><span>терминал</span><span>git log -1 --format=%H</span></figcaption>
-<pre>745f2e16ef3422f5063e9dde2af6036fc8349ffe</pre>
+          <figcaption><span>терминал</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log -1 --format=%H</span>
+745f2e16ef3422f5063e9dde2af6036fc8349ffe</pre>
         </figure>
         <p>Целиком его почти никогда не пишут: хватает первых семи символов, <code>745f2e1</code>. Короткие имена вы уже видели в графе, в списках и в заголовке окна сравнения.</p>
         <div class="table-scroll">
@@ -138,13 +148,16 @@
         </figure>
         <p>Щелчок по строке открывает сравнение: каким файл был до этого коммита и каким стал после. Так ищут момент, когда в файл попала ошибка.</p>
 
+        <p class="step-done"><b>Что получилось.</b>Видны четыре коммита, которые меняли <code>index.html</code>.</p>
+
         <div class="part" role="separator"><span><b>2</b>История в терминале</span></div>
         <h2 id="s7"><span class="sec">§7</span>Шаг 5. То же самое в терминале</h2>
         <p>Кнопки удобны, но в чужих инструкциях и на форумах историю показывают командами.</p>
         <p><b>Вся история коротким списком.</b> Ключ <code>--graph</code> рисует слева линию, по которой позже будут видны ветки:</p>
         <figure class="code code--out">
-          <figcaption><span>терминал в папке проекта</span><span>git log --oneline --graph</span></figcaption>
-<pre>* 7a74ca0 Увеличил отступы страницы
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline --graph</span>
+* 7a74ca0 Увеличил отступы страницы
 * 2e4864c Добавил страницу контактов
 * 745f2e1 Добавил README с описанием проекта
 * 8da3e92 Добавил абзац о себе
@@ -153,8 +166,9 @@
         </figure>
         <p><b>История одного файла.</b> Имя файла после двух дефисов оставляет в списке только те коммиты, где этот файл менялся:</p>
         <figure class="code code--out">
-          <figcaption><span>терминал</span><span>git log --oneline -- index.html</span></figcaption>
-<pre>2e4864c Добавил страницу контактов
+          <figcaption><span>терминал</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline -- index.html</span>
+2e4864c Добавил страницу контактов
 8da3e92 Добавил абзац о себе
 8e377ad Подключил файл со стилями
 934282c Первая страница сайта</pre>
@@ -162,13 +176,16 @@
         <p>Это тот же список, что показал <b>TIMELINE</b>, — четыре коммита из шести.</p>
         <p><b>Состав одного коммита.</b> Команда <code>git show</code> с ключом <code>--stat</code> печатает, какие файлы затронуты и на сколько строк:</p>
         <figure class="code code--out">
-          <figcaption><span>терминал</span><span>git show --stat --oneline 8e377ad</span></figcaption>
-<pre>8e377ad Подключил файл со стилями
+          <figcaption><span>терминал</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git show --stat --oneline 8e377ad</span>
+8e377ad Подключил файл со стилями
  index.html |  1 +
  styles.css | 11 +++++++++++
  2 files changed, 12 insertions(+)</pre>
         </figure>
         <p>Без <code>--stat</code> та же команда покажет изменения построчно — как окно сравнения, только текстом.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Те же сведения получены командами <code>git log</code> и <code>git show</code>.</p>
 
         <div class="part" role="separator"><span><b>3</b>История на GitHub</span></div>
         <h2 id="s8"><span class="sec">§8</span>Шаг 6. История на GitHub</h2>
@@ -189,6 +206,8 @@
           <figcaption>Тот же отбор, что в разделе TIMELINE и в команде <code>git log -- index.html</code>. Разница только в том, где смотреть.</figcaption>
         </figure>
 
+        <p class="step-done"><b>Что получилось.</b>История проекта, отдельный коммит и история файла открыты на GitHub.</p>
+
         <h2 id="s9"><span class="sec">§9</span>Шаг 7. Кто написал эту строку</h2>
         <p>В файле попалась строка, которая мешает, а зачем она — непонятно. Удалять вслепую опасно, сначала надо выяснить, кто её добавил и в каком коммите.</p>
         <p>Открываем файл на GitHub и переключаемся на вкладку <b>Blame</b>.</p>
@@ -198,8 +217,9 @@
         </figure>
         <p>То же самое делает команда. Ключ <code>-L</code> ограничивает разбор нужными строками:</p>
         <figure class="code code--out">
-          <figcaption><span>терминал</span><span>git blame -L 9,11 index.html</span></figcaption>
-<pre>^934282c (MaximBytecamp 2026-09-23 03:58:04 +0300  9)   &lt;h1&gt;Привет, это моя страница&lt;/h1&gt;
+          <figcaption><span>терминал</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git blame -L 9,11 index.html</span>
+^934282c (MaximBytecamp 2026-09-23 03:58:04 +0300  9)   &lt;h1&gt;Привет, это моя страница&lt;/h1&gt;
 8da3e92e (MaximBytecamp 2026-09-23 03:58:04 +0300 10)   &lt;p&gt;Учусь работать с Git…&lt;/p&gt;
 2e4864c4 (Student       2026-09-23 07:21:50 +0300 11)   &lt;p&gt;&lt;a href="kontakty.html"&gt;Контакты&lt;/a&gt;&lt;/p&gt;</pre>
         </figure>
@@ -218,6 +238,8 @@
           </div>
           <p class="analogy__limit"><b>Где не совпадает</b>Пометка на полях остаётся рядом с текстом, а blame показывает только последнее изменение строки. Если строку потом правил кто-то ещё, первым автором будет считаться он: чтобы докопаться до начала, придётся листать историю глубже.</p>
         </div>
+
+        <p class="step-done"><b>Что получилось.</b>У каждой строки <code>index.html</code> виден коммит, автор и дата.</p>
 
         <div class="part" role="separator"><span><b>4</b>Справка</span></div>
         <h2 id="s10"><span class="sec">§10</span>Как искать нужный коммит</h2>

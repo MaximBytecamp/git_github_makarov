@@ -108,12 +108,18 @@
 
   /* ---- Копирование кода ------------------------------------------ */
   /* Светлые блоки — то, что читатель вставляет в файл или набирает
-     в терминале. Тёмные (code--out) — ответы программ и блоки «было»,
-     их не копируют. */
-  document.querySelectorAll('figure.code:not(.code--out):not(.code--was)').forEach(figure => {
+     в терминале. В тёмных (code--out) копируется только строка команды,
+     блоки «было» не копируются. */
+  document.querySelectorAll('figure.code:not(.code--was)').forEach(figure => {
     const caption = figure.querySelector('figcaption');
     const pre = figure.querySelector('pre');
     if (!caption || !pre) return;
+    /* В блоке ответа копируется только строка команды, сам ответ — нет. */
+    const commands = [...pre.querySelectorAll('.cmd')];
+    if (figure.classList.contains('code--out') && !commands.length) return;
+    const text = () => commands.length
+      ? commands.map(line => line.textContent).join('\n')
+      : pre.innerText.replace(/\n$/, '');
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'copy';
@@ -121,11 +127,11 @@
     const reset = () => setTimeout(() => { button.textContent = 'копировать'; }, 1600);
     button.addEventListener('click', async () => {
       try {
-        await navigator.clipboard.writeText(pre.innerText.replace(/\n$/, ''));
+        await navigator.clipboard.writeText(text());
         button.textContent = 'скопировано';
       } catch (_) {
         const range = document.createRange();
-        range.selectNodeContents(pre);
+        range.selectNodeContents(commands[0] || pre);
         const selection = window.getSelection();
         selection.removeAllRanges();
         selection.addRange(range);

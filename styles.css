@@ -674,3 +674,12 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
 }
 .part b { font: 700 13px/1 var(--mono); margin-right: 8px; }
 .part + h2 { margin-top: 18px; }
+
+/* Строка команды в блоке ответа: что набрать — сверху, ответ — ниже */
+figure.code--out .cmd { display: block; margin: 0 0 8px; padding: 0 0 8px; border-bottom: 1px dashed rgba(240, 231, 225, .25); color: #FFB48A; font-weight: 700; white-space: pre-wrap; }
+figure.code--out .cmd::before { content: '$ '; color: rgba(240, 231, 225, .45); font-weight: 400; }
+figure.code--out .cmd:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: 0; }
+
+/* Итог шага: состояние проекта после действий параграфа */
+.step-done { margin: 18px 0 0; padding: 9px 14px; border-left: 4px solid var(--moss); background: rgba(47, 125, 79, .08); font-size: 15px; line-height: 1.5; }
+.step-done b { color: var(--moss); margin-right: 4px; }

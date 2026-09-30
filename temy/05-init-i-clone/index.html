@@ -119,7 +119,7 @@
         <div class="why">
           <p class="why__head">Зачем это нужно в работе</p>
           <ul class="why__list">
-            <li><b>Приход на готовый проект.</b> Первое, что делают на новом месте, — клонируют репозиторий команды. Скачанная папка сразу знает, куда отправлять правки.</li>
+            <li><b>Приход на готовый проект.</b> Первое, что делают на новом месте, — клонируют репозиторий команды. В скачанной папке сразу записан адрес, куда отправлять правки.</li>
             <li><b>Своя разработка с первого дня.</b> Репозиторий заводят не в конце, когда «уже есть что сохранять», а сразу: иначе первые дни работы останутся без истории.</li>
             <li><b>Чужой код для изучения.</b> Клонирование даёт не только текущие файлы, но и переписку изменений: видно, как проект пришёл к нынешнему виду.</li>
             <li><b>Копия на другом компьютере.</b> Тот же проект дома и на работе — это два клона одного репозитория. Переносить папку флешкой не нужно.</li>
@@ -128,6 +128,7 @@
 
         <div class="part" role="separator"><span><b>1</b>Путь А: свой проект</span></div>
         <h2 id="s2"><span class="sec">§2</span>Путь А, шаг 1. Завести репозиторий в своей папке</h2>
+        <p>Первый путь: папка своя, и истории в ней ещё нет.</p>
         <p>Создаём пустую папку проекта и открываем её в VS Code: <b>File → Open Folder</b>. Затем панель Source Control — <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>.</p>
         <figure class="shot shot--panel">
           <img src="img/step1-init.png" alt="Панель Source Control в пустой папке: текст об отсутствии репозитория и кнопка Initialize Repository">
@@ -150,7 +151,10 @@
           <p>Имя первой ветки подставляет Git. До 2020 года везде стояло <code>master</code>, затем GitHub и вслед за ним Git перешли на <code>main</code> — поэтому в старых проектах встречается прежнее имя. Задаётся настройкой из главы 1.3: <code>git config --global init.defaultBranch main</code>.</p>
         </div>
 
+        <p class="step-done"><b>Что получилось.</b>В папке заведён пустой репозиторий, внизу окна имя <code>main</code>.</p>
+
         <h2 id="s3"><span class="sec">§3</span>Путь А, шаг 2. Проверить, что появилось на диске</h2>
+        <p>Кнопка нажата. Проверим, что изменилось в папке.</p>
         <p>Внешне ничего не изменилось: в проводнике папка выглядит так же. Появилась скрытая папка <code>.git</code> — её видно командой, показывающей скрытые файлы. Команды набираются во встроенном терминале VS Code: меню <b>Terminal → New Terminal</b> или <kbd>Ctrl</kbd> + <kbd>`</kbd>. Терминал открывается внизу окна сразу в папке проекта.</p>
         <figure class="shot shot--wide">
           <img src="img/terminal-ls.png" alt="Встроенный терминал VS Code внизу окна: команда ls -a показывает . .. .git, команда git status отвечает On branch main, No commits yet">
@@ -158,8 +162,9 @@
         </figure>
         <p><span data-os="win">В Windows терминал по умолчанию — PowerShell, и в нём эта команда пишется <code>ls -Force</code>. Ответ выглядит как таблица, но папка <code>.git</code> в ней та же.</span><span data-os="mac linux">Команда <code>ls -a</code> выводит все файлы папки, включая скрытые:</span></p>
         <figure class="code code--out">
-          <figcaption><span>терминал в папке проекта</span><span>ls -a</span></figcaption>
-<pre>.
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">ls -a</span>
+.
 ..
 .git</pre>
         </figure>
@@ -180,8 +185,9 @@
         </div>
         <p>Состояние нового репозитория словами самого Git:</p>
         <figure class="code code--out">
-          <figcaption><span>терминал</span><span>git status</span></figcaption>
-<pre>On branch main
+          <figcaption><span>терминал</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git status</span>
+On branch main
 
 No commits yet
 
@@ -189,8 +195,11 @@ nothing to commit (create/copy files and use "git add" to track)</pre>
         </figure>
         <p>Git сообщает сразу три вещи: ветка называется <code>main</code>, коммитов ещё нет, отслеживать нечего. То же самое показывает пустая панель Source Control, только короче. Путь А на этом закончен. Теперь второй способ — клонирование.</p>
 
+        <p class="step-done"><b>Что получилось.</b>В папке есть скрытая <code>.git</code>. Git подтверждает: коммитов нет, отслеживать нечего.</p>
+
         <div class="part" role="separator"><span><b>2</b>Путь Б: чужой проект</span></div>
         <h2 id="s4"><span class="sec">§4</span>Путь Б, шаг 1. Скопировать адрес проекта</h2>
+        <p>Второй путь: проект уже лежит на GitHub, и его нужно получить к себе вместе с историей. Для этого сначала нужен адрес проекта.</p>
         <p>Клонировать будем учебный проект <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a> — сайт-визитка из трёх файлов с короткой историей. Проект открытый: качать его может кто угодно.</p>
         <p>Для клонирования нужен адрес репозитория. Из адресной строки браузера его не копируют: там ссылка на страницу. Нужный адрес лежит под зелёной кнопкой <b>Code</b>.</p>
         <figure class="shot shot--wide">
@@ -211,7 +220,10 @@ nothing to commit (create/copy files and use "git add" to track)</pre>
         </div>
         <p>Разница в окончании. Git примет и ссылку без <code>.git</code>, но надёжнее копировать из поля, где адрес дан целиком.</p>
 
+        <p class="step-done"><b>Что получилось.</b>В буфере обмена адрес <code>https://github.com/MaximBytecamp/sait-vizitka.git</code>.</p>
+
         <h2 id="s5"><span class="sec">§5</span>Путь Б, шаг 2. Вызвать команду Git: Clone</h2>
+        <p>Адрес скопирован. Клонирование запускается командой VS Code.</p>
         <p>Открываем палитру команд: <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>. Начинаем набирать <code>Git: Clone</code> — список сам сузится до двух пунктов.</p>
         <figure class="shot shot--wide">
           <img src="img/clone1-palette.png" alt="Палитра команд VS Code с набранным Git: Clone и двумя найденными командами">
@@ -219,14 +231,20 @@ nothing to commit (create/copy files and use "git add" to track)</pre>
         </figure>
         <p>Если ни одна папка не открыта, то же самое делает кнопка <b>Clone Repository</b> на стартовом экране.</p>
 
+        <p class="step-done"><b>Что получилось.</b>В палитре команд выбран пункт <b>Git: Clone</b>.</p>
+
         <h2 id="s6"><span class="sec">§6</span>Путь Б, шаг 3. Вставить адрес</h2>
+        <p>Команда выбрана, теперь ей нужен адрес.</p>
         <p>Выбираем пункт <b>Git: Clone</b> — поле сменится на «Provide repository URL». Вставляем скопированный адрес и нажимаем <kbd>Enter</kbd>.</p>
         <figure class="shot shot--wide">
           <img src="img/clone2-url.png" alt="Поле ввода адреса репозитория в VS Code с вставленной ссылкой и пунктами Clone from URL и Clone from GitHub">
           <figcaption>Первая строка под полем — <b>Clone from URL</b>, это ваш адрес. Пункт <b>Clone from GitHub</b> ниже даёт выбрать проект списком, не вводя адрес. Он работает после входа в аккаунт — это модуль 4.</figcaption>
         </figure>
 
+        <p class="step-done"><b>Что получилось.</b>Адрес принят, VS Code просит выбрать папку.</p>
+
         <h2 id="s7"><span class="sec">§7</span>Путь Б, шаг 4. Выбрать папку и открыть проект</h2>
+        <p>Адрес введён. Осталось указать, куда положить проект.</p>
         <p>Откроется окно выбора папки. Выбираем папку, <em>в которой</em> появится проект: сама папка проекта создастся внутри и получит имя репозитория. Заводить её заранее не нужно.</p>
         <p>Когда загрузка закончится, VS Code спросит, что сделать со скачанным проектом:</p>
         <figure class="shot shot--wide">
@@ -254,22 +272,26 @@ nothing to commit (create/copy files and use "git add" to track)</pre>
           <figcaption>Кнопка <b>Commit</b> бледная — сохранять нечего. Списки появятся, как только вы что-нибудь исправите.</figcaption>
         </figure>
 
+        <p class="step-done"><b>Что получилось.</b>Проект открыт в VS Code: три файла, в строке состояния <code>main</code>, список изменений пуст.</p>
+
         <h2 id="s8"><span class="sec">§8</span>Путь Б, шаг 5. Убедиться, что пришла история</h2>
         <p>Вместе с файлами скачались все прошлые версии — этим клон и отличается от папки из архива. Проверим двумя командами в терминале проекта.</p>
         <figure class="code code--out">
-          <figcaption><span>терминал в склонированной папке</span><span>git log --oneline</span></figcaption>
-<pre>745f2e1 Добавил README с описанием проекта
+          <figcaption><span>терминал в склонированной папке</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline</span>
+745f2e1 Добавил README с описанием проекта
 8da3e92 Добавил абзац о себе
 8e377ad Подключил файл со стилями
 934282c Первая страница сайта</pre>
         </figure>
         <p>Каждая строка — сохранённая версия проекта, снизу вверх от самой первой. Слева короткое имя коммита, справа пояснение автора. Все они лежат у вас на диске и открываются без интернета: видно, что сайт начинался с одной страницы, потом к нему подключили стили, затем добавили абзац и описание.</p>
         <figure class="code code--out">
-          <figcaption><span>терминал</span><span>git remote -v</span></figcaption>
-<pre>origin	https://github.com/MaximBytecamp/sait-vizitka.git (fetch)
+          <figcaption><span>терминал</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git remote -v</span>
+origin	https://github.com/MaximBytecamp/sait-vizitka.git (fetch)
 origin	https://github.com/MaximBytecamp/sait-vizitka.git (push)</pre>
         </figure>
-        <p>Адрес сервера записан под коротким именем <span class="term">origin</span>. Поэтому в строке состояния и появились стрелки обмена: клон знает, откуда он взят. Адрес получения и адрес отправки разрешено делать разными, поэтому строки две. В обычном проекте они совпадают.</p>
+        <p>Адрес сервера записан под коротким именем <span class="term">origin</span>. Поэтому в строке состояния и появились стрелки обмена: в клоне записан адрес, откуда он взят. Адрес получения и адрес отправки разрешено делать разными, поэтому строки две. В обычном проекте они совпадают.</p>
         <div class="swap">
           <div class="swap__row">
             <div class="swap__old"><b>После Initialize Repository</b>Коммитов нет, удалённой копии нет, ветка <code>main</code> создана, но пустая</div>
@@ -295,6 +317,8 @@ origin	https://github.com/MaximBytecamp/sait-vizitka.git (push)</pre>
           <b>На полях: сколько весит история</b>
           <p>Скачивается не только текущая версия файлов, но и все прошлые состояния. У учебного проекта из трёх файлов папка <code>.git</code> занимает около 120 КБ — больше, чем сами файлы. У рабочих проектов с многолетней историей она бывает в разы тяжелее рабочих файлов, и это нормально.</p>
         </div>
+
+        <p class="step-done"><b>Что получилось.</b>Вместе с файлами пришли все четыре коммита и адрес сервера <code>origin</code>.</p>
 
         <div class="part" role="separator"><span><b>3</b>Справка</span></div>
         <h2 id="s9"><span class="sec">§9</span>Clone или Download ZIP</h2>
@@ -333,24 +357,27 @@ origin	https://github.com/MaximBytecamp/sait-vizitka.git (push)</pre>
         <h3>Репозиторий внутри репозитория</h3>
         <p>Вы клонировали проект, зашли в его папку и по привычке нажали <b>Initialize Repository</b> в подпапке. Получились две истории, вложенные друг в друга: внешняя видит подпапку как один непонятный объект, внутренняя ведёт свою историю отдельно.</p>
         <figure class="code code--out">
-          <figcaption><span>терминал</span><span>git init в подпапке существующего репозитория</span></figcaption>
-<pre>Initialized empty Git repository in /Users/vy/proba-git/vnutri/.git/</pre>
+          <figcaption><span>терминал</span><span>в подпапке существующего репозитория</span></figcaption>
+<pre><span class="cmd">git init</span>
+Initialized empty Git repository in /Users/vy/proba-git/vnutri/.git/</pre>
         </figure>
         <p>Git это разрешает: вложенные репозитории иногда делают специально. В учебной работе это ошибка. Лечится удалением лишней папки <code>.git</code> из подпапки. Признак в панели: файлы подпапки перестают появляться в списке изменений.</p>
 
         <h3>init поверх готового репозитория</h3>
         <p>Повторное нажатие в той же папке ничего не ломает и историю не стирает:</p>
         <figure class="code code--out">
-          <figcaption><span>терминал</span><span>git init в папке, где репозиторий уже есть</span></figcaption>
-<pre>Reinitialized existing Git repository in /Users/vy/proba-git/.git/</pre>
+          <figcaption><span>терминал</span><span>в папке, где репозиторий уже есть</span></figcaption>
+<pre><span class="cmd">git init</span>
+Reinitialized existing Git repository in /Users/vy/proba-git/.git/</pre>
         </figure>
         <p>Слово <b>Reinitialized</b> вместо <b>Initialized</b> — единственное отличие. Коммиты на месте.</p>
 
         <h3>Клонирование в непустую папку</h3>
         <p>Если папка с таким именем уже есть и в ней что-то лежит, Git отказывается:</p>
         <figure class="code code--out">
-          <figcaption><span>терминал</span><span>ответ при конфликте имён</span></figcaption>
-<pre>fatal: destination path 'sait-vizitka' already exists and is not an empty directory.</pre>
+          <figcaption><span>терминал</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git clone https://github.com/MaximBytecamp/sait-vizitka.git</span>
+fatal: destination path 'sait-vizitka' already exists and is not an empty directory.</pre>
         </figure>
         <p>Иначе клон затёр бы то, что в папке лежит. Выберите другое место или задайте другое имя папки последним словом команды.</p>
 
