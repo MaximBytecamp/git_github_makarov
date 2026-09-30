@@ -1,6 +1,7 @@
 /* Справочник по Git и GitHub — мелкая механика страницы.
    1. Картинка открывается во весь экран по клику.
-   2. Событие на ленте лет подсвечивается вместе с годом. */
+   2. Событие на ленте лет подсвечивается вместе с годом.
+   3. Светлые блоки кода копируются кнопкой. */
 (() => {
   /* ---- Увеличение картинки ------------------------------------- */
   const shots = [...document.querySelectorAll('.shot img:not(.shot--logo img)')];
@@ -104,6 +105,36 @@
       if (event.key === key && event.newValue) apply(read(), false);
     });
   }
+
+  /* ---- Копирование кода ------------------------------------------ */
+  /* Светлые блоки — то, что читатель вставляет в файл или набирает
+     в терминале. Тёмные (code--out) — ответы программ и блоки «было»,
+     их не копируют. */
+  document.querySelectorAll('figure.code:not(.code--out):not(.code--was)').forEach(figure => {
+    const caption = figure.querySelector('figcaption');
+    const pre = figure.querySelector('pre');
+    if (!caption || !pre) return;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'copy';
+    button.textContent = 'копировать';
+    const reset = () => setTimeout(() => { button.textContent = 'копировать'; }, 1600);
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(pre.innerText.replace(/\n$/, ''));
+        button.textContent = 'скопировано';
+      } catch (_) {
+        const range = document.createRange();
+        range.selectNodeContents(pre);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        button.textContent = 'выделено';
+      }
+      reset();
+    });
+    caption.appendChild(button);
+  });
 
   /* ---- Подсветка события на ленте лет --------------------------- */
   /* Карточка и год разнесены по разные стороны рельсы, поэтому связь

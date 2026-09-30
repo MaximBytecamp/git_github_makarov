@@ -112,17 +112,80 @@
           </ul>
         </div>
 
+        <div class="part" role="separator"><span><b>1</b>Подготовка</span></div>
         <h2 id="s2"><span class="sec">§2</span>Готовим площадку: правки в трёх файлах</h2>
         <p>Работаем на проекте <code>sait-vizitka</code>, который склонировали в главе 2.2. Если его нет, склонируйте заново — адрес там же.</p>
         <p>Вносим четыре правки в трёх файлах, как за обычные полчаса работы. Правки про разное, и дальше мы будем их разделять.</p>
-        <ol class="steps">
-          <li>В <code>index.html</code> меняем заголовок вкладки: <code>&lt;title&gt;Сайт-визитка · Максим&lt;/title&gt;</code>.</li>
-          <li>Там же, ниже абзаца, добавляем ссылку: <code>&lt;p&gt;&lt;a href="kontakty.html"&gt;Контакты&lt;/a&gt;&lt;/p&gt;</code>.</li>
-          <li>Создаём файл <code>kontakty.html</code> — копию главной страницы с заголовком «Контакты» и строкой с почтой.</li>
-          <li>В <code>styles.css</code> увеличиваем отступ: <code>padding: 60px;</code> вместо <code>40px</code>.</li>
-        </ol>
+        <p><b>Правки 1 и 2, файл <code>index.html</code>.</b> Меняем заголовок вкладки и под абзацем добавляем ссылку на страницу контактов:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>index.html</span><span>было</span></figcaption>
+<pre>&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+<mark>  &lt;title&gt;Сайт-визитка&lt;/title&gt;</mark>
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Привет, это моя страница&lt;/h1&gt;
+  &lt;p&gt;Учусь работать с Git и веду этот сайт как учебный проект.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>index.html</span><span>стало</span></figcaption>
+<pre>&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+<mark>  &lt;title&gt;Сайт-визитка · Максим&lt;/title&gt;</mark>
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Привет, это моя страница&lt;/h1&gt;
+  &lt;p&gt;Учусь работать с Git и веду этот сайт как учебный проект.&lt;/p&gt;
+<mark>  &lt;p&gt;&lt;a href="kontakty.html"&gt;Контакты&lt;/a&gt;&lt;/p&gt;</mark>
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+          </figure>
+        </div>
+        <p><b>Правка 3, новый файл <code>kontakty.html</code>.</b> Это копия главной страницы с заголовком «Контакты» и строкой с почтой. Создаём его в корне проекта:</p>
+        <figure class="code">
+          <figcaption><span>kontakty.html</span><span>новый файл</span></figcaption>
+<pre>&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;Контакты · Сайт-визитка&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Контакты&lt;/h1&gt;
+  &lt;p&gt;Почта: student@example.com&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        </figure>
+        <p><b>Правка 4, файл <code>styles.css</code>.</b> Увеличиваем отступ страницы:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>styles.css</span><span>было</span></figcaption>
+<pre>body {
+  margin: 0;
+<mark>  padding: 40px;</mark>
+  font-family: system-ui, sans-serif;</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>styles.css</span><span>стало</span></figcaption>
+<pre>body {
+  margin: 0;
+<mark>  padding: 60px;</mark>
+  font-family: system-ui, sans-serif;</pre>
+          </figure>
+        </div>
         <p>Сохраняем всё (<kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>S</kbd> в каждом файле) и открываем панель Source Control.</p>
 
+        <div class="part" role="separator"><span><b>2</b>Два коммита из четырёх правок</span></div>
         <h2 id="s3"><span class="sec">§3</span>Шаг 1. Посмотреть, что накопилось</h2>
         <p>В разделе <b>Changes</b> три файла — те, которые мы трогали:</p>
         <figure class="shot shot--panel">
@@ -144,7 +207,7 @@
         </figure>
 
         <h2 id="s4"><span class="sec">§4</span>Шаг 2. Разложить правки по смыслу</h2>
-        <p>Файлов три, но законченных дел меньше — считаем их, а не файлы:</p>
+        <p>Файлов три, а законченных дел меньше. Коммиты считают по делам:</p>
         <div class="table-scroll">
           <table>
             <thead><tr><th>Что сделано</th><th>Какие файлы затронуты</th><th>Это одно дело?</th></tr></thead>
@@ -168,7 +231,7 @@
               <p>Плюс у файла кладёт его в коробку — индекс. Commit заклеивает и подписывает её. Следующая правка пойдёт в новую коробку со своей подписью.</p>
             </div>
           </div>
-          <p class="analogy__limit"><b>Где не совпадает</b>Коробок одновременно одна: пока не заклеили первую, вторую собирать нельзя. Поэтому коммиты делают по очереди, а не параллельно.</p>
+          <p class="analogy__limit"><b>Где не совпадает</b>Коробок одновременно одна: пока не заклеили первую, вторую собирать нельзя. Поэтому коммиты делают по очереди.</p>
         </div>
 
         <h2 id="s5"><span class="sec">§5</span>Шаг 3. Отобрать первую пару файлов</h2>
@@ -176,6 +239,11 @@
         <figure class="shot shot--panel">
           <img src="img/03-staged-two.png" alt="Панель: в Staged Changes два файла — index.html M и kontakty.html A, в Changes остался styles.css">
           <figcaption>Появились два раздела. В <b>Staged Changes</b> — то, что войдёт в коммит: <code>index.html</code> и <code>kontakty.html</code>. В <b>Changes</b> остался <code>styles.css</code>: в этот коммит он не войдёт.</figcaption>
+        </figure>
+        <p>То же в терминале:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>ответа нет</span></figcaption>
+<pre>git add index.html kontakty.html</pre>
         </figure>
         <p>У <code>index.html</code> осталась <b>M</b>: файл был в истории и изменён. У <code>kontakty.html</code> буква сменилась с <b>U</b> на <b>A</b> — новый файл теперь отобран, Git начнёт за ним следить.</p>
         <p>Отбор виден и в терминале: <code>git diff --staged</code> печатает содержимое индекса, а <code>git diff</code> — то, что в него не вошло. На вопрос «что изменилось» получаются два разных ответа.</p>
@@ -196,6 +264,11 @@
         <figure class="shot shot--panel">
           <img src="img/05-after-first-commit.png" alt="Панель после коммита: раздел Staged Changes исчез, в Changes остался styles.css">
           <figcaption>Раздел <b>Staged Changes</b> исчез — индекс пуст. В <b>Changes</b> по-прежнему <code>styles.css</code>: он в коммит не входил.</figcaption>
+        </figure>
+        <p>То же в терминале. Каждый ключ <code>-m</code> — отдельный абзац сообщения: первый станет заголовком, второй — пояснением.</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Commit</span></figcaption>
+<pre>git commit -m "Добавил страницу контактов" -m "Новая страница kontakty.html и ссылка на неё с главной."</pre>
         </figure>
         <p>Последний коммит целиком — с автором, датой, сообщением и списком файлов — показывает одна команда:</p>
         <figure class="code code--out">
@@ -221,6 +294,12 @@ Date:   Wed Sep 23 05:45:56 2026 +0300
           <figcaption>Плюс у заголовка <b>Changes</b> — это <code>Stage All Changes</code>: отбирает сразу все файлы списка. Удобно, когда в списке только то, что нужно.</figcaption>
         </figure>
         <p>Нажимаем плюс у заголовка, пишем сообщение «Увеличил отступы страницы» и делаем коммит. В истории проекта два коммита вместо одного общего, и каждый описывает своё дело.</p>
+        <p>То же в терминале. Точка после <code>git add</code> означает все изменения в папке проекта:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс у заголовка и Commit</span></figcaption>
+<pre>git add .
+git commit -m "Увеличил отступы страницы"</pre>
+        </figure>
         <figure class="code code--out">
           <figcaption><span>терминал</span><span>git log --oneline -3</span></figcaption>
 <pre>9e3c858 Увеличил отступы страницы
@@ -229,29 +308,73 @@ Date:   Wed Sep 23 05:45:56 2026 +0300
         </figure>
         <p>Если отобрать всё и закоммитить одним махом, в истории останется строка «Правки по сайту». По ней потом ничего не найти.</p>
 
+        <div class="part" role="separator"><span><b>3</b>Часть файла в коммит</span></div>
         <h2 id="s9"><span class="sec">§9</span>Шаг 7. Подготовить часть файла</h2>
-        <p>Бывает, что в одном файле лежат правки о разном: подправили отступ и заодно начали новый блок стилей. В коммит нужно только первое. Git умеет отбирать не файл целиком, а отдельный участок.</p>
-        <p>Открываем окно сравнения (клик по файлу в панели) и наводим курсор на изменённый участок. Слева, в поле с номерами строк, появляются два значка:</p>
+        <p>Бывает, что в одном файле лежат правки о разном: подправили отступ и заодно начали новый блок стилей. В коммит нужно только первое. Git умеет отбирать отдельный участок файла.</p>
+        <p>Вносим в <code>styles.css</code> две такие правки. Отступ уменьшаем до <code>48px</code>, в конце файла начинаем блок для подвала страницы:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>styles.css</span><span>было</span></figcaption>
+<pre>body {
+  margin: 0;
+<mark>  padding: 60px;</mark>
+  font-family: system-ui, sans-serif;
+  background: #F4F1EC;
+  color: #1B1A19;
+}
+
+h1 {
+  font-size: 34px;
+}</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>styles.css</span><span>стало</span></figcaption>
+<pre>body {
+  margin: 0;
+<mark>  padding: 48px;</mark>
+  font-family: system-ui, sans-serif;
+  background: #F4F1EC;
+  color: #1B1A19;
+}
+
+h1 {
+  font-size: 34px;
+}
+
+<mark>footer {</mark>
+<mark>  color: #6B6560;</mark>
+<mark>}</mark></pre>
+          </figure>
+        </div>
+        <p>Сохраняем файл и открываем окно сравнения — щелчком по <code>styles.css</code> в панели. Наводим курсор на первый изменённый участок. Слева, в поле с номерами строк, появляются два значка:</p>
         <figure class="shot shot--wide">
-          <img src="img/07-stage-block.png" alt="Окно сравнения: у изменённого участка всплывает подсказка Stage Block рядом со значком плюса">
-          <figcaption>Подсказка <b>Stage Block</b> у значка <b>+</b>: отобрать в коммит только этот участок. Значок выше (круговая стрелка) — отменить только этот участок.</figcaption>
+          <img src="img/07-stage-block.png" alt="Окно сравнения styles.css: участок padding 60px → 48px с подсказкой Stage Block у значка плюса и ниже добавленный блок footer">
+          <figcaption>Два участка: отступ в начале файла и новый блок <code>footer</code> в конце. Подсказка <b>Stage Block</b> у значка <b>+</b> первого участка: отобрать в коммит только его. Значок выше, круговая стрелка, отменяет только этот участок.</figcaption>
         </figure>
-        <p>Нажали плюс — и один и тот же файл оказался сразу в двух списках:</p>
+        <p>Нажимаем плюс у первого участка. Один и тот же файл оказывается сразу в двух списках:</p>
         <figure class="shot shot--panel">
           <img src="img/08-same-file-both.png" alt="Панель: styles.css одновременно в разделе Staged Changes и в разделе Changes">
           <figcaption>В <b>Staged Changes</b> — отобранный участок файла, в <b>Changes</b> — оставшийся. Один файл, два разных состояния.</figcaption>
         </figure>
-        <p>Отсюда видно, что индекс — отдельное место, а не галочка у файла. Git пишет об этом двумя буквами:</p>
+        <p>Отсюда видно, что индекс хранит своё содержимое отдельно от файла в папке. Git пишет об этом двумя буквами:</p>
         <figure class="code code--out">
           <figcaption><span>терминал</span><span>git status --short</span></figcaption>
 <pre>MM styles.css</pre>
         </figure>
-        <p>Первая <b>M</b> — изменение в индексе, вторая — изменение в папке, которое туда не попало. После коммита первая буква исчезнет, вторая останется: эта правка в коммит не вошла.</p>
+        <p>Первая <b>M</b> — изменение в индексе, вторая — изменение в папке, которое туда не попало. Если сейчас сделать коммит, в него войдёт только новый отступ, а блок <code>footer</code> останется в <b>Changes</b>.</p>
+        <p>Коммит здесь не делаем: обе правки были нужны только для примера. Возвращаем файл к последнему коммиту. Нажимаем <b>−</b> у <code>styles.css</code> в <b>Staged Changes</b> — отобранный участок вернётся в <b>Changes</b>. Затем нажимаем круговую стрелку у <code>styles.css</code> в <b>Changes</b> и подтверждаем: обе правки стираются, и список изменений пустеет. То же в терминале:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>ответа нет</span></figcaption>
+<pre>git restore --staged styles.css
+git restore styles.css</pre>
+        </figure>
+        <p>Первая команда возвращает файл из индекса, вторая возвращает сам файл к последнему коммиту. Подробно отмена изменений разобрана в главе 2.6.</p>
         <div class="margin-note margin-note--steel">
           <b>На полях: когда это нужно</b>
           <p>Частичная подготовка нужна, когда правки перемешались. Специально разносить каждую строку по коммитам не надо: проще делать одно дело за раз и коммитить, как только оно закончено.</p>
         </div>
 
+        <div class="part" role="separator"><span><b>4</b>Справка</span></div>
         <h2 id="s10"><span class="sec">§10</span>Справка: три зоны и команды</h2>
         <p>В панели и в командах одни и те же действия называются по-разному:</p>
         <div class="table-scroll">
@@ -291,11 +414,12 @@ Date:   Wed Sep 23 05:45:56 2026 +0300
         <div class="checklist">
           <p class="checklist__head">Проверка сообщения перед коммитом</p>
           <div class="checklist__item"><span><b>Первая строка короткая</b>Примерно до <code>50–70</code> символов: она целиком видна в списках истории и на GitHub.</span></div>
-          <div class="checklist__item"><span><b>Сказано, что сделано, а не какие файлы тронуты</b>Список файлов Git и так хранит — его видно командой <code>git log --stat</code>.</span></div>
+          <div class="checklist__item"><span><b>Сказано, что сделано</b>Перечислять тронутые файлы не нужно: Git хранит их список сам, его видно командой <code>git log --stat</code>.</span></div>
           <div class="checklist__item"><span><b>Одно дело — одно сообщение</b>Если в сообщении появляется слово «и», проверьте: может быть, это два коммита.</span></div>
           <div class="checklist__item"><span><b>Пояснение — отдельным абзацем</b>После пустой строки. Туда идёт «почему так сделано», если это неочевидно.</span></div>
         </div>
 
+        <div class="part" role="separator"><span><b>5</b>Проверка себя</span></div>
         <h2 id="s12"><span class="sec">§12</span>Частые вопросы</h2>
         <div class="myths">
           <div class="myth">

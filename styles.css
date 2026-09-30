@@ -189,6 +189,22 @@ figure.code figcaption {
 figure.code pre { margin: 0; padding: 15px 18px; overflow-x: auto; font: 400 14px/1.65 var(--mono); }
 figure.code--out pre { background: #1B1A19; color: #F0E7E1; }
 figure.code--out figcaption { background: var(--ink-soft); }
+figure.code .copy {
+  flex: 0 0 auto; margin-left: 4px; padding: 1px 7px;
+  border: 1px solid currentColor; background: transparent; color: var(--fire-pale);
+  font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer;
+}
+figure.code .copy:hover { background: var(--fire-deep); color: #fff; border-color: var(--fire-deep); }
+figure.code figcaption > span:nth-of-type(2) { margin-left: auto; }
+/* Пара «было → стало»: два соседних блока одного файла */
+.code-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin: 20px 0; }
+.code-pair figure.code { margin: 0; }
+figure.code--was figcaption { background: var(--ink-soft); }
+figure.code--was pre { color: var(--ink-soft); }
+figure.code mark { color: inherit; padding: 1px 0; }
+figure.code--was mark { background: #F3D3CC; }
+figure.code--now mark { background: #D6E8CF; }
+@media (max-width: 720px) { .code-pair { grid-template-columns: minmax(0, 1fr); } }
 .c { color: var(--ink-faint); }                  /* комментарий  */
 .k { color: var(--steel); font-weight: 700; }    /* ключевое слово */
 .s { color: var(--fire-deep); }                  /* строка       */
@@ -645,3 +661,16 @@ details p:last-child, details ul:last-child { margin-bottom: 0; }
 .vsc__diff .del { background: rgba(241, 76, 76, .16); color: #F3C4C4; }
 .vsc__diff .nil { color: #6B6B6B; }
 @media (max-width: 560px) { .vsc__diff { grid-template-columns: 1fr; } .vsc__diff > div:first-child { border-right: 0; border-bottom: 1px solid #3A3A3A; } }
+
+/* ── Разделитель частей главы ────────────────────────────────── */
+/* Пунктир с плашкой делит главу на смысловые части:
+   подготовка, шаги, справка, проверка. */
+.part { display: flex; align-items: center; gap: 14px; margin: 56px 0 6px; }
+.part::before, .part::after { content: ''; flex: 1 1 0; border-top: 3px dashed var(--fire); }
+.part::before { flex: 0 0 18px; }
+.part span {
+  flex: 0 1 auto; padding: 7px 14px; border: 3px solid var(--fire-deep); background: var(--fire-pale);
+  font: 600 12px/1.4 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; color: var(--fire-deep);
+}
+.part b { font: 700 13px/1 var(--mono); margin-right: 8px; }
+.part + h2 { margin-top: 18px; }

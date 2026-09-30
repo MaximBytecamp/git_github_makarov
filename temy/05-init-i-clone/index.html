@@ -122,10 +122,11 @@
             <li><b>Приход на готовый проект.</b> Первое, что делают на новом месте, — клонируют репозиторий команды. Скачанная папка сразу знает, куда отправлять правки.</li>
             <li><b>Своя разработка с первого дня.</b> Репозиторий заводят не в конце, когда «уже есть что сохранять», а сразу: иначе первые дни работы останутся без истории.</li>
             <li><b>Чужой код для изучения.</b> Клонирование даёт не только текущие файлы, но и переписку изменений: видно, как проект пришёл к нынешнему виду.</li>
-            <li><b>Копия на другом компьютере.</b> Тот же проект дома и на работе — это два клона одного репозитория, а не две папки, которые вы переносите флешкой.</li>
+            <li><b>Копия на другом компьютере.</b> Тот же проект дома и на работе — это два клона одного репозитория. Переносить папку флешкой не нужно.</li>
           </ul>
         </div>
 
+        <div class="part" role="separator"><span><b>1</b>Путь А: свой проект</span></div>
         <h2 id="s2"><span class="sec">§2</span>Путь А, шаг 1. Завести репозиторий в своей папке</h2>
         <p>Создаём пустую папку проекта и открываем её в VS Code: <b>File → Open Folder</b>. Затем панель Source Control — <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>.</p>
         <figure class="shot shot--panel">
@@ -137,6 +138,11 @@
           <img src="img/step2-empty.png" alt="Панель после инициализации: поле Message и кнопка Commit, списков изменений нет">
           <figcaption>После нажатия: появились поле сообщения и кнопка Commit, внизу окна — имя ветки <code>main</code>. История заведена и пока пуста.</figcaption>
         </figure>
+        <p>То же в терминале:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Initialize Repository</span></figcaption>
+<pre>git init</pre>
+        </figure>
         <p>Дальше идут создание файла, подготовка и первый коммит — всё это по шагам разобрано в главе 2.1. Сейчас нам нужен только момент, когда репозиторий появился.</p>
         <p>Вторая кнопка, <b>Publish to GitHub</b>, делает то же самое и сразу создаёт репозиторий на сайте. Ей пользуются, когда проект с самого начала общий. Для учебной работы удобнее сначала завести историю у себя, а публиковать позже — это модуль 4.</p>
         <div class="margin-note">
@@ -145,7 +151,12 @@
         </div>
 
         <h2 id="s3"><span class="sec">§3</span>Путь А, шаг 2. Проверить, что появилось на диске</h2>
-        <p>Внешне ничего не изменилось: в проводнике папка выглядит так же. Появилась скрытая папка <code>.git</code> — её видно командой, показывающей скрытые файлы:</p>
+        <p>Внешне ничего не изменилось: в проводнике папка выглядит так же. Появилась скрытая папка <code>.git</code> — её видно командой, показывающей скрытые файлы. Команды набираются во встроенном терминале VS Code: меню <b>Terminal → New Terminal</b> или <kbd>Ctrl</kbd> + <kbd>`</kbd>. Терминал открывается внизу окна сразу в папке проекта.</p>
+        <figure class="shot shot--wide">
+          <img src="img/terminal-ls.png" alt="Встроенный терминал VS Code внизу окна: команда ls -a показывает . .. .git, команда git status отвечает On branch main, No commits yet">
+          <figcaption>Встроенный терминал с двумя командами этого шага и их ответами. Слева в приглашении — имя папки проекта.</figcaption>
+        </figure>
+        <p><span data-os="win">В Windows терминал по умолчанию — PowerShell, и в нём эта команда пишется <code>ls -Force</code>. Ответ выглядит как таблица, но папка <code>.git</code> в ней та же.</span><span data-os="mac linux">Команда <code>ls -a</code> выводит все файлы папки, включая скрытые:</span></p>
         <figure class="code code--out">
           <figcaption><span>терминал в папке проекта</span><span>ls -a</span></figcaption>
 <pre>.
@@ -165,7 +176,7 @@
             <div class="tree__row"><span>&nbsp;&nbsp;├── objects/</span><em>здесь будут лежать сохранённые состояния файлов — пока пусто</em></div>
             <div class="tree__row"><span>&nbsp;&nbsp;└── refs/</span><em>ветки: в каждом файле имя одного коммита — тоже пусто</em></div>
           </div>
-          <p class="tree__foot">Разбирать содержимое сейчас не нужно. История проекта лежит здесь, а не на сайте и не в редакторе. Скопируете папку проекта на флешку — история скопируется вместе с ней.</p>
+          <p class="tree__foot">Разбирать содержимое сейчас не нужно. История проекта лежит в этой папке, на вашем компьютере. Скопируете папку проекта на флешку — история скопируется вместе с ней.</p>
         </div>
         <p>Состояние нового репозитория словами самого Git:</p>
         <figure class="code code--out">
@@ -178,6 +189,7 @@ nothing to commit (create/copy files and use "git add" to track)</pre>
         </figure>
         <p>Git сообщает сразу три вещи: ветка называется <code>main</code>, коммитов ещё нет, отслеживать нечего. То же самое показывает пустая панель Source Control, только короче. Путь А на этом закончен. Теперь второй способ — клонирование.</p>
 
+        <div class="part" role="separator"><span><b>2</b>Путь Б: чужой проект</span></div>
         <h2 id="s4"><span class="sec">§4</span>Путь Б, шаг 1. Скопировать адрес проекта</h2>
         <p>Клонировать будем учебный проект <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a> — сайт-визитка из трёх файлов с короткой историей. Проект открытый: качать его может кто угодно.</p>
         <p>Для клонирования нужен адрес репозитория. Из адресной строки браузера его не копируют: там ссылка на страницу. Нужный адрес лежит под зелёной кнопкой <b>Code</b>.</p>
@@ -216,10 +228,20 @@ nothing to commit (create/copy files and use "git add" to track)</pre>
 
         <h2 id="s7"><span class="sec">§7</span>Путь Б, шаг 4. Выбрать папку и открыть проект</h2>
         <p>Откроется окно выбора папки. Выбираем папку, <em>в которой</em> появится проект: сама папка проекта создастся внутри и получит имя репозитория. Заводить её заранее не нужно.</p>
-        <p>Когда загрузка закончится, VS Code спросит, открыть ли скачанный проект. Нажимаем <b>Open</b> — и в проводнике появляются файлы:</p>
+        <p>Когда загрузка закончится, VS Code спросит, что сделать со скачанным проектом:</p>
+        <figure class="shot shot--wide">
+          <img src="img/clone-open-prompt.png" alt="Окно VS Code: Would you like to open the repository, or add it to the current workspace? Кнопки Add to Workspace, Open in New Window, Cancel, Open">
+          <figcaption><b>Open</b> — открыть проект в этом окне. <b>Open in New Window</b> — в новом окне, текущее останется как было. <b>Add to Workspace</b> в учебных проектах не нужен.</figcaption>
+        </figure>
+        <p>Нажимаем <b>Open</b> — и в проводнике появляются файлы:</p>
         <figure class="shot shot--panel">
           <img src="img/clone3-files.png" alt="Проводник VS Code со списком файлов склонированного проекта: index.html, README.md, styles.css">
           <figcaption>Файлы склонированного проекта: <code>index.html</code>, <code>README.md</code>, <code>styles.css</code>. Те же три файла видны на странице проекта на GitHub.</figcaption>
+        </figure>
+        <p>То же в терминале. Команду запускают в папке, внутри которой должен появиться проект:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Git: Clone</span></figcaption>
+<pre>git clone https://github.com/MaximBytecamp/sait-vizitka.git</pre>
         </figure>
         <p>В строке состояния сразу видна ветка и значок обмена с сервером:</p>
         <figure class="shot shot--bar">
@@ -274,6 +296,7 @@ origin	https://github.com/MaximBytecamp/sait-vizitka.git (push)</pre>
           <p>Скачивается не только текущая версия файлов, но и все прошлые состояния. У учебного проекта из трёх файлов папка <code>.git</code> занимает около 120 КБ — больше, чем сами файлы. У рабочих проектов с многолетней историей она бывает в разы тяжелее рабочих файлов, и это нормально.</p>
         </div>
 
+        <div class="part" role="separator"><span><b>3</b>Справка</span></div>
         <h2 id="s9"><span class="sec">§9</span>Clone или Download ZIP</h2>
         <p>В том же меню под кнопкой <b>Code</b> есть пункт <b>Download ZIP</b>. Он скачивает файлы — и только их.</p>
         <div class="versus">
@@ -295,7 +318,7 @@ origin	https://github.com/MaximBytecamp/sait-vizitka.git (push)</pre>
               <p>Полноценный репозиторий на вашем диске.</p>
               <ul>
                 <li>Все версии и ветки доступны сразу</li>
-                <li>Обновление — одна кнопка, а не повторное скачивание</li>
+                <li>Обновление — одной кнопкой, без повторного скачивания</li>
                 <li>Свои правки можно предложить автору</li>
                 <li>Панель Source Control работает</li>
               </ul>
@@ -337,7 +360,7 @@ origin	https://github.com/MaximBytecamp/sait-vizitka.git (push)</pre>
         <div class="checklist">
           <p class="checklist__head">Проверка после создания или клонирования</p>
           <div class="checklist__item"><span><b>Внизу окна видно имя ветки</b>Например, <code>main</code>. Если имени нет — репозитория в этой папке нет.</span></div>
-          <div class="checklist__item"><span><b>Открыта папка проекта, а не папка над ней</b>В проводнике VS Code верхняя строка — имя вашего проекта, а не <code>Documents</code> и не имя пользователя.</span></div>
+          <div class="checklist__item"><span><b>Открыта папка проекта</b>В проводнике VS Code верхняя строка — имя вашего проекта. Если там <code>Documents</code> или имя пользователя, открыта папка уровнем выше.</span></div>
           <div class="checklist__item"><span><b>Панель Source Control отзывается</b>Создайте любой файл — он должен появиться в списке <b>Changes</b>.</span></div>
           <div class="checklist__item"><span><b>Для клона: история на месте</b><code>git log --oneline</code> показывает чужие коммиты, а в строке состояния стоят стрелки обмена.</span></div>
         </div>
@@ -356,6 +379,7 @@ origin	https://github.com/MaximBytecamp/sait-vizitka.git (push)</pre>
           </table>
         </div>
 
+        <div class="part" role="separator"><span><b>4</b>Проверка себя</span></div>
         <h2 id="s12"><span class="sec">§12</span>Частые вопросы</h2>
         <div class="myths">
           <div class="myth">

@@ -86,17 +86,33 @@
             </tbody>
           </table>
         </div>
-        <p>Имена первых двух начинаются с точки. В macOS и Linux так обозначают скрытые файлы: файловый менеджер их по умолчанию не показывает, а проводник VS Code показывает.</p>
+        <p>Имена первых двух начинаются с точки. В macOS и Linux так обозначают скрытые файлы: файловый менеджер их по умолчанию не показывает. Проводник VS Code показывает большинство таких файлов, кроме нескольких системных — например, <code>.DS_Store</code>.</p>
 
+        <div class="part" role="separator"><span><b>1</b>Подготовка</span></div>
         <h2 id="s2"><span class="sec">§2</span>Готовим площадку: четыре лишних файла</h2>
-        <p>Работаем на проекте <code>sait-vizitka</code> из прошлых глав. Создаём в нём четыре файла, какие появляются в любом проекте за первую неделю работы.</p>
-        <ol class="steps">
-          <li>Файл <code>.env</code> с одной строкой <code>FORM_KEY=pk_live_4f9a2c71e0b3</code>. Так обычно называют файл с ключами и паролями: программа читает их оттуда при запуске. Здесь это ключ почтового сервиса, который будет отправлять письма с формы на странице контактов. Ключ выдуман для примера.</li>
-          <li>Папку <code>.vscode</code> с файлом <code>settings.json</code> внутри. VS Code создаёт её сам, когда вы меняете настройку только для этой папки, например размер шрифта.</li>
-          <li>Папку <code>chernoviki</code> с файлом <code>plan.txt</code>, где записан список того, что вы хотите добавить на сайт.</li>
-          <li>Системный файл. На macOS его создавать не нужно: <code>.DS_Store</code> появляется сам, как только папку откроют в Finder. На Windows похожую роль играет <code>Thumbs.db</code> — в нём проводник хранит уменьшенные копии картинок.</li>
-        </ol>
+        <p>Работаем на проекте <code>sait-vizitka</code> из прошлых глав. Создаём в нём четыре файла такого рода: они появляются почти в каждом проекте за первую неделю работы. Файлы создаются в проводнике VS Code значком <b>New File</b>, папки — значком <b>New Folder</b>.</p>
+        <p><b>Файл <code>.env</code> в корне проекта.</b> Так обычно называют файл с ключами и паролями: программа читает их оттуда при запуске. Здесь это ключ почтового сервиса, который будет отправлять письма с формы на странице контактов. Ключ выдуман для примера.</p>
+        <figure class="code">
+          <figcaption><span>.env</span><span>новый файл</span></figcaption>
+<pre>FORM_KEY=pk_live_4f9a2c71e0b3</pre>
+        </figure>
+        <p><b>Папка <code>.vscode</code> с файлом <code>settings.json</code>.</b> VS Code создаёт её сам, когда вы меняете настройку только для этой папки проекта, например размер шрифта. Здесь создаём вручную:</p>
+        <figure class="code">
+          <figcaption><span>.vscode/settings.json</span><span>новый файл</span></figcaption>
+<pre>{
+  "editor.fontSize": 16
+}</pre>
+        </figure>
+        <p><b>Папка <code>chernoviki</code> с файлом <code>plan.txt</code>.</b> В нём список того, что вы хотите добавить на сайт:</p>
+        <figure class="code">
+          <figcaption><span>chernoviki/plan.txt</span><span>новый файл</span></figcaption>
+<pre>Что добавить на сайт:
+- страницу с проектами
+- фотографию</pre>
+        </figure>
+        <p><b>Системный файл.</b> На macOS его создавать не нужно: <code>.DS_Store</code> появляется сам, как только папку откроют в Finder. На Windows похожую роль играет <code>Thumbs.db</code> — в нём проводник хранит уменьшенные копии картинок.</p>
 
+        <div class="part" role="separator"><span><b>2</b>Файл .gitignore</span></div>
         <h2 id="s3"><span class="sec">§3</span>Шаг 1. Посмотреть, что видит Git</h2>
         <p>Открываем панель Source Control. Все четыре файла стоят в разделе <b>Changes</b>:</p>
         <figure class="shot shot--panel">
@@ -148,7 +164,7 @@ chernoviki/</pre>
         </figure>
 
         <h2 id="s5"><span class="sec">§5</span>Справка: как читать строки .gitignore</h2>
-        <p>Строка может быть точным именем или шаблоном. Звёздочка заменяет любую часть имени, косая черта указывает, где искать. Все примеры в таблице проверены на Git версии <code>2.51.1</code>.</p>
+        <p>Строка может быть точным именем или шаблоном. Звёздочка заменяет любую часть имени, косая черта указывает, где искать.</p>
         <div class="table-scroll">
           <table>
             <thead><tr><th>Строка</th><th>Что скрывает</th><th>Что не скрывает</th></tr></thead>
@@ -186,7 +202,12 @@ chernoviki/</pre>
 
         <h2 id="s7"><span class="sec">§7</span>Шаг 4. Закоммитить .gitignore</h2>
         <p>Сам <code>.gitignore</code> в историю попадать должен. Правила в нём нужны всем, кто работает с проектом: после клонирования они сработают и на другом компьютере, и лишние файлы не будут видны в панели у коллег.</p>
-        <p>Наводим курсор на <code>.gitignore</code> в панели, нажимаем <b>+</b>, пишем сообщение «Добавил .gitignore» и нажимаем <b>✓ Commit</b>.</p>
+        <p>Наводим курсор на <code>.gitignore</code> в панели, нажимаем <b>+</b>, пишем сообщение «Добавил .gitignore» и нажимаем <b>✓ Commit</b>. То же в терминале:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git add .gitignore
+git commit -m "Добавил .gitignore"</pre>
+        </figure>
         <div class="analogy">
           <p class="analogy__head">Ассоциация: фильтр в почте</p>
           <div class="analogy__pair">
@@ -204,12 +225,36 @@ chernoviki/</pre>
 
         <h2 id="s8"><span class="sec">§8</span>Шаг 5. Файл, который уже в истории</h2>
         <p><code>.gitignore</code> часто появляется в проекте позже, чем нужно: несколько коммитов уже сделано, и лишний файл в них вошёл. Воспроизведём такой случай на отдельном файле, чтобы увидеть, как его исправить.</p>
-        <ol class="steps">
-          <li>Создаём файл <code>zametki.txt</code> с одной строкой: «Спросить у куратора про домен».</li>
-          <li>Отбираем его плюсом и делаем коммит «Добавил заметки». Теперь файл в истории.</li>
-          <li>Дописываем в конец <code>.gitignore</code> правило <code>zametki.txt</code> с комментарием <code># личные заметки</code>.</li>
-          <li>Добавляем в <code>zametki.txt</code> вторую строку: «Купить хостинг до пятницы». Сохраняем оба файла.</li>
-        </ol>
+        <p>Создаём в корне проекта файл <code>zametki.txt</code>:</p>
+        <figure class="code">
+          <figcaption><span>zametki.txt</span><span>новый файл</span></figcaption>
+<pre>Спросить у куратора про домен</pre>
+        </figure>
+        <p>Отбираем его плюсом и делаем коммит «Добавил заметки». Теперь файл в истории. То же в терминале:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git add zametki.txt
+git commit -m "Добавил заметки"</pre>
+        </figure>
+        <p>Решаем, что заметки в репозитории не нужны, и дописываем правило в конец <code>.gitignore</code>:</p>
+        <figure class="code">
+          <figcaption><span>.gitignore</span><span>в конец файла</span></figcaption>
+<pre>
+# личные заметки
+zametki.txt</pre>
+        </figure>
+        <p>Добавляем в <code>zametki.txt</code> вторую строку и сохраняем оба файла:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>zametki.txt</span><span>было</span></figcaption>
+<pre>Спросить у куратора про домен</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>zametki.txt</span><span>стало</span></figcaption>
+<pre>Спросить у куратора про домен
+<mark>Купить хостинг до пятницы</mark></pre>
+          </figure>
+        </div>
         <figure class="shot shot--panel">
           <img src="img/04-tracked-still-shown.png" alt="Панель: в разделе Changes два файла — .gitignore M и zametki.txt M">
           <figcaption>Правило для <code>zametki.txt</code> записано, но файл по-прежнему в списке с буквой <b>M</b> — изменён. Git продолжает за ним следить.</figcaption>
@@ -225,7 +270,13 @@ chernoviki/</pre>
           <img src="img/05-rm-cached.png" alt="Панель: в Staged Changes zametki.txt с буквой D и зачёркнутым именем, в Changes .gitignore с буквой M">
           <figcaption>В <b>Staged Changes</b> файл <code>zametki.txt</code> с буквой <b>D</b> — удалён. Имя зачёркнуто, хотя на диске файл остался. В <b>Changes</b> лежит изменённый <code>.gitignore</code>.</figcaption>
         </figure>
-        <p>Отбираем плюсом и <code>.gitignore</code>, пишем сообщение «Убрал zametki.txt из репозитория» и делаем коммит. После него файл остаётся в папке, а в списке скрытых появляется пятая строка:</p>
+        <p>Отбираем плюсом и <code>.gitignore</code>, пишем сообщение «Убрал zametki.txt из репозитория» и делаем коммит. То же в терминале:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git add .gitignore
+git commit -m "Убрал zametki.txt из репозитория"</pre>
+        </figure>
+        <p>После коммита файл остаётся в папке, а в списке скрытых появляется пятая строка:</p>
         <figure class="code code--out">
           <figcaption><span>терминал</span><span>git status --short --ignored</span></figcaption>
 <pre>!! .DS_Store
@@ -244,6 +295,7 @@ chernoviki/</pre>
           <p>Команда <code>git rm --cached</code> убирает файл только из следующих коммитов. В старых он остаётся и после отправки на GitHub доступен всем, кто видит репозиторий. Поэтому ключ, который хоть раз попал в коммит, считают раскрытым: в личном кабинете сервиса выпускают новый, а старый отключают. Вычищать файл из всей истории можно, но это отдельная операция с переписыванием коммитов, и выпуск нового ключа она не заменяет.</p>
         </div>
 
+        <div class="part" role="separator"><span><b>3</b>Пустая папка и README</span></div>
         <h2 id="s9"><span class="sec">§9</span>Шаг 6. Пустая папка и .gitkeep</h2>
         <p>Для картинок сайта заведём папку <code>img</code>. Картинок пока нет, но папка нужна сразу: в ней договорились хранить все изображения проекта.</p>
         <p>Создаём папку значком <b>New Folder</b> в проводнике и открываем панель Source Control.</p>
@@ -257,8 +309,13 @@ chernoviki/</pre>
           <img src="img/06-gitkeep.png" alt="Панель: в разделе Changes файл .gitkeep из папки img с буквой U">
           <figcaption>В списке появился <code>.gitkeep</code> из папки <code>img</code>. Вместе с ним в коммит попадёт и сама папка.</figcaption>
         </figure>
-        <p>Имя <code>.gitkeep</code> придумали разработчики, в самом Git оно ничего не значит. Файл мог бы называться как угодно, работает сам факт, что в папке появился файл. Имя прижилось, потому что по нему сразу понятно, зачем файл нужен. Когда в <code>img</code> появятся картинки, <code>.gitkeep</code> можно удалить.</p>
-        <p>Отбираем файл плюсом и делаем коммит «Добавил папку для картинок».</p>
+        <p>Имя <code>.gitkeep</code> придумали разработчики, в самом Git оно ничего не значит. Git сохраняет папку потому, что в ней есть файл, а имя этого файла роли не играет. Имя прижилось, потому что по нему сразу понятно, зачем файл нужен. Когда в <code>img</code> появятся картинки, <code>.gitkeep</code> можно удалить.</p>
+        <p>Отбираем файл плюсом и делаем коммит «Добавил папку для картинок». То же в терминале:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git add img/.gitkeep
+git commit -m "Добавил папку для картинок"</pre>
+        </figure>
 
         <h2 id="s10"><span class="sec">§10</span>Шаг 7. README — описание проекта</h2>
         <p><span class="term">README</span> — текстовый файл в корне проекта с описанием для людей: что это за проект, из чего он состоит, как его запустить. Название значит «прочти меня». GitHub показывает этот файл на главной странице репозитория, поэтому его читают первым.</p>
@@ -267,17 +324,26 @@ chernoviki/</pre>
           <img src="img/08-gh-readme.png" alt="Главная страница репозитория sait-vizitka на GitHub: список из трёх файлов, ниже вкладка README с заголовком «Сайт-визитка» и разделами «Что внутри» и «Как открыть»">
           <figcaption>Сверху список файлов, под ним на вкладке <b>README</b> — содержимое файла <code>README.md</code>. Заголовки, списки и код GitHub оформляет по разметке, записанной в файле.</figcaption>
         </figure>
-        <p>Раздел «Что внутри» устарел: в нём два файла, а в проекте появились страница контактов, папка для картинок и <code>.gitignore</code>. Открываем <code>README.md</code> и дописываем список:</p>
-        <figure class="code">
-          <figcaption><span>README.md</span><span>раздел «Что внутри»</span></figcaption>
+        <p>Раздел «Что внутри» устарел: в нём два файла, а в проекте появились страница контактов, папка для картинок и <code>.gitignore</code>. Открываем <code>README.md</code> и меняем список:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>README.md</span><span>было</span></figcaption>
 <pre>## Что внутри
 
-- `index.html` — главная страница
-- `kontakty.html` — страница контактов
+<mark>- `index.html` — сама страница</mark>
+- `styles.css` — оформление</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>README.md</span><span>стало</span></figcaption>
+<pre>## Что внутри
+
+<mark>- `index.html` — главная страница</mark>
+<mark>- `kontakty.html` — страница контактов</mark>
 - `styles.css` — оформление
-- `img/` — картинки сайта, пока пустая
-- `.gitignore` — список файлов, которые Git не отслеживает</pre>
-        </figure>
+<mark>- `img/` — картинки сайта, пока пустая</mark>
+<mark>- `.gitignore` — список файлов, которые Git не отслеживает</mark></pre>
+          </figure>
+        </div>
         <p>Расширение <code>.md</code> означает, что файл записан в разметке <span class="term">Markdown</span>. Это обычный текст с несколькими условными знаками: решётка в начале строки делает заголовок, дефис — пункт списка, обратные кавычки выделяют имя файла или команду. Как текст будет выглядеть после оформления, VS Code показывает рядом с файлом: <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>K</kbd>, затем <kbd>V</kbd>.</p>
         <figure class="shot shot--wide">
           <img src="img/07-readme-preview.png" alt="Слева файл README.md с разметкой Markdown, справа вкладка Preview README.md с оформленным текстом: заголовки, список из пяти пунктов">
@@ -297,7 +363,13 @@ chernoviki/</pre>
             </tbody>
           </table>
         </div>
-        <p>Сохраняем файл, отбираем его плюсом и делаем коммит «Обновил список файлов в README». На GitHub новое описание появится после отправки коммитов в модуле 4.</p>
+        <p>Сохраняем файл, отбираем его плюсом и делаем коммит «Обновил список файлов в README». То же в терминале:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git add README.md
+git commit -m "Обновил список файлов в README"</pre>
+        </figure>
+        <p>На GitHub новое описание появится после отправки коммитов в модуле 4.</p>
         <div class="checklist">
           <p class="checklist__head">Что обычно есть в README</p>
           <div class="checklist__item"><span><b>Название и одна-две фразы о проекте</b>Что это и для кого. Этот абзац виден первым на странице репозитория.</span></div>
@@ -306,6 +378,7 @@ chernoviki/</pre>
           <div class="checklist__item"><span><b>Автор и контакты</b>К кому обращаться с вопросами по проекту.</span></div>
         </div>
 
+        <div class="part" role="separator"><span><b>4</b>Справка</span></div>
         <h2 id="s11"><span class="sec">§11</span>Готовые шаблоны .gitignore</h2>
         <p>Писать <code>.gitignore</code> с нуля для каждого проекта не нужно. Для распространённых языков и инструментов списки уже составлены.</p>
         <div class="table-scroll">
@@ -323,6 +396,7 @@ chernoviki/</pre>
           <p>Общий файл действует только у вас: коллеги его не получат. Поэтому правила, от которых зависит безопасность проекта, — <code>.env</code>, папки со сборкой, журналы — пишут в <code>.gitignore</code> проекта, даже если у себя вы их уже скрыли. В общий файл попадает только то, что создаёт ваша система и ваш редактор.</p>
         </div>
 
+        <div class="part" role="separator"><span><b>5</b>Проверка себя</span></div>
         <h2 id="s12"><span class="sec">§12</span>Частые вопросы</h2>
         <div class="myths">
           <div class="myth">

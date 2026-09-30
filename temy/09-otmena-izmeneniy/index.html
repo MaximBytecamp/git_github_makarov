@@ -53,7 +53,7 @@
             <li><a href="#s4">Шаг 3. Исправить последний коммит</a></li>
             <li><a href="#s5">Шаг 4. Отменить последний коммит целиком</a></li>
             <li><a href="#s6">Шаг 5. Отменить старый коммит</a></li>
-            <li><a href="#s7">Шаг 6. Перенести ветку назад</a></li>
+            <li><a href="#s7">Шаг 6. Вернуться к старому коммиту: reset</a></li>
             <li><a href="#s8">Шаг 7. Вернуть стёртый коммит</a></li>
             <li><a href="#s9">Справка: какой способ выбрать</a></li>
             <li><a href="#s10">Частые вопросы</a></li>
@@ -101,20 +101,53 @@
           </svg>
           <figcaption>Под каждой зоной — способ отменить то, что в ней лежит. Возврат из индекса кнопкой «минус» разобран в главе 2.3, остальные способы — в этой.</figcaption>
         </figure>
-        <p>Все способы делятся на две группы. Первые меняют только файлы и индекс, история проекта остаётся прежней. Вторые меняют историю: убирают коммит, заменяют его другим или добавляют новый. У второй группы есть правило, от которого зависит выбор способа, — о нём в шагах 3 и 5.</p>
+        <p>Все способы делятся на две группы. Первые меняют только файлы и индекс, история проекта остаётся прежней. Вторые меняют историю: убирают коммит, заменяют его другим или добавляют новый. Для второй группы действует правило: коммиты, которые уже отправлены на GitHub, не убирают и не заменяют. Их отменяют только новым коммитом.</p>
         <div class="why">
           <p class="why__head">Зачем это нужно в работе</p>
           <ul class="why__list">
             <li><b>Проба не удалась.</b> Поменяли цвета, посмотрели — хуже. Правку нужно выбросить и вернуть файл к последнему коммиту.</li>
             <li><b>Опечатка в сообщении или забытый файл.</b> Коммит только что сделан, и в нём ошибка. Исправить его проще, чем делать второй коммит «исправил опечатку».</li>
             <li><b>Правка на сайте оказалась ошибкой.</b> Коммит неделю назад поменял отступы, и теперь их нужно вернуть. Остальные коммиты после него трогать нельзя.</li>
-            <li><b>Что-то стёрто по ошибке.</b> Git записывает каждое перемещение ветки, и по этой записи стёртый коммит можно вернуть.</li>
+            <li><b>Что-то стёрто по ошибке.</b> Git записывает в журнал каждое действие с историей, и по этой записи стёртый коммит можно вернуть.</li>
           </ul>
         </div>
         <p>Работаем на проекте <code>sait-vizitka</code> в том виде, в каком его оставила глава 2.5: одиннадцать коммитов, семь из них на GitHub ещё не отправлены.</p>
 
+        <div class="part" role="separator"><span><b>1</b>Правка ещё не в истории</span></div>
         <h2 id="s2"><span class="sec">§2</span>Шаг 1. Отменить правку в файле</h2>
-        <p>Пробуем тёмное оформление: в <code>styles.css</code> меняем местами цвета фона и текста — <code>background: #1B1A19;</code> и <code>color: #F4F1EC;</code>. Заодно создаём файл <code>proba.html</code> с одним заголовком, чтобы посмотреть на тёмную тему отдельно. Сохраняем оба файла.</p>
+        <p>Пробуем тёмное оформление. В <code>styles.css</code> в блоке <code>body</code> меняем местами цвета фона и текста:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>styles.css</span><span>было</span></figcaption>
+<pre>body {
+  margin: 0;
+  padding: 60px;
+  font-family: system-ui, sans-serif;
+<mark>  background: #F4F1EC;</mark>
+<mark>  color: #1B1A19;</mark>
+}</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>styles.css</span><span>стало</span></figcaption>
+<pre>body {
+  margin: 0;
+  padding: 60px;
+  font-family: system-ui, sans-serif;
+<mark>  background: #1B1A19;</mark>
+<mark>  color: #F4F1EC;</mark>
+}</pre>
+          </figure>
+        </div>
+        <p>Заодно создаём в корне проекта файл <code>proba.html</code>, чтобы посмотреть на тёмную тему отдельно. Сохраняем оба файла.</p>
+        <figure class="code">
+          <figcaption><span>proba.html</span><span>новый файл</span></figcaption>
+<pre>&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+&lt;body&gt;
+  &lt;h1&gt;Проба тёмной темы&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        </figure>
         <figure class="shot shot--panel">
           <img src="img/01-two-changes.png" alt="Панель Source Control: в разделе Changes proba.html с буквой U и styles.css с буквой M">
           <figcaption>Два изменения: новый файл <code>proba.html</code> (<b>U</b>) и изменённый <code>styles.css</code> (<b>M</b>).</figcaption>
@@ -138,7 +171,7 @@
         <p>Команда ничего не печатает. После неё <code>git status --short</code> не показывает <code>styles.css</code>: файл совпадает с последним коммитом.</p>
         <div class="margin-note">
           <b>На полях: отменённую правку не вернуть</b>
-          <p>Discard перезаписывает файл версией из последнего коммита. Правка в историю не попадала, поэтому Git её не хранит, и в корзину она тоже не попадает. Если среди выбрасываемого есть что-то нужное, сначала сделайте коммит или скопируйте текст. Отменить не весь файл, а один участок можно круговой стрелкой в окне сравнения — она рядом со значком <b>Stage Block</b> из главы 2.3.</p>
+          <p>Discard перезаписывает файл версией из последнего коммита. Правка в историю не попадала, поэтому Git её не хранит, и в корзину она тоже не попадает. Если среди выбрасываемого есть что-то нужное, сначала сделайте коммит или скопируйте текст. Один участок файла отменяет круговая стрелка в окне сравнения — она рядом со значком <b>Stage Block</b> из главы 2.3.</p>
         </div>
 
         <h2 id="s3"><span class="sec">§3</span>Шаг 2. Удалить новый файл</h2>
@@ -147,20 +180,48 @@
           <img src="img/04-delete-untracked.png" alt="Окно подтверждения: Are you sure you want to DELETE the following untracked file: 'proba.html'? You can restore this file from the Trash. Кнопки Cancel и Move to Trash">
           <figcaption>«Удалить неотслеживаемый файл proba.html? Его можно будет восстановить из корзины». Кнопка <b>Move to Trash</b> переносит файл в корзину системы.</figcaption>
         </figure>
-        <p>С новым файлом VS Code действует иначе, чем с изменённым: файл не стирается, а переносится в корзину. В терминале удаление неотслеживаемых файлов делает команда <code>git clean -f имя-файла</code>, и она стирает файл сразу, минуя корзину.</p>
+        <p>Новый файл VS Code переносит в корзину системы, и оттуда его можно достать. В терминале новый файл удаляет команда <code>git clean</code>. Она стирает файл сразу, минуя корзину:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>ответ: Removing proba.html</span></figcaption>
+<pre>git clean -f proba.html</pre>
+        </figure>
 
+        <div class="part" role="separator"><span><b>2</b>Последний коммит</span></div>
         <h2 id="s4"><span class="sec">§4</span>Шаг 3. Исправить последний коммит</h2>
-        <p>Добавляем на страницу контактов ссылку на профиль GitHub — строку <code>&lt;p&gt;&lt;a href="https://github.com/MaximBytecamp"&gt;Профиль на GitHub&lt;/a&gt;&lt;/p&gt;</code> в <code>kontakty.html</code>. В <code>styles.css</code> задаём цвет ссылок: блок <code>a { color: #C2410C; }</code>. Отбираем только <code>kontakty.html</code> и коммитим с сообщением «Добавил сылку на GitHub».</p>
+        <p>Добавляем на страницу контактов ссылку на профиль GitHub. В <code>kontakty.html</code> под строкой с почтой появляется новая строка:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>kontakty.html</span><span>было</span></figcaption>
+<pre>  &lt;h1&gt;Контакты&lt;/h1&gt;
+  &lt;p&gt;Почта: student@example.com&lt;/p&gt;
+&lt;/body&gt;</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>kontakty.html</span><span>стало</span></figcaption>
+<pre>  &lt;h1&gt;Контакты&lt;/h1&gt;
+  &lt;p&gt;Почта: student@example.com&lt;/p&gt;
+<mark>  &lt;p&gt;&lt;a href="https://github.com/MaximBytecamp"&gt;Профиль на GitHub&lt;/a&gt;&lt;/p&gt;</mark>
+&lt;/body&gt;</pre>
+          </figure>
+        </div>
+        <p>В конец <code>styles.css</code> добавляем цвет ссылок:</p>
+        <figure class="code">
+          <figcaption><span>styles.css</span><span>в конец файла</span></figcaption>
+<pre>a {
+  color: #C2410C;
+}</pre>
+        </figure>
+        <p>Отбираем плюсом только <code>kontakty.html</code> и коммитим с сообщением «Добавил сылку на GitHub».</p>
         <p>В коммите две ошибки: опечатка в сообщении и забытый <code>styles.css</code>. Коммит последний и на GitHub не отправлен, поэтому его можно исправить. Второй коммит для этого не нужен.</p>
+        <figure class="shot shot--panel">
+          <img src="img/05b-graph-typo.png" alt="Раздел Graph: верхний коммит «Добавил сылку на GitHub» с меткой main">
+          <figcaption>Коммит с опечаткой «сылку» в графе. В него вошёл только <code>kontakty.html</code>.</figcaption>
+        </figure>
         <ol class="steps">
           <li>Отбираем плюсом <code>styles.css</code> — он войдёт в исправленный коммит.</li>
           <li>В поле сообщения пишем правильный текст: «Добавил ссылку на GitHub».</li>
           <li>Нажимаем стрелку справа от кнопки <b>Commit</b> и выбираем <b>Commit (Amend)</b>.</li>
         </ol>
-        <figure class="shot shot--panel">
-          <img src="img/05b-graph-typo.png" alt="Раздел Graph: верхний коммит «Добавил сылку на GitHub» с меткой main">
-          <figcaption>До исправления: в графе верхний коммит с опечаткой «сылку».</figcaption>
-        </figure>
         <figure class="shot shot--wide">
           <img src="img/05-amend-menu.png" alt="Панель: в поле сообщения «Добавил ссылку на GitHub», в Staged Changes styles.css, открыто меню кнопки Commit с пунктами Commit, Commit (Amend), Commit &amp; Push, Commit &amp; Sync">
           <figcaption>Меню кнопки <b>Commit</b>. Пункт <b>Commit (Amend)</b> заменяет последний коммит новым: в него войдут прежние файлы и то, что лежит в <b>Staged Changes</b>, а сообщение возьмётся из поля.</figcaption>
@@ -169,7 +230,7 @@
           <img src="img/06-graph-after-amend.png" alt="Раздел Graph: верхний коммит «Добавил ссылку на GitHub» с меткой main">
           <figcaption>После исправления в графе один коммит с правильным сообщением. Коммита с опечаткой в списке нет.</figcaption>
         </figure>
-        <p>Что произошло, видно по имени коммита:</p>
+        <p>Что произошло, видно по имени коммита. Слово <code>HEAD</code> в команде означает коммит, на котором вы сейчас стоите, — в графе он отмечен меткой <code>main</code>:</p>
         <figure class="code code--out">
           <figcaption><span>терминал</span><span>git show --stat --oneline HEAD</span></figcaption>
 <pre>e4da965 Добавил ссылку на GitHub
@@ -177,14 +238,36 @@
  styles.css    | 4 ++++
  2 files changed, 5 insertions(+)</pre>
         </figure>
-        <p>До исправления коммит назывался <code>609b763</code>, после — <code>e4da965</code>. Amend создаёт новый коммит с исправленным содержимым и ставит его на место старого. Имя коммита вычисляется из содержимого (глава 2.4), поэтому новое содержимое даёт новое имя. В терминале то же делает <code>git commit --amend -m "новое сообщение"</code>.</p>
+        <p>До исправления коммит назывался <code>609b763</code>, после — <code>e4da965</code>. Amend создаёт новый коммит с исправленным содержимым и ставит его на место старого. Имя коммита вычисляется из содержимого (глава 2.4), поэтому новое содержимое даёт новое имя.</p>
+        <p>То же в терминале: отобрать забытый файл и заменить последний коммит.</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit (Amend)</span></figcaption>
+<pre>git add styles.css
+git commit --amend -m "Добавил ссылку на GitHub"</pre>
+        </figure>
         <div class="margin-note margin-note--steel">
           <b>На полях: только до отправки</b>
           <p>Если коммит уже на GitHub, у сервера и у коллег осталась старая версия <code>609b763</code>, а у вас — новая <code>e4da965</code>. Истории разошлись, и обычная отправка не пройдёт. Поэтому правило такое: amend применяют к коммитам, которые ещё не отправлены. В графе это коммиты выше метки <code>origin/main</code>.</p>
         </div>
 
         <h2 id="s5"><span class="sec">§5</span>Шаг 4. Отменить последний коммит целиком</h2>
-        <p>Задаём заголовку цвет — строку <code>color: #C2410C;</code> в блоке <code>h1</code> — и сразу коммитим с сообщением «Покрасил заголовок». Потом становится видно, что цвет заголовка совпал с цветом ссылок и их не различить. Коммит сделан рано: правку нужно доработать.</p>
+        <p>Задаём цвет заголовку. В <code>styles.css</code> в блок <code>h1</code> добавляем строку:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>styles.css</span><span>было</span></figcaption>
+<pre>h1 {
+  font-size: 34px;
+}</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>styles.css</span><span>стало</span></figcaption>
+<pre>h1 {
+  font-size: 34px;
+<mark>  color: #C2410C;</mark>
+}</pre>
+          </figure>
+        </div>
+        <p>Сразу коммитим с сообщением «Покрасил заголовок». Потом становится видно, что цвет заголовка совпал с цветом ссылок и их не различить. Коммит сделан рано: правку нужно доработать.</p>
         <p>Для этого у раздела <b>CHANGES</b> есть меню. Наводим курсор на строку <b>CHANGES</b>, нажимаем «…» справа и выбираем <b>Commit</b> → <b>Undo Last Commit</b>.</p>
         <figure class="shot shot--wide">
           <img src="img/07-undo-menu.png" alt="Меню «…» раздела CHANGES, подменю Commit с пунктами Commit, Commit Staged, Commit All, Undo Last Commit и вариантами Amend">
@@ -194,9 +277,36 @@
           <img src="img/08-after-undo.png" alt="Панель после отмены: в поле сообщения «Покрасил заголовок», в Staged Changes styles.css, в графе верхний коммит «Добавил ссылку на GitHub»">
           <figcaption>Коммита «Покрасил заголовок» в графе больше нет. Его правка вернулась в <b>Staged Changes</b>, а сообщение — в поле ввода.</figcaption>
         </figure>
-        <p>Undo Last Commit ничего не выбрасывает: коммит исчезает из истории, а его содержимое остаётся в индексе. Меняем цвет заголовка на <code>#9A3412</code>, темнее ссылок, и делаем коммит заново с тем же сообщением.</p>
-        <p>В терминале этой кнопке соответствует <code>git reset --soft HEAD~</code>. Запись <code>HEAD~</code> означает «коммит перед текущим». Команда <code>reset</code> подробно разобрана в шаге 6.</p>
+        <p>Undo Last Commit ничего не выбрасывает: коммит исчезает из истории, а его содержимое остаётся в индексе. В терминале этой кнопке соответствует команда <code>reset</code> с ключом <code>--soft</code>. Запись <code>HEAD~</code> означает коммит перед текущим, <code>HEAD~1</code> — то же самое. Подробно <code>reset</code> разобран в шаге 6.</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>ответа нет</span></figcaption>
+<pre>git reset --soft HEAD~</pre>
+        </figure>
+        <p>Меняем цвет заголовка на более тёмный, чтобы он отличался от ссылок:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>styles.css</span><span>было</span></figcaption>
+<pre>h1 {
+  font-size: 34px;
+<mark>  color: #C2410C;</mark>
+}</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>styles.css</span><span>стало</span></figcaption>
+<pre>h1 {
+  font-size: 34px;
+<mark>  color: #9A3412;</mark>
+}</pre>
+          </figure>
+        </div>
+        <p>Отбираем файл плюсом и делаем коммит заново с тем же сообщением — оно уже стоит в поле. То же в терминале:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git add styles.css
+git commit -m "Покрасил заголовок"</pre>
+        </figure>
 
+        <div class="part" role="separator"><span><b>3</b>Старые коммиты</span></div>
         <h2 id="s6"><span class="sec">§6</span>Шаг 5. Отменить старый коммит</h2>
         <p>Отступы страницы решено вернуть к <code>40px</code>. Их увеличил коммит «Увеличил отступы страницы» из главы 2.3. После него сделано ещё семь коммитов, и все они нужны.</p>
         <p>Для такого случая есть <span class="term">revert</span> — новый коммит, который делает обратное указанному: убирает добавленные им строки и возвращает удалённые. Сам старый коммит остаётся в истории.</p>
@@ -205,14 +315,14 @@
           <img src="img/09-graph-menu.png" alt="Контекстное меню коммита «Увеличил отступы страницы» в графе: Open Changes, Checkout, Create Branch, Cherry Pick, Copy Commit Hash и другие пункты">
           <figcaption>Меню коммита в графе. Пункта Revert в нём нет; <b>Copy Commit Hash</b> копирует полное имя коммита для команды.</figcaption>
         </figure>
-        <p>Открываем терминал (<kbd>Ctrl</kbd> + <kbd>`</kbd>) и вставляем имя после команды. Ключ <code>--no-edit</code> оставляет сообщение, которое Git составит сам: без него откроется редактор для сообщения, и если в главе 1.3 вы оставили Vim, выйти из него можно сочетанием <kbd>Esc</kbd>, затем <code>:wq</code> и <kbd>Enter</kbd>.</p>
+        <p>Открываем терминал (<kbd>Ctrl</kbd> + <kbd>`</kbd>) и вставляем имя после команды. Ключ <code>--no-edit</code> оставляет сообщение, которое Git составит сам. Без него откроется редактор для сообщения. Если в главе 1.3 вы оставили редактором Vim, сообщение сохраняется и редактор закрывается так: <kbd>Esc</kbd>, затем <code>:wq</code> и <kbd>Enter</kbd>.</p>
         <figure class="code code--out">
           <figcaption><span>терминал в папке проекта</span><span>git revert --no-edit cdfcb1a</span></figcaption>
 <pre>Auto-merging styles.css
 [main 387d823] Revert "Увеличил отступы страницы"
  1 file changed, 1 insertion(+), 1 deletion(-)</pre>
         </figure>
-        <p>Имя коммита у вас будет своим — то, которое скопировали из графа. Git создал коммит <code>387d823</code>. Что в нём:</p>
+        <p>Имя коммита у вас будет своим — то, которое скопировали из графа. Первая строка ответа сообщает, что Git сам сопоставил правки в <code>styles.css</code>. Вторая — что создан коммит <code>387d823</code>; перед его именем стоит метка <code>main</code>, та же, что в графе. Что в новом коммите:</p>
         <figure class="code code--out">
           <figcaption><span>терминал, фрагмент ответа</span><span>git show HEAD</span></figcaption>
 <pre>commit 387d823cb6c74f85901dac6dceb35840b9a0e686
@@ -242,36 +352,36 @@ Author: Student &lt;student@example.com&gt;
               <p>Revert — такая же обратная запись. Ошибочный коммит остаётся в истории, над ним появляется коммит с обратными изменениями и ссылкой на него в сообщении. Файлы становятся такими, как до ошибки.</p>
             </div>
           </div>
-          <p class="analogy__limit"><b>Где не совпадает</b>Сумму с обратным знаком вычесть можно всегда. Git вычитает строки, и если после ошибочного коммита те же строки кто-то менял ещё раз, revert остановится с конфликтом: Git не сможет сам решить, какой вариант оставить. Конфликты разобраны в главе 3.4.</p>
+          <p class="analogy__limit"><b>Где не совпадает</b>Сумму с обратным знаком вычесть можно всегда. Git вычитает строки, и если после ошибочного коммита те же строки кто-то менял ещё раз, revert остановится с конфликтом: Git не сможет сам решить, какой вариант оставить. Конфликты разберём в главе 3.4.</p>
         </div>
         <p>Revert подходит и для коммитов, которые уже на GitHub: он только добавляет коммит, прежние остаются на месте. Поэтому отправленные коммиты отменяют через revert.</p>
 
-        <h2 id="s7"><span class="sec">§7</span>Шаг 6. Перенести ветку назад</h2>
-        <p>Команда <span class="term">reset</span> переносит ветку на другой коммит. Коммиты, которые были выше, пропадают из истории ветки. Что станет с их правками, зависит от ключа:</p>
+        <h2 id="s7"><span class="sec">§7</span>Шаг 6. Вернуться к старому коммиту: reset</h2>
+        <p>Команда <span class="term">reset</span> делает указанный коммит последним. Коммиты новее него пропадают из истории, метка <code>main</code> в графе встаёт на указанный коммит. Что станет с правками из убранных коммитов, зависит от ключа:</p>
         <div class="table-scroll">
           <table>
             <thead><tr><th>Команда</th><th>Правки из убранных коммитов</th><th>Что показывает <code>git status</code></th></tr></thead>
             <tbody>
               <tr><td><code>git reset --soft HEAD~</code></td><td>Остаются в индексе, готовые к новому коммиту</td><td><code>M&nbsp;&nbsp;styles.css</code> — в Staged Changes</td></tr>
               <tr><td><code>git reset HEAD~</code><br>(то же, что <code>--mixed</code>)</td><td>Остаются в файлах, индекс пуст</td><td><code>&nbsp;M styles.css</code> — в Changes</td></tr>
-              <tr><td><code>git reset --hard HEAD~</code></td><td>Стираются: файлы становятся такими, как в коммите, куда перенесли ветку</td><td>Ничего: изменений нет</td></tr>
+              <tr><td><code>git reset --hard HEAD~</code></td><td>Стираются: файлы становятся такими, как в указанном коммите</td><td>Ничего: изменений нет</td></tr>
             </tbody>
           </table>
         </div>
-        <p>Все три строки проверены на копии проекта: коммит revert убирался каждым из трёх способов. В первых двух случаях в файле осталось <code>padding: 40px</code>, в третьем вернулось <code>60px</code>.</p>
-        <p>Проверим вариант <code>--hard</code> на коммите revert. Команда стирает коммит вместе с его правкой:</p>
+        <p>Разница видна на коммите revert из прошлого шага. После <code>--soft</code> и <code>--mixed</code> в <code>styles.css</code> остаётся <code>padding: 40px</code>: правка коммита сохранилась, хотя сам коммит убран. После <code>--hard</code> возвращается <code>60px</code>.</p>
+        <p>Выполним <code>--hard</code>. Команда стирает коммит revert вместе с его правкой:</p>
         <figure class="code code--out">
           <figcaption><span>терминал</span><span>git reset --hard HEAD~1</span></figcaption>
 <pre>HEAD is now at 38f8c7b Покрасил заголовок</pre>
         </figure>
-        <p>Коммита <code>387d823</code> нет ни в графе, ни в <code>git log</code>, в <code>styles.css</code> снова <code>padding: 60px</code>. Незакоммиченные правки, если они были, тоже стёрты, и их уже не вернуть. Коммит вернуть можно — это следующий шаг.</p>
+        <p>Коммита <code>387d823</code> нет ни в графе, ни в <code>git log</code>, в <code>styles.css</code> снова <code>padding: 60px</code>. Незакоммиченные правки, если они были, тоже стёрты, и их уже не вернуть. Сам коммит вернуть можно, это следующий шаг.</p>
         <div class="margin-note">
           <b>На полях: reset и отправленные коммиты</b>
-          <p>Reset убирает коммиты из истории ветки, как amend заменяет последний. Для коммитов, которые уже на GitHub, действует то же правило: история у вас и на сервере разойдётся. Отправленные коммиты отменяют через revert.</p>
+          <p>Reset убирает коммиты из истории, как amend заменяет последний. Для коммитов, которые уже на GitHub, действует то же правило: история у вас и на сервере разойдётся. Отправленные коммиты отменяют через revert.</p>
         </div>
 
         <h2 id="s8"><span class="sec">§8</span>Шаг 7. Вернуть стёртый коммит</h2>
-        <p>Git ведёт журнал перемещений ветки: каждый коммит, amend, reset и revert записывается туда с именем коммита, на котором ветка оказалась. Журнал называется <span class="term">reflog</span> и хранится только на вашем компьютере.</p>
+        <p>Git ведёт журнал действий с историей: каждый коммит, amend, reset и revert записывается туда вместе с именем коммита, который после этого действия стал текущим. Журнал называется <span class="term">reflog</span> и хранится только на вашем компьютере.</p>
         <figure class="code code--out">
           <figcaption><span>терминал</span><span>git reflog -7</span></figcaption>
 <pre>38f8c7b HEAD@{0}: reset: moving to HEAD~1
@@ -282,13 +392,13 @@ e4da965 HEAD@{3}: reset: moving to HEAD~
 e4da965 HEAD@{5}: commit (amend): Добавил ссылку на GitHub
 609b763 HEAD@{6}: commit: Добавил сылку на GitHub</pre>
         </figure>
-        <p>Журнал читается сверху вниз, от последнего действия к первому. В нём все шаги этой главы:</p>
+        <p>Журнал читается сверху вниз, от последнего действия к первому. Запись <code>HEAD@{1}</code> означает «состояние на одно действие раньше», <code>HEAD@{2}</code> — на два, и так далее. В журнале все шаги этой главы:</p>
         <ul>
           <li><code>HEAD@{6}</code> и <code>HEAD@{5}</code> — коммит с опечаткой <code>609b763</code> и его исправление через amend;</li>
           <li><code>HEAD@{4}</code> и <code>HEAD@{3}</code> — поспешный коммит <code>1479d61</code> и Undo Last Commit. VS Code записал его как <code>reset: moving to HEAD~</code>;</li>
           <li><code>HEAD@{1}</code> — revert, <code>HEAD@{0}</code> — только что сделанный reset.</li>
         </ul>
-        <p>Стёртый коммит <code>387d823</code> стоит в строке <code>HEAD@{1}</code>. Переносим ветку обратно на него:</p>
+        <p>Стёртый коммит <code>387d823</code> стоит в строке <code>HEAD@{1}</code>. Возвращаемся к нему той же командой <code>reset --hard</code>:</p>
         <figure class="code code--out">
           <figcaption><span>терминал</span><span>git reset --hard 'HEAD@{1}'</span></figcaption>
 <pre>HEAD is now at 387d823 Revert "Увеличил отступы страницы"</pre>
@@ -296,6 +406,7 @@ e4da965 HEAD@{5}: commit (amend): Добавил ссылку на GitHub
         <p>Коммит вернулся в граф, в <code>styles.css</code> снова <code>40px</code>. Вместо <code>HEAD@{1}</code> можно написать имя коммита из журнала: <code>git reset --hard 387d823</code>. Кавычки вокруг <code>HEAD@{1}</code> нужны в PowerShell: без них фигурные скобки там означают другое. В терминале macOS и Linux команда работает и без кавычек.</p>
         <p>Так же достаются старые версии после amend: <code>git show 609b763</code> покажет коммит с опечаткой, хотя в истории его уже нет. Git хранит такие коммиты не меньше тридцати дней и только потом удаляет.</p>
 
+        <div class="part" role="separator"><span><b>4</b>Справка</span></div>
         <h2 id="s9"><span class="sec">§9</span>Справка: какой способ выбрать</h2>
         <div class="table-scroll">
           <table>
@@ -320,6 +431,7 @@ e4da965 HEAD@{5}: commit (amend): Добавил ссылку на GitHub
           <div class="checklist__item"><span><b>Нет ли в папке нужного незакоммиченного</b>Discard и <code>reset --hard</code> стирают его без возможности вернуть. Если сомневаетесь, сначала сделайте коммит.</span></div>
         </div>
 
+        <div class="part" role="separator"><span><b>5</b>Проверка себя</span></div>
         <h2 id="s10"><span class="sec">§10</span>Частые вопросы</h2>
         <div class="myths">
           <div class="myth">
@@ -340,7 +452,7 @@ e4da965 HEAD@{5}: commit (amend): Добавил ссылку на GitHub
           </div>
           <div class="myth">
             <div class="myth__no"><b>Обычно думают</b>Reset и revert делают одно и то же.</div>
-            <div class="myth__yes"><b>На самом деле</b>Reset переносит ветку назад, и коммиты выше пропадают из её истории. Revert оставляет историю как есть и добавляет коммит. Для отправленных коммитов подходит только revert.</div>
+            <div class="myth__yes"><b>На самом деле</b>Reset делает указанный коммит последним, и коммиты новее него пропадают из истории. Revert оставляет историю как есть и добавляет коммит. Для отправленных коммитов подходит только revert.</div>
           </div>
         </div>
 
@@ -359,11 +471,11 @@ e4da965 HEAD@{5}: commit (amend): Добавил ссылку на GitHub
         </details>
         <details>
           <summary>Чем <code>git reset --soft HEAD~</code> отличается от <code>git reset --hard HEAD~</code>?</summary>
-          <p>Оба убирают последний коммит из истории ветки. С <code>--soft</code> его правки остаются в индексе, готовые к новому коммиту. С <code>--hard</code> они стираются, а файлы становятся такими, как в предыдущем коммите.</p>
+          <p>Оба убирают последний коммит из истории. С <code>--soft</code> его правки остаются в индексе, готовые к новому коммиту. С <code>--hard</code> они стираются, а файлы становятся такими, как в предыдущем коммите.</p>
         </details>
         <details>
           <summary>После <code>git reset --hard</code> пропал нужный коммит. Как его вернуть?</summary>
-          <p>Выполнить <code>git reflog</code>, найти строку с этим коммитом и перенести ветку на него: <code>git reset --hard имя-коммита</code> или <code>git reset --hard 'HEAD@{N}'</code>.</p>
+          <p>Выполнить <code>git reflog</code>, найти строку с этим коммитом и вернуться к нему: <code>git reset --hard имя-коммита</code> или <code>git reset --hard 'HEAD@{N}'</code>.</p>
         </details>
         <details>
           <summary>Почему после amend у коммита другое имя?</summary>
@@ -408,7 +520,7 @@ e4da965 HEAD@{5}: commit (amend): Добавил ссылку на GitHub
         </div>
 
         <h3>Итог главы</h3>
-        <p>Способ отмены выбирают по тому, где находится правка. Правку в файле возвращает к последнему коммиту Discard Changes, или <code>git restore</code>; она не хранится нигде и пропадает насовсем. Новый файл VS Code переносит в корзину. Последний коммит исправляет Commit (Amend) — он создаёт новый коммит на месте старого, с другим именем, — а Undo Last Commit убирает коммит и возвращает его правки в индекс. Старый коммит отменяет <code>git revert</code>: он добавляет коммит с обратными изменениями и ничего не удаляет из истории, поэтому подходит и для коммитов на GitHub. Amend, Undo Last Commit и <code>git reset</code> переписывают историю, их применяют только к неотправленным коммитам. <code>reset --hard</code> стирает и коммиты, и незакоммиченные правки. Коммиты после него можно найти в журнале <code>git reflog</code> и вернуть. На этом модуль 2 закончен. Следующий модуль посвящён веткам: как вести несколько линий работы в одном проекте и собирать их вместе.</p>
+        <p>Способ отмены выбирают по тому, где находится правка. Discard Changes, в терминале <code>git restore</code>, возвращает файл к последнему коммиту, и выброшенная правка пропадает насовсем. Новый файл VS Code переносит в корзину. Последний коммит исправляет Commit (Amend) — он создаёт новый коммит на месте старого, с другим именем, — а Undo Last Commit убирает коммит и возвращает его правки в индекс. Старый коммит отменяет <code>git revert</code>: он добавляет коммит с обратными изменениями и ничего не удаляет из истории, поэтому подходит и для коммитов на GitHub. Amend, Undo Last Commit и <code>git reset</code> переписывают историю, их применяют только к неотправленным коммитам. <code>reset --hard</code> стирает и коммиты, и незакоммиченные правки. Коммиты после него можно найти в журнале <code>git reflog</code> и вернуть. На этом модуль 2 закончен. Следующий модуль посвящён веткам: как вести несколько линий работы в одном проекте и собирать их вместе.</p>
 
         <div class="sources">
           <b>Откуда взяты факты</b>
