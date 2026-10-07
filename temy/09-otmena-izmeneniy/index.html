@@ -377,17 +377,7 @@ Author: Student &lt;student@example.com&gt;
         <h2 id="s7"><span class="sec">§7</span>Шаг 6. Три режима reset на пробном коммите</h2>
         <p>Revert исправляет ошибку новым коммитом. Команда <code>reset</code> действует иначе: она убирает коммиты из истории. Это нужно, когда коммит сделан по ошибке и на GitHub ещё не отправлен.</p>
         <p><span class="term">Reset</span> возвращает историю к указанному коммиту. Все коммиты после него исчезают из графа.</p>
-        <p>Правка из коммита записана в трёх местах: в истории, в индексе и в файле в папке проекта. Сразу после коммита все три совпадают. Reset с любым ключом убирает коммит из истории. Ключ <code>--soft</code>, <code>--mixed</code> или <code>--hard</code> определяет, вернутся ли к предыдущему коммиту ещё и индекс с файлом:</p>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>Ключ</th><th>История</th><th>Индекс</th><th>Файл в папке</th><th>Где правка после команды</th></tr></thead>
-            <tbody>
-              <tr><td><code>--soft</code></td><td>Коммит убран</td><td>Не меняется</td><td>Не меняется</td><td>В индексе и в файле</td></tr>
-              <tr><td><code>--mixed</code><br>или без ключа</td><td>Коммит убран</td><td>Возвращается к предыдущему коммиту</td><td>Не меняется</td><td>Только в файле</td></tr>
-              <tr><td><code>--hard</code></td><td>Коммит убран</td><td>Возвращается к предыдущему коммиту</td><td>Возвращается к предыдущему коммиту</td><td>Нигде</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <p>Правка из коммита записана в трёх местах: в истории, в индексе и в файле. Reset с любым ключом убирает коммит из истории. Ключ <code>--soft</code>, <code>--mixed</code> или <code>--hard</code> определяет, вернутся ли к предыдущему коммиту индекс и файл:</p>
         <figure class="scheme">
           <svg viewBox="0 0 700 318" role="img" aria-label="Схема: история, индекс и файл после коммита и после reset с ключами soft, mixed и hard. Soft возвращает только историю, mixed — историю и индекс, hard — историю, индекс и файл">
             <text x="253" y="22" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="13" fill="var(--ink)">ИСТОРИЯ</text>
@@ -440,7 +430,6 @@ Author: Student &lt;student@example.com&gt;
           </svg>
           <figcaption>Розовая клетка — правка <code>40px</code> на месте. Голубая клетка — место вернулось к коммиту revert. С каждым ключом голубых клеток на одну больше.</figcaption>
         </figure>
-        <p>Каждый следующий ключ возвращает на одно место больше: <code>--soft</code> — только историю, <code>--mixed</code> — историю и индекс, <code>--hard</code> — историю, индекс и файл.</p>
         <div class="analogy">
           <p class="analogy__head">Ассоциация: заклеенная коробка из главы 2.3</p>
           <div class="analogy__pair">
@@ -455,8 +444,7 @@ Author: Student &lt;student@example.com&gt;
           </div>
           <p class="analogy__limit"><b>Где не совпадает</b>Выброшенную коробку не вернуть. Коммит после <code>--hard</code> Git ещё хранит, и его можно достать по журналу — это шаг 7. Незакоммиченные правки после <code>--hard</code> пропадают насовсем.</p>
         </div>
-        <p>Чтобы увидеть разницу между режимами, сделаем пробный коммит и отменим его тремя способами по очереди. После каждой отмены проверяем три места: граф, индекс и файл. Индекс показывает команда <code>git diff --staged --stat</code>: она печатает файлы, которые отличаются в индексе от последнего коммита. Файл показывает <code>git diff --stat</code>: она печатает файлы, которые отличаются в папке от индекса. Пустой ответ означает, что отличий нет.</p>
-        <p>В <code>styles.css</code> увеличиваем размер заголовка:</p>
+        <p>Проверим это на пробном коммите: сделаем его и отменим тремя способами по очереди. На каждом кадре слева панель Source Control, справа открытый файл <code>styles.css</code>. В <code>styles.css</code> увеличиваем размер заголовка:</p>
         <div class="code-pair">
           <figure class="code code--was">
             <figcaption><span>styles.css</span><span>было</span></figcaption>
@@ -479,9 +467,9 @@ Author: Student &lt;student@example.com&gt;
 <pre>git add styles.css
 git commit -m "Проба reset"</pre>
         </figure>
-        <figure class="shot shot--panel">
-          <img src="img/11-probe.png" alt="Панель Source Control: кнопка Sync Changes 11↑, в графе сверху коммит «Проба reset» с меткой main">
-          <figcaption>Пробный коммит сверху графа, над коммитом revert из шага 5. На кнопке <code>11↑</code>: коммитов, не отправленных на GitHub, стало на один больше.</figcaption>
+        <figure class="shot">
+          <img src="img/11-probe-window.png" alt="Окно VS Code: в графе сверху коммит «Проба reset», список изменений пуст, в файле styles.css строка font-size: 40px">
+          <figcaption>До reset. В графе сверху коммит «Проба reset», на кнопке <code>11↑</code>. Список изменений пуст. В файле строка 10: <code>font-size: 40px</code>.</figcaption>
         </figure>
         <h3>Режим --soft: правка остаётся в индексе и в файле</h3>
         <p>Отменяем пробный коммит с ключом <code>--soft</code>. Запись <code>HEAD~</code> означает коммит перед текущим — здесь это коммит revert:</p>
@@ -489,36 +477,12 @@ git commit -m "Проба reset"</pre>
           <figcaption><span>терминал в папке проекта</span><span>ответа нет</span></figcaption>
 <pre>git reset --soft HEAD~</pre>
         </figure>
-        <figure class="shot shot--panel">
-          <img src="img/12-reset-soft.png" alt="Панель: в Staged Changes styles.css с буквой M, в графе сверху коммит Revert с меткой main">
-          <figcaption>Коммита «Проба reset» в графе нет, сверху снова revert. Правка из пробного коммита лежит в <b>Staged Changes</b> и готова к новому коммиту.</figcaption>
+        <figure class="shot">
+          <img src="img/12-soft-window.png" alt="Окно VS Code после reset --soft: в Staged Changes файл styles.css с буквой M, в графе сверху коммит Revert, в файле строка font-size: 40px">
+          <figcaption>После <code>--soft</code>. Коммита «Проба reset» в графе нет, сверху revert. Файл стоит в <b>Staged Changes</b>. В строке 10 по-прежнему <code>40px</code>.</figcaption>
         </figure>
-        <figure class="code code--out">
-          <figcaption><span>терминал</span><span>команда и ответ</span></figcaption>
-<pre><span class="cmd">git status --short</span>
-M  styles.css</pre>
-        </figure>
-        <p>Буква <b>M</b> в первой колонке — изменение в индексе. Проверяем индекс и файл по отдельности:</p>
-        <figure class="code code--out">
-          <figcaption><span>терминал</span><span>команды и ответ</span></figcaption>
-<pre><span class="cmd">git diff --staged --stat</span>
- styles.css | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-<span class="cmd">git diff --stat</span></pre>
-        </figure>
-        <p>Первая команда показала <code>styles.css</code>: в индексе лежит правка, которой нет в последнем коммите. Вторая ничего не напечатала: файл в папке совпадает с индексом.</p>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>Где</th><th>Что там после <code>git reset --soft HEAD~</code></th></tr></thead>
-            <tbody>
-              <tr><td>История</td><td>Коммита «Проба reset» нет, последний коммит — revert</td></tr>
-              <tr><td>Индекс</td><td><code>font-size: 40px</code> — правка отобрана, файл стоит в Staged Changes</td></tr>
-              <tr><td>Файл <code>styles.css</code></td><td><code>font-size: 40px</code> — файл не менялся</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>Убран только коммит. Правка осталась и в индексе, и в файле, поэтому для нового коммита достаточно нажать Commit. Кнопка Undo Last Commit из шага 4 делает то же самое.</p>
-        <p>Возвращаем пробный коммит, чтобы попробовать следующий режим: пишем в поле сообщение «Проба reset» и нажимаем <b>✓ Commit</b>. То же в терминале:</p>
+        <p>Убран только коммит. Правка отобрана в индекс, поэтому для нового коммита достаточно нажать Commit. Кнопка Undo Last Commit из шага 4 выполняет эту же команду.</p>
+        <p>Возвращаем пробный коммит: пишем в поле сообщение «Проба reset» и нажимаем <b>✓ Commit</b>. То же в терминале:</p>
         <figure class="code">
           <figcaption><span>терминал в папке проекта</span><span>то же, что Commit</span></figcaption>
 <pre>git commit -m "Проба reset"</pre>
@@ -531,93 +495,36 @@ M  styles.css</pre>
 Unstaged changes after reset:
 M	styles.css</pre>
         </figure>
-        <figure class="shot shot--panel">
-          <img src="img/13-reset-mixed.png" alt="Панель: раздела Staged Changes нет, в Changes styles.css с буквой M, в графе сверху коммит Revert">
-          <figcaption>Коммит снова убран. Правка теперь в <b>Changes</b>: она есть в файле, но в индекс не отобрана.</figcaption>
+        <figure class="shot">
+          <img src="img/13-mixed-window.png" alt="Окно VS Code после reset без ключа: в Changes файл styles.css с буквой M, раздела Staged Changes нет, в файле строка font-size: 40px">
+          <figcaption>После <code>--mixed</code>. Коммита нет, файл стоит в <b>Changes</b>, раздела Staged Changes нет. В строке 10 по-прежнему <code>40px</code>.</figcaption>
         </figure>
-        <figure class="code code--out">
-          <figcaption><span>терминал</span><span>команда и ответ</span></figcaption>
-<pre><span class="cmd">git status --short</span>
- M styles.css</pre>
-        </figure>
-        <p>Буква <b>M</b> сдвинулась во вторую колонку — изменение есть в папке, в индекс оно не отобрано. Те же две проверки:</p>
-        <figure class="code code--out">
-          <figcaption><span>терминал</span><span>команды и ответ</span></figcaption>
-<pre><span class="cmd">git diff --staged --stat</span>
-<span class="cmd">git diff --stat</span>
- styles.css | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)</pre>
-        </figure>
-        <p>Ответы поменялись местами. Первая команда ничего не напечатала: индекс совпадает с последним коммитом. Вторая показала <code>styles.css</code>: файл в папке отличается от индекса.</p>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>Где</th><th>Что там после <code>git reset HEAD~</code></th></tr></thead>
-            <tbody>
-              <tr><td>История</td><td>Коммита «Проба reset» нет, последний коммит — revert</td></tr>
-              <tr><td>Индекс</td><td><code>font-size: 34px</code> — как в коммите revert, раздела Staged Changes нет</td></tr>
-              <tr><td>Файл <code>styles.css</code></td><td><code>font-size: 40px</code> — файл не менялся, стоит в Changes</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>Убраны коммит и отбор в индекс. Правка осталась только в файле, поэтому для нового коммита её нужно отобрать заново. Возвращаем пробный коммит ещё раз: плюс у файла, сообщение «Проба reset», <b>✓ Commit</b>.</p>
+        <p>Убраны коммит и отбор в индекс. Файл не менялся, но для нового коммита его нужно отобрать заново. Возвращаем пробный коммит ещё раз: плюс у файла, сообщение «Проба reset», <b>✓ Commit</b>.</p>
         <figure class="code">
           <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
 <pre>git add styles.css
 git commit -m "Проба reset"</pre>
         </figure>
         <h3>Режим --hard: правка стёрта в индексе и в файле</h3>
-        <p>Последний режим стирает и коммит, и его правки:</p>
+        <p>Последний режим стирает и коммит, и его правку:</p>
         <figure class="code code--out">
           <figcaption><span>терминал</span><span>команда и ответ</span></figcaption>
 <pre><span class="cmd">git reset --hard HEAD~</span>
 HEAD is now at 9f5312d Revert "Увеличил отступы страницы"</pre>
         </figure>
-        <figure class="shot shot--panel">
-          <img src="img/14-reset-hard.png" alt="Панель: списков изменений нет, кнопка Sync Changes 10↑, в графе сверху коммит Revert">
-          <figcaption>Список изменений пуст, на кнопке снова <code>10↑</code>. Пробного коммита нет, и его правки тоже нет.</figcaption>
+        <figure class="shot">
+          <img src="img/14-hard-window.png" alt="Окно VS Code после reset --hard: список изменений пуст, на кнопке Sync Changes 10, в файле строка font-size: 34px">
+          <figcaption>После <code>--hard</code>. Коммита нет, список изменений пуст, на кнопке снова <code>10↑</code>. В строке 10 теперь <code>34px</code>: Git перезаписал файл.</figcaption>
         </figure>
-        <p>Ответ команды называет коммит, который стал последним. Те же проверки:</p>
-        <figure class="code code--out">
-          <figcaption><span>терминал</span><span>команды, ответа нет</span></figcaption>
-<pre><span class="cmd">git status --short</span>
-<span class="cmd">git diff --staged --stat</span>
-<span class="cmd">git diff --stat</span></pre>
-        </figure>
-        <p>Все три команды ничего не напечатали: индекс и файл совпадают с последним коммитом.</p>
+        <p>Убраны коммит, отбор в индекс и сама правка в файле. Строка <code>font-size: 40px</code> осталась только в стёртом коммите. Если бы в папке лежали другие незакоммиченные правки, они бы тоже стёрлись, и вернуть их нельзя.</p>
+        <p>Итог трёх опытов:</p>
         <div class="table-scroll">
           <table>
-            <thead><tr><th>Где</th><th>Что там после <code>git reset --hard HEAD~</code></th></tr></thead>
+            <thead><tr><th>Команда</th><th>Панель Source Control</th><th>Файл <code>styles.css</code></th><th>Как сделать коммит заново</th></tr></thead>
             <tbody>
-              <tr><td>История</td><td>Коммита «Проба reset» нет, последний коммит — revert</td></tr>
-              <tr><td>Индекс</td><td><code>font-size: 34px</code> — как в коммите revert</td></tr>
-              <tr><td>Файл <code>styles.css</code></td><td><code>font-size: 34px</code> — Git перезаписал файл версией из коммита revert</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>Убраны коммит, отбор в индекс и сама правка в файле. Строки <code>font-size: 40px</code> в проекте больше нет, она осталась только в стёртом коммите. Если бы в папке лежали другие незакоммиченные правки, они бы тоже стёрлись, и их вернуть уже нельзя.</p>
-        <p>Три кадра панели рядом. Граф во всех трёх одинаковый: сверху коммит revert. Различается раздел над графом:</p>
-        <div class="shot-row">
-          <figure class="shot">
-            <img src="img/12-reset-soft.png" alt="Панель после reset --soft: раздел Staged Changes с файлом styles.css">
-            <figcaption><b>--soft.</b> Файл в <b>Staged Changes</b>: правка в индексе и в файле.</figcaption>
-          </figure>
-          <figure class="shot">
-            <img src="img/13-reset-mixed.png" alt="Панель после reset без ключа: раздел Changes с файлом styles.css">
-            <figcaption><b>--mixed.</b> Файл в <b>Changes</b>: правка только в файле.</figcaption>
-          </figure>
-          <figure class="shot">
-            <img src="img/14-reset-hard.png" alt="Панель после reset --hard: список изменений пуст">
-            <figcaption><b>--hard.</b> Список пуст: правки нет.</figcaption>
-          </figure>
-        </div>
-        <p>Итог трёх опытов. Коммит «Проба reset» убран из истории во всех трёх случаях, различается состояние индекса и файла:</p>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>Команда</th><th>Индекс</th><th>Файл <code>styles.css</code></th><th><code style="white-space:nowrap">git status --short</code></th><th>Как сделать коммит заново</th></tr></thead>
-            <tbody>
-              <tr><td><code style="white-space:nowrap">git reset --soft HEAD~</code></td><td><code>40px</code>, правка отобрана</td><td><code>40px</code></td><td><code>M&nbsp;&nbsp;styles.css</code></td><td>Commit</td></tr>
-              <tr><td><code style="white-space:nowrap">git reset HEAD~</code><br>(то же, что <code>--mixed</code>)</td><td><code>34px</code>, правка не отобрана</td><td><code>40px</code></td><td><code>&nbsp;M styles.css</code></td><td>Плюс у файла и Commit</td></tr>
-              <tr><td><code style="white-space:nowrap">git reset --hard HEAD~</code></td><td><code>34px</code></td><td><code>34px</code></td><td>Ответа нет</td><td>Правки нет, её вносят заново или возвращают коммит по журналу (шаг 7)</td></tr>
+              <tr><td><code style="white-space:nowrap">git reset --soft HEAD~</code></td><td>Файл в Staged Changes</td><td><code>40px</code></td><td>Commit</td></tr>
+              <tr><td><code style="white-space:nowrap">git reset HEAD~</code><br>(то же, что <code>--mixed</code>)</td><td>Файл в Changes</td><td><code>40px</code></td><td>Плюс у файла и Commit</td></tr>
+              <tr><td><code style="white-space:nowrap">git reset --hard HEAD~</code></td><td>Список пуст</td><td><code>34px</code></td><td>Правки нет: её вносят заново или возвращают коммит по журналу (шаг 7)</td></tr>
             </tbody>
           </table>
         </div>
@@ -664,17 +571,7 @@ HEAD is now at 837cf71 Проба reset</pre>
           <img src="img/15-restored.png" alt="Панель: кнопка Sync Changes 11↑, в графе сверху снова коммит «Проба reset»">
           <figcaption>Коммит «Проба reset» вернулся в граф, на кнопке снова <code>11↑</code>.</figcaption>
         </figure>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>Где</th><th>Что там после <code>git reset --hard 'HEAD@{1}'</code></th></tr></thead>
-            <tbody>
-              <tr><td>История</td><td>Коммит «Проба reset» <code>837cf71</code> снова последний, под ним revert</td></tr>
-              <tr><td>Индекс</td><td><code>font-size: 40px</code> — как в коммите «Проба reset»</td></tr>
-              <tr><td>Файл <code>styles.css</code></td><td><code>font-size: 40px</code> — Git перезаписал файл версией из этого коммита</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>Ключ <code>--hard</code> здесь сработал так же, как в шаге 6: индекс и файл приведены к коммиту, который стал последним. Поэтому правка <code>40px</code> вернулась в файл, а список изменений пуст.</p>
+        <p>Ключ <code>--hard</code> здесь сработал так же, как в шаге 6: файл приведён к коммиту, который стал последним. В <code>styles.css</code> снова <code>40px</code>, список изменений пуст.</p>
         <p>Вместо <code>HEAD@{1}</code> можно написать имя коммита из журнала: <code>git reset --hard 837cf71</code>. Кавычки вокруг <code>HEAD@{1}</code> нужны в PowerShell: без них фигурные скобки там означают другое. В терминале macOS и Linux команда работает и без кавычек.</p>
         <p>Так же достаются старые версии после amend: <code>git show 171a006</code> покажет коммит с опечаткой, хотя в истории его уже нет. Git хранит такие коммиты не меньше тридцати дней и только потом удаляет.</p>
         <p>Пробный коммит был нужен только для опыта. Убираем его той же командой, что в шаге 6:</p>
