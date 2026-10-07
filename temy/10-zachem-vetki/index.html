@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>3.1 Ветки: зачем нужны и как устроены · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <script>
+    try {
+      var saved = localStorage.getItem('git-book-os');
+      if (!saved) {
+        var p = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+        saved = /win/i.test(p) ? 'win' : (/mac|iphone|ipad/i.test(p) ? 'mac' : 'linux');
+      }
+      document.documentElement.dataset.os = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Модуль 3 · Ветки</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 3 · ветки</p>
+          <p class="running__folio">Глава 3.1</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">3.1</span>
+          <h1>Ветки:<br>зачем нужны и как устроены</h1>
+          <p class="lead">В главе разобрано, что такое ветка в Git, для чего ветки заводят и как Git их хранит. На проекте <code>sait-vizitka</code> показано, где в VS Code видно имя ветки, в каком файле оно записано и как ветка сдвигается при коммите. Создание веток и переключение между ними разобраны в главе 3.2.</p>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Ветки</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Что получится</dt><dd>Понимание, что такое ветка, HEAD и чем <code>main</code> отличается от <code>origin/main</code></dd></div>
+          <div><dt>Сколько занимает</dt><dd>Около двадцати минут за компьютером</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>Порядок действий</b>
+          <ol>
+            <li><a href="#s1">Зачем нужны ветки</a></li>
+            <li><a href="#s2">Шаг 1. Найти имя ветки в VS Code</a></li>
+            <li><a href="#s3">Шаг 2. Открыть список веток</a></li>
+            <li><a href="#s4">Шаг 3. Найти файл ветки</a></li>
+            <li><a href="#s5">Шаг 4. Прочитать запись HEAD</a></li>
+            <li><a href="#s6">Шаг 5. Сделать коммит и проверить ветку</a></li>
+            <li><a href="#s7">Шаг 6. Сравнить main и origin/main</a></li>
+            <li><a href="#s8">Справка: что добавляет вторая ветка</a></li>
+            <li><a href="#s9">Справка: имена веток</a></li>
+            <li><a href="#s10">Частые вопросы</a></li>
+            <li><a href="#s11">Проверьте себя</a></li>
+            <li><a href="#s12">Шпаргалка по главе</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Зачем нужны ветки</h2>
+        <p>В модуле 2 история проекта была одной цепочкой: каждый новый коммит вставал после предыдущего. Такой порядок подходит, пока в проекте идёт одна работа. Когда работ две, их коммиты в одной цепочке перемешиваются, и незаконченная работа попадает в проект вместе с готовой.</p>
+        <p><span class="term">Ветка</span> — отдельная линия коммитов внутри одного репозитория. Коммиты одной ветки не попадают в другую, пока ветки не объединят. Папка проекта при этом одна: Git показывает в ней файлы той ветки, на которой вы стоите.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 215" role="img" aria-label="Схема: основная линия из четырёх коммитов; от третьего коммита отходит вторая ветка с двумя коммитами новой страницы">
+            <path d="M60 150 L640 150" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <path d="M260 150 C300 150 300 60 340 60 H540" stroke="var(--fire-deep)" stroke-width="3" fill="none"/>
+            <circle cx="60" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="60" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">коммит 1</text>
+            <circle cx="160" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="160" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">коммит 2</text>
+            <circle cx="260" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="260" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">коммит 3</text>
+            <circle cx="640" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="640" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">срочная правка</text>
+            <circle cx="400" cy="60" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <circle cx="540" cy="60" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="470" y="32" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--fire-deep)">коммиты новой страницы</text>
+            <text x="20" y="122" font-family="Roboto Mono, monospace" font-size="12" font-weight="700" fill="var(--ink)">основная линия</text>
+            <text x="340" y="100" font-family="Roboto Mono, monospace" font-size="12" font-weight="700" fill="var(--fire-deep)">вторая ветка</text>
+          </svg>
+          <figcaption>От третьего коммита работа идёт двумя линиями. Коммиты новой страницы лежат во второй ветке и в основную линию не входят, пока ветки не объединят.</figcaption>
+        </figure>
+        <div class="why">
+          <p class="why__head">Зачем это нужно в работе</p>
+          <ul class="why__list">
+            <li><b>Новая страница и работающий сайт.</b> Форму обратной связи делают несколько дней. Её коммиты лежат в отдельной ветке, а основная линия остаётся в рабочем состоянии.</li>
+            <li><b>Срочное исправление.</b> Во время работы над формой на сайте нашли опечатку. Её исправляют в основной линии, незаконченная форма в это исправление не попадает.</li>
+            <li><b>Пробный вариант.</b> Новое оформление пробуют в отдельной ветке. Если вариант не подошёл, ветку удаляют, основная линия не меняется.</li>
+            <li><b>Несколько участников.</b> Каждый ведёт свою задачу в своей ветке. Готовую задачу проверяют и объединяют с основной линией.</li>
+          </ul>
+        </div>
+        <p>В проекте <code>sait-vizitka</code> ветка уже есть. Она называется <code>main</code>, и все коммиты модуля 2 сделаны в ней. В этой главе новых веток не создаём: на ветке <code>main</code> разбирается, как ветка устроена.</p>
+        <p>В главе используется проект <code>sait-vizitka</code> в том виде, в каком он остался после главы 2.6: четырнадцать коммитов, десять из них на GitHub не отправлены. Имена коммитов, сделанных вами, будут отличаться от показанных.</p>
+
+        <div class="part" role="separator"><span><b>1</b>Ветка в окне VS Code</span></div>
+        <h2 id="s2"><span class="sec">§2</span>Шаг 1. Найти имя ветки в VS Code</h2>
+        <p>Имя ветки, на которой вы стоите, VS Code показывает в двух местах.</p>
+        <p>Открываем проект и панель Source Control: <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>.</p>
+        <figure class="shot shot--panel">
+          <img src="img/01-branch-name.png" alt="Панель Source Control: в графе у верхнего коммита метка main, в строке состояния внизу слева имя main и счётчик 10 со стрелкой вверх">
+          <figcaption>Имя <code>main</code> стоит в строке состояния внизу слева и в графе у верхнего коммита. Подсказка в поле сообщения тоже называет ветку: <code>commit on "main"</code>.</figcaption>
+        </figure>
+        <p>Строка состояния показывает ветку, на которой вы стоите. Метка в графе показывает коммит, которым эта ветка заканчивается. В главе 2.4 эти надписи назывались метками, теперь у них есть название: <code>main</code> — ветка.</p>
+        <p>То же в терминале (<kbd>Ctrl</kbd> + <kbd>`</kbd>):</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git branch --show-current</span>
+main</pre>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>Имя текущей ветки <code>main</code> найдено в строке состояния, в графе и в ответе команды.</p>
+        <h2 id="s3"><span class="sec">§3</span>Шаг 2. Открыть список веток</h2>
+        <p>В репозитории может быть несколько веток. Список веток открывается из строки состояния.</p>
+        <p>Нажимаем на имя <code>main</code> в строке состояния. Вверху окна открывается список:</p>
+        <figure class="shot shot--wide">
+          <img src="img/02-branch-list.png" alt="Список веток вверху окна: пункты Create new branch, Create new branch from, Checkout detached, затем ветка main и ветка origin/main">
+          <figcaption>Три верхние строки — команды. Под ними две ветки: <code>main</code> в группе <b>branches</b> и <code>origin/main</code> в группе <b>remote branches</b>.</figcaption>
+        </figure>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Строка списка</th><th>Что это</th></tr></thead>
+            <tbody>
+              <tr><td><b>Create new branch…</b></td><td>Команда создания ветки. Используется в главе 3.2</td></tr>
+              <tr><td><code>main</code>, группа branches</td><td>Ветка на вашем компьютере. Под именем указаны автор, имя и сообщение её последнего коммита</td></tr>
+              <tr><td><code>origin/main</code>, группа remote branches</td><td>Запись о ветке <code>main</code> в копии проекта на GitHub. Её последний коммит — «Добавил README с описанием проекта»</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Список закрываем клавишей <kbd>Esc</kbd>: выбирать в нём пока нечего. То же в терминале:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git branch -a</span>
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main</pre>
+        </figure>
+        <p>Команда <code>git branch</code> без ключа печатает только ветки на компьютере, с ключом <code>-a</code> — ещё и записи о ветках сервера. Звёздочка отмечает ветку, на которой вы стоите. Строка <code>remotes/origin/HEAD -> origin/main</code> сообщает, какая ветка на сервере считается главной.</p>
+
+        <p class="step-done"><b>Что получилось.</b>В репозитории одна ветка на компьютере, <code>main</code>, и одна запись о ветке сервера, <code>origin/main</code>.</p>
+
+        <div class="part" role="separator"><span><b>2</b>Как Git хранит ветку</span></div>
+        <h2 id="s4"><span class="sec">§4</span>Шаг 3. Найти файл ветки</h2>
+        <p>Ветка хранится в папке <code>.git</code> как небольшой файл. Найдём его.</p>
+        <p>В терминале выводим содержимое папки, в которой Git хранит ветки:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">ls .git/refs/heads</span>
+main</pre>
+        </figure>
+        <p>В папке один файл, и он называется так же, как ветка. В PowerShell ответ выглядит как таблица, имя файла в ней то же. Читаем файл:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">cat .git/refs/heads/main</span>
+cd668045e081279c0fc52e58236a16491577a258</pre>
+        </figure>
+        <p>В файле одна строка из сорока символов. Это полное имя коммита из главы 2.4. Сравниваем с последним коммитом проекта:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline -1</span>
+cd66804 Revert "Увеличил отступы страницы"</pre>
+        </figure>
+        <p>Первые семь символов совпадают: в файле ветки записан последний коммит.</p>
+        <p>Отсюда точное определение. <span class="term">Ветка</span> в Git — это имя, за которым записан один коммит, последний в линии. Остальные коммиты ветки в файле не перечислены. Git находит их по цепочке: в каждом коммите записано имя предыдущего. На странице коммита в главе 2.4 эта запись показана строкой <code>1 parent</code>.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 215" role="img" aria-label="Схема: три последних коммита проекта соединены в цепочку, имя main указывает на последний коммит cd66804">
+            <path d="M40 150 L410 150" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="14" y="155" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="90" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="90" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">b2b1492</text><text x="90" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил ссылку</text>
+            <circle cx="250" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">7346da3</text><text x="250" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Покрасил заголовок</text>
+            <circle cx="410" cy="150" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="410" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="410" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <path d="M228 128 Q170.0 102 112 128" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="4 4"/><path d="M120 120 l-8 8 11 2" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+            <path d="M388 128 Q330.0 102 272 128" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="4 4"/><path d="M280 120 l-8 8 11 2" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+            <rect x="382.2" y="55" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="410" y="74" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <path d="M410 85 V128" stroke="var(--fire-deep)" stroke-width="3"/><path d="M404 122 l6 8 6 -8" fill="none" stroke="var(--fire-deep)" stroke-width="3"/>
+          </svg>
+          <figcaption>Пунктирные стрелки: в каждом коммите записано имя предыдущего. Имя <code>main</code> указывает на один коммит — последний. Остальные Git находит по цепочке.</figcaption>
+        </figure>
+        <div class="tree">
+          <p class="tree__head">Где в папке .git записаны ветки</p>
+          <div class="tree__body">
+            <div class="tree__row tree__row--hi"><span>.git/</span><em>репозиторий</em></div>
+            <div class="tree__row"><span>&nbsp;&nbsp;├── HEAD</span><em>имя ветки, на которой вы стоите</em></div>
+            <div class="tree__row"><span>&nbsp;&nbsp;├── refs/heads/</span><em>ветки на компьютере, по одному файлу на ветку</em></div>
+            <div class="tree__row"><span>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── main</span><em>имя последнего коммита ветки main</em></div>
+            <div class="tree__row"><span>&nbsp;&nbsp;└── refs/remotes/origin/</span><em>записи о ветках сервера</em></div>
+          </div>
+        </div>
+        <div class="margin-note">
+          <b>На полях: если файла ветки нет</b>
+          <p>При служебной упаковке репозитория Git переносит записи о ветках из отдельных файлов в один общий файл <code>.git/packed-refs</code>. Тогда команда <code>cat</code> сообщит, что файла нет. Имя коммита ветки в любом случае показывает команда <code>git rev-parse main</code>.</p>
+        </div>
+
+        <p class="step-done"><b>Что получилось.</b>Найден файл <code>.git/refs/heads/main</code>. В нём записано имя последнего коммита ветки.</p>
+        <h2 id="s5"><span class="sec">§5</span>Шаг 4. Прочитать запись HEAD</h2>
+        <p>Веток может быть несколько, а стоите вы всегда на одной. Какая ветка текущая, Git записывает в файле <code>HEAD</code>.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">cat .git/HEAD</span>
+ref: refs/heads/main</pre>
+        </figure>
+        <p>В файле записан путь к файлу ветки из шага 3. <span class="term">HEAD</span> — запись о том, на какой ветке вы стоите. По ней VS Code выводит имя ветки в строке состояния, а команда <code>git branch</code> ставит звёздочку.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 215" role="img" aria-label="Схема: HEAD указывает на имя main, main указывает на коммит cd66804">
+            <path d="M40 150 L410 150" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="14" y="155" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="90" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="90" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">b2b1492</text><text x="90" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил ссылку</text>
+            <circle cx="250" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">7346da3</text><text x="250" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Покрасил заголовок</text>
+            <circle cx="410" cy="150" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="410" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="410" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <path d="M228 128 Q170.0 102 112 128" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="4 4"/><path d="M120 120 l-8 8 11 2" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+            <path d="M388 128 Q330.0 102 272 128" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="4 4"/><path d="M280 120 l-8 8 11 2" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+            <rect x="382.2" y="55" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="410" y="74" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <path d="M410 85 V128" stroke="var(--fire-deep)" stroke-width="3"/><path d="M404 122 l6 8 6 -8" fill="none" stroke="var(--fire-deep)" stroke-width="3"/>
+            <rect x="382.2" y="7" width="55.6" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="410" y="26" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">HEAD</text>
+            <path d="M410 37 V52" stroke="var(--fire-deep)" stroke-width="3"/><path d="M404 46 l6 8 6 -8" fill="none" stroke="var(--fire-deep)" stroke-width="3"/>
+          </svg>
+          <figcaption>В <code>HEAD</code> записано имя ветки, в ветке — имя коммита. По этим двум записям Git определяет коммит, на котором вы стоите.</figcaption>
+        </figure>
+        <p>В главе 2.6 запись <code>HEAD</code> в командах означала коммит, на котором вы стоите. Теперь видно, как Git его находит: читает в <code>HEAD</code> имя ветки, затем в файле ветки — имя коммита. Запись <code>HEAD~</code> означает коммит перед ним.</p>
+
+        <p class="step-done"><b>Что получилось.</b>В <code>HEAD</code> записано <code>ref: refs/heads/main</code>: текущая ветка — <code>main</code>.</p>
+        <h2 id="s6"><span class="sec">§6</span>Шаг 5. Сделать коммит и проверить ветку</h2>
+        <p>В файле ветки записан последний коммит. Проверим, что происходит с этой записью, когда появляется новый коммит.</p>
+        <p>В <code>index.html</code> под ссылкой на контакты добавляем строку:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>index.html</span><span>было</span></figcaption>
+<pre>  &lt;p&gt;&lt;a href="kontakty.html"&gt;Контакты&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>index.html</span><span>стало</span></figcaption>
+<pre>  &lt;p&gt;&lt;a href="kontakty.html"&gt;Контакты&lt;/a&gt;&lt;/p&gt;
+<mark>  &lt;p&gt;Страница обновлена в октябре 2026 года.&lt;/p&gt;</mark>
+&lt;/body&gt;</pre>
+          </figure>
+        </div>
+        <p>Сохраняем файл, отбираем его плюсом и делаем коммит с сообщением «Добавил дату обновления страницы». То же в терминале:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git add index.html
+git commit -m "Добавил дату обновления страницы"</pre>
+        </figure>
+        <figure class="shot shot--panel">
+          <img src="img/03-after-commit.png" alt="Панель Source Control: в графе сверху коммит «Добавил дату обновления страницы» с меткой main, на кнопке Sync Changes 11 со стрелкой вверх">
+          <figcaption>Метка <code>main</code> перешла на новый коммит. Коммит revert, у которого она стояла, теперь вторая строка графа. На кнопке <code>11↑</code>.</figcaption>
+        </figure>
+        <p>Читаем оба файла ещё раз:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">cat .git/refs/heads/main</span>
+82fd14a052d87f56416c01e19570b560b6e7a884
+<span class="cmd">cat .git/HEAD</span>
+ref: refs/heads/main
+<span class="cmd">git log --oneline -2</span>
+82fd14a Добавил дату обновления страницы
+cd66804 Revert "Увеличил отступы страницы"</pre>
+        </figure>
+        <p>В файле ветки теперь имя нового коммита. Запись в <code>HEAD</code> осталась прежней: ветка та же, изменился её последний коммит.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 215" role="img" aria-label="Схема: после нового коммита 82fd14a имя main и HEAD указывают на него">
+            <path d="M40 150 L570 150" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="14" y="155" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="90" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="90" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">b2b1492</text><text x="90" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил ссылку</text>
+            <circle cx="250" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">7346da3</text><text x="250" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Покрасил заголовок</text>
+            <circle cx="410" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="410" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="410" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <circle cx="570" cy="150" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="570" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="570" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил дату …</text>
+            <path d="M228 128 Q170.0 102 112 128" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="4 4"/><path d="M120 120 l-8 8 11 2" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+            <path d="M388 128 Q330.0 102 272 128" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="4 4"/><path d="M280 120 l-8 8 11 2" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+            <path d="M548 128 Q490.0 102 432 128" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="4 4"/><path d="M440 120 l-8 8 11 2" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+            <rect x="542.2" y="55" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="570" y="74" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <path d="M570 85 V128" stroke="var(--fire-deep)" stroke-width="3"/><path d="M564 122 l6 8 6 -8" fill="none" stroke="var(--fire-deep)" stroke-width="3"/>
+            <rect x="542.2" y="7" width="55.6" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="570" y="26" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">HEAD</text>
+            <path d="M570 37 V52" stroke="var(--fire-deep)" stroke-width="3"/><path d="M564 46 l6 8 6 -8" fill="none" stroke="var(--fire-deep)" stroke-width="3"/>
+          </svg>
+          <figcaption>Новый коммит <code>82fd14a</code> записал <code>cd66804</code> как предыдущий. Имя <code>main</code> сдвинулось на него, запись в <code>HEAD</code> не менялась.</figcaption>
+        </figure>
+        <p>При каждом коммите Git делает два действия. Создаёт коммит, в котором предыдущим записан коммит из файла текущей ветки. Затем записывает в файл ветки имя нового коммита. Ветка сдвигается на один коммит вперёд.</p>
+        <p>Команды главы 2.6 меняли этот же файл. <code>git reset HEAD~</code> записывает в файл ветки имя предыдущего коммита, поэтому последний коммит пропадает из графа. Сам коммит при этом не удаляется, и его находит <code>git reflog</code>.</p>
+
+        <p class="step-done"><b>Что получилось.</b>После коммита в <code>.git/refs/heads/main</code> записан новый коммит <code>82fd14a</code>, в проекте пятнадцать коммитов.</p>
+        <h2 id="s7"><span class="sec">§7</span>Шаг 6. Сравнить main и origin/main</h2>
+        <p>В списке шага 2 была вторая строка, <code>origin/main</code>. Сравним её с веткой <code>main</code>.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git branch -a -v</span>
+* main                82fd14a [ahead 11] Добавил дату обновления страницы
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main 745f2e1 Добавил README с описанием проекта</pre>
+        </figure>
+        <p>Ключ <code>-v</code> добавляет к каждой ветке имя и сообщение её последнего коммита.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Запись</th><th>Где ведётся</th><th>Последний коммит</th><th>Когда сдвигается</th></tr></thead>
+            <tbody>
+              <tr><td><code>main</code></td><td>На вашем компьютере</td><td><code>82fd14a</code>, сделан в шаге 5</td><td>При каждом вашем коммите, amend, reset и revert</td></tr>
+              <tr><td><code>origin/main</code></td><td>На вашем компьютере, как запись о сервере</td><td><code>745f2e1</code>, получен при клонировании</td><td>Только при обмене с GitHub</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><code>origin/main</code> — запись о том, на каком коммите ветка <code>main</code> была на GitHub при последнем обмене. Обмена после клонирования не было, поэтому запись стоит на том же коммите, что в главе 2.2. Ваши коммиты её не сдвигают.</p>
+        <p>Пометка <code>[ahead 11]</code> означает, что в ветке <code>main</code> одиннадцать коммитов, которых нет в <code>origin/main</code>. То же число стоит на кнопке Sync Changes и в строке состояния: <code>11↑</code>. Отправка коммитов разобрана в модуле 4.</p>
+
+        <p class="step-done"><b>Что получилось.</b><code>main</code> стоит на коммите <code>82fd14a</code>, <code>origin/main</code> — на <code>745f2e1</code>. Между ними одиннадцать неотправленных коммитов.</p>
+
+        <div class="part" role="separator"><span><b>3</b>Справка</span></div>
+        <h2 id="s8"><span class="sec">§8</span>Справка: что добавляет вторая ветка</h2>
+        <p>Ветка — файл с именем одного коммита. Поэтому вторая ветка добавляет в репозиторий один файл в папке <code>.git/refs/heads</code>. В нём записан тот же коммит, на котором вы стоите.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 215" role="img" aria-label="Схема: два имени веток, main и forma, указывают на один и тот же коммит 82fd14a">
+            <path d="M40 150 L570 150" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="14" y="155" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="90" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="90" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">b2b1492</text><text x="90" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил ссылку</text>
+            <circle cx="250" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">7346da3</text><text x="250" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Покрасил заголовок</text>
+            <circle cx="410" cy="150" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="410" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="410" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <circle cx="570" cy="150" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="570" y="186" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="570" y="200" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил дату …</text>
+            <path d="M228 128 Q170.0 102 112 128" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="4 4"/><path d="M120 120 l-8 8 11 2" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+            <path d="M388 128 Q330.0 102 272 128" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="4 4"/><path d="M280 120 l-8 8 11 2" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+            <path d="M548 128 Q490.0 102 432 128" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="4 4"/><path d="M440 120 l-8 8 11 2" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+            <rect x="492.2" y="55" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="520" y="74" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <rect x="603.0" y="55" width="64.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="635" y="74" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma</text>
+            <path d="M530 85 L560 130" stroke="var(--fire-deep)" stroke-width="3"/><path d="M625 85 L582 130" stroke="var(--fire-deep)" stroke-width="3"/>
+          </svg>
+          <figcaption>Новая ветка — второе имя у того же коммита. Коммиты и файлы проекта при этом не копируются.</figcaption>
+        </figure>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что</th><th>При создании ветки</th></tr></thead>
+            <tbody>
+              <tr><td>Файлы проекта</td><td>Не копируются. Папка проекта одна</td></tr>
+              <tr><td>Коммиты</td><td>Не копируются. Обе ветки ведут к одним и тем же коммитам</td></tr>
+              <tr><td>Папка <code>.git/refs/heads</code></td><td>Появляется второй файл из сорока одного символа: имя коммита и перевод строки</td></tr>
+              <tr><td>Запись <code>HEAD</code></td><td>Меняется, когда вы переходите на другую ветку</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Ветки начинают различаться после первого коммита. Новый коммит сдвигает только ту ветку, которая записана в <code>HEAD</code>. Вторая ветка остаётся на прежнем коммите. Так получаются две линии из схемы в начале главы.</p>
+        <div class="analogy">
+          <p class="analogy__head">Ассоциация: закладки в тетради</p>
+          <div class="analogy__pair">
+            <div class="analogy__side">
+              <b>В жизни</b>
+              <p>В тетради с записями лежит закладка на последней исписанной странице. Тетрадь одна. Закладка ничего не содержит, она отмечает место. Вторая закладка не добавляет в тетрадь страниц.</p>
+            </div>
+            <div class="analogy__side">
+              <b>В Git</b>
+              <p>Коммиты — страницы, ветка — закладка на последнем коммите. Вторая ветка — вторая закладка: коммиты остаются те же, добавляется одна запись в <code>.git/refs/heads</code>. <code>HEAD</code> отмечает закладку, которой вы сейчас пользуетесь.</p>
+            </div>
+          </div>
+          <p class="analogy__limit"><b>Где не совпадает</b>Закладку передвигают рукой, а ветка сдвигается сама при каждом коммите. В тетради после страницы идёт одна следующая, а в Git после одного коммита могут идти два разных: по одному в каждой ветке.</p>
+        </div>
+        <h2 id="s9"><span class="sec">§9</span>Справка: имена веток</h2>
+        <p>Имя первой ветки задаёт настройка <code>init.defaultBranch</code> из главы 1.3, в этом курсе это <code>main</code>. Остальным веткам имя даёт тот, кто их создаёт. Имя ветки становится именем файла, поэтому на него действуют ограничения:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Правило</th><th>Подходит</th><th>Не подходит</th></tr></thead>
+            <tbody>
+              <tr><td>Латинские буквы, цифры, дефис</td><td><code>forma-kontaktov</code></td><td><code>форма контактов</code>: кириллица неудобна в командах, пробел запрещён</td></tr>
+              <tr><td>Имя называет задачу</td><td><code>temnaya-tema</code></td><td><code>proba2</code>, <code>new</code>: по имени не видно, что в ветке</td></tr>
+              <tr><td>Косая черта делит имя на группу и задачу</td><td><code>fix/opechatka-v-kontaktah</code></td><td><code>fix/</code>: имя не может заканчиваться косой чертой</td></tr>
+              <tr><td>Без служебных знаков</td><td><code>stranica-proektov</code></td><td>Имена с <code>~</code>, <code>^</code>, <code>:</code>, <code>?</code>, <code>*</code>, двумя точками подряд или с дефисом в начале</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Имя <code>main</code> для Git ничем не отличается от других. Главной эту ветку делает договорённость: в ней держат проверенное состояние проекта, и GitHub показывает её на странице репозитория по умолчанию.</p>
+
+        <div class="part" role="separator"><span><b>4</b>Проверка себя</span></div>
+        <h2 id="s10"><span class="sec">§10</span>Частые вопросы</h2>
+        <div class="myths">
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Ветка — это копия папки проекта.</div>
+            <div class="myth__yes"><b>На самом деле</b>Папка проекта одна. Ветка — файл с именем одного коммита в <code>.git/refs/heads</code>.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Ветки нужны только в команде.</div>
+            <div class="myth__yes"><b>На самом деле</b>Один человек ведёт в ветке незаконченную работу или пробный вариант, а основная линия остаётся рабочей.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>В ветке записан список её коммитов.</div>
+            <div class="myth__yes"><b>На самом деле</b>В ветке записан один коммит, последний. Остальные Git находит по записи о предыдущем коммите внутри каждого коммита.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b><code>origin/main</code> показывает, что сейчас лежит на GitHub.</div>
+            <div class="myth__yes"><b>На самом деле</b><code>origin/main</code> показывает, что было на GitHub при последнем обмене. Запись обновляется только при обмене с сервером.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>HEAD и <code>main</code> — одно и то же.</div>
+            <div class="myth__yes"><b>На самом деле</b><code>main</code> — ветка, в ней записан коммит. В <code>HEAD</code> записано имя ветки, на которой вы стоите. Сейчас это <code>main</code>, после перехода на другую ветку запись изменится.</div>
+          </div>
+        </div>
+
+        <h2 id="s11"><span class="sec">§11</span>Проверьте себя</h2>
+        <details>
+          <summary>Что записано в файле <code>.git/refs/heads/main</code>?</summary>
+          <p>Полное имя одного коммита, сорок символов. Это последний коммит ветки <code>main</code>.</p>
+        </details>
+        <details>
+          <summary>В ветке записан только последний коммит. Как Git показывает всю историю ветки?</summary>
+          <p>В каждом коммите записано имя предыдущего. Git начинает с коммита из файла ветки и идёт по этим записям до первого коммита проекта.</p>
+        </details>
+        <details>
+          <summary>Что изменится в папке <code>.git</code> после нового коммита в ветке <code>main</code>?</summary>
+          <p>Появится новый коммит, и в файле <code>.git/refs/heads/main</code> будет записано его имя. Файл <code>HEAD</code> не изменится: в нём по-прежнему <code>ref: refs/heads/main</code>.</p>
+        </details>
+        <details>
+          <summary>Команда <code>cat .git/HEAD</code> напечатала <code>ref: refs/heads/main</code>. Что это значит?</summary>
+          <p>Вы стоите на ветке <code>main</code>. Новый коммит сдвинет эту ветку. То же имя показано в строке состояния VS Code.</p>
+        </details>
+        <details>
+          <summary>В ответе <code>git branch -a -v</code> у ветки <code>main</code> стоит <code>[ahead 11]</code>. Что это значит?</summary>
+          <p>В ветке <code>main</code> одиннадцать коммитов, которых нет в <code>origin/main</code>, то есть они не отправлены на GitHub. То же число показано на кнопке Sync Changes.</p>
+        </details>
+        <details>
+          <summary>Сколько места займёт в репозитории новая ветка, созданная на текущем коммите?</summary>
+          <p>Один файл из сорока одного символа в папке <code>.git/refs/heads</code>. Файлы проекта и коммиты не копируются.</p>
+        </details>
+
+        <h2 id="s12"><span class="sec">§12</span>Шпаргалка по главе</h2>
+        <div class="cheat">
+          <div>
+            <b>Что такое ветка</b>
+            <code>имя → последний коммит линии</code>
+            <code>файл в .git/refs/heads</code>
+          </div>
+          <div>
+            <b>Что такое HEAD</b>
+            <code>запись о текущей ветке</code>
+            <code>файл .git/HEAD</code>
+          </div>
+          <div>
+            <b>Где видно в VS Code</b>
+            <code>строка состояния, слева внизу</code>
+            <code>метка в разделе GRAPH</code>
+            <code>щелчок по имени — список веток</code>
+          </div>
+          <div>
+            <b>Команды</b>
+            <code>git branch --show-current</code>
+            <code>git branch -a -v</code>
+            <code>git rev-parse main</code>
+          </div>
+          <div>
+            <b>Файлы</b>
+            <code>cat .git/HEAD</code>
+            <code>cat .git/refs/heads/main</code>
+            <code>ls .git/refs/heads</code>
+          </div>
+          <div>
+            <b>main и origin/main</b>
+            <code>main — ваша ветка</code>
+            <code>origin/main — запись о сервере</code>
+            <code>ahead N — не отправлено N</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Ветка — отдельная линия коммитов в одном репозитории. Git хранит её как файл в папке <code>.git/refs/heads</code>, в котором записано имя одного коммита, последнего в линии. Остальные коммиты находятся по цепочке: в каждом записан предыдущий. В файле <code>.git/HEAD</code> записано имя ветки, на которой вы стоите. VS Code показывает его в строке состояния и меткой в графе. Новый коммит сдвигает текущую ветку: в её файл записывается имя нового коммита. <code>origin/main</code> — запись о ветке на GitHub, она сдвигается только при обмене с сервером. Вторая ветка добавляет в репозиторий один небольшой файл, файлы проекта и коммиты при этом не копируются. В следующей главе создаётся вторая ветка, и на ней проверяется, что её коммиты не попадают в <code>main</code>.</p>
+
+        <div class="sources">
+          <b>Откуда взяты факты</b>
+          <ol>
+            <li>Кадры и ответы команд получены на клоне проекта <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a> в Git версии 2.51.1 и VS Code версии 1.138.</li>
+            <li>Ветка как указатель на коммит, запись HEAD — книга Pro Git, раздел <a href="https://git-scm.com/book/ru/v2/Ветвление-в-Git-О-ветвлении-в-двух-словах">«О ветвлении в двух словах»</a>.</li>
+            <li>Папки <code>refs/heads</code>, <code>refs/remotes</code>, файлы <code>HEAD</code> и <code>packed-refs</code> — <a href="https://git-scm.com/docs/gitrepository-layout">документация gitrepository-layout</a>.</li>
+            <li>Ключи <code>git branch</code> — <a href="https://git-scm.com/docs/git-branch">документация git-branch</a>; ограничения на имена веток — <a href="https://git-scm.com/docs/git-check-ref-format">git-check-ref-format</a>.</li>
+            <li>Имя ветки в строке состояния и список веток — <a href="https://code.visualstudio.com/docs/sourcecontrol/overview">документация VS Code, раздел Source Control</a>.</li>
+          </ol>
+        </div>
+
+        <div class="pager"><a href="../09-otmena-izmeneniy/index.html">← 2.6 Отмена изменений</a><a href="../../index.html">К содержанию справочника</a></div>
+
+        <div class="colophon">
+          <span>Глава 3.1 · Ветки: зачем нужны и как устроены · Справочник по Git и GitHub</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../../book.js"></script>
+</body>
+</html>
