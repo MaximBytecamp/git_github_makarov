@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>3.2 Вторая ветка: создать, переключиться, проверить · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <script>
+    try {
+      var saved = localStorage.getItem('git-book-os');
+      if (!saved) {
+        var p = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+        saved = /win/i.test(p) ? 'win' : (/mac|iphone|ipad/i.test(p) ? 'mac' : 'linux');
+      }
+      document.documentElement.dataset.os = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Модуль 3 · Ветки</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 3 · ветки</p>
+          <p class="running__folio">Глава 3.2</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">3.2</span>
+          <h1>Вторая ветка:<br>создать, переключиться, проверить</h1>
+          <p class="lead">В главе создаётся вторая ветка проекта <code>sait-vizitka</code>. В ней делается форма обратной связи, а в ветке <code>main</code> — отдельное исправление. На кадрах показано, как при переключении меняются файлы в папке и что происходит с правками, которые не закоммичены.</p>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Ветки</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Что получится</dt><dd>Две ветки с разными коммитами и умение переключаться между ними</dd></div>
+          <div><dt>Сколько занимает</dt><dd>Около тридцати минут за компьютером</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>Порядок действий</b>
+          <ol>
+            <li><a href="#s1">Задача главы</a></li>
+            <li><a href="#s2">Шаг 1. Создать ветку</a></li>
+            <li><a href="#s3">Шаг 2. Проверить записи в папке .git</a></li>
+            <li><a href="#s4">Шаг 3. Сделать коммит в новой ветке</a></li>
+            <li><a href="#s5">Шаг 4. Переключиться на main</a></li>
+            <li><a href="#s6">Шаг 5. Сделать коммит в main</a></li>
+            <li><a href="#s7">Шаг 6. Показать обе ветки в графе</a></li>
+            <li><a href="#s8">Шаг 7. Вернуться в ветку формы</a></li>
+            <li><a href="#s9">Шаг 8. Переключиться с незакоммиченной правкой</a></li>
+            <li><a href="#s10">Шаг 9. Отказ в переключении</a></li>
+            <li><a href="#s11">Справка: команды для веток</a></li>
+            <li><a href="#s12">Частые вопросы</a></li>
+            <li><a href="#s13">Проверьте себя</a></li>
+            <li><a href="#s14">Шпаргалка по главе</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Задача главы</h2>
+        <p>В главе 3.1 разобрано, что ветка — это имя, за которым записан один коммит, а в <code>HEAD</code> записано имя текущей ветки. В этой главе это проверяется действием. На страницу контактов добавляется форма обратной связи. Работа над ней ведётся в отдельной ветке <code>forma-kontaktov</code>, чтобы незаконченная форма не попала в <code>main</code>.</p>
+        <div class="why">
+          <p class="why__head">Зачем это нужно в работе</p>
+          <ul class="why__list">
+            <li><b>Начать задачу.</b> Под новую задачу создают ветку и коммитят в неё. Основная ветка в это время не меняется.</li>
+            <li><b>Прерваться на исправление.</b> Срочную правку делают в основной ветке. Для этого на неё переключаются, а после исправления возвращаются к задаче.</li>
+            <li><b>Сравнить два состояния.</b> Переключение показывает проект с новой работой и без неё в одной и той же папке.</li>
+            <li><b>Не потерять правки.</b> Незакоммиченная правка при переключении либо переходит в другую ветку, либо останавливает переключение. Оба случая нужно узнавать по сообщениям Git.</li>
+          </ul>
+        </div>
+        <p>В главе используется проект <code>sait-vizitka</code> в том виде, в каком он остался после главы 3.1: пятнадцать коммитов в ветке <code>main</code>, одиннадцать из них на GitHub не отправлены. Имена коммитов, сделанных вами, будут отличаться от показанных.</p>
+
+        <div class="part" role="separator"><span><b>1</b>Новая ветка</span></div>
+        <h2 id="s2"><span class="sec">§2</span>Шаг 1. Создать ветку</h2>
+        <p>Ветка создаётся из списка веток, который открывался в главе 3.1.</p>
+        <p>Нажимаем на имя <code>main</code> в строке состояния и выбираем в списке <b>Create new branch…</b></p>
+        <figure class="shot">
+          <img src="img/01-create-pick.png" alt="Список веток вверху окна, выбрана строка Create new branch">
+          <figcaption>Строка <b>Create new branch…</b> создаёт ветку на коммите, на котором вы стоите.</figcaption>
+        </figure>
+        <p>Вводим имя <code>forma-kontaktov</code> и нажимаем <kbd>Enter</kbd>:</p>
+        <figure class="shot">
+          <img src="img/02-name.png" alt="Поле ввода с именем forma-kontaktov и подсказкой Please provide a new branch name">
+          <figcaption>Имя набрано по правилам из главы 3.1: латиница, дефис вместо пробела, название задачи.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="img/03-created.png" alt="Окно VS Code после создания ветки: в строке состояния имя forma-kontaktov, кнопка Publish Branch, в графе метка forma-kontaktov у верхнего коммита">
+          <figcaption>После создания. В строке состояния и в графе стоит <code>forma-kontaktov</code>. Файл <code>kontakty.html</code> не изменился.</figcaption>
+        </figure>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что изменилось в окне</th><th>Что это значит</th></tr></thead>
+            <tbody>
+              <tr><td>В строке состояния <code>forma-kontaktov</code></td><td>VS Code создал ветку и сразу перешёл на неё</td></tr>
+              <tr><td>В графе у верхнего коммита метка <code>forma-kontaktov</code></td><td>Новая ветка стоит на том же коммите, на котором стояла <code>main</code></td></tr>
+              <tr><td>Рядом с именем ветки значок облака со стрелкой</td><td>Ветки нет на GitHub, она есть только на вашем компьютере</td></tr>
+              <tr><td>Кнопка <b>Publish Branch</b> вместо Sync Changes</td><td>Кнопка отправляет новую ветку на GitHub. В этой главе её не нажимаем, отправка разобрана в модуле 4</td></tr>
+              <tr><td>В подсказке поля сообщения <code>commit on "forma-kontaktov"</code></td><td>Следующий коммит попадёт в новую ветку</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>То же в терминале. Ключ <code>-c</code> создаёт ветку, сама команда <code>switch</code> переходит на неё:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git switch -c forma-kontaktov</span>
+Switched to a new branch 'forma-kontaktov'</pre>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>Создана ветка <code>forma-kontaktov</code>, вы стоите на ней. Файлы проекта не изменились.</p>
+        <h2 id="s3"><span class="sec">§3</span>Шаг 2. Проверить записи в папке .git</h2>
+        <p>По главе 3.1 новая ветка — это новый файл в папке <code>.git/refs/heads</code> и новая запись в <code>HEAD</code>. Проверяем.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git branch</span>
+* forma-kontaktov
+  main
+<span class="cmd">ls .git/refs/heads</span>
+forma-kontaktov
+main
+<span class="cmd">cat .git/HEAD</span>
+ref: refs/heads/forma-kontaktov</pre>
+        </figure>
+        <p>Веток две, звёздочка стоит у <code>forma-kontaktov</code>. В папке два файла. В <code>HEAD</code> теперь записана новая ветка. Смотрим, на каких коммитах стоят ветки:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git branch -v</span>
+* forma-kontaktov 82fd14a Добавил дату обновления страницы
+  main            82fd14a [ahead 11] Добавил дату обновления страницы</pre>
+        </figure>
+        <p>Обе ветки стоят на одном коммите <code>82fd14a</code>. Различие между ними пока одно: имя.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: имена main и forma-kontaktov указывают на один коммит 82fd14a, HEAD стоит на forma-kontaktov">
+            <path d="M30 215 H250" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <circle cx="250" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="250" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил дату …</text>
+            <rect x="172.2" y="148" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="200" y="167" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <rect x="256.0" y="148" width="148.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="330" y="167" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma-kontaktov</text>
+            <path d="M210 178 L240 197" stroke="var(--fire-deep)" stroke-width="3"/><path d="M310 178 L262 197" stroke="var(--fire-deep)" stroke-width="3"/>
+            <text x="330" y="137" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD ↓</text>
+          </svg>
+          <figcaption>Два имени у одного коммита. <code>HEAD</code> указывает на <code>forma-kontaktov</code>.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>В <code>.git/refs/heads</code> два файла с одним и тем же коммитом, в <code>HEAD</code> записана ветка <code>forma-kontaktov</code>.</p>
+
+        <div class="part" role="separator"><span><b>2</b>Две линии коммитов</span></div>
+        <h2 id="s4"><span class="sec">§4</span>Шаг 3. Сделать коммит в новой ветке</h2>
+        <p>Ветки начинают различаться после первого коммита. Делаем его в новой ветке.</p>
+        <p>В <code>kontakty.html</code> под ссылкой на профиль добавляем форму:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>kontakty.html</span><span>было</span></figcaption>
+<pre>  &lt;p&gt;&lt;a href="https://github.com/MaximBytecamp"&gt;Профиль на GitHub&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>kontakty.html</span><span>стало</span></figcaption>
+<pre>  &lt;p&gt;&lt;a href="https://github.com/MaximBytecamp"&gt;Профиль на GitHub&lt;/a&gt;&lt;/p&gt;
+<mark>  &lt;form&gt;</mark>
+<mark>    &lt;input type="email" placeholder="Ваша почта"&gt;</mark>
+<mark>    &lt;textarea placeholder="Сообщение"&gt;&lt;/textarea&gt;</mark>
+<mark>    &lt;button&gt;Отправить&lt;/button&gt;</mark>
+<mark>  &lt;/form&gt;</mark>
+&lt;/body&gt;</pre>
+          </figure>
+        </div>
+        <p>Сохраняем файл, отбираем его плюсом и делаем коммит с сообщением «Добавил форму обратной связи». То же в терминале:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git add kontakty.html
+git commit -m "Добавил форму обратной связи"</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/04-branch-commit.png" alt="Окно VS Code: в графе сверху коммит «Добавил форму обратной связи» с меткой forma-kontaktov, в файле kontakty.html строки 12–16 с формой">
+          <figcaption>В графе сверху новый коммит с меткой <code>forma-kontaktov</code>. В файле строки 12–16 — форма.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git branch -v</span>
+* forma-kontaktov a727fbf Добавил форму обратной связи
+  main            82fd14a [ahead 11] Добавил дату обновления страницы</pre>
+        </figure>
+        <p>Ветка <code>forma-kontaktov</code> сдвинулась на новый коммит <code>a727fbf</code>. Ветка <code>main</code> осталась на <code>82fd14a</code>: коммит сдвигает только ту ветку, которая записана в <code>HEAD</code>.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: ветка forma-kontaktov стоит на новом коммите a727fbf, ветка main осталась на 82fd14a, HEAD стоит на forma-kontaktov">
+            <path d="M30 215 H250" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <circle cx="250" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="250" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил дату …</text>
+            <path d="M250 215 C300 215 310 80 360 80 H380" stroke="var(--fire-deep)" stroke-width="3" fill="none"/>
+            <circle cx="380" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">a727fbf</text><text x="380" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">форма</text>
+            <rect x="222.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <path d="M250 182 V197" stroke="var(--fire-deep)" stroke-width="3"/>
+            <rect x="306.0" y="17" width="148.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="36" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma-kontaktov</text>
+            <path d="M380 47 V62" stroke="var(--fire-deep)" stroke-width="3"/>
+            <text x="298.0" y="36" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text>
+          </svg>
+          <figcaption>После коммита. <code>forma-kontaktov</code> перешла на <code>a727fbf</code>, <code>main</code> осталась на <code>82fd14a</code>. <code>HEAD</code> указывает на <code>forma-kontaktov</code>.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>В ветке <code>forma-kontaktov</code> на один коммит больше, чем в <code>main</code>.</p>
+        <h2 id="s5"><span class="sec">§5</span>Шаг 4. Переключиться на main</h2>
+        <p>Теперь переходим на ветку <code>main</code> и смотрим на тот же файл.</p>
+        <p>Нажимаем на имя ветки в строке состояния и выбираем в списке <code>main</code>. То же в терминале:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git switch main</span>
+Switched to branch 'main'
+Your branch is ahead of 'origin/main' by 11 commits.
+  (use "git push" to publish your local commits)</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/05-on-main.png" alt="Окно VS Code на ветке main: в строке состояния main, в графе сверху коммит «Добавил дату обновления страницы», в файле kontakty.html формы нет, файл заканчивается на строке 13">
+          <figcaption>На ветке <code>main</code>. В том же файле формы нет: после строки 11 сразу идёт <code>&lt;/body&gt;</code>. В графе сверху коммит «Добавил дату обновления страницы».</figcaption>
+        </figure>
+        <p>При переключении Git делает два действия:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Действие</th><th>Что меняется</th></tr></thead>
+            <tbody>
+              <tr><td>Записывает в <code>HEAD</code> имя выбранной ветки</td><td><code>ref: refs/heads/main</code></td></tr>
+              <tr><td>Приводит файлы в папке проекта к последнему коммиту этой ветки</td><td>В <code>kontakty.html</code> пропали пять строк формы: в коммите <code>82fd14a</code> их нет</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Форма не удалена. Она записана в коммите <code>a727fbf</code> ветки <code>forma-kontaktov</code> и вернётся в файл при переходе на эту ветку. Папка проекта одна, а её содержимое зависит от ветки, на которой вы стоите.</p>
+        <p>В графе коммита с формой сейчас нет: раздел GRAPH по умолчанию показывает только текущую ветку. Обе ветки сразу будут показаны в шаге 6.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: коммиты те же, HEAD переставлен на ветку main, которая стоит на 82fd14a">
+            <path d="M30 215 H250" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <circle cx="250" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="250" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил дату …</text>
+            <path d="M250 215 C300 215 310 80 360 80 H380" stroke="var(--fire-deep)" stroke-width="3" fill="none"/>
+            <circle cx="380" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">a727fbf</text><text x="380" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">форма</text>
+            <rect x="222.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <path d="M250 182 V197" stroke="var(--fire-deep)" stroke-width="3"/>
+            <rect x="306.0" y="17" width="148.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="36" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma-kontaktov</text>
+            <path d="M380 47 V62" stroke="var(--fire-deep)" stroke-width="3"/>
+            <text x="214.2" y="171" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text>
+          </svg>
+          <figcaption>После переключения. Коммиты и ветки на прежних местах, изменилась только запись <code>HEAD</code>: теперь она указывает на <code>main</code>. Файлы в папке соответствуют коммиту <code>82fd14a</code>.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>Вы стоите на <code>main</code>. В папке проекта файлы без формы.</p>
+        <h2 id="s6"><span class="sec">§6</span>Шаг 5. Сделать коммит в main</h2>
+        <p>Пока форма не готова, в <code>main</code> делаем отдельное исправление: меняем заголовок главной страницы.</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>index.html</span><span>было</span></figcaption>
+<pre><mark>  &lt;h1&gt;Привет, это моя страница&lt;/h1&gt;</mark></pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>index.html</span><span>стало</span></figcaption>
+<pre><mark>  &lt;h1&gt;Привет, это мой сайт&lt;/h1&gt;</mark></pre>
+          </figure>
+        </div>
+        <p>Сохраняем файл, отбираем его плюсом и делаем коммит «Исправил заголовок главной страницы». То же в терминале:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git add index.html
+git commit -m "Исправил заголовок главной страницы"</pre>
+        </figure>
+        <p>Теперь у каждой ветки есть коммит, которого нет в другой. Обе линии показывает команда <code>git log</code> с ключом <code>--all</code>:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline --graph --all -4</span>
+* 69f9d13 Исправил заголовок главной страницы
+| * a727fbf Добавил форму обратной связи
+|/  
+* 82fd14a Добавил дату обновления страницы
+* cd66804 Revert "Увеличил отступы страницы"</pre>
+        </figure>
+        <p>Ключ <code>--graph</code> рисует линии слева. От коммита <code>82fd14a</code> вверх идут две линии: на левой коммит ветки <code>main</code>, на правой — коммит ветки <code>forma-kontaktov</code>. Ниже <code>82fd14a</code> история общая.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: от коммита 82fd14a идут две линии — коммит 69f9d13 в ветке main и коммит a727fbf в ветке forma-kontaktov, HEAD стоит на main">
+            <path d="M30 215 H640" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <circle cx="250" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="250" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил дату …</text>
+            <path d="M250 215 C300 215 310 80 360 80 H380" stroke="var(--fire-deep)" stroke-width="3" fill="none"/>
+            <circle cx="380" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">a727fbf</text><text x="380" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">форма</text>
+            <circle cx="640" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="640" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">69f9d13</text><text x="640" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">заголовок</text>
+            <rect x="612.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="640" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <path d="M640 182 V197" stroke="var(--fire-deep)" stroke-width="3"/>
+            <rect x="306.0" y="17" width="148.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="36" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma-kontaktov</text>
+            <path d="M380 47 V62" stroke="var(--fire-deep)" stroke-width="3"/>
+            <text x="604.2" y="171" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text>
+          </svg>
+          <figcaption>Общая история заканчивается на <code>82fd14a</code>. Дальше у каждой ветки свой коммит. <code>HEAD</code> указывает на <code>main</code>.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>В <code>main</code> шестнадцать коммитов, на кнопке <code>12↑</code>. Ветки разошлись: у каждой свой последний коммит.</p>
+        <h2 id="s7"><span class="sec">§7</span>Шаг 6. Показать обе ветки в графе</h2>
+        <p>Раздел GRAPH можно переключить на показ всех веток.</p>
+        <p>В заголовке раздела <b>GRAPH</b> нажимаем на слово <b>Auto</b>. В списке отмечаем <b>All</b> и нажимаем <b>OK</b>:</p>
+        <figure class="shot">
+          <img src="img/06-graph-picker.png" alt="Список выбора для графа: отмечена строка All, ниже Auto, ветки main и forma-kontaktov, удалённые ветки origin/HEAD и origin/main">
+          <figcaption><b>Auto</b> показывает текущую ветку, <b>All</b> — все ветки. Ниже можно отметить отдельные ветки.</figcaption>
+        </figure>
+        <figure class="shot shot--panel">
+          <img src="img/07-graph-all.png" alt="Раздел Graph в режиме All: сверху коммит «Исправил заголовок главной…» с меткой main, под ним на отдельной линии коммит «Добавил форму об…» с меткой forma-kontaktov, ниже общая история">
+          <figcaption>Те же две линии, что в ответе <code>git log --graph --all</code>. Синяя метка — текущая ветка <code>main</code>, оранжевая — <code>forma-kontaktov</code>.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>В графе VS Code видны обе ветки и коммит, от которого они расходятся.</p>
+        <h2 id="s8"><span class="sec">§8</span>Шаг 7. Вернуться в ветку формы</h2>
+        <p>Возвращаемся к работе над формой. Нажимаем на имя ветки в строке состояния и выбираем <code>forma-kontaktov</code>. То же в терминале:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git switch forma-kontaktov</span>
+Switched to branch 'forma-kontaktov'</pre>
+        </figure>
+        <p>Файлы в папке снова соответствуют ветке формы. Сравнение двух веток по файлам:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Файл</th><th>На ветке <code>main</code></th><th>На ветке <code>forma-kontaktov</code></th></tr></thead>
+            <tbody>
+              <tr><td><code>kontakty.html</code></td><td>Формы нет</td><td>Форма есть, строки 12–16</td></tr>
+              <tr><td><code>index.html</code></td><td>Заголовок «Привет, это мой сайт»</td><td>Заголовок «Привет, это моя страница»</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Исправление заголовка сделано в <code>main</code>, поэтому в ветке формы его нет. Коммиты одной ветки не попадают в другую. Объединение веток разобрано в главе 3.3.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: две линии от коммита 82fd14a, HEAD переставлен на forma-kontaktov">
+            <path d="M30 215 H640" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <circle cx="250" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="250" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил дату …</text>
+            <path d="M250 215 C300 215 310 80 360 80 H380" stroke="var(--fire-deep)" stroke-width="3" fill="none"/>
+            <circle cx="380" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">a727fbf</text><text x="380" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">форма</text>
+            <circle cx="640" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="640" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">69f9d13</text><text x="640" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">заголовок</text>
+            <rect x="612.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="640" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <path d="M640 182 V197" stroke="var(--fire-deep)" stroke-width="3"/>
+            <rect x="306.0" y="17" width="148.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="36" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma-kontaktov</text>
+            <path d="M380 47 V62" stroke="var(--fire-deep)" stroke-width="3"/>
+            <text x="298.0" y="36" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text>
+          </svg>
+          <figcaption>После возврата. Обе линии на месте, <code>HEAD</code> снова указывает на <code>forma-kontaktov</code>. Файлы в папке соответствуют коммиту <code>a727fbf</code>.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>Вы стоите на <code>forma-kontaktov</code>: в <code>kontakty.html</code> есть форма, в <code>index.html</code> прежний заголовок.</p>
+
+        <div class="part" role="separator"><span><b>3</b>Незакоммиченные правки при переключении</span></div>
+        <h2 id="s9"><span class="sec">§9</span>Шаг 8. Переключиться с незакоммиченной правкой</h2>
+        <p>До сих пор перед каждым переключением список изменений был пуст. Проверим, что происходит с правкой, которая не закоммичена.</p>
+        <p>На ветке <code>forma-kontaktov</code> добавляем в конец <code>styles.css</code> отступ над формой и сохраняем файл. Коммит не делаем.</p>
+        <figure class="code">
+          <figcaption><span>styles.css</span><span>в конец файла</span></figcaption>
+<pre>form {
+  margin-top: 24px;
+}</pre>
+        </figure>
+        <p>Переключаемся на <code>main</code>:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git switch main</span>
+M	styles.css
+Switched to branch 'main'
+Your branch is ahead of 'origin/main' by 12 commits.
+  (use "git push" to publish your local commits)
+<span class="cmd">git status --short</span>
+ M styles.css</pre>
+        </figure>
+        <p>Переключение прошло, и правка осталась в файле. Первая строка ответа <code>M styles.css</code> сообщает об этом: изменённый файл перенесён на ветку <code>main</code>.</p>
+        <p>Незакоммиченная правка не записана ни в одной ветке. Она лежит в папке проекта. Файл <code>styles.css</code> в обеих ветках одинаковый, поэтому Git оставил его как есть. Если сейчас сделать коммит, отступ для формы попадёт в <code>main</code>, где формы нет.</p>
+        <p>Возвращаемся в ветку формы и коммитим правку там:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git switch forma-kontaktov</span>
+M	styles.css
+Switched to branch 'forma-kontaktov'
+<span class="cmd">git add styles.css</span>
+<span class="cmd">git commit -m "Добавил отступ над формой"</span>
+[forma-kontaktov e3eeeb9] Добавил отступ над формой
+ 1 file changed, 4 insertions(+)</pre>
+        </figure>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: в ветке forma-kontaktov два коммита, a727fbf и e3eeeb9, в main один коммит 69f9d13, HEAD стоит на forma-kontaktov">
+            <path d="M30 215 H640" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <circle cx="250" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="250" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил дату …</text>
+            <path d="M250 215 C300 215 310 80 360 80 H470" stroke="var(--fire-deep)" stroke-width="3" fill="none"/>
+            <circle cx="380" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">a727fbf</text><text x="380" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">форма</text>
+            <circle cx="470" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="470" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">e3eeeb9</text><text x="470" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">отступ</text>
+            <circle cx="640" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="640" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">69f9d13</text><text x="640" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">заголовок</text>
+            <rect x="612.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="640" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <path d="M640 182 V197" stroke="var(--fire-deep)" stroke-width="3"/>
+            <rect x="396.0" y="17" width="148.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="470" y="36" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma-kontaktov</text>
+            <path d="M470 47 V62" stroke="var(--fire-deep)" stroke-width="3"/>
+            <text x="388.0" y="36" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text>
+          </svg>
+          <figcaption>После коммита. В ветке <code>forma-kontaktov</code> второй коммит <code>e3eeeb9</code>. Ветка <code>main</code> не сдвинулась: переход на неё и обратно коммитов не добавил.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>Правка в <code>styles.css</code> закоммичена в ветке <code>forma-kontaktov</code>. Перед коммитом ветку проверяют по строке состояния.</p>
+        <h2 id="s10"><span class="sec">§10</span>Шаг 9. Отказ в переключении</h2>
+        <p>Во втором случае Git переключение останавливает.</p>
+        <p>На ветке <code>forma-kontaktov</code> меняем в <code>kontakty.html</code> надпись на кнопке и сохраняем файл. Коммит не делаем.</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>kontakty.html</span><span>было</span></figcaption>
+<pre><mark>    &lt;button&gt;Отправить&lt;/button&gt;</mark></pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>kontakty.html</span><span>стало</span></figcaption>
+<pre><mark>    &lt;button&gt;Написать&lt;/button&gt;</mark></pre>
+          </figure>
+        </div>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git switch main</span>
+error: Your local changes to the following files would be overwritten by checkout:
+	kontakty.html
+Please commit your changes or stash them before you switch branches.
+Aborting</pre>
+        </figure>
+        <p>Git сообщает: правки в <code>kontakty.html</code> будут перезаписаны при переключении, сначала сделайте коммит. Слово <code>Aborting</code> означает, что переключение отменено и вы остались на прежней ветке. Причина в том, что <code>kontakty.html</code> в двух ветках разный: в <code>main</code> формы нет. Чтобы привести файл к ветке <code>main</code>, Git должен был бы стереть вашу правку.</p>
+        <p>VS Code в этом случае показывает окно с выбором. Выбираем в списке веток <code>main</code>:</p>
+        <figure class="shot">
+          <img src="img/08-blocked.png" alt="Окно VS Code с сообщением Your local changes would be overwritten by checkout и кнопками Force Checkout, Migrate Changes, Cancel, Stash & Checkout">
+          <figcaption>Сообщение то же, что в терминале. В списке Changes стоит <code>kontakty.html</code>, в файле строка 15 с новой надписью.</figcaption>
+        </figure>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Кнопка</th><th>Что делает</th></tr></thead>
+            <tbody>
+              <tr><td><b>Cancel</b></td><td>Отменяет переключение. Правка и ветка остаются как были</td></tr>
+              <tr><td><b>Stash &amp; Checkout</b></td><td>Убирает правку во временное хранилище и переключается. Хранилище разобрано в главе 3.5</td></tr>
+              <tr><td><b>Migrate Changes</b></td><td>Переключается и пробует перенести правку в другую ветку</td></tr>
+              <tr><td><b>Force Checkout</b></td><td>Переключается и стирает правку. Вернуть её нельзя</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Нажимаем <b>Cancel</b>. Правка относится к форме, поэтому коммитим её в текущей ветке:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git add kontakty.html
+git commit -m "Переименовал кнопку формы"</pre>
+        </figure>
+        <p>Оба случая этой части сводятся к одному правилу: перед переключением делают коммит, чтобы список изменений был пуст.</p>
+        <figure class="shot shot--panel">
+          <img src="img/09-final.png" alt="Раздел Graph в режиме All: сверху три коммита ветки forma-kontaktov, ниже на отдельной линии коммит ветки main, затем общая история">
+          <figcaption>Состояние в конце главы. В ветке <code>forma-kontaktov</code> три коммита, в <code>main</code> — один. Вы стоите на <code>forma-kontaktov</code>.</figcaption>
+        </figure>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: от коммита 82fd14a идут две линии — один коммит в ветке main и три коммита в ветке forma-kontaktov, HEAD стоит на forma-kontaktov">
+            <path d="M30 215 H640" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <circle cx="250" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="250" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил дату …</text>
+            <path d="M250 215 C300 215 310 80 360 80 H560" stroke="var(--fire-deep)" stroke-width="3" fill="none"/>
+            <circle cx="380" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">a727fbf</text><text x="380" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">форма</text>
+            <circle cx="470" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="470" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">e3eeeb9</text><text x="470" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">отступ</text>
+            <circle cx="560" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="560" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">52b9719</text><text x="560" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">кнопка</text>
+            <circle cx="640" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="640" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">69f9d13</text><text x="640" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">заголовок</text>
+            <rect x="612.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="640" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <path d="M640 182 V197" stroke="var(--fire-deep)" stroke-width="3"/>
+            <rect x="486.0" y="17" width="148.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="560" y="36" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma-kontaktov</text>
+            <path d="M560 47 V62" stroke="var(--fire-deep)" stroke-width="3"/>
+            <text x="478.0" y="36" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text>
+          </svg>
+          <figcaption>Три коммита формы лежат в своей ветке. В <code>main</code> их нет, пока ветки не объединены.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>Список изменений пуст, вы стоите на <code>forma-kontaktov</code>. В <code>main</code> шестнадцать коммитов, в <code>forma-kontaktov</code> — восемнадцать: пятнадцать общих и три своих.</p>
+
+        <div class="part" role="separator"><span><b>4</b>Справка</span></div>
+        <h2 id="s11"><span class="sec">§11</span>Справка: команды для веток</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что нужно</th><th>В VS Code</th><th>Команда</th></tr></thead>
+            <tbody>
+              <tr><td>Создать ветку и перейти на неё</td><td>Имя ветки в строке состояния → Create new branch…</td><td><code>git switch -c имя</code></td></tr>
+              <tr><td>Создать ветку и остаться на текущей</td><td>Кнопки нет</td><td><code>git branch имя</code></td></tr>
+              <tr><td>Перейти на ветку</td><td>Имя ветки в строке состояния → ветка в списке</td><td><code>git switch имя</code></td></tr>
+              <tr><td>Вернуться на предыдущую ветку</td><td>Кнопки нет</td><td><code>git switch -</code></td></tr>
+              <tr><td>Список веток</td><td>Имя ветки в строке состояния</td><td><code>git branch</code>, с коммитами — <code>git branch -v</code></td></tr>
+              <tr><td>Показать все ветки в истории</td><td>Раздел GRAPH → Auto → All</td><td><code>git log --oneline --graph --all</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="margin-note">
+          <b>На полях: команда checkout</b>
+          <p>В инструкциях и на форумах для тех же действий встречается команда <code>git checkout</code>: <code>git checkout имя</code> переходит на ветку, <code>git checkout -b имя</code> создаёт ветку и переходит на неё. Команда <code>git switch</code> появилась в Git 2.23 в 2019 году и делает только переключение веток. VS Code в своих сообщениях использует слово checkout: <b>Select a branch or tag to checkout</b>, <b>Force Checkout</b>.</p>
+        </div>
+
+        <div class="part" role="separator"><span><b>5</b>Проверка себя</span></div>
+        <h2 id="s12"><span class="sec">§12</span>Частые вопросы</h2>
+        <div class="myths">
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>При создании ветки проект копируется в новую папку.</div>
+            <div class="myth__yes"><b>На самом деле</b>Папка одна. Создаётся файл ветки в <code>.git/refs/heads</code>, а при переключении Git меняет файлы в этой же папке.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>После переключения на <code>main</code> форма удалена.</div>
+            <div class="myth__yes"><b>На самом деле</b>Форма записана в коммитах ветки <code>forma-kontaktov</code>. При переходе на эту ветку она возвращается в файл.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Незакоммиченная правка остаётся в той ветке, где её сделали.</div>
+            <div class="myth__yes"><b>На самом деле</b>Незакоммиченная правка лежит в папке проекта и ни в одной ветке не записана. При переключении она либо переходит вместе с вами, либо Git останавливает переключение.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Коммит попадает в ту ветку, которая выбрана в графе.</div>
+            <div class="myth__yes"><b>На самом деле</b>Коммит попадает в ветку, записанную в <code>HEAD</code>. Её имя показано в строке состояния и в подсказке поля сообщения.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Кнопка Force Checkout помогает, когда Git не даёт переключиться.</div>
+            <div class="myth__yes"><b>На самом деле</b>Force Checkout стирает незакоммиченные правки без возможности вернуть. Вместо неё делают коммит.</div>
+          </div>
+        </div>
+
+        <h2 id="s13"><span class="sec">§13</span>Проверьте себя</h2>
+        <details>
+          <summary>Что меняется в папке <code>.git</code> после команды <code>git switch -c forma-kontaktov</code>?</summary>
+          <p>В <code>.git/refs/heads</code> появляется файл <code>forma-kontaktov</code> с именем текущего коммита, а в <code>HEAD</code> записывается <code>ref: refs/heads/forma-kontaktov</code>. Файлы проекта не меняются.</p>
+        </details>
+        <details>
+          <summary>Вы сделали коммит в ветке <code>forma-kontaktov</code>. Что стало с веткой <code>main</code>?</summary>
+          <p>Ничего. Коммит сдвигает только ветку, записанную в <code>HEAD</code>. <code>main</code> осталась на прежнем коммите.</p>
+        </details>
+        <details>
+          <summary>После перехода на <code>main</code> из <code>kontakty.html</code> пропала форма. Где она?</summary>
+          <p>В коммите ветки <code>forma-kontaktov</code>. При переключении Git приводит файлы к последнему коммиту выбранной ветки, а в <code>main</code> формы нет. Команда <code>git switch forma-kontaktov</code> возвращает её в файл.</p>
+        </details>
+        <details>
+          <summary>Вы изменили файл, не закоммитили и переключились на другую ветку. Git ответил строкой <code>M styles.css</code>. Что произошло?</summary>
+          <p>Переключение выполнено, изменённый файл перенесён вместе с вами. Правка по-прежнему не закоммичена и лежит в папке проекта. Коммит попадёт в ту ветку, на которой вы стоите сейчас.</p>
+        </details>
+        <details>
+          <summary>Git ответил <code>Your local changes … would be overwritten by checkout</code> и <code>Aborting</code>. Что делать?</summary>
+          <p>Переключение отменено, вы на прежней ветке. Файл с правкой в двух ветках разный, и Git не стал её стирать. Нужно закоммитить правку в текущей ветке и переключиться снова.</p>
+        </details>
+        <details>
+          <summary>Как увидеть в одном списке коммиты обеих веток?</summary>
+          <p>В терминале: <code>git log --oneline --graph --all</code>. В VS Code: в заголовке раздела GRAPH нажать Auto, отметить All и нажать OK.</p>
+        </details>
+
+        <h2 id="s14"><span class="sec">§14</span>Шпаргалка по главе</h2>
+        <div class="cheat">
+          <div>
+            <b>Создать ветку</b>
+            <code>строка состояния → Create new branch…</code>
+            <code>git switch -c имя</code>
+          </div>
+          <div>
+            <b>Переключиться</b>
+            <code>строка состояния → ветка в списке</code>
+            <code>git switch имя</code>
+            <code>git switch -</code>
+          </div>
+          <div>
+            <b>Что делает переключение</b>
+            <code>HEAD → имя ветки</code>
+            <code>файлы → последний коммит ветки</code>
+          </div>
+          <div>
+            <b>Проверить</b>
+            <code>git branch -v</code>
+            <code>cat .git/HEAD</code>
+            <code>git log --oneline --graph --all</code>
+          </div>
+          <div>
+            <b>Граф VS Code</b>
+            <code>Auto — текущая ветка</code>
+            <code>All — все ветки</code>
+          </div>
+          <div>
+            <b>Перед переключением</b>
+            <code>список изменений пуст</code>
+            <code>правку коммитят в своей ветке</code>
+            <code>Force Checkout стирает правки</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Ветку создают из списка веток в строке состояния или командой <code>git switch -c</code>. Новая ветка стоит на том же коммите, что и текущая, файлы проекта при этом не меняются. Коммит сдвигает только ветку, записанную в <code>HEAD</code>, поэтому после первого коммита ветки расходятся. При переключении Git записывает в <code>HEAD</code> имя выбранной ветки и приводит файлы в папке к её последнему коммиту: форма есть в файле на ветке <code>forma-kontaktov</code> и отсутствует на <code>main</code>. Обе ветки показывает <code>git log --oneline --graph --all</code> и раздел GRAPH в режиме All. Незакоммиченная правка не записана ни в одной ветке: при переключении она переходит вместе с вами, а если файл в ветках разный, Git переключение отменяет. Поэтому перед переключением делают коммит. В следующей главе ветку <code>forma-kontaktov</code> объединяют с <code>main</code>.</p>
+
+        <div class="sources">
+          <b>Откуда взяты факты</b>
+          <ol>
+            <li>Кадры и ответы команд получены на клоне проекта <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a> в Git версии 2.51.1 и VS Code версии 1.138.</li>
+            <li>Команды <code>git switch</code> и <code>git branch</code> — <a href="https://git-scm.com/docs/git-switch">документация git-switch</a> и <a href="https://git-scm.com/docs/git-branch">git-branch</a>.</li>
+            <li>Команда <code>git checkout</code> и перенос незакоммиченных правок при переключении — <a href="https://git-scm.com/docs/git-checkout">документация git-checkout</a>.</li>
+            <li>Появление <code>git switch</code> в версии 2.23 — <a href="https://github.com/git/git/blob/master/Documentation/RelNotes/2.23.0.txt">заметки к выпуску Git 2.23</a>.</li>
+            <li>Создание веток, список веток и раздел Graph — <a href="https://code.visualstudio.com/docs/sourcecontrol/overview">документация VS Code, раздел Source Control</a>.</li>
+          </ol>
+        </div>
+
+        <div class="pager"><a href="../10-zachem-vetki/index.html">← 3.1 Ветки</a><a href="../../index.html">К содержанию справочника</a></div>
+
+        <div class="colophon">
+          <span>Глава 3.2 · Вторая ветка: создать, переключиться, проверить · Справочник по Git и GitHub</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../../book.js"></script>
+</body>
+</html>
