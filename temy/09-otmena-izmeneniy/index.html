@@ -105,13 +105,13 @@
         <div class="why">
           <p class="why__head">Зачем это нужно в работе</p>
           <ul class="why__list">
-            <li><b>Проба не удалась.</b> Поменяли цвета, посмотрели — хуже. Правку нужно выбросить и вернуть файл к последнему коммиту.</li>
+            <li><b>Пробная правка не подошла.</b> Цвета поменяли, результат хуже прежнего. Правку нужно выбросить и вернуть файл к последнему коммиту.</li>
             <li><b>Опечатка в сообщении или забытый файл.</b> Коммит только что сделан, и в нём ошибка. Исправить его проще, чем делать второй коммит «исправил опечатку».</li>
             <li><b>Правка на сайте оказалась ошибкой.</b> Коммит неделю назад поменял отступы, и теперь их нужно вернуть. Остальные коммиты после него трогать нельзя.</li>
             <li><b>Что-то стёрто по ошибке.</b> Git записывает в журнал каждое действие с историей, и по этой записи стёртый коммит можно вернуть.</li>
           </ul>
         </div>
-        <p>Работаем на проекте <code>sait-vizitka</code> в том виде, в каком его оставила глава 2.5: одиннадцать коммитов, семь из них на GitHub ещё не отправлены.</p>
+        <p>В главе используется проект <code>sait-vizitka</code> в том виде, в каком он остался после главы 2.5: одиннадцать коммитов, семь из них на GitHub ещё не отправлены.</p>
 
         <div class="part" role="separator"><span><b>1</b>Правка ещё не в истории</span></div>
         <h2 id="s2"><span class="sec">§2</span>Шаг 1. Отменить правку в файле</h2>
@@ -288,7 +288,7 @@ git commit --amend -m "Добавил ссылку на GitHub"</pre>
           <img src="img/08-after-undo.png" alt="Панель после отмены: в поле сообщения «Покрасил заголовок», в Staged Changes styles.css, в графе верхний коммит «Добавил ссылку на GitHub»">
           <figcaption>Коммита «Покрасил заголовок» в графе больше нет. Его правка вернулась в <b>Staged Changes</b>, а сообщение — в поле ввода.</figcaption>
         </figure>
-        <p>Undo Last Commit ничего не выбрасывает: коммит исчезает из истории, а его содержимое остаётся в индексе. В терминале этой кнопке соответствует команда <code>reset</code> с ключом <code>--soft</code>. Запись <code>HEAD~</code> означает коммит перед текущим, <code>HEAD~1</code> — то же самое. Подробно <code>reset</code> разобран в шаге 6.</p>
+        <p>После Undo Last Commit коммит исчезает из истории, а его содержимое остаётся в индексе. В терминале этой кнопке соответствует команда <code>reset</code> с ключом <code>--soft</code>. Запись <code>HEAD~</code> означает коммит перед текущим, <code>HEAD~1</code> — то же самое. Подробно <code>reset</code> разобран в шаге 6.</p>
         <figure class="code">
           <figcaption><span>терминал в папке проекта</span><span>ответа нет</span></figcaption>
 <pre>git reset --soft HEAD~</pre>
@@ -376,7 +376,7 @@ Author: Student &lt;student@example.com&gt;
 
         <h2 id="s7"><span class="sec">§7</span>Шаг 6. Три режима reset на пробном коммите</h2>
         <p>Revert исправляет ошибку новым коммитом. Команда <code>reset</code> действует иначе: она убирает коммиты из истории. Это нужно, когда коммит сделан по ошибке и на GitHub ещё не отправлен.</p>
-        <p>Простыми словами, <span class="term">reset</span> отматывает историю назад до указанного коммита. Все коммиты после него исчезают из графа. Остаётся решить, куда деть правки, которые в этих коммитах лежали. Это решает ключ команды: <code>--soft</code>, <code>--mixed</code> или <code>--hard</code>.</p>
+        <p><span class="term">Reset</span> возвращает историю к указанному коммиту. Все коммиты после него исчезают из графа. Остаётся решить, куда деть правки, которые в этих коммитах лежали. Это решает ключ команды: <code>--soft</code>, <code>--mixed</code> или <code>--hard</code>.</p>
         <div class="analogy">
           <p class="analogy__head">Ассоциация: заклеенная коробка из главы 2.3</p>
           <div class="analogy__pair">
@@ -391,7 +391,7 @@ Author: Student &lt;student@example.com&gt;
           </div>
           <p class="analogy__limit"><b>Где не совпадает</b>Выброшенную коробку не вернуть. Коммит после <code>--hard</code> Git ещё хранит, и его можно достать по журналу — это шаг 7. Незакоммиченные правки после <code>--hard</code> пропадают насовсем.</p>
         </div>
-        <p>Чтобы увидеть разницу на своём экране, сделаем пробный коммит и отменим его тремя способами по очереди. В <code>styles.css</code> увеличиваем размер заголовка:</p>
+        <p>Чтобы увидеть разницу между режимами, сделаем пробный коммит и отменим его тремя способами по очереди. В <code>styles.css</code> увеличиваем размер заголовка:</p>
         <div class="code-pair">
           <figure class="code code--was">
             <figcaption><span>styles.css</span><span>было</span></figcaption>
@@ -658,7 +658,7 @@ HEAD is now at 9f5312d Revert "Увеличил отступы страницы"
         <div class="sources">
           <b>Откуда взяты факты</b>
           <ol>
-            <li>Кадры и ответы команд получены на клоне учебного проекта <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a> в Git версии 2.51.1 и VS Code версии 1.138.</li>
+            <li>Кадры и ответы команд получены на клоне проекта <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a> в Git версии 2.51.1 и VS Code версии 1.138.</li>
             <li>Команды <code>git restore</code>, <code>git clean</code>, <code>git commit --amend</code> — <a href="https://git-scm.com/docs/git-restore">документация git-restore</a>, <a href="https://git-scm.com/docs/git-clean">git-clean</a>, <a href="https://git-scm.com/docs/git-commit">git-commit</a>.</li>
             <li>Режимы <code>git reset</code> и работа <code>git revert</code> — <a href="https://git-scm.com/docs/git-reset">документация git-reset</a> и <a href="https://git-scm.com/docs/git-revert">git-revert</a>.</li>
             <li>Журнал <code>git reflog</code> и срок хранения записей — <a href="https://git-scm.com/docs/git-reflog">документация git-reflog</a> и <a href="https://git-scm.com/docs/git-gc">git-gc</a> (параметр <code>gc.reflogExpireUnreachable</code>, по умолчанию <code>30</code> дней).</li>
