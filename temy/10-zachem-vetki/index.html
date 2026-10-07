@@ -334,7 +334,41 @@ cd66804 Revert "Увеличил отступы страницы"</pre>
             </tbody>
           </table>
         </div>
-        <p>Ветки начинают различаться после первого коммита. Новый коммит сдвигает только ту ветку, которая записана в <code>HEAD</code>. Вторая ветка остаётся на прежнем коммите. Так получаются две линии из схемы в начале главы.</p>
+        <p>Ветки начинают различаться после первого коммита. Новый коммит сдвигает только ту ветку, которая записана в <code>HEAD</code>. Вторая ветка остаётся на прежнем коммите:</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: после коммита в ветке forma имя forma стоит на новом коммите, имя main осталось на коммите 82fd14a">
+            <path d="M30 215 H250" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <circle cx="250" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="250" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил дату …</text>
+            <path d="M250 215 C300 215 310 80 360 80 H380" stroke="var(--fire-deep)" stroke-width="3" fill="none"/>
+            <circle cx="380" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">новый коммит</text><text x="380" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">в ветке forma</text>
+            <rect x="222.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <path d="M250 182 V197" stroke="var(--fire-deep)" stroke-width="3"/>
+            <rect x="348.0" y="17" width="64.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="36" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma</text>
+            <path d="M380 47 V62" stroke="var(--fire-deep)" stroke-width="3"/>
+            <text x="340.0" y="36" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text>
+          </svg>
+          <figcaption>Коммит сделан, когда в <code>HEAD</code> записана ветка <code>forma</code>. Её имя перешло на новый коммит, имя <code>main</code> осталось на <code>82fd14a</code>.</figcaption>
+        </figure>
+        <p>Если затем перейти на <code>main</code> и сделать коммит там, сдвинется уже <code>main</code>. У каждой ветки появляется свой последний коммит, а общая история заканчивается на <code>82fd14a</code>:</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: от коммита 82fd14a идут две линии, в каждой по одному новому коммиту; имя main стоит на своём, имя forma на своём">
+            <path d="M30 215 H640" stroke="var(--ink)" stroke-width="3" fill="none"/>
+            <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+            <circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">cd66804</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Revert …</text>
+            <circle cx="250" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="250" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">Добавил дату …</text>
+            <path d="M250 215 C300 215 310 80 360 80 H380" stroke="var(--fire-deep)" stroke-width="3" fill="none"/>
+            <circle cx="380" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">новый коммит</text><text x="380" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">в ветке forma</text>
+            <circle cx="640" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="640" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">новый коммит</text><text x="640" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">в ветке main</text>
+            <rect x="612.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="640" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text>
+            <path d="M640 182 V197" stroke="var(--fire-deep)" stroke-width="3"/>
+            <rect x="348.0" y="17" width="64.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="380" y="36" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma</text>
+            <path d="M380 47 V62" stroke="var(--fire-deep)" stroke-width="3"/>
+            <text x="604.2" y="171" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text>
+          </svg>
+          <figcaption>Две линии из схемы в начале главы. Коммит ветки <code>forma</code> в <code>main</code> не входит, коммит ветки <code>main</code> не входит в <code>forma</code>.</figcaption>
+        </figure>
         <div class="analogy">
           <p class="analogy__head">Ассоциация: закладки в тетради</p>
           <div class="analogy__pair">
@@ -363,6 +397,10 @@ cd66804 Revert "Увеличил отступы страницы"</pre>
           </table>
         </div>
         <p>Имя <code>main</code> для Git ничем не отличается от других. Главной эту ветку делает договорённость: в ней держат проверенное состояние проекта, и GitHub показывает её на странице репозитория по умолчанию.</p>
+        <div class="margin-note">
+          <b>На полях: ветку main не переименовывают</b>
+          <p>В проектах этого курса имя <code>main</code> менять нельзя. Команда переименования в Git и в VS Code есть, но она меняет имя только на вашем компьютере. На GitHub ветка по-прежнему называется <code>main</code>, и запись <code>origin/main</code> относится к ней. После переименования имена у вас и на сервере не совпадают, и отправка коммитов останавливается с ошибкой <code>The upstream branch of your current branch does not match the name of your current branch</code>. На имя <code>main</code> настроены и другие части проекта: страница репозитория, публикация сайта, проверки. Новым веткам имя выбирают свободно, <code>main</code> оставляют как есть.</p>
+        </div>
 
         <div class="part" role="separator"><span><b>4</b>Проверка себя</span></div>
         <h2 id="s10"><span class="sec">§10</span>Частые вопросы</h2>
@@ -467,7 +505,7 @@ cd66804 Revert "Увеличил отступы страницы"</pre>
           </ol>
         </div>
 
-        <div class="pager"><a href="../09-otmena-izmeneniy/index.html">← 2.6 Отмена изменений</a><a href="../../index.html">К содержанию справочника</a></div>
+        <div class="pager"><a href="../09-otmena-izmeneniy/index.html">← 2.6 Отмена изменений</a><a href="../../index.html">К содержанию справочника</a><a href="../11-sozdat-vetku/index.html">3.2 Вторая ветка →</a></div>
 
         <div class="colophon">
           <span>Глава 3.1 · Ветки: зачем нужны и как устроены · Справочник по Git и GitHub</span>
