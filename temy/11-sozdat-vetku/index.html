@@ -56,7 +56,7 @@
             <li><a href="#s7">Шаг 6. Показать обе ветки в графе</a></li>
             <li><a href="#s8">Шаг 7. Вернуться в ветку формы</a></li>
             <li><a href="#s9">Шаг 8. Переключиться с незакоммиченной правкой</a></li>
-            <li><a href="#s10">Шаг 9. Отказ в переключении</a></li>
+            <li><a href="#s10">Шаг 9. Получить отказ в переключении</a></li>
             <li><a href="#s11">Справка: команды для веток</a></li>
             <li><a href="#s12">Частые вопросы</a></li>
             <li><a href="#s13">Проверьте себя</a></li>
@@ -65,14 +65,14 @@
         </nav>
 
         <h2 id="s1"><span class="sec">§1</span>Задача главы</h2>
-        <p>В главе 3.1 разобрано, что ветка — это имя, за которым записан один коммит, а в <code>HEAD</code> записано имя текущей ветки. В этой главе это проверяется действием. На страницу контактов добавляется форма обратной связи. Работа над ней ведётся в отдельной ветке <code>forma-kontaktov</code>, чтобы незаконченная форма не попала в <code>main</code>.</p>
+        <p>В главе 3.1 на ветке <code>main</code> разобрано, что ветка — это имя, за которым записан один коммит, а в <code>HEAD</code> записано имя текущей ветки. В этой главе к <code>main</code> добавляется вторая ветка. Задача: добавить на страницу контактов форму обратной связи. Работа ведётся в отдельной ветке <code>forma-kontaktov</code>, чтобы незаконченная форма не попала в <code>main</code>.</p>
         <div class="why">
           <p class="why__head">Зачем это нужно в работе</p>
           <ul class="why__list">
             <li><b>Начать задачу.</b> Под новую задачу создают ветку и коммитят в неё. Основная ветка в это время не меняется.</li>
             <li><b>Прерваться на исправление.</b> Срочную правку делают в основной ветке. Для этого на неё переключаются, а после исправления возвращаются к задаче.</li>
             <li><b>Сравнить два состояния.</b> Переключение показывает проект с новой работой и без неё в одной и той же папке.</li>
-            <li><b>Не потерять правки.</b> Незакоммиченная правка при переключении либо переходит в другую ветку, либо останавливает переключение. Оба случая нужно узнавать по сообщениям Git.</li>
+            <li><b>Не потерять правки.</b> Незакоммиченная правка при переключении либо переходит в другую ветку, либо останавливает переключение. Какой из двух случаев произошёл, видно по ответу Git.</li>
           </ul>
         </div>
         <p>В главе используется проект <code>sait-vizitka</code> в том виде, в каком он остался после главы 3.1: пятнадцать коммитов в ветке <code>main</code>, одиннадцать из них на GitHub не отправлены. Имена коммитов, сделанных вами, будут отличаться от показанных.</p>
@@ -99,7 +99,7 @@
             <thead><tr><th>Что изменилось в окне</th><th>Что это значит</th></tr></thead>
             <tbody>
               <tr><td>В строке состояния <code>forma-kontaktov</code></td><td>VS Code создал ветку и сразу перешёл на неё</td></tr>
-              <tr><td>В графе у верхнего коммита метка <code>forma-kontaktov</code></td><td>Новая ветка стоит на том же коммите, на котором стояла <code>main</code></td></tr>
+              <tr><td>В графе у верхнего коммита метка <code>forma-kontaktov</code></td><td>Новая ветка стоит на том же коммите, что и <code>main</code></td></tr>
               <tr><td>Рядом с именем ветки значок облака со стрелкой</td><td>Ветки нет на GitHub, она есть только на вашем компьютере</td></tr>
               <tr><td>Кнопка <b>Publish Branch</b> вместо Sync Changes</td><td>Кнопка отправляет новую ветку на GitHub. В этой главе её не нажимаем, отправка разобрана в модуле 4</td></tr>
               <tr><td>В подсказке поля сообщения <code>commit on "forma-kontaktov"</code></td><td>Следующий коммит попадёт в новую ветку</td></tr>
@@ -134,7 +134,7 @@ ref: refs/heads/forma-kontaktov</pre>
 * forma-kontaktov 82fd14a Добавил дату обновления страницы
   main            82fd14a [ahead 11] Добавил дату обновления страницы</pre>
         </figure>
-        <p>Обе ветки стоят на одном коммите <code>82fd14a</code>. Различие между ними пока одно: имя.</p>
+        <p>Обе ветки стоят на одном коммите <code>82fd14a</code>. Пока ветки различаются только именем.</p>
         <figure class="scheme">
           <svg viewBox="0 0 700 275" role="img" aria-label="Схема: имена main и forma-kontaktov указывают на один коммит 82fd14a, HEAD стоит на forma-kontaktov">
             <path d="M30 215 H250" stroke="var(--ink)" stroke-width="3" fill="none"/>
@@ -182,6 +182,7 @@ git commit -m "Добавил форму обратной связи"</pre>
           <img src="img/04-branch-commit.png" alt="Окно VS Code: в графе сверху коммит «Добавил форму обратной связи» с меткой forma-kontaktov, в файле kontakty.html строки 12–16 с формой">
           <figcaption>В графе сверху новый коммит с меткой <code>forma-kontaktov</code>. В файле строки 12–16 — форма.</figcaption>
         </figure>
+        <p>Проверяем, на каких коммитах стоят ветки:</p>
         <figure class="code code--out">
           <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
 <pre><span class="cmd">git branch -v</span>
@@ -231,8 +232,8 @@ Your branch is ahead of 'origin/main' by 11 commits.
             </tbody>
           </table>
         </div>
-        <p>Форма не удалена. Она записана в коммите <code>a727fbf</code> ветки <code>forma-kontaktov</code> и вернётся в файл при переходе на эту ветку. Папка проекта одна, а её содержимое зависит от ветки, на которой вы стоите.</p>
-        <p>В графе коммита с формой сейчас нет: раздел GRAPH по умолчанию показывает только текущую ветку. Обе ветки сразу будут показаны в шаге 6.</p>
+        <p>Форма записана в коммите <code>a727fbf</code> ветки <code>forma-kontaktov</code> и вернётся в файл при переходе на эту ветку. Папка проекта одна, а её содержимое зависит от ветки, на которой вы стоите.</p>
+        <p>В графе коммита с формой сейчас нет: раздел GRAPH по умолчанию показывает только текущую ветку.</p>
         <figure class="scheme">
           <svg viewBox="0 0 700 275" role="img" aria-label="Схема: коммиты те же, HEAD переставлен на ветку main, которая стоит на 82fd14a">
             <path d="M30 215 H250" stroke="var(--ink)" stroke-width="3" fill="none"/>
@@ -360,7 +361,7 @@ Switched to branch 'forma-kontaktov'</pre>
   margin-top: 24px;
 }</pre>
         </figure>
-        <p>Переключаемся на <code>main</code>:</p>
+        <p>Переключаемся на <code>main</code>, из списка веток в строке состояния или командой:</p>
         <figure class="code code--out">
           <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
 <pre><span class="cmd">git switch main</span>
@@ -373,7 +374,7 @@ Your branch is ahead of 'origin/main' by 12 commits.
         </figure>
         <p>Переключение прошло, и правка осталась в файле. Первая строка ответа <code>M styles.css</code> сообщает об этом: изменённый файл перенесён на ветку <code>main</code>.</p>
         <p>Незакоммиченная правка не записана ни в одной ветке. Она лежит в папке проекта. Файл <code>styles.css</code> в обеих ветках одинаковый, поэтому Git оставил его как есть. Если сейчас сделать коммит, отступ для формы попадёт в <code>main</code>, где формы нет.</p>
-        <p>Возвращаемся в ветку формы и коммитим правку там:</p>
+        <p>Поэтому перед коммитом ветку проверяют по строке состояния. Возвращаемся в ветку формы и коммитим правку там:</p>
         <figure class="code code--out">
           <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
 <pre><span class="cmd">git switch forma-kontaktov</span>
@@ -403,9 +404,9 @@ Switched to branch 'forma-kontaktov'
           <figcaption>После коммита. В ветке <code>forma-kontaktov</code> второй коммит <code>e3eeeb9</code>. Ветка <code>main</code> не сдвинулась: переход на неё и обратно коммитов не добавил.</figcaption>
         </figure>
 
-        <p class="step-done"><b>Что получилось.</b>Правка в <code>styles.css</code> закоммичена в ветке <code>forma-kontaktov</code>. Перед коммитом ветку проверяют по строке состояния.</p>
-        <h2 id="s10"><span class="sec">§10</span>Шаг 9. Отказ в переключении</h2>
-        <p>Во втором случае Git переключение останавливает.</p>
+        <p class="step-done"><b>Что получилось.</b>Правка в <code>styles.css</code> закоммичена в ветке <code>forma-kontaktov</code>, в которой находится форма.</p>
+        <h2 id="s10"><span class="sec">§10</span>Шаг 9. Получить отказ в переключении</h2>
+        <p>Если изменённый файл в двух ветках разный, Git переключение отменяет. Воспроизведём этот случай.</p>
         <p>На ветке <code>forma-kontaktov</code> меняем в <code>kontakty.html</code> надпись на кнопке и сохраняем файл. Коммит не делаем.</p>
         <div class="code-pair">
           <figure class="code code--was">
@@ -417,6 +418,7 @@ Switched to branch 'forma-kontaktov'
 <pre><mark>    &lt;button&gt;Написать&lt;/button&gt;</mark></pre>
           </figure>
         </div>
+        <p>Переключаемся на <code>main</code> командой:</p>
         <figure class="code code--out">
           <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
 <pre><span class="cmd">git switch main</span>
@@ -426,7 +428,7 @@ Please commit your changes or stash them before you switch branches.
 Aborting</pre>
         </figure>
         <p>Git сообщает: правки в <code>kontakty.html</code> будут перезаписаны при переключении, сначала сделайте коммит. Слово <code>Aborting</code> означает, что переключение отменено и вы остались на прежней ветке. Причина в том, что <code>kontakty.html</code> в двух ветках разный: в <code>main</code> формы нет. Чтобы привести файл к ветке <code>main</code>, Git должен был бы стереть вашу правку.</p>
-        <p>VS Code в этом случае показывает окно с выбором. Выбираем в списке веток <code>main</code>:</p>
+        <p>В VS Code то же действие, выбор <code>main</code> в списке веток, открывает окно с четырьмя кнопками:</p>
         <figure class="shot">
           <img src="img/08-blocked.png" alt="Окно VS Code с сообщением Your local changes would be overwritten by checkout и кнопками Force Checkout, Migrate Changes, Cancel, Stash & Checkout">
           <figcaption>Сообщение то же, что в терминале. В списке Changes стоит <code>kontakty.html</code>, в файле строка 15 с новой надписью.</figcaption>
@@ -448,7 +450,7 @@ Aborting</pre>
 <pre>git add kontakty.html
 git commit -m "Переименовал кнопку формы"</pre>
         </figure>
-        <p>Оба случая этой части сводятся к одному правилу: перед переключением делают коммит, чтобы список изменений был пуст.</p>
+        <p>Правило для обоих случаев: перед переключением делают коммит, список изменений должен быть пуст.</p>
         <figure class="shot shot--panel">
           <img src="img/09-final.png" alt="Раздел Graph в режиме All: сверху три коммита ветки forma-kontaktov, ниже на отдельной линии коммит ветки main, затем общая история">
           <figcaption>Состояние в конце главы. В ветке <code>forma-kontaktov</code> три коммита, в <code>main</code> — один. Вы стоите на <code>forma-kontaktov</code>.</figcaption>
