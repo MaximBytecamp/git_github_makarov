@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>ДЗ по темам 2.1–2.3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1B1A19; --ink-soft: #4A4644; --ink-faint: #918A85;
+  --fire: #F05133; --fire-deep: #C8380F; --fire-pale: #FBE0D8;
+  --steel: #2C5D8F; --steel-pale: #DDE7F1; --moss: #2F7D4F;
+  --paper: #F4F1EC; --rule: rgba(27,26,25,.16);
+  --body: Inter, system-ui, sans-serif;
+  --display: Literata, Georgia, serif;
+  --mono: "Roboto Mono", Consolas, monospace;
+}
+@page { size: A4; margin: 16mm 16mm 18mm; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: var(--ink); font: 10.5pt/1.5 var(--body); }
+.sheet { max-width: 178mm; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.2; margin: 0; }
+h1 { font-size: 23pt; margin: 4mm 0 3mm; }
+h2 { font-size: 15pt; margin: 8mm 0 2mm; padding-top: 3mm; border-top: 2px solid var(--ink); break-after: avoid; }
+h2 .num { color: var(--fire); margin-right: 2mm; }
+h3 { font-size: 11.5pt; margin: 5mm 0 1.5mm; break-after: avoid; }
+p { margin: 0 0 2.2mm; }
+ul, ol { margin: 0 0 2.5mm; padding-left: 6mm; }
+li { margin-bottom: 1mm; }
+code, kbd, .mono { font-family: var(--mono); font-size: .88em; }
+code { background: var(--paper); padding: .5px 4px; border-radius: 3px; }
+kbd { border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 3px; padding: 0 4px; background: #fff; white-space: nowrap; }
+a { color: var(--steel); }
+
+.top { display: flex; justify-content: space-between; align-items: center;
+  font-size: 8.5pt; color: var(--ink-soft); border-bottom: 3px solid var(--fire); padding-bottom: 2mm; }
+.top b { color: var(--ink); letter-spacing: .02em; }
+.lead { font-size: 11pt; color: var(--ink-soft); margin-bottom: 3mm; }
+
+.passport { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--ink); margin: 0 0 4mm; }
+.passport div { padding: 2mm 3mm; border-bottom: 1px solid var(--rule); }
+.passport div:nth-child(odd) { border-right: 1px solid var(--rule); }
+.passport div:nth-last-child(-n+2) { border-bottom: 0; }
+.passport b { display: block; font-size: 7.5pt; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-faint); font-weight: 600; }
+
+.box { border-radius: 4px; padding: 3mm 4mm; margin: 3mm 0; break-inside: avoid; }
+.box > b:first-child { display: block; margin-bottom: 1mm; }
+.box p:last-child, .box ul:last-child { margin-bottom: 0; }
+.box--stop { background: var(--fire-pale); border-left: 4px solid var(--fire-deep); }
+.box--info { background: var(--steel-pale); border-left: 4px solid var(--steel); }
+.box--note { background: var(--paper); border-left: 4px solid var(--ink-faint); }
+
+.shot { display: flex; gap: 3mm; align-items: flex-start; border: 1.5px dashed var(--fire); border-radius: 4px;
+  padding: 2.5mm 3.5mm; margin: 3mm 0; break-inside: avoid; }
+.shot .n { flex: none; background: var(--fire); color: #fff; font-weight: 700; border-radius: 3px; padding: .5mm 2mm; font-size: 9pt; white-space: nowrap; }
+.shot p { margin: 0; }
+.shot .cap { font-size: 9pt; color: var(--ink-soft); margin-top: 1mm; }
+
+figure.code { margin: 2mm 0 3mm; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; break-inside: avoid; }
+figure.code figcaption { display: flex; justify-content: space-between; font: 8pt var(--mono); background: var(--paper); padding: 1mm 3mm; color: var(--ink-soft); border-bottom: 1px solid var(--rule); }
+figure.code figcaption b { color: var(--ink); font-weight: 500; }
+figure.code pre { margin: 0; padding: 2mm 3mm; font: 8.6pt/1.45 var(--mono); white-space: pre-wrap; background: #fff; }
+pre mark { background: #DDF0E3; color: var(--moss); font-weight: 500; }
+pre del { background: var(--fire-pale); color: var(--fire-deep); text-decoration: none; }
+figure.code.term pre { background: #1E1E1E; color: #D4D4D4; }
+.term pre .c { color: #9CDCFE; }
+.term pre .o { color: #B5CEA8; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
+.pair figure.code { margin: 2mm 0 3mm; }
+
+table { width: 100%; border-collapse: collapse; margin: 2mm 0 3mm; font-size: 9.5pt; break-inside: avoid; }
+th, td { text-align: left; vertical-align: top; padding: 1.5mm 2mm; border-bottom: 1px solid var(--rule); }
+th { font-size: 8pt; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); border-bottom: 1.5px solid var(--ink); }
+td.num { font-family: var(--mono); color: var(--fire-deep); font-weight: 500; white-space: nowrap; }
+
+.ref { margin: 3mm 0; break-inside: avoid; }
+.ref img { display: block; max-width: 100%; border: 1px solid var(--rule); border-radius: 3px; }
+.ref figcaption { font-size: 8.5pt; color: var(--ink-soft); margin-top: 1mm; }
+.ref--half img { width: 62%; }
+
+.steps { counter-reset: s; list-style: none; padding-left: 0; }
+.steps > li { counter-increment: s; position: relative; padding-left: 8mm; margin-bottom: 2mm; }
+.steps > li::before { content: counter(s); position: absolute; left: 0; top: .3mm; width: 5.5mm; height: 5.5mm; border-radius: 50%;
+  background: var(--ink); color: #fff; font: 600 8pt/5.5mm var(--mono); text-align: center; }
+
+.grade td:first-child { font-family: var(--display); font-weight: 700; font-size: 13pt; width: 12mm; color: var(--fire-deep); }
+.page-break { break-before: page; }
+.foot { margin-top: 8mm; padding-top: 2mm; border-top: 1px solid var(--rule); font-size: 8.5pt; color: var(--ink-faint); display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<div class="top"><span><b>Git и GitHub</b> · практическое домашнее задание</span><span>Темы 2.1–2.3</span></div>
+
+<h1>Свой репозиторий, клон проекта и&nbsp;коммиты по задачам</h1>
+<p class="lead">Часть 1 — свой репозиторий. Часть 2 — клон учебного проекта. Часть 3 — четыре правки, записанные тремя коммитами. Сдаётся документ Word со снимками экрана.</p>
+
+<div class="passport">
+  <div><b>Темы справочника</b>2.1 панель Source Control · 2.2 init и clone · 2.3 изменения, индекс, коммит</div>
+  <div><b>Учебный репозиторий</b><span class="mono">github.com/MaximBytecamp/kofeynya</span></div>
+  <div><b>Что нужно на компьютере</b>VS Code и Git, настроенные по главе 1.3: в Git заданы ваши имя и почта</div>
+  <div><b>Что сдаётся</b>Документ Word с девятью снимками экрана</div>
+  <div><b>Сколько занимает</b>Около часа за компьютером</div>
+  <div><b>Срок</b>До начала следующего практического занятия</div>
+</div>
+
+<div class="box box--stop">
+  <b>На GitHub ничего не отправляем</b>
+  <p>Отправку коммитов на GitHub (<b>Sync Changes</b>, <code>git push</code>) мы ещё не изучали — это глава 4.3. Работа выполняется только на вашем компьютере и сдаётся снимками экрана.</p>
+  <p>После коммитов в клоне появится кнопка <b>Sync Changes</b> и стрелка <span class="mono">↑3</span> в строке состояния. Не нажимайте: прав на запись в учебный репозиторий у вас нет, будет ошибка.</p>
+</div>
+
+<h3>Как делать снимки</h3>
+<ul>
+  <li>Снимается окно VS Code целиком, текст должен читаться.</li>
+  <li>Снимок в буфер обмена: Windows — <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>; macOS — <kbd>Cmd</kbd> + <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>4</kbd>, затем пробел и щелчок по окну.</li>
+  <li>Под каждым снимком в Word — подпись из оранжевой рамки задания.</li>
+  <li>Терминал: <kbd>Ctrl</kbd> + <kbd>`</kbd> (клавиша «ё»).</li>
+</ul>
+
+<!-- ============ ЧАСТЬ 1 ============ -->
+<h2><span class="num">1</span>Свой репозиторий</h2>
+<p>Главы 2.1 и 2.2 (путь А).</p>
+
+<ol class="steps">
+  <li>Создайте папку <code>dz-git-familiya</code>, где вместо <code>familiya</code> — ваша фамилия латиницей, например <code>dz-git-ivanov</code>. Папка не должна лежать внутри другого репозитория и в облачной папке (OneDrive, iCloud Drive, Яндекс Диск).</li>
+  <li>Откройте папку в VS Code: <b>File → Open Folder</b>. В панели Source Control (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>) нажмите <b>Initialize Repository</b>.</li>
+  <li>Создайте в папке файл <code>obo-mne.md</code> и впишите в него свои данные:
+    <figure class="code"><figcaption><b>obo-mne.md</b><span>новый файл</span></figcaption><pre># О себе
+
+Иванов Иван, группа ИС-21
+Изучаю Git в VS Code.</pre></figure>
+    Сохраните файл. У него в панели буква <b>U</b>.</li>
+</ol>
+
+<div class="shot"><span class="n">Снимок 1</span><div><p>Панель Source Control: в разделе Changes файл <code>obo-mne.md</code> с буквой U, рядом открыт сам файл с вашими данными.</p><p class="cap">Подпись: «Рисунок 1 — Новый файл в только что созданном репозитории»</p></div></div>
+
+<ol class="steps" start="4" style="counter-reset: s 3">
+  <li>Нажмите <b>+</b> у файла, в поле Message напишите <code>Добавил файл о себе</code>, нажмите <b>✓ Commit</b>.</li>
+  <li>Допишите в конец файла строку <code>Любимый напиток: …</code> и сохраните. У файла буква <b>M</b>. Щёлкните по нему в панели — откроется окно сравнения.</li>
+</ol>
+
+<div class="shot"><span class="n">Снимок 2</span><div><p>Окно сравнения <code>obo-mne.md</code> с добавленной строкой и панель Source Control, где у файла буква M.</p><p class="cap">Подпись: «Рисунок 2 — Изменение файла после первого коммита»</p></div></div>
+
+<ol class="steps" start="6" style="counter-reset: s 5">
+  <li>Сделайте второй коммит: <code>Дописал любимый напиток</code>.</li>
+  <li>Откройте терминал и выполните команду:
+    <figure class="code term"><figcaption><b>терминал в папке dz-git-familiya</b><span>команда</span></figcaption><pre><span class="c">git log</span></pre></figure>
+    Должно быть два коммита с вашим именем в строке <span class="mono">Author</span>.</li>
+</ol>
+
+<div class="shot"><span class="n">Снимок 3</span><div><p>Терминал с ответом <code>git log</code>: два коммита, ваше имя в строках Author.</p><p class="cap">Подпись: «Рисунок 3 — История своего репозитория»</p></div></div>
+
+<!-- ============ ЧАСТЬ 2 ============ -->
+<h2><span class="num">2</span>Клон учебного проекта</h2>
+<p>Глава 2.2 (путь Б). Учебный проект — сайт кофейни: четыре файла, пять коммитов.</p>
+
+<ol class="steps">
+  <li>Откройте в браузере <a href="https://github.com/MaximBytecamp/kofeynya">github.com/MaximBytecamp/kofeynya</a>. <b>Code</b> → HTTPS → скопировать адрес:
+    <figure class="code"><figcaption><b>адрес репозитория</b><span>заканчивается на .git</span></figcaption><pre>https://github.com/MaximBytecamp/kofeynya.git</pre></figure></li>
+  <li><b>File → New Window</b>. Палитра команд <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> → <code>Git: Clone</code> → вставить адрес → <kbd>Enter</kbd>.</li>
+  <li>Выберите папку для проекта, например «Документы». Папку <code>dz-git-familiya</code> не выбирайте — получится репозиторий внутри репозитория.</li>
+  <li>Нажмите <b>Open</b>.</li>
+  <li>Откройте терминал и выполните две команды:
+    <figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git log --oneline</span>
+<span class="o">d451256 Добавил какао в меню
+c016d04 Добавил README с описанием проекта
+07b88ef Добавил страницу меню
+c971be5 Подключил файл со стилями
+69a4f0b Первая страница кофейни</span>
+<span class="c">git remote -v</span>
+<span class="o">origin  https://github.com/MaximBytecamp/kofeynya.git (fetch)
+origin  https://github.com/MaximBytecamp/kofeynya.git (push)</span></pre></figure>
+</li>
+</ol>
+
+<div class="shot"><span class="n">Снимок 4</span><div><p>Окно VS Code с проектом <code>kofeynya</code>: в проводнике четыре файла, в терминале ответы <code>git log --oneline</code> и <code>git remote -v</code>.</p><p class="cap">Подпись: «Рисунок 4 — Склонированный проект и его история»</p></div></div>
+
+<!-- ============ ЧАСТЬ 3 ============ -->
+<h2><span class="num">3</span>Четыре правки — три коммита</h2>
+<p>Глава 2.3. Четыре правки относятся к трём задачам — значит, три коммита. Две правки из разных задач находятся в одном файле <code>index.html</code>.</p>
+
+<h3>Подготовка: внесите правки</h3>
+<p><b>Правка 1, index.html</b> — часы работы:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>index.html</b><span>было, строка 11</span></figcaption><pre>  &lt;p&gt;Часы работы: <del>с 08:00 до 20:00</del>, без выходных.&lt;/p&gt;</pre></figure>
+<figure class="code"><figcaption><b>index.html</b><span>стало</span></figcaption><pre>  &lt;p&gt;Часы работы: <mark>с 07:30 до 21:00</mark>, без выходных.&lt;/p&gt;</pre></figure>
+</div>
+
+<p><b>Правка 2, index.html</b> — ссылка в конце страницы:</p>
+<figure class="code"><figcaption><b>index.html</b><span>стало, конец файла</span></figcaption><pre>  &lt;h2&gt;Разделы сайта&lt;/h2&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="menu.html"&gt;Меню&lt;/a&gt;&lt;/li&gt;
+<mark>    &lt;li&gt;&lt;a href="dostavka.html"&gt;Доставка&lt;/a&gt;&lt;/li&gt;</mark>
+  &lt;/ul&gt;</pre></figure>
+
+<p><b>Правка 3</b> — новый файл <code>dostavka.html</code> рядом с <code>index.html</code>:</p>
+<figure class="code"><figcaption><b>dostavka.html</b><span>новый файл</span></figcaption><pre>&lt;!doctype html&gt;
+&lt;html lang="ru"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;Доставка · Кофейня «Зерно»&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Доставка&lt;/h1&gt;
+  &lt;p&gt;Привозим заказ в любой корпус университета за 15 минут.&lt;/p&gt;
+  &lt;p&gt;&lt;a href="index.html"&gt;На главную&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></figure>
+
+<p><b>Правка 4, menu.html</b> — напиток с вашей фамилией:</p>
+<figure class="code"><figcaption><b>menu.html</b><span>стало</span></figcaption><pre>    &lt;li&gt;Какао — 170 ₽&lt;/li&gt;
+<mark>    &lt;li&gt;Раф «Иванов» — 230 ₽&lt;/li&gt;</mark>
+  &lt;/ul&gt;</pre></figure>
+<p>Сохраните все файлы.</p>
+
+<h3>Шаг 1. Посмотреть список изменений</h3>
+<p>В Changes три файла: <code>dostavka.html</code> (U), <code>index.html</code> и <code>menu.html</code> (M).</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git status --short</span>
+<span class="o"> M index.html
+ M menu.html
+?? dostavka.html</span></pre></figure>
+
+<div class="shot"><span class="n">Снимок 5</span><div><p>Панель Source Control с тремя файлами в Changes и терминал с ответом <code>git status --short</code>.</p><p class="cap">Подпись: «Рисунок 5 — Четыре правки в трёх файлах до отбора в индекс»</p></div></div>
+
+<h3>Шаг 2. Разложить правки по задачам</h3>
+
+<table>
+  <tr><th>Коммит</th><th>Задача</th><th>Правки</th><th>Что отбирать в индекс</th></tr>
+  <tr><td class="num">1</td><td>Страница доставки</td><td>3 и 2</td><td><code>dostavka.html</code> целиком и в <code>index.html</code> только участок со ссылкой</td></tr>
+  <tr><td class="num">2</td><td>Новые часы работы</td><td>1</td><td>Оставшийся участок <code>index.html</code></td></tr>
+  <tr><td class="num">3</td><td>Новый напиток в меню</td><td>4</td><td><code>menu.html</code></td></tr>
+</table>
+
+<h3>Шаг 3. Отобрать первый коммит</h3>
+<ol class="steps">
+  <li><b>+</b> у <code>dostavka.html</code>.</li>
+  <li>Щёлкните по <code>index.html</code> — в окне сравнения два участка: часы вверху, ссылка внизу.</li>
+  <li>Наведите курсор на <b>нижний</b> участок и нажмите <b>+</b> (Stage Block) у номеров строк.</li>
+</ol>
+<figure class="ref"><img src="../../temy/06-izmeneniya-indeks-kommit/img/07-stage-block.png" alt="Значок Stage Block в окне сравнения"><figcaption>Значок Stage Block (кадр из главы 2.3).</figcaption></figure>
+<p><code>index.html</code> появится в обоих разделах. Проверка:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git status --short</span>
+<span class="o">A  dostavka.html
+MM index.html
+ M menu.html</span>
+<span class="c">git diff --staged</span></pre></figure>
+<p><code>git diff --staged</code> должен показать новый файл и одну строку со ссылкой, без часов работы. Отобрался не тот участок — <b>−</b> у <code>index.html</code> в Staged Changes и повторить пункт 3.</p>
+
+<div class="shot"><span class="n">Снимок 6</span><div><p>Панель, где <code>index.html</code> есть и в Staged Changes, и в Changes, и терминал с ответом <code>git status --short</code> (буквы A, MM, M).</p><p class="cap">Подпись: «Рисунок 6 — В индекс отобрана часть файла index.html»</p></div></div>
+
+<h3>Шаг 4. Написать сообщение из двух частей</h3>
+<p>Заголовок: <code>Добавил страницу доставки</code>. Дважды <kbd>Shift</kbd> + <kbd>Enter</kbd>. Пояснение: <code>Новая страница dostavka.html и ссылка на неё в разделах сайта.</code></p>
+
+<div class="shot"><span class="n">Снимок 7</span><div><p>Поле Message с заголовком и пояснением, разделёнными пустой строкой, до нажатия Commit.</p><p class="cap">Подпись: «Рисунок 7 — Сообщение первого коммита»</p></div></div>
+
+<h3>Шаг 5. Сделать первый коммит и проверить его</h3>
+<p><b>✓ Commit</b>, затем:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git log -1 --stat</span>
+<span class="o">commit 78ee90fced1099856a843e32baddeea4bc36aa48
+Author: Иванов Иван &lt;ivanov@example.com&gt;
+Date:   Wed Sep 30 23:21:14 2026 +0300
+
+    Добавил страницу доставки
+
+    Новая страница dostavka.html и ссылка на неё в разделах сайта.
+
+ dostavka.html | 13 +++++++++++++
+ index.html    |  1 +
+ 2 files changed, 14 insertions(+)</span></pre></figure>
+<p>Хеш, имя и дата будут ваши. Файлов два, в <code>index.html</code> одна строка.</p>
+
+<div class="shot"><span class="n">Снимок 8</span><div><p>Терминал с ответом <code>git log -1 --stat</code>: ваше имя, сообщение из двух частей, два файла.</p><p class="cap">Подпись: «Рисунок 8 — Первый коммит: страница доставки»</p></div></div>
+
+<h3>Шаг 6. Сделать второй и третий коммиты</h3>
+<ol class="steps">
+  <li><b>+</b> у <code>index.html</code> → <code>Изменил часы работы</code> → <b>✓ Commit</b>.</li>
+  <li><b>+</b> у <code>menu.html</code> → <code>Добавил в меню раф «Фамилия»</code> → <b>✓ Commit</b>.</li>
+  <li><code>git log --oneline</code> — восемь коммитов, три верхних ваши.</li>
+</ol>
+
+<div class="shot"><span class="n">Снимок 9</span><div><p>Пустая панель Source Control и <code>git log --oneline</code> с восемью коммитами.</p><p class="cap">Подпись: «Рисунок 9 — История клона после трёх коммитов»</p></div></div>
+
+<!-- ============ СДАЧА ============ -->
+<h2><span class="num">4</span>Как сдать работу</h2>
+<ol class="steps">
+  <li>Документ Word: в первой строке ФИО, группа, «ДЗ по Git, темы 2.1–2.3».</li>
+  <li>Девять снимков по порядку с подписями.</li>
+  <li>Имя файла: <code>Фамилия_Git_ДЗ_2.1-2.3.docx</code>.</li>
+</ol>
+
+<h3>Критерии оценки</h3>
+<table class="grade">
+  <tr><td>5</td><td>Все девять снимков. Три коммита по задачам, первый — с пояснением и двумя файлами.</td></tr>
+  <tr><td>4</td><td>Нет одного-двух снимков или правки разложены не по задачам.</td></tr>
+  <tr><td>3</td><td>Выполнены части 1 и 2, в части 3 есть хотя бы один коммит.</td></tr>
+</table>
+<p>Не принимается, если в <span class="mono">Author</span> на снимках 3 и 8 не ваше имя.</p>
+
+<h3>Если что-то пошло не так</h3>
+<table>
+  <tr><th>Что видно</th><th>Что делать</th></tr>
+  <tr><td>В палитре нет команды <code>Git: Clone</code>, панель предлагает скачать Git</td><td>Установить Git по главе 1.3, перезапустить VS Code.</td></tr>
+  <tr><td>При коммите сообщение <span class="mono">Please tell me who you are</span></td><td><code>git config --global user.name "Иванов Иван"</code><br><code>git config --global user.email "почта"</code></td></tr>
+  <tr><td>VS Code предлагает отобрать все изменения и сразу сделать коммит</td><td><b>Cancel</b>, отобрать файлы плюсом.</td></tr>
+  <tr><td>В Staged Changes попал не тот участок или файл</td><td><b>−</b> у файла в Staged Changes, правки сохранятся.</td></tr>
+</table>
+
+<p>Справочник: <a href="https://maximbytecamp.github.io/git_github_makarov/">maximbytecamp.github.io/git_github_makarov</a>, главы 2.1–2.3.</p>
+
+<div class="foot"><span>Справочник по Git и GitHub · домашнее задание по темам 2.1–2.3</span><span>Макаров Максим Николаевич</span></div>
+
+</div>
+</body>
+</html>
