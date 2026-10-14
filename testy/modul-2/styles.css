@@ -402,3 +402,10 @@ table.gridq{width:100%;border-collapse:collapse;background:#fff}
 .review-map a.part{background:var(--clay-pale);color:#9A3412}
 .verdict.part{color:#9A3412;background:var(--clay-pale)}
 .rv.part{border-color:var(--clay);box-shadow:6px 6px 0 var(--clay)}
+
+/* условие: ситуация и отдельный блок «Что нужно сделать» */
+.q-text p{margin:0 0 8px}
+.q-text ul,.q-text ol,.q-task ul{margin:6px 0 4px;padding-left:22px}
+.q-text li,.q-task li{margin-bottom:4px;line-height:1.5}
+.q-task{margin:0 0 14px;padding:10px 14px;border:2px solid var(--ink);border-left:6px solid var(--clay);background:#FFF8F2;font-size:16px;line-height:1.55}
+.q-task>b:first-child{display:block;margin-bottom:4px;font:600 11px/1.3 var(--pixel);letter-spacing:.07em;text-transform:uppercase;color:var(--clay)}
