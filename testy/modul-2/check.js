@@ -72,10 +72,11 @@ async function verify(code) {
   let recomputed = 0;
   for (let i = 0; i < QUIZ.questions.length; i++) {
     const q = QUIZ.questions[i];
-    const ok = await isCorrect(q, decodeAnswer(q, picks[i]));
-    if (ok) recomputed++;
-    rows.push({ n: i + 1, topic: q.topic, kind: KIND_SHORT[q.type], picked: picks[i] || '', ok });
+    const pts = await pointsFor(q, decodeAnswer(q, picks[i]));
+    recomputed += pts;
+    rows.push({ n: i + 1, topic: q.topic, kind: KIND_SHORT[q.type], picked: picks[i] || '', ok: pts === 1, pts });
   }
+  recomputed = Math.round(recomputed * 10) / 10;
   return {
     sumOk, claimed: p.s, recomputed, total: p.t, mark: gradeFor(recomputed).mark, markOk: gradeFor(recomputed).mark === p.m,
     name: p.n, group: p.g, date: p.d, used: p.u, byTimeout: p.o === 1, leaves: p.x || 0, rows
@@ -111,12 +112,12 @@ document.getElementById('btn').addEventListener('click', async () => {
 
     const flags = [];
     if (!r.sumOk) flags.push('контрольная сумма не сходится — код правили вручную');
-    if (r.claimed !== r.recomputed) flags.push(`в коде записано ${r.claimed} баллов, по ответам получается ${r.recomputed}`);
+    if (Math.abs(r.claimed - r.recomputed) > 0.05) flags.push(`в коде записано ${fmtPts(r.claimed)} баллов, по ответам получается ${fmtPts(r.recomputed)}`);
     if (!r.markOk) flags.push('оценка в коде не соответствует баллам');
     if (repeat) flags.push('повторный код этого студента — засчитывается первый');
     const trusted = !flags.length;
 
-    table.push([r.name, r.group, r.recomputed, r.mark, r.leaves, r.used ?? '', r.byTimeout ? 'да' : 'нет',
+    table.push([r.name, r.group, fmtPts(r.recomputed), r.mark, r.leaves, r.used ?? '', r.byTimeout ? 'да' : 'нет',
       r.date.replace('T', ' '), trusted ? 'ок' : flags.join('; ')]);
 
     box.innerHTML = `
@@ -124,7 +125,7 @@ document.getElementById('btn').addEventListener('click', async () => {
         <div class="mark m${r.mark}">${r.mark}</div>
         <div class="score-text">
           <p><b>${esc(r.name)}</b> · группа ${esc(r.group)}</p>
-          <p>${r.recomputed} из ${r.total} · ${gradeFor(r.recomputed).label}</p>
+          <p>${fmtPts(r.recomputed)} из ${r.total} · ${gradeFor(r.recomputed).label}</p>
           <p class="muted">${esc(r.date.replace('T', ', '))}${r.used != null ? ` · потрачено ${r.used} мин` : ''}${r.byTimeout ? ' · отправлено по истечении времени' : ''}</p>
           <p style="font-weight:600;color:${r.leaves ? 'var(--clay)' : 'var(--mint)'}">${r.leaves ? `уходил со вкладки: ${r.leaves} раз` : 'со вкладки не уходил'}</p>
           <p style="font-weight:600;color:${trusted ? 'var(--mint)' : 'var(--red)'}">${trusted ? '✓ код подлинный, баллы сходятся' : '⚠ ' + flags.join('; ')}</p>
@@ -135,7 +136,7 @@ document.getElementById('btn').addEventListener('click', async () => {
         ${r.rows.map(x => `<tr>
           <td>${x.n}</td><td>${esc(x.topic)}</td><td>${x.kind}</td>
           <td><code>${x.picked ? esc(x.picked) : '—'}</code></td>
-          <td style="color:${x.ok ? 'var(--mint)' : 'var(--red)'};font-weight:600">${x.ok ? 'верно' : 'неверно'}</td>
+          <td style="color:${x.ok ? 'var(--mint)' : x.pts > 0 ? 'var(--clay)' : 'var(--red)'};font-weight:600">${x.ok ? 'верно · 1' : x.pts > 0 ? 'частично · ' + fmtPts(x.pts) : 'неверно · 0'}</td>
         </tr>`).join('')}
       </table></div>`;
     out.appendChild(box);

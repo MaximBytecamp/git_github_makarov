@@ -397,3 +397,8 @@ table.gridq{width:100%;border-collapse:collapse;background:#fff}
   .gridq .cell{width:32px;height:32px}
   .gridq .cell.on:after,.gridq .cell.right:after,.gridq .cell.miss:after,.gridq .cell.wrong:after{font-size:17px}
 }
+
+/* частично верное задание */
+.review-map a.part{background:var(--clay-pale);color:#9A3412}
+.verdict.part{color:#9A3412;background:var(--clay-pale)}
+.rv.part{border-color:var(--clay);box-shadow:6px 6px 0 var(--clay)}

@@ -35,7 +35,7 @@ const KIND = {
   sim: 'тренажёр панели', grid: 'таблица отметок', ignore: 'файл .gitignore'
 };
 const HINT = {
-  multi: 'Несколько верных вариантов · балл только за полностью верный набор',
+  multi: 'Несколько верных вариантов · за ошибочную отметку часть балла снимается',
   order: 'Перетащите карточки или двигайте их стрелками · можно нажать карточку, затем ту, на чьё место её поставить',
   slots: 'Перетащите карточку в пропуск или нажмите карточку, затем пропуск · нажатие на заполненный пропуск очищает его',
   sort: 'Перетащите каждую карточку в группу или нажмите карточку, затем группу',
@@ -857,10 +857,11 @@ async function finish(byTimeout) {
   const details = [];
   let score = 0;
   for (const q of QUIZ.questions) {
-    const ok = await isCorrect(q, state.answers[q.id]);
-    if (ok) score++;
-    details.push({ id: q.id, ok });
+    const pts = await pointsFor(q, state.answers[q.id]);
+    score += pts;
+    details.push({ id: q.id, ok: pts === 1, pts });
   }
+  score = Math.round(score * 10) / 10;
   const g = gradeFor(score);
   const result = {
     v: 1,
@@ -909,7 +910,7 @@ async function renderResult(r, returning) {
   const g = QUIZ.grades.find(x => x.mark === r.mark) || QUIZ.grades[QUIZ.grades.length - 1];
   $('mark').textContent = r.mark;
   $('mark').className = 'mark m' + r.mark;
-  $('score-line').textContent = `${r.score} из ${r.total} · ${g.label}`;
+  $('score-line').textContent = `${fmtPts(r.score)} из ${r.total} · ${g.label}`;
   $('who').textContent = `${r.name} · группа ${r.group}`;
   const dt = new Date(r.finishedAt);
   $('when').textContent = 'Завершено ' + dt.toLocaleString('ru-RU', { dateStyle: 'long', timeStyle: 'short' })
@@ -930,15 +931,17 @@ async function renderResult(r, returning) {
   $('review-map').innerHTML = order.map((qi, pos) => {
     const q = QUIZ.questions[qi];
     const d = r.details.find(x => x.id === q.id) || { ok: false };
-    return `<a href="#rv-${q.id}" class="${d.ok ? 'ok' : 'bad'}" title="${d.ok ? 'верно' : 'неверно'} · ${esc(q.topic)}">${pos + 1}</a>`;
+    const st = verdictOf(d);
+    return `<a href="#rv-${q.id}" class="${st.cls}" title="${st.text} · ${esc(q.topic)}">${pos + 1}</a>`;
   }).join('');
 
   $('review').innerHTML = order.map((qi, pos) => {
     const q = QUIZ.questions[qi];
     const d = r.details.find(x => x.id === q.id) || { ok: false };
     const key = secret[q.id].key;
-    const verdict = `<span class="verdict ${d.ok ? 'ok' : 'bad'}">${d.ok ? '✓ верно' : '✗ неверно'}</span>`;
-    return `<article class="q rv ${d.ok ? 'ok' : 'bad'}" id="rv-${q.id}">
+    const st = verdictOf(d);
+    const verdict = `<span class="verdict ${st.cls}">${st.text}</span>`;
+    return `<article class="q rv ${d.ok ? 'ok' : 'bad'} ${st.cls}" id="rv-${q.id}">
       ${questionHead(q, pos, verdict)}
       ${imageBlock(q.image)}
       ${sourceBlock(q)}
@@ -946,6 +949,14 @@ async function renderResult(r, returning) {
       <div class="why"><b>Разбор</b>${secret[q.id].why}</div>
     </article>`;
   }).join('') + repeatBlock(r);
+}
+
+/* Вердикт задания: верно (1 балл), частично (доля балла), неверно (0). */
+function verdictOf(d) {
+  const pts = d.pts ?? (d.ok ? 1 : 0);
+  if (pts === 1) return { cls: 'ok', text: '✓ верно · 1 балл' };
+  if (pts > 0) return { cls: 'part', text: `◐ частично · ${fmtPts(pts)} балла` };
+  return { cls: 'bad', text: '✗ неверно · 0 баллов' };
 }
 
 /* Итог разбора: разделы глав, по которым были ошибки, со ссылками. */
