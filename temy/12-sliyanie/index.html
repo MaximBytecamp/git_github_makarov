@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>3.3 Слияние: fast-forward и обычное · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <script>
+    try {
+      var saved = localStorage.getItem('git-book-os');
+      if (!saved) {
+        var p = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+        saved = /win/i.test(p) ? 'win' : (/mac|iphone|ipad/i.test(p) ? 'mac' : 'linux');
+      }
+      document.documentElement.dataset.os = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Модуль 3 · Ветки</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 3 · ветки</p>
+          <p class="running__folio">Глава 3.3</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">3.3</span>
+          <h1>Слияние:<br>fast-forward и обычное</h1>
+          <p class="lead">В главе работа из двух веток проекта <code>sait-vizitka</code> собирается в <code>main</code>. Сначала сливается короткая ветка, после которой <code>main</code> не менялась, — Git переносит имя ветки вперёд. Затем сливается ветка формы, которая разошлась с <code>main</code>, — Git создаёт коммит слияния. В конце разобрано, как удалить слитые ветки и почему Git не даёт удалить неслитую.</p>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Ветки</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Что получится</dt><dd>Форма и подвал страницы в ветке <code>main</code>, лишних веток нет</dd></div>
+          <div><dt>Сколько занимает</dt><dd>Около тридцати минут за компьютером</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>Порядок действий</b>
+          <ol>
+            <li><a href="#s1">Задача главы</a></li>
+            <li><a href="#s2">Шаг 1. Сделать короткую ветку</a></li>
+            <li><a href="#s3">Шаг 2. Слить её в main: fast-forward</a></li>
+            <li><a href="#s4">Шаг 3. Удалить слитую ветку</a></li>
+            <li><a href="#s5">Шаг 4. Сравнить ветки перед слиянием</a></li>
+            <li><a href="#s6">Шаг 5. Слить ветку формы в main</a></li>
+            <li><a href="#s7">Шаг 6. Посмотреть коммит слияния изнутри</a></li>
+            <li><a href="#s8">Шаг 7. Удалить ветку формы</a></li>
+            <li><a href="#s9">Шаг 8. Получить отказ при удалении</a></li>
+            <li><a href="#s10">Справка: два вида слияния и команды</a></li>
+            <li><a href="#s11">Частые вопросы</a></li>
+            <li><a href="#s12">Проверьте себя</a></li>
+            <li><a href="#s13">Шпаргалка по главе</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Задача главы</h2>
+        <p>Глава 3.2 закончилась так: в ветке <code>forma-kontaktov</code> три коммита с формой обратной связи, в <code>main</code> — исправленный заголовок главной страницы. Коммиты одной ветки не попадают в другую, пока ветки не слиты, поэтому на сайте из ветки <code>main</code> формы пока нет. Перенести работу из одной ветки в другую — задача слияния.</p>
+        <p><b>Слияние</b> (merge) — действие, после которого в текущей ветке есть все коммиты другой ветки. Сливают в ту ветку, на которой стоите: чтобы форма попала в <code>main</code>, сначала переходят на <code>main</code>, затем выбирают ветку <code>forma-kontaktov</code> как источник. Ветка-источник от слияния не меняется.</p>
+        <p>Как Git выполнит слияние, зависит от того, менялась ли текущая ветка после того, как от неё отделилась другая. Если не менялась, Git переносит её имя вперёд и нового коммита не создаёт. Если менялась, линии истории разошлись, и Git создаёт отдельный коммит, который их соединяет. В главе показаны оба случая на настоящих ветках проекта. На схеме — состояние проекта в начале главы:</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: от коммита 82fd14a идут две линии — в main коммит 69f9d13, в forma-kontaktov коммиты a727fbf, e3eeeb9, 52b9719, HEAD стоит на main">
+          <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+          <path d="M30 215 H260" stroke="var(--ink)" stroke-width="3" fill="none"/><path d="M110 215 H110" stroke="var(--ink)" stroke-width="3" fill="none"/><path d="M110 215 C160 215 170 80 220 80 H500" stroke="var(--fire-deep)" stroke-width="3" fill="none"/><circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">общий предок</text><circle cx="260" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="260" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">69f9d13</text><text x="260" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">заголовок</text><circle cx="240" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="240" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">a727fbf</text><text x="240" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">форма</text><circle cx="370" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="370" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">e3eeeb9</text><text x="370" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">отступ</text><circle cx="500" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="500" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">52b9719</text><text x="500" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">кнопка</text><rect x="232.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="260" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text><path d="M260 182 V197" stroke="var(--fire-deep)" stroke-width="3"/><text x="224.2" y="171" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text><rect x="426.0" y="17" width="148.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="500" y="36" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma-kontaktov</text><path d="M500 47 V62" stroke="var(--fire-deep)" stroke-width="3"/>
+          </svg>
+          <figcaption>Начало главы. От коммита <code>82fd14a</code> идут две линии: в <code>main</code> один свой коммит, в <code>forma-kontaktov</code> три. Вы стоите на <code>main</code>.</figcaption>
+        </figure>
+        <p>На схеме <code>main</code> менялась после отделения ветки формы, поэтому её слияние будет вторым случаем, с отдельным коммитом. Первый случай, перенос имени, показан на новой короткой ветке.</p>
+        <div class="analogy">
+          <p class="analogy__head">Ассоциация: закладки в тетради из главы 3.1</p>
+          <div class="analogy__pair">
+            <div class="analogy__side">
+              <b>В жизни</b>
+              <p>В тетради две закладки. Пока вы писали дальше по второй закладке, первую никто не трогал. Чтобы первая закладка тоже отмечала последние записи, её достаточно переложить на страницу второй. Новых страниц не появляется.</p>
+            </div>
+            <div class="analogy__side">
+              <b>В Git</b>
+              <p>Так работает fast-forward: имя <code>main</code> переносится на последний коммит другой ветки. Когда же записи велись по обеим закладкам с одной и той же страницы, переложить закладку нельзя: потеряются записи первой. Тогда Git пишет новую страницу, которая продолжает обе линии, — коммит слияния.</p>
+            </div>
+          </div>
+          <p class="analogy__limit"><b>Где не совпадает</b>В тетради страницы идут одна за другой, и страницы с двумя предыдущими не бывает. В Git у коммита слияния два предыдущих коммита, и это записано в нём самом. Шаг 6 показывает эту запись.</p>
+        </div>
+        <div class="why">
+          <p class="why__head">Зачем это нужно в работе</p>
+          <ul class="why__list">
+            <li><b>Закончить задачу.</b> Работу ведут в отдельной ветке, а когда она готова, сливают в основную. Слияние — последний шаг каждой задачи.</li>
+            <li><b>Собрать работу нескольких людей.</b> Каждый ведёт свою ветку от <code>main</code>. Если пока вы делали форму, коллега уже слил в <code>main</code> свою правку, ветки разошлись, и слияние будет с коммитом слияния.</li>
+            <li><b>Найти, когда в проект пришла задача.</b> Коммит слияния с сообщением <code>Merge branch 'forma-kontaktov'</code> отмечает в истории момент, когда работа ветки попала в <code>main</code>.</li>
+            <li><b>Держать список веток коротким.</b> Слитую ветку удаляют. Коммиты остаются в истории <code>main</code>, а в списке веток видны только те, работа в которых идёт.</li>
+          </ul>
+        </div>
+        <p>В главе используется проект <code>sait-vizitka</code> в том виде, в каком он остался после главы 3.2. В <code>main</code> шестнадцать коммитов, в <code>forma-kontaktov</code> три своих коммита, список изменений пуст. Имена коммитов, сделанных вами, будут отличаться от показанных. Раздел GRAPH переключён в режим All, как в шаге 6 главы 3.2: так видны обе ветки сразу. Первая часть главы показывает fast-forward.</p>
+
+        <div class="part" role="separator"><span><b>1</b>Fast-forward</span></div>
+        <h2 id="s2"><span class="sec">§2</span>Шаг 1. Сделать короткую ветку</h2>
+        <p>Первый вид слияния проще увидеть на ветке, в которой один коммит. Сделаем такую ветку для небольшой задачи: строку с датой обновления на главной странице перенесём в подвал страницы, тег <code>&lt;footer&gt;</code>.</p>
+        <p>Переходим на <code>main</code>: нажимаем на имя ветки в строке состояния и выбираем <code>main</code>. Затем в том же списке выбираем <b>Create new branch…</b> и вводим имя <code>podval</code>, как в шаге 1 главы 3.2. Новая ветка стоит на последнем коммите <code>main</code>, на <code>69f9d13</code>.</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что выбор main и Create new branch…</span></figcaption>
+<pre>git switch main
+git switch -c podval</pre>
+        </figure>
+        <p>В <code>index.html</code> меняем одну строку:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>index.html</span><span>было</span></figcaption>
+<pre>  &lt;p&gt;Страница обновлена в октябре 2026 года.&lt;/p&gt;</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>index.html</span><span>стало</span></figcaption>
+<pre><mark>  &lt;footer&gt;Страница обновлена в октябре 2026 года.&lt;/footer&gt;</mark></pre>
+          </figure>
+        </div>
+        <p>Сохраняем файл, отбираем его плюсом и делаем коммит «Перенёс дату в подвал страницы».</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git add index.html
+git commit -m "Перенёс дату в подвал страницы"</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/01-podval-commit.png" alt="Окно VS Code на ветке podval: в графе сверху коммит «Перенёс дату в подвал страницы» с меткой podval, ниже коммит с меткой main, в файле index.html строка 12 с тегом footer">
+          <figcaption>Ветка <code>podval</code>. В графе её коммит стоит прямо над коммитом с меткой <code>main</code>, без отдельной линии. В файле строка 12 — подвал.</figcaption>
+        </figure>
+        <p>В графе нет второй линии: коммит <code>podval</code> продолжает ту же цепочку, что и <code>main</code>. Ветка <code>main</code> после отделения <code>podval</code> не сдвигалась, поэтому <code>podval</code> содержит все коммиты <code>main</code> и ещё один свой.</p>
+
+        <p class="step-done"><b>Что получилось.</b>В ветке <code>podval</code> один новый коммит <code>271abe3</code>. Ветка <code>main</code> стоит на <code>69f9d13</code>, на один коммит позади. Чтобы подвал попал в основную ветку, этот коммит нужно перенести в <code>main</code>.</p>
+
+        <h2 id="s3"><span class="sec">§3</span>Шаг 2. Слить её в main: fast-forward</h2>
+        <p>Слияние начинают с перехода на ту ветку, которая должна получить коммиты. Переходим на <code>main</code>. В файле снова строка <code>&lt;p&gt;</code>, подвала нет: файлы в папке соответствуют последнему коммиту <code>main</code>.</p>
+        <figure class="shot">
+          <img src="img/02-before-ff.png" alt="Окно VS Code на ветке main перед слиянием: в графе сверху коммит с меткой podval, под ним коммит с меткой main, в index.html строка 12 с тегом p">
+          <figcaption>Перед слиянием. Вы на <code>main</code>, метка <code>podval</code> на коммит выше. В строке 12 прежний тег <code>&lt;p&gt;</code>. На кнопке <b>12↑</b>.</figcaption>
+        </figure>
+        <p>Слияние в VS Code запускается из палитры команд. Нажимаем <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>, набираем <code>Git: Merge</code> и выбираем <b>Git: Merge...</b> Открывается список веток:</p>
+        <figure class="shot">
+          <img src="img/03-merge-pick.png" alt="Список вверху окна с подсказкой Select a branch or tag to merge from: ветки podval и forma-kontaktov с последними коммитами">
+          <figcaption>Подсказка <b>Select a branch or tag to merge from</b> — «выберите ветку, из которой сливать». Текущей ветки <code>main</code> в списке нет: сливают в неё.</figcaption>
+        </figure>
+        <p>Выбираем <code>podval</code>. Слияние выполняется сразу, без окна подтверждения. В терминале то же действие — команда <code>git merge</code> с именем ветки-источника:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Git: Merge... → podval</span></figcaption>
+<pre><span class="cmd">git merge podval</span>
+Updating 69f9d13..271abe3
+Fast-forward
+ index.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)</pre>
+        </figure>
+        <p>Ответ читается по строкам. <code>Updating 69f9d13..271abe3</code> — ветка <code>main</code> переходит с коммита <code>69f9d13</code> на коммит <code>271abe3</code>. <code>Fast-forward</code>, «перемотка вперёд», — способ, которым это сделано. Ниже, как в <code>git log --stat</code>, перечислены файлы, которые изменились в папке: в <code>index.html</code> одна строка заменена другой.</p>
+        <figure class="shot">
+          <img src="img/04-after-ff.png" alt="Окно VS Code после слияния: в графе у верхнего коммита «Перенёс дату в подвал страницы» метка main и значок второй ветки, в index.html строка 12 с тегом footer, на кнопке 13↑">
+          <figcaption>После слияния. Метки <code>main</code> и <code>podval</code> на одном коммите, в файле подвал, на кнопке <b>13↑</b>. Нового коммита в графе нет.</figcaption>
+        </figure>
+        <p>Fast-forward возможен потому, что у <code>main</code> нет коммитов, которых нет в <code>podval</code>. Объединять нечего: достаточно записать в файл ветки <code>main</code> имя последнего коммита <code>podval</code>. Git так и делает — меняет одну строку в <code>.git/refs/heads/main</code> и приводит файлы в папке к новому коммиту. История остаётся прямой линией.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: ветка podval на коммите 271abe3 сразу после 69f9d13; при слиянии имя main переносится с 69f9d13 на 271abe3, нового коммита нет">
+          <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+          <path d="M30 215 H390" stroke="var(--ink)" stroke-width="3" fill="none"/><circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">дата</text><circle cx="250" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">69f9d13</text><text x="250" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">заголовок</text><circle cx="390" cy="215" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="390" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">271abe3</text><text x="390" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">подвал</text><rect x="222.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3" stroke-dasharray="6 4" opacity=".55"/><text x="250" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)" opacity=".55">main</text><path d="M282 166 C320 130 350 130 352 148" stroke="var(--fire-deep)" stroke-width="3" fill="none" stroke-dasharray="7 5"/><path d="M346 140 L353 150 L360 140" stroke="var(--fire-deep)" stroke-width="3" fill="none"/><rect x="362.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="390" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text><path d="M390 182 V197" stroke="var(--fire-deep)" stroke-width="3"/><text x="354.2" y="171" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text><rect x="430" y="118" width="74.4" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="467.2" y="137" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">podval</text><path d="M440 148 L405 200" stroke="var(--fire-deep)" stroke-width="3"/><text x="250" y="138" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-faint)">было</text>
+          </svg>
+          <figcaption>Fast-forward. Коммиты те же, имя <code>main</code> перенесено с <code>69f9d13</code> на <code>271abe3</code>. Обе ветки теперь на одном коммите.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git branch -v</span>
+  forma-kontaktov 52b9719 Переименовал кнопку формы
+* main            271abe3 [ahead 13] Перенёс дату в подвал страницы
+  podval          271abe3 Перенёс дату в подвал страницы</pre>
+        </figure>
+        <p>Ветки <code>main</code> и <code>podval</code> стоят на одном коммите <code>271abe3</code>. Число в скобках выросло с 12 до 13: коммит подвала теперь входит в <code>main</code> и ещё не отправлен на GitHub.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Коммит подвала вошёл в <code>main</code> без нового коммита: имя ветки перенесено вперёд. Ветка <code>podval</code> после этого больше не нужна.</p>
+
+        <h2 id="s4"><span class="sec">§4</span>Шаг 3. Удалить слитую ветку</h2>
+        <p>Задача подвала закончена, её коммит есть в <code>main</code>. Ветку <code>podval</code> больше не используют, поэтому её удаляют. Удаление ветки стирает только её имя — файл в <code>.git/refs/heads</code>. Коммит <code>271abe3</code> остаётся, потому что на нём стоит <code>main</code>.</p>
+        <p>В палитре команд выбираем <b>Git: Delete Branch...</b> и в списке — <code>podval</code>:</p>
+        <figure class="shot">
+          <img src="img/05-delete-pick.png" alt="Список вверху окна с подсказкой Select a branch to delete: ветки podval и forma-kontaktov">
+          <figcaption>Подсказка <b>Select a branch to delete</b>. Текущей ветки в списке нет: ветку, на которой стоите, удалить нельзя.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Git: Delete Branch... → podval</span></figcaption>
+<pre><span class="cmd">git branch -d podval</span>
+Deleted branch podval (was 271abe3).</pre>
+        </figure>
+        <p>Ключ <code>-d</code> (delete) удаляет ветку. В скобках Git пишет, на каком коммите стояла удалённая ветка: по этому имени ветку можно создать заново, если удалили по ошибке.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Веток две: <code>main</code> с подвалом и <code>forma-kontaktov</code> с формой. Ветка формы разошлась с <code>main</code>, и её слияние устроено иначе.</p>
+
+        <div class="part" role="separator"><span><b>2</b>Обычное слияние</span></div>
+        <h2 id="s5"><span class="sec">§5</span>Шаг 4. Сравнить ветки перед слиянием</h2>
+        <p>Теперь в <code>main</code> нужно перенести форму. Перед слиянием проверяют, какие коммиты придут и можно ли перенести имя вперёд, как в шаге 2. Это показывает <code>git log</code> с двумя именами веток через две точки: команда выводит коммиты, которые есть во второй ветке и которых нет в первой.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline main..forma-kontaktov</span>
+52b9719 Переименовал кнопку формы
+e3eeeb9 Добавил отступ над формой
+a727fbf Добавил форму обратной связи
+<span class="cmd">git log --oneline forma-kontaktov..main</span>
+271abe3 Перенёс дату в подвал страницы
+69f9d13 Исправил заголовок главной страницы</pre>
+        </figure>
+        <p>Первая команда перечисляет три коммита формы — их слияние добавит в <code>main</code>. Вторая показывает, что у <code>main</code> тоже есть два коммита, которых нет в ветке формы: заголовок из главы 3.2 и подвал из шага 2. Значит, ветки разошлись. Перенести имя <code>main</code> на коммит <code>52b9719</code> нельзя: тогда заголовок и подвал выпали бы из <code>main</code>.</p>
+        <p>Место, где ветки разошлись, похоже на развилку дороги: до неё путь общий, после неё — две дороги. В Git такое место — коммит, и он называется <b>общим предком</b> двух веток. Его находит команда <code>git merge-base</code>:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git merge-base main forma-kontaktov</span>
+82fd14a052d87f56416c01e19570b560b6e7a884</pre>
+        </figure>
+        <p>Это коммит <code>82fd14a</code> «Добавил дату обновления страницы» — последний, который есть в обеих ветках. От него идут две линии.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: от общего коммита 82fd14a идут две линии — в main коммиты 69f9d13 и 271abe3, в forma-kontaktov коммиты a727fbf, e3eeeb9, 52b9719">
+          <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+          <path d="M30 215 H400" stroke="var(--ink)" stroke-width="3" fill="none"/><path d="M110 215 H110" stroke="var(--ink)" stroke-width="3" fill="none"/><path d="M110 215 C160 215 170 80 220 80 H500" stroke="var(--fire-deep)" stroke-width="3" fill="none"/><circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">общий предок</text><circle cx="260" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="260" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">69f9d13</text><text x="260" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">заголовок</text><circle cx="400" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="400" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">271abe3</text><text x="400" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">подвал</text><circle cx="240" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="240" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">a727fbf</text><text x="240" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">форма</text><circle cx="370" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="370" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">e3eeeb9</text><text x="370" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">отступ</text><circle cx="500" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="500" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">52b9719</text><text x="500" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">кнопка</text><rect x="372.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="400" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text><path d="M400 182 V197" stroke="var(--fire-deep)" stroke-width="3"/><text x="364.2" y="171" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text><rect x="426.0" y="17" width="148.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="500" y="36" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma-kontaktov</text><path d="M500 47 V62" stroke="var(--fire-deep)" stroke-width="3"/>
+          </svg>
+          <figcaption>Две линии от общего предка <code>82fd14a</code>. У каждой ветки есть коммиты, которых нет в другой. Вы стоите на <code>main</code>.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="img/06-before-merge.png" alt="Окно VS Code на ветке main: в графе две линии — коммиты ветки forma-kontaktov и коммиты main от общего коммита «Добавил дату обновления страницы», в kontakty.html формы нет, файл заканчивается строкой 13">
+          <figcaption>Те же две линии в разделе GRAPH. Открыт <code>kontakty.html</code> на ветке <code>main</code>: формы нет, после строки 11 сразу <code>&lt;/body&gt;</code>.</figcaption>
+        </figure>
+        <p>Перед слиянием проверяют ещё две вещи: в строке состояния стоит <code>main</code>, а список изменений пуст. Незакоммиченная правка при слиянии ведёт себя так же, как при переключении в главе 3.2: если она в файле, который меняет слияние, Git слияние не начнёт.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Известно, что придёт в <code>main</code>: три коммита формы. Ветки разошлись от коммита <code>82fd14a</code>, поэтому Git создаст отдельный коммит, который их соединит.</p>
+
+        <h2 id="s6"><span class="sec">§6</span>Шаг 5. Слить ветку формы в main</h2>
+        <p>Действие то же, что в шаге 2: палитра команд → <b>Git: Merge...</b> → в списке выбираем <code>forma-kontaktov</code>. Результат другой, потому что ветки разошлись.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Git: Merge... → forma-kontaktov</span></figcaption>
+<pre><span class="cmd">git merge --no-edit forma-kontaktov</span>
+Merge made by the 'ort' strategy.
+ kontakty.html | 5 +++++
+ styles.css    | 4 ++++
+ 2 files changed, 9 insertions(+)</pre>
+        </figure>
+        <p>Строка <code>Merge made by the 'ort' strategy</code> сообщает, что создан коммит слияния. <code>ort</code> — название способа, которым Git сводит изменения двух веток. С версии 2.34 он используется по умолчанию, выбирать его не нужно. Ниже перечислено, что изменилось в <code>main</code>: пять строк формы в <code>kontakty.html</code> и четыре строки отступа в <code>styles.css</code>. Файл <code>index.html</code> в списке не указан: ветка формы его не меняла, и в нём остались заголовок и подвал из <code>main</code>.</p>
+        <p>Ключ <code>--no-edit</code> нужен только в терминале. Коммиту слияния нужно сообщение, и без ключа Git откроет редактор, чтобы его можно было исправить. С ключом Git оставляет сообщение по умолчанию: <code>Merge branch 'forma-kontaktov'</code>. VS Code поступает так же и редактор не открывает.</p>
+        <figure class="shot">
+          <img src="img/08-after-merge.png" alt="Окно VS Code после слияния: в графе сверху коммит «Merge branch 'forma-kontaktov'» с меткой main, к нему сходятся две линии, в kontakty.html строки 12–16 с формой, на кнопке 17↑">
+          <figcaption>После слияния. Сверху коммит <code>Merge branch 'forma-kontaktov'</code>, к нему сходятся обе линии. Вы на <code>main</code>, и в <code>kontakty.html</code> есть форма. На кнопке <b>17↑</b>.</figcaption>
+        </figure>
+        <p>Коммит слияния продолжает обе линии сразу. Ветка <code>main</code> перешла на него, ветка <code>forma-kontaktov</code> осталась на <code>52b9719</code>: слияние меняет только ту ветку, в которую сливают.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: новый коммит ea7f264 в main соединяет обе линии: к нему ведут стрелки от 271abe3 и от 52b9719">
+          <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+          <path d="M400 215 H610" stroke="var(--ink)" stroke-width="3" fill="none"/><path d="M500 80 C560 80 570 215 610 215" stroke="var(--fire-deep)" stroke-width="3" fill="none"/><path d="M30 215 H400" stroke="var(--ink)" stroke-width="3" fill="none"/><path d="M110 215 H110" stroke="var(--ink)" stroke-width="3" fill="none"/><path d="M110 215 C160 215 170 80 220 80 H500" stroke="var(--fire-deep)" stroke-width="3" fill="none"/><circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">общий предок</text><circle cx="260" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="260" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">69f9d13</text><text x="260" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">заголовок</text><circle cx="400" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="400" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">271abe3</text><text x="400" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">подвал</text><circle cx="240" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="240" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">a727fbf</text><text x="240" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">форма</text><circle cx="370" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="370" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">e3eeeb9</text><text x="370" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">отступ</text><circle cx="500" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="500" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">52b9719</text><text x="500" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">кнопка</text><circle cx="625" cy="215" r="15" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="4"/><text x="625" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">ea7f264</text><text x="625" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">слияние</text><rect x="597.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="625" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text><path d="M625 182 V197" stroke="var(--fire-deep)" stroke-width="3"/><text x="589.2" y="171" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text><rect x="426.0" y="17" width="148.0" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="500" y="36" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">forma-kontaktov</text><path d="M500 47 V62" stroke="var(--fire-deep)" stroke-width="3"/>
+          </svg>
+          <figcaption>Обычное слияние. Новый коммит <code>ea7f264</code> соединяет линии: у него два предыдущих коммита, <code>271abe3</code> и <code>52b9719</code>. Имя <code>main</code> перешло на него.</figcaption>
+        </figure>
+        <p>На кнопке 17 коммитов: было 13, пришли три коммита формы и добавился сам коммит слияния. Тот же рисунок, что в схеме, печатает терминал:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline --graph -8</span>
+*   ea7f264 Merge branch 'forma-kontaktov'
+|\
+| * 52b9719 Переименовал кнопку формы
+| * e3eeeb9 Добавил отступ над формой
+| * a727fbf Добавил форму обратной связи
+* | 271abe3 Перенёс дату в подвал страницы
+* | 69f9d13 Исправил заголовок главной страницы
+|/
+* 82fd14a Добавил дату обновления страницы</pre>
+        </figure>
+        <p>Две линии слева расходятся под <code>82fd14a</code> и сходятся на <code>ea7f264</code>. Ключ <code>--all</code> здесь не нужен: все коммиты формы теперь входят в историю <code>main</code>.</p>
+
+        <p class="step-done"><b>Что получилось.</b>В <code>main</code> есть форма, подвал и исправленный заголовок. Работа двух веток объединена коммитом слияния <code>ea7f264</code>. Чем он отличается от обычного коммита, видно по его содержимому.</p>
+
+        <h2 id="s7"><span class="sec">§7</span>Шаг 6. Посмотреть коммит слияния изнутри</h2>
+        <p>Команда <code>git cat-file -p</code> печатает коммит так, как он записан в папке <code>.git</code>:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git cat-file -p HEAD</span>
+tree 64fbdb2d48dd183ec0e943a3f8ffef5104a147cf
+parent 271abe32c3a73aea1081feee831cc7f05ea19771
+parent 52b971969a49f65d4eb633e0f0b8ca9b5374c76c
+author Student &lt;student@example.com&gt; 1792523352 +0300
+committer Student &lt;student@example.com&gt; 1792523352 +0300
+
+Merge branch 'forma-kontaktov'</pre>
+        </figure>
+        <p>В родословной у каждого человека записаны родители, и по этим записям восстанавливают всё семейное дерево. В коммите так же записан предыдущий коммит — его называют <b>родителем</b>, по-английски parent. У обычного коммита одна строка <code>parent</code>. По этим строкам Git строит историю: от каждого коммита назад к родителю. У коммита слияния строк <code>parent</code> две. Первая — <code>271abe3</code>, последний коммит ветки, в которую сливали. Вторая — <code>52b9719</code>, последний коммит ветки, которую сливали. Поэтому история <code>main</code> теперь проходит через обе линии, и <code>git log</code> выводит коммиты формы как коммиты <code>main</code>.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Строка</th><th>Что записано</th></tr></thead>
+            <tbody>
+              <tr><td><code>tree</code></td><td>Состояние всех файлов проекта после слияния</td></tr>
+              <tr><td>первая <code>parent</code></td><td>Коммит, на котором стояла <code>main</code> до слияния</td></tr>
+              <tr><td>вторая <code>parent</code></td><td>Последний коммит ветки <code>forma-kontaktov</code></td></tr>
+              <tr><td><code>author</code>, <code>committer</code></td><td>Кто сделал слияние и когда: число секунд с 1970 года и часовой пояс</td></tr>
+              <tr><td>последняя строка</td><td>Сообщение коммита</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>От порядка родителей зависит вывод команды <code>git show</code> с ключом <code>--stat</code>. Команда перечисляет файлы, которые коммит слияния изменил по сравнению с первым родителем, то есть что нового пришло в <code>main</code>:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git show --stat --oneline HEAD</span>
+ea7f264 Merge branch 'forma-kontaktov'
+
+ kontakty.html | 5 +++++
+ styles.css    | 4 ++++
+ 2 files changed, 9 insertions(+)</pre>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>У коммита слияния два родителя: последний коммит <code>main</code> и последний коммит ветки формы. Имя <code>forma-kontaktov</code> теперь лишнее.</p>
+
+        <div class="part" role="separator"><span><b>3</b>После слияния</span></div>
+        <h2 id="s8"><span class="sec">§8</span>Шаг 7. Удалить ветку формы</h2>
+        <p>Работа формы в <code>main</code>, ветку <code>forma-kontaktov</code> удаляем так же, как <code>podval</code>: палитра команд → <b>Git: Delete Branch...</b> → <code>forma-kontaktov</code>.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Git: Delete Branch... → forma-kontaktov</span></figcaption>
+<pre><span class="cmd">git branch -d forma-kontaktov</span>
+Deleted branch forma-kontaktov (was 52b9719).</pre>
+        </figure>
+        <p>Три коммита формы остались в проекте. До них можно дойти от <code>main</code>: через вторую строку <code>parent</code> коммита слияния. В графе они остаются на своей линии, пропадает только метка с именем ветки.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: после удаления ветки forma-kontaktov её коммиты на месте и входят в историю main через коммит слияния, плашки с именем ветки нет">
+          <text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+          <path d="M400 215 H610" stroke="var(--ink)" stroke-width="3" fill="none"/><path d="M500 80 C560 80 570 215 610 215" stroke="var(--fire-deep)" stroke-width="3" fill="none"/><path d="M30 215 H400" stroke="var(--ink)" stroke-width="3" fill="none"/><path d="M110 215 H110" stroke="var(--ink)" stroke-width="3" fill="none"/><path d="M110 215 C160 215 170 80 220 80 H500" stroke="var(--fire-deep)" stroke-width="3" fill="none"/><circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">82fd14a</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">общий предок</text><circle cx="260" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="260" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">69f9d13</text><text x="260" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">заголовок</text><circle cx="400" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="400" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">271abe3</text><text x="400" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">подвал</text><circle cx="240" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="240" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">a727fbf</text><text x="240" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">форма</text><circle cx="370" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="370" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">e3eeeb9</text><text x="370" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">отступ</text><circle cx="500" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="500" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">52b9719</text><text x="500" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">кнопка</text><circle cx="625" cy="215" r="15" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="4"/><text x="625" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">ea7f264</text><text x="625" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">слияние</text><rect x="597.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="625" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text><path d="M625 182 V197" stroke="var(--fire-deep)" stroke-width="3"/><text x="589.2" y="171" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text>
+          </svg>
+          <figcaption>После удаления ветки. Коммиты формы на месте и входят в историю <code>main</code>, имени <code>forma-kontaktov</code> больше нет.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>В проекте одна ветка, <code>main</code>. В ней 21 коммит, 17 из них на GitHub не отправлены. Обе ветки удалены ключом <code>-d</code> без вопросов, потому что их коммиты уже были в <code>main</code>.</p>
+
+        <h2 id="s9"><span class="sec">§9</span>Шаг 8. Получить отказ при удалении</h2>
+        <p>Ключ <code>-d</code> удаляет ветку, только если её коммиты уже есть в текущей ветке. Проверим, что будет с веткой, которую не сливали. Создаём ветку <code>proba-cveta</code>, меняем в <code>styles.css</code> цвет ссылок на синий <code>#1D4ED8</code> и коммитим «Попробовал синие ссылки». Цвет не понравился, возвращаемся на <code>main</code> и удаляем ветку пробы:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git branch -d proba-cveta</span>
+error: the branch 'proba-cveta' is not fully merged
+hint: If you are sure you want to delete it, run 'git branch -D proba-cveta'</pre>
+        </figure>
+        <p>Git отказал: ветка «не полностью слита». Коммит «Попробовал синие ссылки» есть только в этой ветке, и после удаления имени до него нельзя будет дойти ни от одной ветки. VS Code в том же случае спрашивает подтверждение:</p>
+        <figure class="shot">
+          <img src="img/09-not-merged.png" alt="Окно VS Code с вопросом The branch proba-cveta is not fully merged. Delete anyway? и кнопками Cancel и Delete Branch, в графе сверху коммит ветки proba-cveta">
+          <figcaption><b>The branch "proba-cveta" is not fully merged. Delete anyway?</b> — «ветка не полностью слита, всё равно удалить?» Кнопка <b>Delete Branch</b> удаляет её.</figcaption>
+        </figure>
+        <p>Пробу решено выбросить, поэтому удаляем ветку принудительно. Кнопка <b>Delete Branch</b> в окне VS Code или ключ <code>-D</code> с заглавной буквой:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Delete Branch в окне</span></figcaption>
+<pre><span class="cmd">git branch -D proba-cveta</span>
+Deleted branch proba-cveta (was 922e412).</pre>
+        </figure>
+        <p>Коммит <code>922e412</code> остался в папке <code>.git</code>, но ни одна ветка на него не указывает, и в графе его нет. Найти его можно в журнале <code>git reflog</code>, как стёртый коммит в главе 2.6, — в течение тридцати дней. Поэтому <code>-D</code> применяют, когда точно решено, что работа ветки не нужна.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Ветка пробы удалена ключом <code>-D</code>. В проекте одна ветка <code>main</code>, список изменений пуст. Ниже собраны оба вида слияния и команды главы.</p>
+
+        <div class="part" role="separator"><span><b>4</b>Справка</span></div>
+        <h2 id="s10"><span class="sec">§10</span>Справка: два вида слияния и команды</h2>
+        <p>Какой вид слияния выполнит Git, выбирать не нужно: он определяется по истории веток.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th></th><th>Fast-forward</th><th>Обычное слияние</th></tr></thead>
+            <tbody>
+              <tr><td>Когда бывает</td><td>Текущая ветка не менялась после отделения другой</td><td>У обеих веток есть свои коммиты</td></tr>
+              <tr><td>Ответ Git</td><td><code>Fast-forward</code></td><td><code>Merge made by the 'ort' strategy.</code></td></tr>
+              <tr><td>Новый коммит</td><td>Нет, имя ветки переносится вперёд</td><td>Да, коммит слияния с двумя родителями</td></tr>
+              <tr><td>Граф</td><td>Одна прямая линия</td><td>Две линии сходятся в коммите слияния</td></tr>
+              <tr><td>В главе</td><td><code>podval</code> → <code>main</code></td><td><code>forma-kontaktov</code> → <code>main</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что нужно</th><th>В VS Code</th><th>Команда</th></tr></thead>
+            <tbody>
+              <tr><td>Слить ветку в текущую</td><td>Палитра команд → Git: Merge... → ветка</td><td><code>git merge имя</code></td></tr>
+              <tr><td>Слить, не открывая редактор сообщения</td><td>Так работает Git: Merge...</td><td><code>git merge --no-edit имя</code></td></tr>
+              <tr><td>Коммиты, которые придут при слиянии</td><td>Раздел GRAPH в режиме All</td><td><code>git log --oneline main..имя</code></td></tr>
+              <tr><td>Общий предок двух веток</td><td>Кнопки нет</td><td><code>git merge-base main имя</code></td></tr>
+              <tr><td>Удалить слитую ветку</td><td>Палитра команд → Git: Delete Branch...</td><td><code>git branch -d имя</code></td></tr>
+              <tr><td>Удалить неслитую ветку</td><td>Git: Delete Branch... → Delete Branch в окне</td><td><code>git branch -D имя</code></td></tr>
+              <tr><td>Список уже слитых веток</td><td>Кнопки нет</td><td><code>git branch --merged</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="margin-note">
+          <b>На полях: ключ --no-ff</b>
+          <p>Команда <code>git merge --no-ff имя</code> создаёт коммит слияния даже там, где возможен fast-forward. В части команд так договариваются, чтобы в истории <code>main</code> каждая задача была отмечена своим коммитом слияния. Слияние через запрос на слияние (pull request) на GitHub по умолчанию тоже создаёт коммит слияния.</p>
+        </div>
+
+        <div class="part" role="separator"><span><b>5</b>Проверка себя</span></div>
+        <h2 id="s11"><span class="sec">§11</span>Частые вопросы</h2>
+        <div class="myths">
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Чтобы форма попала в <code>main</code>, нужно стоять на ветке формы и выбрать <code>main</code>.</div>
+            <div class="myth__yes"><b>На самом деле</b>Сливают в ту ветку, на которой стоите. Переходят на <code>main</code> и выбирают в Git: Merge... ветку формы. Слияние в обратную сторону перенесёт коммиты <code>main</code> в ветку формы.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>При слиянии ветка-источник переносится в <code>main</code> и исчезает.</div>
+            <div class="myth__yes"><b>На самом деле</b>Ветка-источник не меняется и остаётся на своём коммите. Её удаляют отдельно, когда работа в ней закончена.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>После удаления ветки её коммиты пропадают.</div>
+            <div class="myth__yes"><b>На самом деле</b>Удаляется только имя. Коммиты слитой ветки остаются в истории <code>main</code>. Неслитую ветку Git без ключа <code>-D</code> не удалит.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Коммит слияния появляется при каждом слиянии.</div>
+            <div class="myth__yes"><b>На самом деле</b>Только когда ветки разошлись. Если текущая ветка не менялась, Git делает fast-forward и переносит её имя вперёд.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Коммит слияния повторяет правки всех коммитов ветки ещё раз, и они записываются дважды.</div>
+            <div class="myth__yes"><b>На самом деле</b>Коммиты ветки входят в историю один раз, через вторую строку <code>parent</code>. Коммит слияния записывает итоговое состояние файлов после объединения.</div>
+          </div>
+        </div>
+
+        <h2 id="s12"><span class="sec">§12</span>Проверьте себя</h2>
+        <details>
+          <summary>Нужно перенести коммиты ветки <code>temnaya-tema</code> в <code>main</code>. С чего начать?</summary>
+          <p>Перейти на <code>main</code> и проверить, что список изменений пуст. Затем палитра команд → Git: Merge... → <code>temnaya-tema</code>, или <code>git merge temnaya-tema</code>.</p>
+        </details>
+        <details>
+          <summary>Git ответил <code>Fast-forward</code>. Появился ли новый коммит?</summary>
+          <p>Нет. Текущая ветка не менялась после отделения другой, поэтому Git перенёс её имя на последний коммит сливаемой ветки. История осталась прямой линией.</p>
+        </details>
+        <details>
+          <summary>Как до слияния узнать, какие коммиты придут в <code>main</code> из ветки <code>forma-kontaktov</code>?</summary>
+          <p><code>git log --oneline main..forma-kontaktov</code> — коммиты, которые есть в ветке формы и которых нет в <code>main</code>. В VS Code — раздел GRAPH в режиме All.</p>
+        </details>
+        <details>
+          <summary>Чем коммит слияния отличается от обычного?</summary>
+          <p>У него две строки <code>parent</code>: последний коммит ветки, в которую сливали, и последний коммит сливаемой ветки. Поэтому история текущей ветки проходит через обе линии.</p>
+        </details>
+        <details>
+          <summary>На кнопке было <b>13↑</b>, после слияния ветки с тремя коммитами стало <b>17↑</b>. Откуда четвёртый коммит?</summary>
+          <p>Это сам коммит слияния. Ветки разошлись, и Git создал коммит, который их соединяет: три коммита ветки плюс один коммит слияния.</p>
+        </details>
+        <details>
+          <summary>Git ответил <code>the branch 'proba-cveta' is not fully merged</code>. Что это значит и что делать?</summary>
+          <p>В ветке есть коммиты, которых нет в текущей ветке, и после удаления до них нельзя будет дойти. Если работа нужна — слить ветку. Если точно не нужна — удалить ключом <code>-D</code> или кнопкой Delete Branch в окне VS Code.</p>
+        </details>
+
+        <h2 id="s13"><span class="sec">§13</span>Шпаргалка по главе</h2>
+        <div class="cheat">
+          <div>
+            <b>Перед слиянием</b>
+            <code>стоите на ветке, куда сливают</code>
+            <code>список изменений пуст</code>
+          </div>
+          <div>
+            <b>Слить</b>
+            <code>Git: Merge... → ветка</code>
+            <code>git merge имя</code>
+            <code>git merge --no-edit имя</code>
+          </div>
+          <div>
+            <b>Что придёт</b>
+            <code>git log --oneline main..имя</code>
+            <code>git merge-base main имя</code>
+          </div>
+          <div>
+            <b>Ответ Git</b>
+            <code>Fast-forward — имя перенесено</code>
+            <code>Merge made by … — коммит слияния</code>
+          </div>
+          <div>
+            <b>Коммит слияния</b>
+            <code>git cat-file -p HEAD</code>
+            <code>две строки parent</code>
+          </div>
+          <div>
+            <b>Удалить ветку</b>
+            <code>Git: Delete Branch...</code>
+            <code>git branch -d имя — слитую</code>
+            <code>git branch -D имя — любую</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Слияние переносит в текущую ветку коммиты другой ветки, поэтому сначала переходят на ветку, которая должна их получить, и проверяют, что список изменений пуст. В VS Code слияние запускает команда Git: Merge... из палитры, в терминале — <code>git merge</code>. Если текущая ветка не менялась после отделения другой, Git делает fast-forward: переносит её имя на последний коммит другой ветки, нового коммита нет. Так в <code>main</code> пришёл подвал страницы. Если у обеих веток есть свои коммиты, Git находит общего предка, сводит изменения и создаёт коммит слияния с двумя родителями. Так в <code>main</code> пришла форма. Слитую ветку удаляют командой Git: Delete Branch... или <code>git branch -d</code>: стирается только имя, коммиты остаются в истории. Неслитую ветку Git без подтверждения или ключа <code>-D</code> не удаляет. В этой главе ветки меняли разные файлы и разные строки, поэтому Git свёл их изменения без участия человека.</p>
+
+        <div class="sources">
+          <b>Откуда взяты факты</b>
+          <ol>
+            <li>Кадры и ответы команд получены на клоне проекта <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a> в Git версии 2.51.1 и VS Code версии 1.138.</li>
+            <li>Fast-forward, коммит слияния, ключи <code>--no-edit</code> и <code>--no-ff</code> — <a href="https://git-scm.com/docs/git-merge">документация git-merge</a>.</li>
+            <li>Способ слияния <code>ort</code> и его выбор по умолчанию с версии 2.34 — <a href="https://git-scm.com/docs/merge-strategies">документация merge-strategies</a> и <a href="https://github.com/git/git/blob/master/Documentation/RelNotes/2.34.0.txt">заметки к выпуску Git 2.34</a>.</li>
+            <li>Ключи <code>-d</code>, <code>-D</code>, <code>--merged</code> — <a href="https://git-scm.com/docs/git-branch">документация git-branch</a>; <code>git merge-base</code> — <a href="https://git-scm.com/docs/git-merge-base">документация git-merge-base</a>.</li>
+            <li>Устройство коммита и строки <code>parent</code> — книга <a href="https://git-scm.com/book/ru/v2/Git-изнутри-Объекты-Git">Pro Git, глава «Git изнутри»</a>.</li>
+            <li>Команды Git: Merge и Git: Delete Branch — <a href="https://code.visualstudio.com/docs/sourcecontrol/overview">документация VS Code, раздел Source Control</a>.</li>
+          </ol>
+        </div>
+
+        <div class="pager"><a href="../11-sozdat-vetku/index.html">← 3.2 Вторая ветка</a><a href="../../index.html">К содержанию справочника</a></div>
+
+        <div class="colophon">
+          <span>Глава 3.3 · Слияние: fast-forward и обычное · Справочник по Git и GitHub</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../../book.js"></script>
+</body>
+</html>
