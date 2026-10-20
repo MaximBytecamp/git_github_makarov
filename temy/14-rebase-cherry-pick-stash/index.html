@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>3.5 Stash, cherry-pick, rebase · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <script>
+    try {
+      var saved = localStorage.getItem('git-book-os');
+      if (!saved) {
+        var p = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+        saved = /win/i.test(p) ? 'win' : (/mac|iphone|ipad/i.test(p) ? 'mac' : 'linux');
+      }
+      document.documentElement.dataset.os = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Модуль 3 · Ветки</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 3 · ветки</p>
+          <p class="running__folio">Глава 3.5</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">3.5</span>
+          <h1>Stash, cherry-pick, rebase:<br>отложить, перенести, переставить</h1>
+          <p class="lead">В главе разобраны три действия, которые дополняют слияние. Stash убирает незаконченную правку во временное хранилище, чтобы освободить папку для срочной работы. Cherry-pick переносит в текущую ветку один коммит из другой ветки. Rebase переставляет коммиты ветки на последний коммит <code>main</code>, после чего ветка сливается прямой линией. Все три действия показаны на проекте <code>sait-vizitka</code>.</p>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Ветки</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Что получится</dt><dd>Телефон, исправленная почта и правка README в <code>main</code>, история прямой линией</dd></div>
+          <div><dt>Сколько занимает</dt><dd>Около сорока минут за компьютером</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>Порядок действий</b>
+          <ol>
+            <li><a href="#s1">Задача главы</a></li>
+            <li><a href="#s2">Шаг 1. Начать правку в новой ветке</a></li>
+            <li><a href="#s3">Шаг 2. Убрать правку в stash</a></li>
+            <li><a href="#s4">Шаг 3. Сделать срочную правку в main</a></li>
+            <li><a href="#s5">Шаг 4. Вернуть правку из stash</a></li>
+            <li><a href="#s6">Шаг 5. Сделать пробную ветку</a></li>
+            <li><a href="#s7">Шаг 6. Перенести один коммит: cherry-pick</a></li>
+            <li><a href="#s8">Шаг 7. Посмотреть, насколько отстала ветка</a></li>
+            <li><a href="#s9">Шаг 8. Перебазировать ветку: rebase</a></li>
+            <li><a href="#s10">Шаг 9. Слить ветку прямой линией</a></li>
+            <li><a href="#s11">Справка: команды и выбор способа</a></li>
+            <li><a href="#s12">Частые вопросы</a></li>
+            <li><a href="#s13">Проверьте себя</a></li>
+            <li><a href="#s14">Шпаргалка по главе</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Задача главы</h2>
+        <p>В главах 3.3 и 3.4 работа из ветки попадала в <code>main</code> слиянием целиком: все коммиты ветки, а при расхождении — ещё и коммит слияния. В работе встречаются три ситуации, где этого мало или это неудобно.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Ситуация</th><th>Что нужно</th><th>Действие</th></tr></thead>
+            <tbody>
+              <tr><td>Правка начата, но не закончена; нужно срочно сделать другую работу</td><td>Убрать правку из папки и потом вернуть</td><td><b>stash</b></td></tr>
+              <tr><td>В незаконченной ветке есть один коммит, который нужен в <code>main</code> уже сейчас</td><td>Перенести только этот коммит</td><td><b>cherry-pick</b></td></tr>
+              <tr><td>Пока велась ветка, <code>main</code> ушла вперёд</td><td>Продолжить ветку от последнего коммита <code>main</code></td><td><b>rebase</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Глава идёт в этом порядке. Каждое действие показано кнопкой или командой в VS Code и командой в терминале.</p>
+        <div class="why">
+          <p class="why__head">Зачем это нужно в работе</p>
+          <ul class="why__list">
+            <li><b>Прерваться без мусорного коммита.</b> Срочная задача приходит посреди работы. Stash убирает незаконченную правку, и её не приходится коммитить с сообщением вроде «недоделано».</li>
+            <li><b>Взять исправление из чужой ветки.</b> Коллега починил ошибку в ветке, которая ещё неделю будет в работе. Cherry-pick переносит одно исправление, остальные коммиты ветки остаются на месте.</li>
+            <li><b>Держать историю читаемой.</b> После rebase ветка сливается fast-forward, без коммита слияния, и история <code>main</code> остаётся прямой линией.</li>
+            <li><b>Подготовить ветку к слиянию.</b> Если в <code>main</code> пришли правки, которые задевают вашу работу, конфликты появятся при rebase. Их разбирают в вашей ветке до того, как её работа попадёт в <code>main</code>.</li>
+          </ul>
+        </div>
+        <p>В главе используется проект <code>sait-vizitka</code> в том виде, в каком он остался после главы 3.4. В нём одна ветка <code>main</code> и 27 коммитов, 23 из них на GitHub не отправлены, список изменений пуст. Раздел GRAPH переключён в режим All. Имена коммитов, сделанных вами, будут отличаться от показанных. Первая часть главы — stash.</p>
+        <div class="starter" id="start">
+          <p class="starter__head">Если проекта нет или он в другом состоянии</p>
+          <div class="starter__body">
+            <p>Архив содержит проект <code>sait-vizitka</code> в том состоянии, с которого начинается глава, — после главы 3.4. В нём файлы проекта, папка <code>.git</code> со всей историей и ветками и адрес <code>origin</code>. Имена коммитов, которые уже есть в архиве, совпадают с показанными в главе. Коммиты, которые вы сделаете по ходу главы, получат свои имена: имя коммита зависит от автора и времени.</p>
+            <a class="starter__btn" href="sait-vizitka-nachalo-3-5.zip" download>sait-vizitka-nachalo-3-5.zip <small>40 КБ</small></a>
+            <ol class="starter__steps">
+              <li>Распакуйте архив в папку, где лежат ваши проекты. Появится папка <code>sait-vizitka</code>. Если папка с таким именем там уже есть, сначала переименуйте старую, например в <code>sait-vizitka-staraya</code>.</li>
+              <li>Откройте новую папку в VS Code: <b>File → Open Folder</b> → <code>sait-vizitka</code>.</li>
+              <li>Проверьте историю в терминале (<kbd>Ctrl</kbd> + <kbd>`</kbd>). Ответ должен совпасть с этим:</li>
+            </ol>
+            <figure class="code code--out">
+              <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline --graph -3</span>
+*   0d62db4 Merge branch 'stil-podvala'
+|\
+| * f37fe1f Добавил стиль подвала
+* | c6508f8 Добавил стиль кнопки
+|/</pre>
+            </figure>
+            <p>В строке состояния — <code>main</code>, на кнопке <b>23↑</b>, список изменений пуст.</p>
+            <p class="starter__foot">Папка <code>.git</code> скрытая: в Finder и Проводнике её по умолчанию не видно, но VS Code и Git работают с ней как обычно. Имя и почту автора для ваших коммитов Git берёт из настроек главы 1.3. Кнопку Sync Changes не нажимайте: адрес <code>origin</code> ведёт в репозиторий автора справочника, и отправить туда коммиты не получится.</p>
+          </div>
+        </div>
+
+        <div class="part" role="separator"><span><b>1</b>Stash: отложить правку</span></div>
+        <h2 id="s2"><span class="sec">§2</span>Шаг 1. Начать правку в новой ветке</h2>
+        <p>Задача: добавить на страницу контактов телефон. Под неё создаём ветку <code>telefon</code>, как в шаге 1 главы 3.2, и в <code>kontakty.html</code> после ссылки на профиль добавляем строку:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>kontakty.html</span><span>было</span></figcaption>
+<pre>  &lt;p&gt;&lt;a href="https://github.com/MaximBytecamp"&gt;Профиль на GitHub&lt;/a&gt;&lt;/p&gt;
+  &lt;form&gt;</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>kontakty.html</span><span>стало</span></figcaption>
+<pre>  &lt;p&gt;&lt;a href="https://github.com/MaximBytecamp"&gt;Профиль на GitHub&lt;/a&gt;&lt;/p&gt;
+<mark>  &lt;p&gt;Телефон: +7 900 123-45-67&lt;/p&gt;</mark>
+  &lt;form&gt;</pre>
+          </figure>
+        </div>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Create new branch…</span></figcaption>
+<pre>git switch -c telefon</pre>
+        </figure>
+        <p>Сохраняем файл. Коммит не делаем: номер ещё нужно уточнить.</p>
+        <figure class="shot">
+          <img src="img/01-wip.png" alt="Окно VS Code на ветке telefon: в kontakty.html строка 12 с телефоном, в Changes файл kontakty.html с буквой M, в строке состояния telefon*">
+          <figcaption>Ветка <code>telefon</code>, в Changes <code>kontakty.html</code>. Строка 12 — телефон, он не закоммичен.</figcaption>
+        </figure>
+        <p>В этот момент приходит срочная задача: на странице контактов неверный адрес почты, и исправить его нужно в <code>main</code>. Если переключиться на <code>main</code> прямо сейчас, незакоммиченная правка переедет туда вместе с вами, как в шаге 8 главы 3.2. Тогда телефон легко отобрать в коммит с почтой по ошибке. Коммит с незаконченным телефоном в ветке <code>telefon</code> тоже не нужен: номер ещё не уточнён.</p>
+
+        <p class="step-done"><b>Что получилось.</b>В ветке <code>telefon</code> незакоммиченная правка. Перед переходом на <code>main</code> её нужно убрать из папки, не теряя.</p>
+
+        <h2 id="s3"><span class="sec">§3</span>Шаг 2. Убрать правку в stash</h2>
+        <p>Недописанное письмо можно убрать в ящик стола: стол освобождается для срочной работы, а письмо лежит на месте и потом возвращается. В Git такой ящик называется stash.</p>
+        <p><b>Stash</b> — хранилище незакоммиченных правок внутри репозитория. Команда stash забирает правки из папки и индекса и кладёт их в хранилище. Папка становится такой, как в последнем коммите, список изменений пустеет. Записи хранилища не относятся ни к одной ветке, их можно вернуть на любой.</p>
+        <p>В палитре команд выбираем <b>Git: Stash</b>. VS Code спрашивает сообщение — подпись, по которой запись потом узнают. Вводим «Телефон на странице контактов» и нажимаем <kbd>Enter</kbd>:</p>
+        <figure class="shot">
+          <img src="img/02-stash-prompt.png" alt="Поле вверху окна с текстом Телефон на странице контактов и подсказкой Optionally provide a stash message">
+          <figcaption>Подсказка <b>Optionally provide a stash message</b> — «сообщение необязательно». Без него запись получит подпись из последнего коммита.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Git: Stash</span></figcaption>
+<pre><span class="cmd">git stash push -m "Телефон на странице контактов"</span>
+Saved working directory and index state On telefon: Телефон на странице контактов
+<span class="cmd">git stash list</span>
+stash@{0}: On telefon: Телефон на странице контактов
+<span class="cmd">git status --short</span></pre>
+        </figure>
+        <p>Git сохранил состояние папки и индекса (<code>working directory and index state</code>). В списке хранилища одна запись. Её имя <code>stash@{0}</code>: номер 0 у самой новой записи, следующая сдвинет её на номер 1. После имени — на какой ветке сделана запись и её сообщение. <code>git status --short</code> ничего не печатает: изменений нет.</p>
+        <figure class="shot">
+          <img src="img/03-stashed.png" alt="Окно VS Code после stash: список изменений пуст, кнопка Publish Branch, в kontakty.html строки телефона нет, в строке состояния telefon без звёздочки">
+          <figcaption>После stash. Список изменений пуст, в файле телефона нет, у имени ветки нет звёздочки.</figcaption>
+        </figure>
+        <p>Что лежит в записи, показывает <b>Git: View Stash...</b>: команда предлагает выбрать запись и открывает её как окно сравнения.</p>
+        <figure class="shot">
+          <img src="img/04-view.png" alt="Вкладка Git Stash #0: Телефон на странице контактов (1 file), в ней kontakty.html со строкой 12 о телефоне, подсвеченной зелёным">
+          <figcaption>Вкладка <b>Git Stash #0</b>. В записи один файл и одна добавленная строка — телефон.</figcaption>
+        </figure>
+        <p>Новые файлы, за которыми Git ещё не следит, обычная команда stash не забирает. Для них есть <b>Git: Stash (Include Untracked)</b>, в терминале — <code>git stash push -u</code>. Кнопка <b>Stash &amp; Checkout</b> в окне отказа из шага 9 главы 3.2 делает stash и сразу переключает ветку.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Правка лежит в записи <code>stash@{0}</code>, папка чистая. Теперь можно переключиться на <code>main</code>.</p>
+
+        <h2 id="s4"><span class="sec">§4</span>Шаг 3. Сделать срочную правку в main</h2>
+        <p>Переходим на <code>main</code> и в <code>kontakty.html</code> исправляем адрес:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>kontakty.html</span><span>было</span></figcaption>
+<pre>  &lt;p&gt;Почта: student@example.com&lt;/p&gt;</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>kontakty.html</span><span>стало</span></figcaption>
+<pre><mark>  &lt;p&gt;Почта: maxim@example.com&lt;/p&gt;</mark></pre>
+          </figure>
+        </div>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что выбор main, плюс и Commit</span></figcaption>
+<pre><span class="cmd">git switch main</span>
+<span class="cmd">git commit -am "Исправил адрес почты на странице контактов"</span>
+[main 895b31b] Исправил адрес почты на странице контактов
+ 1 file changed, 1 insertion(+), 1 deletion(-)</pre>
+        </figure>
+        <p>В коммит ушла одна строка — почта. Телефона в нём нет, потому что телефон лежит в stash.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Срочная правка в <code>main</code>, коммит <code>895b31b</code>. Можно возвращаться к телефону.</p>
+
+        <h2 id="s5"><span class="sec">§5</span>Шаг 4. Вернуть правку из stash</h2>
+        <p>Переходим обратно на ветку <code>telefon</code>. В палитре команд выбираем <b>Git: Pop Latest Stash</b> — «достать последнюю запись»:</p>
+        <figure class="shot">
+          <img src="img/05-pop-pick.png" alt="Палитра команд с набранной командой Git: Pop Latest Stash, ниже Git: Pop Stash и Git: Apply Latest Stash">
+          <figcaption>В палитре рядом три команды. <b>Pop Latest Stash</b> возвращает последнюю запись и удаляет её из хранилища, <b>Pop Stash...</b> — то же для выбранной записи, <b>Apply Latest Stash</b> возвращает правку и оставляет запись.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что выбор telefon и Git: Pop Latest Stash</span></figcaption>
+<pre><span class="cmd">git switch telefon</span>
+<span class="cmd">git stash pop</span>
+On branch telefon
+Changes not staged for commit:
+  (use "git add &lt;file&gt;..." to update what will be committed)
+  (use "git restore &lt;file&gt;..." to discard changes in working directory)
+	modified:   kontakty.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (a989cb8efaf2781bfbbd5162d3539f64a5b1baed)
+<span class="cmd">git stash list</span></pre>
+        </figure>
+        <p>Git вернул правку в папку: <code>kontakty.html</code> снова изменён. Последняя строка — запись <code>stash@{0}</code> удалена (dropped) из хранилища. Список хранилища пуст. Строки в скобках — обычные подсказки <code>git status</code> о командах <code>git add</code> и <code>git restore</code>.</p>
+        <figure class="shot">
+          <img src="img/06-popped.png" alt="Окно VS Code на ветке telefon после pop: в Changes kontakty.html с буквой M, в файле строка 12 с телефоном, в графе метка main на коммите выше метки telefon">
+          <figcaption>После pop. Телефон снова в строке 12, файл в Changes. В графе видно, что <code>main</code> ушла на коммит вперёд.</figcaption>
+        </figure>
+        <p>Номер уточнён, коммитим телефон в его ветке:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre><span class="cmd">git commit -am "Добавил телефон на страницу контактов"</span>
+[telefon 81e99a3] Добавил телефон на страницу контактов
+ 1 file changed, 1 insertion(+)</pre>
+        </figure>
+        <p>Весь путь правки за шаги 1–4 — на схеме.</p>
+        <figure class="scheme">
+          <div class="scheme-pair"><svg viewBox="0 0 350 250" role="img" aria-label="Схема, шаги 1 и 2: правка телефона в папке; после Stash папка чистая, правка на полке stash@{0}"><text x="87.0" y="22" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12.5" font-weight="700" fill="var(--ink)">1. Правка начата</text><text x="87.0" y="42" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--fire-deep)">telefon</text><text x="8" y="66" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">папка проекта</text><rect x="8" y="72" width="158" height="62" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="17" y="94" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink)">kontakty.html: M</text><text x="17" y="112" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink)">+ строка телефона</text><text x="8" y="160" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">полка stash</text><rect x="8" y="166" width="158" height="62" fill="var(--page)" stroke="var(--ink)" stroke-width="3" stroke-dasharray="6 4"/><text x="17" y="188" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink-faint)">пусто</text><text x="261.0" y="22" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12.5" font-weight="700" fill="var(--ink)">2. После Stash</text><text x="261.0" y="42" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--fire-deep)">telefon</text><text x="182" y="66" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">папка проекта</text><rect x="182" y="72" width="158" height="62" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="191" y="94" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink)">изменений нет</text><text x="182" y="160" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">полка stash</text><rect x="182" y="166" width="158" height="62" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3" stroke-dasharray="0"/><text x="191" y="188" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--ink)">stash@{0}</text><text x="191" y="206" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--ink)">телефон</text></svg><svg viewBox="0 0 350 250" role="img" aria-label="Схема, шаги 3 и 4: на ветке main сделан коммит с почтой, полка не тронута; после Pop на ветке telefon правка снова в папке, полка пуста"><text x="87.0" y="22" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12.5" font-weight="700" fill="var(--ink)">3. Срочная правка</text><text x="87.0" y="42" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--fire-deep)">main</text><text x="8" y="66" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">папка проекта</text><rect x="8" y="72" width="158" height="62" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="17" y="94" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink)">коммит 895b31b:</text><text x="17" y="112" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink)">почта maxim@…</text><text x="8" y="160" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">полка stash</text><rect x="8" y="166" width="158" height="62" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3" stroke-dasharray="0"/><text x="17" y="188" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--ink)">stash@{0}</text><text x="17" y="206" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--ink)">телефон</text><text x="261.0" y="22" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12.5" font-weight="700" fill="var(--ink)">4. После Pop</text><text x="261.0" y="42" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--fire-deep)">telefon</text><text x="182" y="66" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">папка проекта</text><rect x="182" y="72" width="158" height="62" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="191" y="94" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink)">kontakty.html: M</text><text x="191" y="112" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink)">+ строка телефона</text><text x="182" y="160" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">полка stash</text><rect x="182" y="166" width="158" height="62" fill="var(--page)" stroke="var(--ink)" stroke-width="3" stroke-dasharray="6 4"/><text x="191" y="188" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink-faint)">пусто</text></svg></div>
+          <figcaption>Правка и хранилище по шагам. Пока правка на полке, папка свободна для срочной работы в <code>main</code>.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>Телефон закоммичен в ветке <code>telefon</code>, хранилище пусто. В <code>main</code> исправлена почта, но в ветке <code>telefon</code> её ещё нет. Вторая часть главы — cherry-pick.</p>
+
+        <div class="part" role="separator"><span><b>2</b>Cherry-pick: перенести один коммит</span></div>
+        <h2 id="s6"><span class="sec">§6</span>Шаг 5. Сделать пробную ветку</h2>
+        <p>Создаём от <code>main</code> ветку <code>temnaya-tema</code> и делаем в ней два коммита. Первый — начало тёмной темы, она пока не готова. Второй — правка README, которая к теме не относится: описание страницы контактов устарело после главы 3.3.</p>
+        <div class="code-pair">
+          <figure class="code code--now">
+            <figcaption><span>styles.css</span><span>в конец файла, коммит «Начал тёмную тему»</span></figcaption>
+<pre><mark>body {</mark>
+<mark>  background: #1B1A19;</mark>
+<mark>  color: #F4F1EC;</mark>
+<mark>}</mark></pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>README.md</span><span>коммит «Дополнил описание страницы контактов в README»</span></figcaption>
+<pre><mark>- `kontakty.html` — страница контактов с формой обратной связи</mark></pre>
+          </figure>
+        </div>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git switch -c temnaya-tema main</span>
+<span class="cmd">git commit -am "Начал тёмную тему"</span>
+[temnaya-tema 436c4d0] Начал тёмную тему
+<span class="cmd">git commit -am "Дополнил описание страницы контактов в README"</span>
+[temnaya-tema fd6a6a1] Дополнил описание страницы контактов в README</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/06-probe-branch.png" alt="Окно VS Code на main: в README.md строка 10 без слов о форме, в графе сверху ветка temnaya-tema с двумя коммитами — «Дополнил описание страницы контактов в README» и «Начал тёмную тему», ниже коммит с меткой main">
+          <figcaption>Вы на <code>main</code>. В графе над ней два коммита ветки <code>temnaya-tema</code>. В README строка 10 пока прежняя.</figcaption>
+        </figure>
+        <p>Правка README нужна в <code>main</code> сейчас. Слить ветку целиком нельзя: вместе с README в <code>main</code> придёт недоделанная тёмная тема.</p>
+
+        <p class="step-done"><b>Что получилось.</b>В ветке <code>temnaya-tema</code> два коммита, нужен только второй.</p>
+
+        <h2 id="s7"><span class="sec">§7</span>Шаг 6. Перенести один коммит: cherry-pick</h2>
+        <p>Из чужой тетради с рецептами можно переписать в свою один рецепт. В своей тетради появится новая запись с тем же текстом, а в чужой ничего не изменится.</p>
+        <p><b>Cherry-pick</b> — действие, которое берёт изменения одного коммита и создаёт с ними новый коммит в текущей ветке. Сообщение, автор и дата правки сохраняются. Имя у нового коммита другое: у него другой родитель, а имя вычисляется из содержимого коммита (глава 2.4). Исходный коммит остаётся в своей ветке.</p>
+        <p>Переходим на <code>main</code>. В разделе GRAPH нажимаем правой кнопкой на коммит «Дополнил описание страницы контактов в README» ветки <code>temnaya-tema</code> и выбираем <b>Cherry Pick</b>:</p>
+        <figure class="shot">
+          <img src="img/07-cherry-menu.png" alt="Контекстное меню коммита в разделе GRAPH: Open Changes, Open on GitHub, Checkout, Create Branch, Delete Branch, Create Tag, Cherry Pick выделен, Compare with Remote, Copy Commit Hash, Copy Commit Message">
+          <figcaption>Меню коммита в графе. Пункт <b>Cherry Pick</b> переносит этот коммит в ветку, на которой вы стоите.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Cherry Pick в меню графа</span></figcaption>
+<pre><span class="cmd">git switch main</span>
+<span class="cmd">git cherry-pick fd6a6a1</span>
+[main 79cd7b5] Дополнил описание страницы контактов в README
+ Date: Tue Oct 20 23:17:02 2026 +0300
+ 1 file changed, 1 insertion(+), 1 deletion(-)</pre>
+        </figure>
+        <p>В <code>main</code> новый коммит <code>79cd7b5</code> с тем же сообщением. Строка <code>Date</code> — время исходной правки: Git сохранил его, потому что дата автора переносится вместе с изменениями. Та же команда есть в палитре — <b>Git: Cherry Pick...</b>; она спрашивает имя коммита (<b>Please provide the commit hash</b>).</p>
+        <figure class="shot">
+          <img src="img/08-after-cherry.png" alt="Окно VS Code на main после cherry-pick: в README.md строка 10 «страница контактов с формой обратной связи», в графе сверху коммит с меткой main, ниже на отдельной линии ветка temnaya-tema с коммитом того же сообщения">
+          <figcaption>После cherry-pick. В README новая строка 10. В графе два коммита с одинаковым сообщением: новый в <code>main</code> и исходный в <code>temnaya-tema</code>.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline --graph --all -4</span>
+* 79cd7b5 Дополнил описание страницы контактов в README
+| * fd6a6a1 Дополнил описание страницы контактов в README
+| * 436c4d0 Начал тёмную тему
+|/
+* 895b31b Исправил адрес почты на странице контактов</pre>
+        </figure>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: в ветке temnaya-tema коммиты 436c4d0 и fd6a6a1; в main после 895b31b появился новый коммит 79cd7b5 — копия fd6a6a1 с другим именем">
+<text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+<path d="M30 215 H530" stroke="var(--ink)" stroke-width="3" fill="none"/><path d="M390 215 C430 215 440 80 480 80 H600" stroke="var(--fire-deep)" stroke-width="3" fill="none"/><circle cx="250" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">0d62db4</text><text x="250" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">слияние</text><circle cx="390" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="390" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">895b31b</text><text x="390" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">почта</text><circle cx="490" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="490" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">436c4d0</text><text x="490" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">тёмная тема</text><circle cx="600" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="600" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">fd6a6a1</text><text x="600" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">README</text><circle cx="530" cy="215" r="15" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="4"/><text x="530" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">79cd7b5</text><text x="530" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">README</text><path d="M602 97 C612 165 585 200 549 210" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/><path d="M556 201 L547 211 L560 215" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/><text x="618" y="168" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--fire-deep)">копия</text><text x="618" y="183" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--fire-deep)">правки</text><rect x="502.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="530" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text><path d="M530 182 V197" stroke="var(--fire-deep)" stroke-width="3"/><text x="494.2" y="171" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text><rect x="539.8" y="17" width="120.4" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="600" y="36" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">temnaya-tema</text><path d="M600 47 V62" stroke="var(--fire-deep)" stroke-width="3"/>
+</svg>
+          <figcaption>Cherry-pick. Правка коммита <code>fd6a6a1</code> повторена в <code>main</code> новым коммитом <code>79cd7b5</code>. Ветка <code>temnaya-tema</code> не изменилась.</figcaption>
+        </figure>
+        <p>Тёмную тему решено отложить, ветку пробы удаляем. Она не слита, поэтому нужен ключ <code>-D</code>, как в шаге 8 главы 3.3. Правка README остаётся в <code>main</code>.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git branch -D temnaya-tema</span>
+Deleted branch temnaya-tema (was fd6a6a1).</pre>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>В <code>main</code> правка README без тёмной темы. Теперь в <code>main</code> два коммита, которых нет в ветке <code>telefon</code>. Третья часть главы — rebase.</p>
+
+        <div class="part" role="separator"><span><b>3</b>Rebase: переставить ветку</span></div>
+        <h2 id="s8"><span class="sec">§8</span>Шаг 7. Посмотреть, насколько отстала ветка</h2>
+        <p>Переходим на ветку <code>telefon</code>. Она создана от коммита <code>0d62db4</code>, а <code>main</code> с тех пор получила почту и README:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git switch telefon</span>
+<span class="cmd">git log --oneline --graph --all -4</span>
+* 79cd7b5 Дополнил описание страницы контактов в README
+* 895b31b Исправил адрес почты на странице контактов
+| * 81e99a3 Добавил телефон на страницу контактов
+|/
+*   0d62db4 Merge branch 'stil-podvala'
+|\</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/09-before-rebase.png" alt="Окно VS Code на ветке telefon: в kontakty.html строка 10 со старой почтой student@example.com и строка 12 с телефоном, в графе метка main на два коммита выше метки telefon">
+          <figcaption>Ветка <code>telefon</code> до rebase. В строке 10 старая почта: исправление есть только в <code>main</code>.</figcaption>
+        </figure>
+        <p>Ветки разошлись, поэтому слияние <code>telefon</code> в <code>main</code> сейчас создало бы коммит слияния, как в главе 3.3. Есть другой путь: сначала переставить коммит телефона так, будто ветка создана от последнего коммита <code>main</code>.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Ветка <code>telefon</code> отстаёт от <code>main</code> на два коммита, своих у неё один.</p>
+
+        <h2 id="s9"><span class="sec">§9</span>Шаг 8. Перебазировать ветку: rebase</h2>
+        <p>Черновик доклада начат по старой версии плана. План обновили, и черновик переписывают так, чтобы он опирался на новую версию: текст доклада тот же, но основа другая.</p>
+        <p><b>Rebase</b> (перебазирование) — действие, которое берёт коммиты текущей ветки, отсутствующие в другой ветке, и создаёт их заново поверх её последнего коммита. Ветка переходит на новые коммиты. Изменения в них те же, а имена новые, потому что у коммитов другие родители. Прежние коммиты остаются только в журнале <code>git reflog</code>, как в шаге 7 главы 2.6.</p>
+        <p>Вы стоите на <code>telefon</code>. В палитре команд выбираем <b>Git: Rebase Branch...</b> и в списке — <code>main</code>:</p>
+        <figure class="shot">
+          <img src="img/10-rebase-pick.png" alt="Список вверху окна с подсказкой Select a branch to rebase onto: main и origin/main">
+          <figcaption>Подсказка <b>Select a branch to rebase onto</b> — «выберите ветку, на которую перебазировать». Перебазируется ветка, на которой вы стоите.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Git: Rebase Branch... → main</span></figcaption>
+<pre><span class="cmd">git rebase main</span>
+Rebasing (1/1)
+Successfully rebased and updated refs/heads/telefon.</pre>
+        </figure>
+        <p><code>Rebasing (1/1)</code> — Git пересоздаёт коммиты ветки по одному, здесь коммит один. Вторая строка — перебазирование прошло, ветка <code>telefon</code> обновлена.</p>
+        <figure class="shot">
+          <img src="img/11-after-rebase.png" alt="Окно VS Code на ветке telefon после rebase: в kontakty.html строка 10 с новой почтой maxim@example.com и строка 12 с телефоном, в графе метка telefon сразу над меткой main на одной линии">
+          <figcaption>После rebase. В строке 10 новая почта из <code>main</code>, в строке 12 телефон. В графе <code>telefon</code> стоит сразу над <code>main</code>, на одной линии.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline --graph --all -4</span>
+* 8d0dd10 Добавил телефон на страницу контактов
+* 79cd7b5 Дополнил описание страницы контактов в README
+* 895b31b Исправил адрес почты на странице контактов
+*   0d62db4 Merge branch 'stil-podvala'
+|\</pre>
+        </figure>
+        <p>Коммит телефона назывался <code>81e99a3</code>, теперь — <code>8d0dd10</code>. Его родитель — <code>79cd7b5</code>, последний коммит <code>main</code>. На схеме — что изменилось.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 700 275" role="img" aria-label="Схема: прежний коммит 81e99a3 ветки telefon отходил от 0d62db4 и показан бледным; после rebase ветка telefon стоит на новом коммите 8d0dd10 сразу после 79cd7b5 — вершины main">
+<text x="8" y="220" font-family="Roboto Mono, monospace" font-size="14" fill="var(--ink-faint)">…</text>
+<path d="M30 215 H570" stroke="var(--ink)" stroke-width="3" fill="none"/><g opacity=".38"><path d="M110 215 C160 215 170 80 220 80 H250" stroke="var(--fire-deep)" stroke-width="3" fill="none"/><circle cx="250" cy="80" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="116" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">81e99a3</text><text x="250" y="130" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">телефон (было)</text></g><text x="250" y="40" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink-faint)">прежний коммит, ветки на нём нет</text><circle cx="110" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="110" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">0d62db4</text><text x="110" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">слияние</text><circle cx="250" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="250" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">895b31b</text><text x="250" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">почта</text><circle cx="390" cy="215" r="15" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="390" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">79cd7b5</text><text x="390" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">README</text><circle cx="570" cy="215" r="15" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="4"/><text x="570" y="251" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">8d0dd10</text><text x="570" y="265" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-faint)">телефон</text><path d="M282 86 C420 70 540 120 562 196" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/><path d="M555 188 L563 199 L568 186" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/><rect x="362.2" y="152" width="55.6" height="28" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="390" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">main</text><path d="M390 182 V197" stroke="var(--fire-deep)" stroke-width="3"/><rect x="532.8" y="152" width="74.4" height="28" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="570" y="171" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">telefon</text><path d="M570 182 V197" stroke="var(--fire-deep)" stroke-width="3"/><text x="524.8" y="171" text-anchor="end" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--fire-deep)">HEAD →</text>
+</svg>
+          <figcaption>Rebase. Коммит телефона создан заново поверх <code>79cd7b5</code> и получил имя <code>8d0dd10</code>. Прежний <code>81e99a3</code> остался без ветки.</figcaption>
+        </figure>
+        <div class="margin-note">
+          <b>На полях: rebase только для неотправленных коммитов</b>
+          <p>Rebase заменяет коммиты новыми, как amend и reset в главе 2.6. Если ветка уже на GitHub, у сервера и у коллег останутся прежние коммиты, и истории разойдутся. Поэтому перебазируют только ветки, которые ещё не отправлены. Ветку, которую уже отправили, сливают обычным слиянием.</p>
+        </div>
+        <div class="margin-note margin-note--steel">
+          <b>На полях: конфликт при rebase</b>
+          <p>Если коммит ветки и коммиты <code>main</code> меняют одно место, rebase останавливается с конфликтом. Он разбирается так же, как в главе 3.4: правка файла и <code>git add</code>. Затем перебазирование продолжают командой <code>git rebase --continue</code> или отменяют командой <code>git rebase --abort</code>.</p>
+        </div>
+
+        <p class="step-done"><b>Что получилось.</b>Ветка <code>telefon</code> продолжает <code>main</code> прямой линией. Осталось слить её.</p>
+
+        <h2 id="s10"><span class="sec">§10</span>Шаг 9. Слить ветку прямой линией</h2>
+        <p>Переходим на <code>main</code> и сливаем <code>telefon</code>, как в главе 3.3: палитра команд → <b>Git: Merge...</b> → <code>telefon</code>.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Git: Merge... → telefon</span></figcaption>
+<pre><span class="cmd">git switch main</span>
+<span class="cmd">git merge telefon</span>
+Updating 79cd7b5..8d0dd10
+Fast-forward
+ kontakty.html | 1 +
+ 1 file changed, 1 insertion(+)
+<span class="cmd">git branch -d telefon</span>
+Deleted branch telefon (was 8d0dd10).</pre>
+        </figure>
+        <p>Слияние прошло fast-forward: после rebase у <code>main</code> нет коммитов, которых нет в <code>telefon</code>, и Git перенёс имя <code>main</code> вперёд. Коммита слияния нет. Слитую ветку удаляем.</p>
+        <figure class="shot">
+          <img src="img/12-final.png" alt="Окно VS Code на main: в графе сверху три коммита подряд — телефон, README, почта, на кнопке 26↑, в kontakty.html новая почта и телефон">
+          <figcaption>Конец главы. Три новых коммита стоят в <code>main</code> одной линией, на кнопке <b>26↑</b>.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>В проекте одна ветка <code>main</code>, 30 коммитов, 26 из них на GitHub не отправлены, список изменений пуст. Ниже собраны команды главы и выбор между слиянием, cherry-pick и rebase.</p>
+
+        <div class="part" role="separator"><span><b>4</b>Справка</span></div>
+        <h2 id="s11"><span class="sec">§11</span>Справка: команды и выбор способа</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что нужно</th><th>В VS Code</th><th>Команда</th></tr></thead>
+            <tbody>
+              <tr><td>Убрать правки в stash</td><td>Git: Stash</td><td><code>git stash push -m "сообщение"</code></td></tr>
+              <tr><td>То же вместе с новыми файлами</td><td>Git: Stash (Include Untracked)</td><td><code>git stash push -u</code></td></tr>
+              <tr><td>Список записей</td><td>Git: View Stash...</td><td><code>git stash list</code></td></tr>
+              <tr><td>Вернуть последнюю запись и удалить её</td><td>Git: Pop Latest Stash</td><td><code>git stash pop</code></td></tr>
+              <tr><td>Вернуть запись и оставить её</td><td>Git: Apply Latest Stash</td><td><code>git stash apply</code></td></tr>
+              <tr><td>Удалить запись без возврата</td><td>Git: Drop Stash...</td><td><code>git stash drop</code></td></tr>
+              <tr><td>Перенести один коммит</td><td>Cherry Pick в меню графа или Git: Cherry Pick...</td><td><code>git cherry-pick имя</code></td></tr>
+              <tr><td>Перебазировать текущую ветку</td><td>Git: Rebase Branch...</td><td><code>git rebase main</code></td></tr>
+              <tr><td>Продолжить или отменить rebase после конфликта</td><td>Кнопки в главе не показаны</td><td><code>git rebase --continue</code>, <code>git rebase --abort</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Все три способа переноса работы из ветки в ветку отличаются тем, что переносят и что происходит с историей:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th></th><th>Слияние</th><th>Cherry-pick</th><th>Rebase</th></tr></thead>
+            <tbody>
+              <tr><td>Что переносит</td><td>Все коммиты ветки</td><td>Один выбранный коммит</td><td>Коммиты ветки на новую основу</td></tr>
+              <tr><td>Новые коммиты</td><td>Коммит слияния, если ветки разошлись</td><td>Копия коммита</td><td>Копии всех коммитов ветки</td></tr>
+              <tr><td>Меняет имена существующих коммитов</td><td>Нет</td><td>Нет, исходный остаётся</td><td>Да, коммиты ветки заменяются</td></tr>
+              <tr><td>Для отправленных коммитов</td><td>Подходит</td><td>Подходит</td><td>Не подходит</td></tr>
+              <tr><td>В главе</td><td>3.3, 3.4</td><td>README из <code>temnaya-tema</code></td><td>ветка <code>telefon</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="part" role="separator"><span><b>5</b>Проверка себя</span></div>
+        <h2 id="s12"><span class="sec">§12</span>Частые вопросы</h2>
+        <div class="myths">
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Stash удаляет незакоммиченные правки.</div>
+            <div class="myth__yes"><b>На самом деле</b>Stash переносит их в хранилище. Pop или Apply возвращают их в папку.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Запись stash привязана к ветке, где её сделали.</div>
+            <div class="myth__yes"><b>На самом деле</b>Ветка только записана в подписи. Вернуть запись можно на любой ветке.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Cherry-pick перемещает коммит из одной ветки в другую.</div>
+            <div class="myth__yes"><b>На самом деле</b>Cherry-pick создаёт копию с новым именем. Исходный коммит остаётся в своей ветке.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>После rebase коммиты ветки остаются прежними.</div>
+            <div class="myth__yes"><b>На самом деле</b>Rebase создаёт новые коммиты с новыми именами: <code>81e99a3</code> стал <code>8d0dd10</code>. Поэтому отправленные ветки не перебазируют.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Rebase и слияние дают одинаковый результат.</div>
+            <div class="myth__yes"><b>На самом деле</b>Файлы в итоге одинаковые, история разная. После слияния разошедшихся веток есть коммит слияния, после rebase и fast-forward — прямая линия.</div>
+          </div>
+        </div>
+
+        <h2 id="s13"><span class="sec">§13</span>Проверьте себя</h2>
+        <details>
+          <summary>Вы наполовину переписали <code>index.html</code>, а нужно срочно переключиться на другую ветку. Что сделать, чтобы не коммитить незаконченное?</summary>
+          <p>Git: Stash с понятным сообщением или <code>git stash push -m "…"</code>. Папка станет чистой, можно переключаться. Потом вернуться на ветку и выполнить Git: Pop Latest Stash.</p>
+        </details>
+        <details>
+          <summary>Чем Pop отличается от Apply?</summary>
+          <p>Обе команды возвращают правки в папку. Pop после этого удаляет запись из хранилища, Apply оставляет её.</p>
+        </details>
+        <details>
+          <summary>В ветке коллеги есть исправление опечатки, вся остальная ветка не готова. Как получить в <code>main</code> только исправление?</summary>
+          <p>Перейти на <code>main</code> и сделать cherry-pick этого коммита: Cherry Pick в меню графа или <code>git cherry-pick имя</code>. В <code>main</code> появится копия коммита с новым именем.</p>
+        </details>
+        <details>
+          <summary>Почему у коммита после cherry-pick другое имя?</summary>
+          <p>У копии другой родитель — последний коммит текущей ветки. Имя вычисляется из содержимого коммита, в том числе из родителя, поэтому оно другое.</p>
+        </details>
+        <details>
+          <summary>Вы на ветке <code>telefon</code> выполнили <code>git rebase main</code>. Какая ветка изменилась?</summary>
+          <p><code>telefon</code>: её коммиты созданы заново поверх последнего коммита <code>main</code>. Ветка <code>main</code> не изменилась.</p>
+        </details>
+        <details>
+          <summary>Ветка уже отправлена на GitHub, и в <code>main</code> пришли новые коммиты. Перебазировать её или слить?</summary>
+          <p>Слить. Rebase заменил бы отправленные коммиты новыми, и история на компьютере разошлась бы с копией на GitHub.</p>
+        </details>
+
+        <h2 id="s14"><span class="sec">§14</span>Шпаргалка по главе</h2>
+        <div class="cheat">
+          <div>
+            <b>Stash</b>
+            <code>Git: Stash</code>
+            <code>git stash push -m "…"</code>
+            <code>-u — с новыми файлами</code>
+          </div>
+          <div>
+            <b>Вернуть из stash</b>
+            <code>Git: Pop Latest Stash</code>
+            <code>git stash pop / apply</code>
+            <code>git stash list</code>
+          </div>
+          <div>
+            <b>Cherry-pick</b>
+            <code>меню графа → Cherry Pick</code>
+            <code>git cherry-pick имя</code>
+            <code>копия с новым именем</code>
+          </div>
+          <div>
+            <b>Rebase</b>
+            <code>Git: Rebase Branch... → main</code>
+            <code>git rebase main</code>
+            <code>затем слияние — fast-forward</code>
+          </div>
+          <div>
+            <b>Конфликт при rebase</b>
+            <code>правка файла, git add</code>
+            <code>git rebase --continue</code>
+            <code>git rebase --abort</code>
+          </div>
+          <div>
+            <b>Нельзя</b>
+            <code>rebase отправленных коммитов</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Stash убирает незакоммиченные правки в хранилище и освобождает папку: так срочная правка в <code>main</code> сделана без незаконченного телефона. Pop возвращает правку и удаляет запись, Apply возвращает и оставляет. Cherry-pick повторяет один коммит в текущей ветке новым коммитом с новым именем: так в <code>main</code> попала правка README без тёмной темы. Rebase создаёт коммиты ветки заново поверх последнего коммита другой ветки: после него ветка <code>telefon</code> слилась в <code>main</code> fast-forward, прямой линией. Rebase меняет имена коммитов, поэтому его применяют только к веткам, которые ещё не отправлены на GitHub. В проекте одна ветка <code>main</code> с тремя новыми коммитами.</p>
+
+        <div class="sources">
+          <b>Откуда взяты факты</b>
+          <ol>
+            <li>Кадры и ответы команд получены на клоне проекта <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a> в Git версии 2.51.1 и VS Code версии 1.138.</li>
+            <li>Хранилище, <code>push -m</code>, <code>-u</code>, <code>pop</code>, <code>apply</code>, <code>drop</code> — <a href="https://git-scm.com/docs/git-stash">документация git-stash</a>.</li>
+            <li>Перенос коммита и сохранение даты автора — <a href="https://git-scm.com/docs/git-cherry-pick">документация git-cherry-pick</a>.</li>
+            <li>Перебазирование, <code>--continue</code>, <code>--abort</code> — <a href="https://git-scm.com/docs/git-rebase">документация git-rebase</a>; совет не перебазировать отправленные коммиты — книга <a href="https://git-scm.com/book/ru/v2/Ветвление-в-Git-Перебазирование">Pro Git, «Перебазирование»</a>.</li>
+            <li>Команды Git: Stash, Cherry Pick, Rebase Branch — <a href="https://code.visualstudio.com/docs/sourcecontrol/overview">документация VS Code, раздел Source Control</a>.</li>
+          </ol>
+        </div>
+
+        <div class="pager"><a href="../13-konflikty/index.html">← 3.4 Конфликты</a><a href="../../index.html">К содержанию справочника</a></div>
+
+        <div class="colophon">
+          <span>Глава 3.5 · Stash, cherry-pick, rebase · Справочник по Git и GitHub</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../../book.js"></script>
+</body>
+</html>
