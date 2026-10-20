@@ -700,3 +700,7 @@ figure.code--out .cmd:last-child { margin-bottom: 0; padding-bottom: 0; border-b
 .starter__steps li { margin-bottom: 8px; }
 .starter__body > .code { margin: 0 0 12px; }
 .starter__foot { margin: 0 0 10px; padding-top: 10px; border-top: 2px solid var(--rule); font-size: 14.5px; color: var(--ink-soft); }
+
+/* Две схемы рядом; на узком экране — одна под другой во всю ширину */
+.scheme-pair { display: flex; flex-wrap: wrap; gap: 14px 24px; justify-content: center; }
+.scheme-pair svg { flex: 1 1 300px; max-width: 420px; width: 100%; height: auto; }

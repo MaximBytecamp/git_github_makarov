@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>3.4 Конфликты: как получить и как разобрать · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <script>
+    try {
+      var saved = localStorage.getItem('git-book-os');
+      if (!saved) {
+        var p = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+        saved = /win/i.test(p) ? 'win' : (/mac|iphone|ipad/i.test(p) ? 'mac' : 'linux');
+      }
+      document.documentElement.dataset.os = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Модуль 3 · Ветки</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 3 · ветки</p>
+          <p class="running__folio">Глава 3.4</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">3.4</span>
+          <h1>Конфликты:<br>как получить и как разобрать</h1>
+          <p class="lead">В главе разобрано, что происходит, когда две ветки меняют одно и то же место файла. На проекте <code>sait-vizitka</code> получены два конфликта: в заголовке главной страницы и в конце файла стилей. Первый разобран вручную в обычном редакторе, второй — в редакторе слияния VS Code. Показано, как читать метки конфликта, чем опасна кнопка Accept Both Changes и как отменить слияние, которое начато не вовремя.</p>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Ветки</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Что получится</dt><dd>Два разобранных конфликта и два коммита слияния в <code>main</code></dd></div>
+          <div><dt>Сколько занимает</dt><dd>Около сорока минут за компьютером</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>Порядок действий</b>
+          <ol>
+            <li><a href="#s1">Задача главы</a></li>
+            <li><a href="#s2">Шаг 1. Изменить заголовок в новой ветке</a></li>
+            <li><a href="#s3">Шаг 2. Изменить тот же заголовок в main</a></li>
+            <li><a href="#s4">Шаг 3. Запустить слияние и получить конфликт</a></li>
+            <li><a href="#s5">Шаг 4. Прочитать метки конфликта</a></li>
+            <li><a href="#s6">Шаг 5. Исправить файл</a></li>
+            <li><a href="#s7">Шаг 6. Отметить файл и завершить слияние</a></li>
+            <li><a href="#s8">Шаг 7. Получить конфликт в конце файла</a></li>
+            <li><a href="#s9">Шаг 8. Отменить слияние</a></li>
+            <li><a href="#s10">Шаг 9. Разобрать конфликт в редакторе слияния</a></li>
+            <li><a href="#s11">Справка: кнопки, команды, как реже получать конфликты</a></li>
+            <li><a href="#s12">Частые вопросы</a></li>
+            <li><a href="#s13">Проверьте себя</a></li>
+            <li><a href="#s14">Шпаргалка по главе</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Задача главы</h2>
+        <p>В главе 3.3 Git свёл ветки без участия человека: ветка формы меняла <code>kontakty.html</code> и <code>styles.css</code>, а в <code>main</code> менялся <code>index.html</code>. Так бывает, когда ветки меняют разные файлы или разные места одного файла. В этой главе две ветки меняют одну и ту же строку.</p>
+        <div class="analogy">
+          <p class="analogy__head">Ассоциация: два редактора одной статьи</p>
+          <div class="analogy__pair">
+            <div class="analogy__side">
+              <b>В жизни</b>
+              <p>Два редактора получили копии одной статьи. Первый поправил второй абзац, второй — пятый. Правки собирают в одну статью без вопросов. Если же оба переписали один и тот же заголовок, каждый по-своему, выбрать вариант может только автор.</p>
+            </div>
+            <div class="analogy__side">
+              <b>В Git</b>
+              <p>Правки в разных местах Git собирает сам. Когда обе ветки изменили одно место по-разному, Git останавливает слияние и записывает в файл обе версии. Слияние остаётся незавершённым, пока человек не выберет итоговый текст.</p>
+            </div>
+          </div>
+          <p class="analogy__limit"><b>Где не совпадает</b>Редактор сравнивает правки по смыслу, а Git — по строкам. Поэтому для Git конфликт возникает и тогда, когда две ветки дописали разные строки в одно и то же место. По смыслу такие строки друг другу не мешают.</p>
+        </div>
+        <p><b>Конфликт слияния</b> (merge conflict) — остановка слияния, когда обе ветки после общего предка изменили одно и то же место файла и изменения разные. Чтобы найти такие места, Git сравнивает три версии каждого файла. Первая — в общем предке, вторая — в текущей ветке, третья — в сливаемой ветке. На схеме — два случая рядом.</p>
+        <figure class="scheme">
+          <div class="scheme-pair"><svg viewBox="0 0 340 320" role="img" aria-label="Схема: строку изменила только main, Git берёт её вариант"><defs><marker id="ah205" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fire-deep)"/></marker></defs><text x="170.0" y="22" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" fill="var(--ink)">Строку меняла одна ветка</text><rect x="70" y="36" width="200" height="58" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="80" y="55" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="var(--ink-soft)">общий предок</text><text x="80" y="79" font-family="Roboto Mono, monospace" font-size="12.5" fill="var(--ink)">&lt;p&gt;Страница…</text><rect x="10" y="140" width="150" height="58" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="20" y="159" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="var(--ink-soft)">main (Current)</text><text x="20" y="183" font-family="Roboto Mono, monospace" font-size="12.5" fill="var(--ink)">&lt;footer&gt;Страница…</text><rect x="180" y="140" width="150" height="58" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="190" y="159" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="var(--ink-soft)">ветка (Incoming)</text><text x="190" y="183" font-family="Roboto Mono, monospace" font-size="12.5" fill="var(--ink)">&lt;p&gt;Страница…</text><path d="M130 96 L90 136" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" marker-end="url(#ah205)"/><path d="M210 96 L250 136" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" marker-end="url(#ah205)"/><path d="M85 200 L150 246" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" marker-end="url(#ah205)"/><path d="M255 200 L190 246" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" marker-end="url(#ah205)"/><rect x="70" y="250" width="200" height="58" fill="var(--mint-pale, #DDF0E4)" stroke="var(--ink)" stroke-width="3"/><text x="80" y="269" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="var(--ink-soft)">результат: берёт Git</text><text x="80" y="293" font-family="Roboto Mono, monospace" font-size="12.5" fill="var(--ink)">&lt;footer&gt;Страница…</text></svg><svg viewBox="0 0 340 320" role="img" aria-label="Схема: строку изменили обе ветки по-разному, это конфликт, выбирает человек"><defs><marker id="ah18" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--fire-deep)"/></marker></defs><text x="170.0" y="22" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" fill="var(--ink)">Строку меняли обе ветки</text><rect x="70" y="36" width="200" height="58" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="80" y="55" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="var(--ink-soft)">общий предок</text><text x="80" y="79" font-family="Roboto Mono, monospace" font-size="12.5" fill="var(--ink)">…это мой сайт</text><rect x="10" y="140" width="150" height="58" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="20" y="159" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="var(--ink-soft)">main (Current)</text><text x="20" y="183" font-family="Roboto Mono, monospace" font-size="12.5" fill="var(--ink)">…мой сайт-визитка</text><rect x="180" y="140" width="150" height="58" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="190" y="159" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="var(--ink-soft)">ветка (Incoming)</text><text x="190" y="183" font-family="Roboto Mono, monospace" font-size="12.5" fill="var(--ink)">Привет, я Максим</text><path d="M130 96 L90 136" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" marker-end="url(#ah18)"/><path d="M210 96 L250 136" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" marker-end="url(#ah18)"/><path d="M85 200 L150 246" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" marker-end="url(#ah18)"/><path d="M255 200 L190 246" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" marker-end="url(#ah18)"/><rect x="70" y="250" width="200" height="58" fill="var(--red-pale, #FBE0DF)" stroke="var(--ink)" stroke-width="3"/><text x="80" y="269" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="var(--ink-soft)">результат: конфликт</text><text x="80" y="293" font-family="Roboto Mono, monospace" font-size="12.5" fill="var(--ink)">? — выбирает человек</text></svg></div>
+          <figcaption>Три версии одной строки. В первом случае строку изменила только <code>main</code> (подвал из главы 3.3), и Git берёт её вариант. Во втором строку изменили обе ветки, и Git не выбирает между ними.</figcaption>
+        </figure>
+        <p>Если строку изменила одна ветка, Git берёт изменённый вариант: вторая ветка эту строку не трогала, значит, спорить не с чем. Если строку изменили обе ветки и по-разному, у Git нет правила, по которому выбрать. Тогда он записывает обе версии в файл, помечает место конфликта и оставляет слияние незавершённым. Конфликт не стирает ничью работу: обе версии лежат в файле, пока человек не решит, что оставить.</p>
+        <div class="why">
+          <p class="why__head">Зачем это нужно в работе</p>
+          <ul class="why__list">
+            <li><b>Командная работа.</b> Два человека правят один файл в своих ветках. Кто сливает вторым, тот и получает конфликт и разбирает его.</li>
+            <li><b>Долгая ветка.</b> Пока ветка задачи живёт неделю, в <code>main</code> приходят чужие правки. Чем дольше ветка, тем больше мест, где правки встретятся.</li>
+            <li><b>Правильный итог.</b> При разборе решают, какой текст должен остаться. Ошибка на этом шаге попадает в <code>main</code>, поэтому после разбора файл проверяют глазами.</li>
+            <li><b>Возможность отступить.</b> Если конфликт неожиданный или разбирать его сейчас некогда, слияние отменяют, и проект возвращается к состоянию до него.</li>
+          </ul>
+        </div>
+        <p>В главе используется проект <code>sait-vizitka</code> в том виде, в каком он остался после главы 3.3. В нём одна ветка <code>main</code> и 21 коммит, 17 из них на GitHub не отправлены, список изменений пуст. Раздел GRAPH переключён в режим All. Имена коммитов, сделанных вами, будут отличаться от показанных. Первая часть главы — конфликт в одной строке.</p>
+        <div class="starter" id="start">
+          <p class="starter__head">Если проекта нет или он в другом состоянии</p>
+          <div class="starter__body">
+            <p>Архив содержит проект <code>sait-vizitka</code> в том состоянии, с которого начинается глава, — после главы 3.3. В нём файлы проекта, папка <code>.git</code> со всей историей и ветками и адрес <code>origin</code>. Имена коммитов, которые уже есть в архиве, совпадают с показанными в главе. Коммиты, которые вы сделаете по ходу главы, получат свои имена: имя коммита зависит от автора и времени.</p>
+            <a class="starter__btn" href="sait-vizitka-nachalo-3-4.zip" download>sait-vizitka-nachalo-3-4.zip <small>36 КБ</small></a>
+            <ol class="starter__steps">
+              <li>Распакуйте архив в папку, где лежат ваши проекты. Появится папка <code>sait-vizitka</code>. Если папка с таким именем там уже есть, сначала переименуйте старую, например в <code>sait-vizitka-staraya</code>.</li>
+              <li>Откройте новую папку в VS Code: <b>File → Open Folder</b> → <code>sait-vizitka</code>.</li>
+              <li>Проверьте историю в терминале (<kbd>Ctrl</kbd> + <kbd>`</kbd>). Ответ должен совпасть с этим:</li>
+            </ol>
+            <figure class="code code--out">
+              <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline --graph -4</span>
+*   ea7f264 Merge branch 'forma-kontaktov'
+|\
+| * 52b9719 Переименовал кнопку формы
+| * e3eeeb9 Добавил отступ над формой
+| * a727fbf Добавил форму обратной связи</pre>
+            </figure>
+            <p>В строке состояния — <code>main</code>, на кнопке <b>17↑</b>, список изменений пуст.</p>
+            <p class="starter__foot">Папка <code>.git</code> скрытая: в Finder и Проводнике её по умолчанию не видно, но VS Code и Git работают с ней как обычно. Имя и почту автора для ваших коммитов Git берёт из настроек главы 1.3. Кнопку Sync Changes не нажимайте: адрес <code>origin</code> ведёт в репозиторий автора справочника, и отправить туда коммиты не получится.</p>
+          </div>
+        </div>
+
+        <div class="part" role="separator"><span><b>1</b>Конфликт в одной строке</span></div>
+        <h2 id="s2"><span class="sec">§2</span>Шаг 1. Изменить заголовок в новой ветке</h2>
+        <p>Чтобы получить конфликт, нужны две ветки, которые изменят одну строку. Первая — новая ветка <code>zagolovok-s-imenem</code>: в ней в заголовок главной страницы добавляется имя. Создаём её из списка веток в строке состояния, <b>Create new branch…</b>, как в шаге 1 главы 3.2.</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Create new branch…</span></figcaption>
+<pre>git switch -c zagolovok-s-imenem</pre>
+        </figure>
+        <p>В <code>index.html</code> меняем строку 9:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>index.html</span><span>было</span></figcaption>
+<pre>  &lt;h1&gt;Привет, это мой сайт&lt;/h1&gt;</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>index.html</span><span>стало</span></figcaption>
+<pre><mark>  &lt;h1&gt;Привет, я Максим&lt;/h1&gt;</mark></pre>
+          </figure>
+        </div>
+        <p>Сохраняем файл, отбираем его плюсом и делаем коммит «Добавил имя в заголовок».</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git commit -am "Добавил имя в заголовок"</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/01-branch-commit.png" alt="Окно VS Code на ветке zagolovok-s-imenem: в index.html строка 9 «Привет, я Максим», в графе сверху коммит «Добавил имя в заголовок» с меткой ветки, под ним коммит с меткой main">
+          <figcaption>Ветка <code>zagolovok-s-imenem</code>. В строке 9 новый заголовок, в графе её коммит стоит над коммитом с меткой <code>main</code>.</figcaption>
+        </figure>
+        <p>Ключ <code>-a</code> отбирает в коммит все изменённые файлы, за которыми Git уже следит, — то же, что плюс у заголовка Changes.</p>
+
+        <p class="step-done"><b>Что получилось.</b>В ветке <code>zagolovok-s-imenem</code> коммит <code>6c986f0</code> с новым заголовком. Вторая правка той же строки делается в <code>main</code>.</p>
+
+        <h2 id="s3"><span class="sec">§3</span>Шаг 2. Изменить тот же заголовок в main</h2>
+        <p>Переходим на <code>main</code>. В этой ветке заголовок прежний, потому что коммит с именем сделан в другой ветке. Меняем ту же строку 9, но по-другому:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>index.html</span><span>было</span></figcaption>
+<pre>  &lt;h1&gt;Привет, это мой сайт&lt;/h1&gt;</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>index.html</span><span>стало</span></figcaption>
+<pre><mark>  &lt;h1&gt;Привет, это мой сайт-визитка&lt;/h1&gt;</mark></pre>
+          </figure>
+        </div>
+        <p>Сохраняем и делаем коммит «Уточнил заголовок главной страницы».</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что выбор main, плюс и Commit</span></figcaption>
+<pre>git switch main
+git commit -am "Уточнил заголовок главной страницы"</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/02-main-commit.png" alt="Окно VS Code на ветке main: в index.html строка 9 «Привет, это мой сайт-визитка», в графе сверху коммит «Уточнил заголовок главной страницы» с меткой main, под ним коммит «Добавил имя в заголовок» с меткой zagolovok-s-imenem на отдельной линии">
+          <figcaption>Вы на <code>main</code>. В строке 9 вариант <code>main</code>. В графе две линии: коммит <code>main</code> и коммит ветки <code>zagolovok-s-imenem</code>.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline --graph --all -3</span>
+* 2cc18f6 Уточнил заголовок главной страницы
+| * 6c986f0 Добавил имя в заголовок
+|/
+*   ea7f264 Merge branch 'forma-kontaktov'</pre>
+        </figure>
+        <p>Общий предок веток — коммит слияния <code>ea7f264</code> из главы 3.3. После него каждая ветка изменила строку 9, и варианты разные. Это правый случай со схемы в §1.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Две ветки с разными вариантами одной строки. При слиянии Git не сможет выбрать вариант сам.</p>
+
+        <h2 id="s4"><span class="sec">§4</span>Шаг 3. Запустить слияние и получить конфликт</h2>
+        <p>Слияние запускается так же, как в главе 3.3: вы стоите на <code>main</code>, палитра команд → <b>Git: Merge...</b> → <code>zagolovok-s-imenem</code>. Git начинает слияние и останавливается:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Git: Merge... → zagolovok-s-imenem</span></figcaption>
+<pre><span class="cmd">git merge zagolovok-s-imenem</span>
+Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.</pre>
+        </figure>
+        <p>Первая строка — Git начал сводить изменения в <code>index.html</code>. Вторая — в содержимом этого файла конфликт. Третья — автоматическое слияние не удалось, нужно исправить конфликты и сделать коммит. VS Code в этот момент показывает уведомление <b>There are merge conflicts. Please resolve them before committing your changes</b> — «есть конфликты слияния, разберите их перед коммитом».</p>
+        <figure class="shot">
+          <img src="img/03-conflict.png" alt="Окно VS Code во время конфликта: в панели раздел Merge Changes с файлом index.html и восклицательным знаком, кнопка Continue, в файле строки 9–13 с метками конфликта, над ними строка Accept Current Change, Accept Incoming Change, Accept Both Changes, Compare Changes, справа внизу кнопка Resolve in Merge Editor, в строке состояния main!">
+          <figcaption>Конфликт в <code>index.html</code>. В файле строки 9–13 с метками, над ними кнопки разбора. В панели раздел <b>Merge Changes</b>.</figcaption>
+        </figure>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что видно в окне</th><th>Что это значит</th></tr></thead>
+            <tbody>
+              <tr><td>Раздел <b>Merge Changes</b>, у файла <code>!</code></td><td>Файлы с неразобранными конфликтами. Пока список не пуст, слияние не завершить</td></tr>
+              <tr><td>Кнопка <b>Continue</b> вместо Commit</td><td>Идёт слияние. Кнопка завершит его коммитом, когда конфликтов не останется</td></tr>
+              <tr><td>В строке состояния <code>main!</code></td><td>Восклицательный знак — в ветке незавершённое слияние</td></tr>
+              <tr><td>Вкладка <code>index.html !</code></td><td>В этом файле есть метки конфликта</td></tr>
+              <tr><td>Кнопка <b>Resolve in Merge Editor</b></td><td>Открывает редактор слияния — отдельную вкладку для разбора</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>То же состояние показывает <code>git status</code>:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git status</span>
+On branch main
+Your branch is ahead of 'origin/main' by 18 commits.
+  (use "git push" to publish your local commits)
+
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add &lt;file&gt;..." to mark resolution)
+	both modified:   index.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+<span class="cmd">git status --short</span>
+UU index.html</pre>
+        </figure>
+        <p>Git пишет: есть неслитые файлы (<code>unmerged paths</code>), <code>index.html</code> изменили обе ветки (<code>both modified</code>). Подсказки в скобках перечисляют три действия: исправить конфликт и сделать коммит, отметить файл разобранным командой <code>git add</code> или отменить слияние. В коротком ответе буквы <code>UU</code> (unmerged) означают, что в файле неразобранный конфликт изменений двух веток.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Слияние остановлено. Коммита слияния нет, в <code>index.html</code> записаны обе версии строки. Дальше нужно понять, где какая версия.</p>
+
+        <h2 id="s5"><span class="sec">§5</span>Шаг 4. Прочитать метки конфликта</h2>
+        <p>Место конфликта Git отмечает в самом файле тремя служебными строками. Между ними — обе версии строки 9:</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 460 262" role="img" aria-label="Схема: от строки с семью знаками меньше до строки из знаков равно — версия main, Current Change; от знаков равно до строки с семью знаками больше — версия ветки zagolovok-s-imenem, Incoming Change"><text x="10" y="16" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="700" fill="#2F7D4F">Current Change — версия main, где вы стоите</text><rect x="10" y="24" width="440" height="30" fill="#DDF0E4"/><text x="22" y="44" font-family="Roboto Mono, monospace" font-size="13.5" fill="var(--ink)" xml:space="preserve">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</text><rect x="10" y="56" width="440" height="30" fill="#EEF7F1"/><text x="22" y="76" font-family="Roboto Mono, monospace" font-size="13.5" fill="var(--ink)" xml:space="preserve">  &lt;h1&gt;Привет, это мой сайт-визитка&lt;/h1&gt;</text><rect x="10" y="94" width="440" height="30" fill="var(--paper)"/><text x="22" y="114" font-family="Roboto Mono, monospace" font-size="13.5" fill="var(--ink)" xml:space="preserve">=======</text><text x="120" y="114" font-family="Inter, system-ui, sans-serif" font-size="12" fill="var(--ink-soft)">разделитель двух версий</text><text x="10" y="146" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="700" fill="var(--steel)">Incoming Change — версия сливаемой ветки</text><rect x="10" y="154" width="440" height="30" fill="#E8EFF7"/><text x="22" y="174" font-family="Roboto Mono, monospace" font-size="13.5" fill="var(--ink)" xml:space="preserve">  &lt;h1&gt;Привет, я Максим&lt;/h1&gt;</text><rect x="10" y="186" width="440" height="30" fill="var(--steel-pale)"/><text x="22" y="206" font-family="Roboto Mono, monospace" font-size="13.5" fill="var(--ink)" xml:space="preserve">&gt;&gt;&gt;&gt;&gt;&gt;&gt; zagolovok-s-imenem</text><text x="10" y="242" font-family="Inter, system-ui, sans-serif" font-size="12" fill="var(--ink-soft)">Метки и разделитель — служебные строки Git.</text><text x="10" y="258" font-family="Inter, system-ui, sans-serif" font-size="12" fill="var(--ink-soft)">В готовом файле их быть не должно.</text></svg>
+          <figcaption>Метки конфликта в <code>index.html</code>. Сверху версия <code>main</code>, снизу версия сливаемой ветки.</figcaption>
+        </figure>
+        <p>Строка <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> открывает конфликт. <code>HEAD</code> — ветка, на которой вы стоите и в которую сливаете, здесь <code>main</code>. Ниже до разделителя <code>=======</code> идёт её версия. VS Code подписывает её <b>Current Change</b>, «текущее изменение». После разделителя — версия сливаемой ветки, подписанная <b>Incoming Change</b>, «входящее изменение». Строка <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; zagolovok-s-imenem</code> закрывает конфликт и называет эту ветку.</p>
+        <p>Над конфликтом VS Code ставит строку из четырёх кнопок. Каждая кнопка переписывает текст между метками и удаляет сами метки:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Кнопка</th><th>Что останется на месте конфликта</th></tr></thead>
+            <tbody>
+              <tr><td><b>Accept Current Change</b></td><td>Только версия <code>main</code>: <code>&lt;h1&gt;Привет, это мой сайт-визитка&lt;/h1&gt;</code></td></tr>
+              <tr><td><b>Accept Incoming Change</b></td><td>Только версия ветки: <code>&lt;h1&gt;Привет, я Максим&lt;/h1&gt;</code></td></tr>
+              <tr><td><b>Accept Both Changes</b></td><td>Обе версии подряд: два заголовка <code>h1</code> на странице</td></tr>
+              <tr><td><b>Compare Changes</b></td><td>Ничего не меняет, открывает две версии рядом для сравнения</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Для этого конфликта ни одна кнопка не даёт нужного результата. Заголовок должен содержать и имя, и слово «сайт-визитка», то есть итоговый текст нужно написать самому.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Известно, где версия <code>main</code>, где версия ветки и что дала бы каждая кнопка. Итоговый заголовок пишется вручную.</p>
+
+        <h2 id="s6"><span class="sec">§6</span>Шаг 5. Исправить файл</h2>
+        <p>Файл с конфликтом правят так же, как любой текстовый файл. Удаляем строки 9–13 вместе с метками и пишем на их месте итоговый заголовок:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>index.html</span><span>было</span></figcaption>
+<pre>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+  &lt;h1&gt;Привет, это мой сайт-визитка&lt;/h1&gt;
+=======
+  &lt;h1&gt;Привет, я Максим&lt;/h1&gt;
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; zagolovok-s-imenem</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>index.html</span><span>стало</span></figcaption>
+<pre><mark>  &lt;h1&gt;Привет, я Максим, это мой сайт-визитка&lt;/h1&gt;</mark></pre>
+          </figure>
+        </div>
+        <p>Сохраняем файл.</p>
+        <figure class="shot">
+          <img src="img/04-edited.png" alt="Окно VS Code: в index.html строка 9 «Привет, я Максим, это мой сайт-визитка», меток нет, в панели файл по-прежнему в разделе Merge Changes с восклицательным знаком">
+          <figcaption>Меток в файле нет, строка 9 — итоговый заголовок. Файл всё ещё в разделе <b>Merge Changes</b>.</figcaption>
+        </figure>
+        <p>Файл исправлен, но для Git он по-прежнему не слит: отметку о том, что конфликт разобран, ставит человек. Пока файл в разделе Merge Changes, слияние не завершить.</p>
+
+        <p class="step-done"><b>Что получилось.</b>В <code>index.html</code> итоговый заголовок без меток. Осталось отметить файл разобранным.</p>
+
+        <h2 id="s7"><span class="sec">§7</span>Шаг 6. Отметить файл и завершить слияние</h2>
+        <p>Разобранный файл отмечают тем же плюсом, которым отбирают файл в коммит. Наводим курсор на <code>index.html</code> в разделе Merge Changes и нажимаем <b>+</b>:</p>
+        <figure class="shot">
+          <img src="img/05-staged.png" alt="Окно VS Code: в панели раздел Staged Changes с файлом index.html и буквой M, раздел Merge Changes исчез, кнопка Continue">
+          <figcaption>Файл в <b>Staged Changes</b>, раздела Merge Changes больше нет. Неразобранных конфликтов не осталось.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс у файла</span></figcaption>
+<pre><span class="cmd">git add index.html</span>
+<span class="cmd">git status --short</span>
+M  index.html</pre>
+        </figure>
+        <p>Буквы <code>UU</code> сменились на <code>M</code> в первой позиции: файл в индексе, конфликт отмечен разобранным. Перед этим шагом файл проверяют. Если в файле остались метки, VS Code при нажатии плюса переспрашивает. Вопрос такой: <b>Are you sure you want to stage index.html with merge conflicts?</b> — «отметить файл с конфликтами?». Команда <code>git add</code> такого вопроса не задаёт и отмечает файл вместе с метками, после чего они попадают в коммит.</p>
+        <p>Слияние завершает кнопка <b>Continue</b>. Дальше бывает два случая. Если в поле Message уже стоит сообщение <code>Merge branch 'zagolovok-s-imenem'</code>, коммит слияния создаётся сразу. Если поле пустое, VS Code открывает вкладку <code>COMMIT_EDITMSG</code> с готовым сообщением:</p>
+        <figure class="shot">
+          <img src="img/06-commit-editmsg.png" alt="Вкладка COMMIT_EDITMSG: первая строка Merge branch 'zagolovok-s-imenem', ниже строки с решёткой — Conflicts: index.html и пояснения Git, справа внизу кнопка Commit">
+          <figcaption>Вкладка <code>COMMIT_EDITMSG</code>. Первая строка — сообщение коммита. Строки с <code>#</code> — пояснения Git, в коммит они не попадут. Кнопка <b>Commit</b> справа внизу.</figcaption>
+        </figure>
+        <p>Сообщение можно оставить как есть или дописать, что выбрано при разборе. Нажимаем <b>Commit</b> в правом нижнем углу вкладки. В терминале то же действие — коммит с готовым сообщением:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Continue и Commit</span></figcaption>
+<pre>git commit --no-edit</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/07-merged.png" alt="Окно VS Code после слияния: в графе сверху коммит Merge branch 'zagolovok-s-imenem' с меткой main, к нему сходятся две линии, в файле строка 9 с итоговым заголовком, на кнопке 20↑">
+          <figcaption>Слияние завершено. Сверху коммит слияния, на кнопке <b>20↑</b>, в строке состояния снова <code>main</code> без восклицательного знака.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline --graph -4</span>
+*   84f13fc Merge branch 'zagolovok-s-imenem'
+|\
+| * 6c986f0 Добавил имя в заголовок
+* | 2cc18f6 Уточнил заголовок главной страницы
+|/
+*   ea7f264 Merge branch 'forma-kontaktov'
+<span class="cmd">git branch -d zagolovok-s-imenem</span>
+Deleted branch zagolovok-s-imenem (was 6c986f0).</pre>
+        </figure>
+        <p>Коммит слияния устроен так же, как в главе 3.3: у него два родителя, <code>2cc18f6</code> и <code>6c986f0</code>. Отличие одно: строку 9 в нём записал человек при разборе конфликта. Слитую ветку удаляем.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Конфликт разобран, в <code>main</code> коммит слияния <code>84f13fc</code> с итоговым заголовком. Вторая часть главы — конфликт, при котором разные строки дописаны в одно место.</p>
+
+        <div class="part" role="separator"><span><b>2</b>Конфликт в конце файла</span></div>
+        <h2 id="s8"><span class="sec">§8</span>Шаг 7. Получить конфликт в конце файла</h2>
+        <p>Создаём ветку <code>stil-podvala</code> и дописываем в конец <code>styles.css</code> правило для подвала, коммит «Добавил стиль подвала». Затем переходим на <code>main</code> и дописываем в конец того же файла правило для кнопки, коммит «Добавил стиль кнопки».</p>
+        <div class="code-pair">
+          <figure class="code code--now">
+            <figcaption><span>styles.css в ветке stil-podvala</span><span>в конец файла</span></figcaption>
+<pre><mark>footer {</mark>
+<mark>  margin-top: 40px;</mark>
+<mark>  color: #6B6560;</mark>
+<mark>}</mark></pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>styles.css в ветке main</span><span>в конец файла</span></figcaption>
+<pre><mark>button {</mark>
+<mark>  padding: 8px 16px;</mark>
+<mark>}</mark></pre>
+          </figure>
+        </div>
+        <p>Правила разные и друг другу не мешают. Но обе ветки дописали строки в одно и то же место — после строки 20, которая в общем предке была последней. Git не может определить, в каком порядке их ставить, поэтому слияние <code>stil-podvala</code> в <code>main</code> тоже останавливается:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Git: Merge... → stil-podvala</span></figcaption>
+<pre><span class="cmd">git merge stil-podvala</span>
+Auto-merging styles.css
+CONFLICT (content): Merge conflict in styles.css
+Automatic merge failed; fix conflicts and then commit the result.</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/08-css-conflict.png" alt="Окно VS Code: в styles.css строки 22–30, между метками конфликта правило button без закрывающей скобки и правило footer без закрывающей скобки, общая скобка на строке 30 после меток, в строке состояния 5 ошибок">
+          <figcaption>Конфликт в <code>styles.css</code>. Закрывающая скобка <code>}</code> на строке 30 стоит после меток. Метки ломают синтаксис CSS: в строке состояния 5 ошибок.</figcaption>
+        </figure>
+        <p>В этом конфликте есть деталь, которую видно не сразу. Последняя строка обоих правил — одинаковая скобка <code>}</code>. Git сравнивает файлы по строкам, считает эту строку общей и выносит её за метки. Поэтому внутри меток у <code>button</code> нет закрывающей скобки, а у <code>footer</code> она одна на двоих, на строке 30.</p>
+        <p>Отсюда следует, что кнопка <b>Accept Both Changes</b> здесь даст неверный CSS. Она удаляет метки и ставит обе версии подряд:</p>
+        <figure class="code">
+          <figcaption><span>styles.css</span><span>после Accept Both Changes</span></figcaption>
+<pre>button {
+  padding: 8px 16px;
+<mark>footer {</mark>
+  margin-top: 40px;
+  color: #6B6560;
+}</pre>
+        </figure>
+        <p>Правило <code>button</code> осталось без закрывающей скобки, и браузер прочитает <code>footer</code> как часть этого правила. Это проверено на копии проекта. Вывод общий для всех кнопок: после разбора файл перечитывают целиком, включая строки рядом с конфликтом.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Конфликт в конце <code>styles.css</code>. Кнопка Accept Both Changes дала бы сломанный CSS. Прежде чем разбирать его другим способом, слияние отменим.</p>
+
+        <h2 id="s9"><span class="sec">§9</span>Шаг 8. Отменить слияние</h2>
+        <p>Слияние с конфликтом можно отменить. Это нужно, когда конфликт неожиданный, разбирать его сейчас некогда или слили не ту ветку. Отмена возвращает проект к состоянию перед слиянием: файлы, индекс и история становятся такими, какими были до команды <code>git merge</code>.</p>
+        <p>В палитре команд выбираем <b>Git: Abort Merge</b>. Окна подтверждения нет.</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Git: Abort Merge; ответа нет</span></figcaption>
+<pre>git merge --abort</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/09-abort.png" alt="Окно VS Code после отмены слияния: раздел Merge Changes исчез, кнопка Sync Changes 21↑, в styles.css нет меток, в строке состояния main без восклицательного знака и 0 ошибок">
+          <figcaption>После отмены. Меток в файле нет, ошибок 0, на кнопке <b>21↑</b>, в строке состояния <code>main</code> без восклицательного знака.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git status -sb</span>
+## main...origin/main [ahead 21]
+<span class="cmd">git log --oneline -2</span>
+c6508f8 Добавил стиль кнопки
+84f13fc Merge branch 'zagolovok-s-imenem'</pre>
+        </figure>
+        <p>Изменений нет, последний коммит — «Добавил стиль кнопки», сделанный до слияния. Ветка <code>stil-podvala</code> на месте со своим коммитом, и слияние можно повторить.</p>
+        <div class="margin-note">
+          <b>На полях: что отмена не вернёт</b>
+          <p>Отмена приводит файлы к последнему коммиту. Если перед слиянием в папке были незакоммиченные правки, Git может их не восстановить. Поэтому слияние начинают с пустым списком изменений — то же правило, что в главе 3.3.</p>
+        </div>
+
+        <p class="step-done"><b>Что получилось.</b>Слияние отменено, проект в состоянии до него. Тот же конфликт теперь разбираем в редакторе слияния.</p>
+
+        <h2 id="s10"><span class="sec">§10</span>Шаг 9. Разобрать конфликт в редакторе слияния</h2>
+        <p>Повторяем слияние: палитра команд → <b>Git: Merge...</b> → <code>stil-podvala</code>. Конфликт тот же. Открываем <code>styles.css</code> и нажимаем кнопку <b>Resolve in Merge Editor</b> справа внизу. Открывается редактор слияния — отдельная вкладка из трёх частей:</p>
+        <figure class="shot">
+          <img src="img/10-merge-editor.png" alt="Редактор слияния VS Code: слева вверху Incoming из ветки stil-podvala с правилом footer, справа вверху Current из ветки main с правилом button, внизу Result с надписью No Changes Accepted и счётчиком 1 Conflict Remaining, справа внизу кнопка Complete Merge">
+          <figcaption>Редактор слияния. Вверху две версии, внизу итоговый файл. Над каждой версией кнопки Accept.</figcaption>
+        </figure>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Часть</th><th>Что в ней</th></tr></thead>
+            <tbody>
+              <tr><td><b>Incoming</b>, слева вверху</td><td>Версия сливаемой ветки <code>stil-podvala</code>, коммит <code>f37fe1f</code></td></tr>
+              <tr><td><b>Current</b>, справа вверху</td><td>Версия текущей ветки <code>main</code>, коммит <code>c6508f8</code></td></tr>
+              <tr><td><b>Result</b>, внизу</td><td>Каким станет файл. Пока выбора нет, на месте конфликта надпись <b>No Changes Accepted</b>, справа счётчик <b>1 Conflict Remaining</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>В верхних частях правила показаны целиком, вместе с закрывающими скобками, поэтому сочетание двух версий здесь получается со всеми скобками. Над версией <code>main</code> есть кнопка <b>Accept Combination (Current First)</b> — «взять обе версии, сначала текущую». Нажимаем её:</p>
+        <figure class="shot">
+          <img src="img/11-combined.png" alt="Редактор слияния после выбора: в Result правило button со скобкой, пустая строка, правило footer со скобкой, счётчик 0 Conflicts Remaining">
+          <figcaption>В части Result оба правила, каждое со своей скобкой. Счётчик — <b>0 Conflicts Remaining</b>.</figcaption>
+        </figure>
+        <p>Кнопка <b>Complete Merge</b> справа внизу сохраняет итоговый файл и сразу отмечает его разобранным: <code>styles.css</code> переходит в Staged Changes, отдельно нажимать плюс не нужно.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>после Complete Merge</span></figcaption>
+<pre><span class="cmd">git status --short</span>
+M  styles.css</pre>
+        </figure>
+        <p>Слияние завершаем, как в шаге 6: <b>Continue</b>, а если откроется вкладка <code>COMMIT_EDITMSG</code>, — <b>Commit</b> в ней. Слитую ветку удаляем.</p>
+        <figure class="shot">
+          <img src="img/12-final.png" alt="Окно VS Code после второго слияния: в styles.css строки 22–29 — правило button и правило footer, в графе сверху коммит Merge branch 'stil-podvala' с меткой main, на кнопке 23↑">
+          <figcaption>Второе слияние завершено. В конце <code>styles.css</code> оба правила, сверху коммит <code>Merge branch 'stil-podvala'</code>, на кнопке <b>23↑</b>.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline --graph -3</span>
+*   0d62db4 Merge branch 'stil-podvala'
+|\
+| * f37fe1f Добавил стиль подвала
+* | c6508f8 Добавил стиль кнопки
+|/
+<span class="cmd">git branch -d stil-podvala</span>
+Deleted branch stil-podvala (was f37fe1f).</pre>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>Оба конфликта разобраны. В проекте одна ветка <code>main</code>, 27 коммитов, 23 из них на GitHub не отправлены, список изменений пуст. Ниже собраны кнопки и команды главы.</p>
+
+        <div class="part" role="separator"><span><b>3</b>Справка</span></div>
+        <h2 id="s11"><span class="sec">§11</span>Справка: кнопки, команды, как реже получать конфликты</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что нужно</th><th>В VS Code</th><th>Команда</th></tr></thead>
+            <tbody>
+              <tr><td>Увидеть файлы с конфликтом</td><td>Раздел Merge Changes</td><td><code>git status</code>, в коротком виде буквы <code>UU</code></td></tr>
+              <tr><td>Оставить версию текущей ветки</td><td>Accept Current Change</td><td><code>git checkout --ours файл</code> — для всего файла</td></tr>
+              <tr><td>Оставить версию сливаемой ветки</td><td>Accept Incoming Change</td><td><code>git checkout --theirs файл</code> — для всего файла</td></tr>
+              <tr><td>Написать свой вариант</td><td>Правка файла, метки удалить</td><td>Правка файла в редакторе</td></tr>
+              <tr><td>Разобрать в трёх окнах</td><td>Resolve in Merge Editor</td><td>Кнопки нет</td></tr>
+              <tr><td>Отметить файл разобранным</td><td>Плюс у файла или Complete Merge</td><td><code>git add файл</code></td></tr>
+              <tr><td>Завершить слияние</td><td>Continue, затем Commit во вкладке COMMIT_EDITMSG</td><td><code>git commit --no-edit</code></td></tr>
+              <tr><td>Отменить слияние</td><td>Палитра команд → Git: Abort Merge</td><td><code>git merge --abort</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Команды <code>git checkout --ours</code> и <code>--theirs</code> заменяют весь файл одной из версий. Кнопки VS Code меняют только одно место конфликта. После них файл всё равно отмечают командой <code>git add</code>. Это проверено на копии проекта: после <code>--theirs</code> файл остаётся в состоянии <code>UU</code>.</p>
+        <p>Конфликты возникают там, где правки встречаются. Поэтому их становится меньше, когда правки встречаются реже:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Приём</th><th>Почему помогает</th></tr></thead>
+            <tbody>
+              <tr><td>Короткие ветки: задача на день-два</td><td>За это время в <code>main</code> приходит меньше чужих правок</td></tr>
+              <tr><td>Сливать <code>main</code> в свою ветку по ходу работы</td><td>Конфликты появляются по одному и маленькими, пока помнится, что менялось</td></tr>
+              <tr><td>Договориться, кто какие файлы правит</td><td>Правки в разных файлах Git сводит сам</td></tr>
+              <tr><td>Не переформатировать весь файл в ветке задачи</td><td>Замена отступов или кавычек во всём файле даёт конфликт почти с любой чужой правкой</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="part" role="separator"><span><b>4</b>Проверка себя</span></div>
+        <h2 id="s12"><span class="sec">§12</span>Частые вопросы</h2>
+        <div class="myths">
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Конфликт означает, что одна из правок потеряна.</div>
+            <div class="myth__yes"><b>На самом деле</b>Обе версии записаны в файл между метками. Пропадёт только то, что человек удалит при разборе.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Конфликт бывает, только когда меняли одну и ту же строку.</div>
+            <div class="myth__yes"><b>На самом деле</b>Строки, дописанные двумя ветками в одно место, тоже дают конфликт. Так было со стилями в шаге 7.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Accept Both Changes подходит, когда нужны обе правки.</div>
+            <div class="myth__yes"><b>На самом деле</b>Кнопка ставит строки обеих версий подряд. Если Git вынес общую строку за метки, результат сломан: правило <code>button</code> остаётся без закрывающей скобки. Файл после кнопки перечитывают.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>После удаления меток слияние завершено.</div>
+            <div class="myth__yes"><b>На самом деле</b>Нужно ещё отметить файл разобранным — плюс или <code>git add</code> — и создать коммит слияния кнопкой Continue.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Начатое слияние нужно обязательно довести до конца.</div>
+            <div class="myth__yes"><b>На самом деле</b>Git: Abort Merge или <code>git merge --abort</code> возвращают проект к состоянию до слияния.</div>
+          </div>
+        </div>
+
+        <h2 id="s13"><span class="sec">§13</span>Проверьте себя</h2>
+        <details>
+          <summary>Ветка <code>main</code> изменила строку 5 файла, а сливаемая ветка эту строку не трогала. Будет ли конфликт?</summary>
+          <p>Нет. Строку изменила одна ветка, и Git возьмёт её вариант. Конфликт возникает, когда одно место изменили обе ветки и по-разному.</p>
+        </details>
+        <details>
+          <summary>Вы стоите на <code>main</code> и сливаете ветку <code>temnaya-tema</code>. Какая версия стоит после <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code>?</summary>
+          <p>Версия <code>main</code> — ветки, на которой вы стоите. VS Code подписывает её Current Change. Версия <code>temnaya-tema</code> идёт после <code>=======</code> и подписана Incoming Change.</p>
+        </details>
+        <details>
+          <summary>Метки удалены, файл сохранён, а кнопка Continue не создаёт коммит. Что пропущено?</summary>
+          <p>Файл не отмечен разобранным: он всё ещё в разделе Merge Changes. Нужно нажать плюс у файла или выполнить <code>git add файл</code>, затем Continue.</p>
+        </details>
+        <details>
+          <summary><code>git status --short</code> показывает <code>UU styles.css</code>. Что это значит?</summary>
+          <p>В <code>styles.css</code> неразобранный конфликт: файл изменили обе ветки, и он не отмечен разобранным.</p>
+        </details>
+        <details>
+          <summary>Почему в шаге 7 закрывающая скобка оказалась за метками конфликта?</summary>
+          <p>Git сравнивает файлы по строкам. Последняя строка обоих правил — одинаковая <code>}</code>, Git счёл её общей и вынес за метки. Поэтому Accept Both Changes оставил бы правило <code>button</code> без скобки.</p>
+        </details>
+        <details>
+          <summary>Слияние остановилось с конфликтом, а разбирать его сейчас некогда. Что делать?</summary>
+          <p>Отменить слияние: палитра команд → Git: Abort Merge или <code>git merge --abort</code>. Проект вернётся к состоянию до слияния, ветка-источник останется на месте, слияние можно повторить позже.</p>
+        </details>
+
+        <h2 id="s14"><span class="sec">§14</span>Шпаргалка по главе</h2>
+        <div class="cheat">
+          <div>
+            <b>Признаки конфликта</b>
+            <code>CONFLICT (content)</code>
+            <code>раздел Merge Changes, main!</code>
+            <code>git status --short → UU</code>
+          </div>
+          <div>
+            <b>Метки</b>
+            <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD — Current</code>
+            <code>======= — разделитель</code>
+            <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; ветка — Incoming</code>
+          </div>
+          <div>
+            <b>Разобрать</b>
+            <code>Accept Current / Incoming</code>
+            <code>свой вариант, метки удалить</code>
+            <code>Resolve in Merge Editor</code>
+          </div>
+          <div>
+            <b>Проверить</b>
+            <code>меток не осталось</code>
+            <code>файл читается целиком</code>
+            <code>Accept Both — с осторожностью</code>
+          </div>
+          <div>
+            <b>Завершить</b>
+            <code>плюс у файла / git add</code>
+            <code>Continue → Commit</code>
+            <code>git commit --no-edit</code>
+          </div>
+          <div>
+            <b>Отменить</b>
+            <code>Git: Abort Merge</code>
+            <code>git merge --abort</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Конфликт возникает, когда обе ветки после общего предка изменили одно и то же место файла по-разному или дописали строки в одно место. Git останавливает слияние, записывает обе версии в файл между метками и показывает файл в разделе Merge Changes. Версия после <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> — текущей ветки (Current), после <code>=======</code> — сливаемой (Incoming). Разобрать конфликт можно кнопками над ним, правкой вручную или в редакторе слияния. Кнопка Accept Both Changes ставит версии подряд и может сломать синтаксис, поэтому после разбора файл перечитывают целиком. Разобранный файл отмечают плюсом или командой <code>git add</code>, слияние завершают кнопкой Continue. Начатое слияние отменяет Git: Abort Merge или <code>git merge --abort</code>. В проекте одна ветка <code>main</code> с двумя новыми коммитами слияния.</p>
+
+        <div class="sources">
+          <b>Откуда взяты факты</b>
+          <ol>
+            <li>Кадры и ответы команд получены на клоне проекта <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a> в Git версии 2.51.1 и VS Code версии 1.138. Результат кнопки Accept Both Changes и команд <code>git checkout --ours/--theirs</code> проверен на копии проекта.</li>
+            <li>Конфликты, метки и <code>git merge --abort</code> — <a href="https://git-scm.com/docs/git-merge#_how_conflicts_are_presented">документация git-merge, раздел How conflicts are presented</a>.</li>
+            <li>Ключи <code>--ours</code> и <code>--theirs</code> — <a href="https://git-scm.com/docs/git-checkout">документация git-checkout</a>.</li>
+            <li>Кнопки разбора и редактор слияния — <a href="https://code.visualstudio.com/docs/sourcecontrol/merge-conflicts">документация VS Code, Merge conflicts</a>.</li>
+          </ol>
+        </div>
+
+        <div class="pager"><a href="../12-sliyanie/index.html">← 3.3 Слияние</a><a href="../../index.html">К содержанию справочника</a></div>
+
+        <div class="colophon">
+          <span>Глава 3.4 · Конфликты: как получить и как разобрать · Справочник по Git и GitHub</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../../book.js"></script>
+</body>
+</html>
