@@ -75,6 +75,27 @@
           </ul>
         </div>
         <p>В главе используется проект <code>sait-vizitka</code> из прошлых глав. В нём шесть коммитов: четыре получены при клонировании, два сделаны в главе 2.3.</p>
+        <div class="starter" id="start">
+          <p class="starter__head">Если проекта нет или он в другом состоянии</p>
+          <div class="starter__body">
+            <p>Архив содержит проект <code>sait-vizitka</code> в том состоянии, с которого начинается глава, — после главы 2.3. В нём файлы проекта, папка <code>.git</code> со всей историей и адрес <code>origin</code>. Сообщения коммитов, файлы и число коммитов совпадают с главой. Имена коммитов, сделанных после клонирования, отличаются: глава снималась на другой копии проекта, а имя коммита зависит от времени, когда он сделан. Два последних коммита — «Добавил страницу контактов» и «Увеличил отступы страницы» — в главе называются <code>2e4864c</code> и <code>7a74ca0</code>, в архиве <code>72554cc</code> и <code>f301c73</code>.</p>
+            <a class="starter__btn" href="sait-vizitka-nachalo-2-4.zip" download>sait-vizitka-nachalo-2-4.zip <small>28 КБ</small></a>
+            <ol class="starter__steps">
+              <li>Распакуйте архив в папку, где лежат ваши проекты. Появится папка <code>sait-vizitka</code>. Если папка с таким именем там уже есть, сначала переименуйте старую, например в <code>sait-vizitka-staraya</code>.</li>
+              <li>Откройте новую папку в VS Code: <b>File → Open Folder</b> → <code>sait-vizitka</code>.</li>
+              <li>Проверьте историю в терминале (<kbd>Ctrl</kbd> + <kbd>`</kbd>). Ответ должен совпасть с этим:</li>
+            </ol>
+            <figure class="code code--out">
+              <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline -3</span>
+f301c73 Увеличил отступы страницы
+72554cc Добавил страницу контактов
+745f2e1 Добавил README с описанием проекта</pre>
+            </figure>
+            <p>В строке состояния — <code>main</code>, на кнопке <b>2↑</b>, список изменений пуст.</p>
+            <p class="starter__foot">Папка <code>.git</code> скрытая: в Finder и Проводнике её по умолчанию не видно, но VS Code и Git работают с ней как обычно. Имя и почту автора для ваших коммитов Git берёт из настроек главы 1.3. Кнопку Sync Changes не нажимайте: адрес <code>origin</code> ведёт в репозиторий автора справочника, и отправить туда коммиты не получится.</p>
+          </div>
+        </div>
 
         <div class="part" role="separator"><span><b>1</b>История в VS Code</span></div>
         <h2 id="s2"><span class="sec">§2</span>Шаг 1. Открыть раздел Graph</h2>
