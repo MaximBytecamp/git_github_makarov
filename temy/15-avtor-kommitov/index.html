@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>1.4 Чужой компьютер: от чьего имени коммиты · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <script>
+    try {
+      var saved = localStorage.getItem('git-book-os');
+      if (!saved) {
+        var p = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+        saved = /win/i.test(p) ? 'win' : (/mac|iphone|ipad/i.test(p) ? 'mac' : 'linux');
+      }
+      document.documentElement.dataset.os = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Модуль 1 · Что такое контроль версий</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 1 · что такое контроль версий</p>
+          <p class="running__folio">Глава 1.4</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">1.4</span>
+          <h1>Чужой компьютер:<br>от чьего имени коммиты</h1>
+          <p class="lead">В главе разобрано, почему на учебном или чужом компьютере коммиты могут подписываться не вашим именем, даже если в VS Code выполнен вход в ваш аккаунт GitHub. Показано, как проверить подпись, на каком уровне настроек она записана, как задать свою подпись только для одного проекта или для всей учётной записи компьютера и как исправить подпись в последнем коммите.</p>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Рабочее место</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Связанные темы</dt><dd>Имя и почта автора из главы 1.3</dd></div>
+          <div><dt>Зачем это знать</dt><dd>Чтобы работа на любом компьютере была подписана вашим именем</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>Порядок действий</b>
+          <ol>
+            <li><a href="#s1">Задача главы</a></li>
+            <li><a href="#s2">Шаг 1. Открыть пробный проект</a></li>
+            <li><a href="#s3">Шаг 2. Проверить подпись</a></li>
+            <li><a href="#s4">Шаг 3. Узнать, где записана подпись</a></li>
+            <li><a href="#s5">Шаг 4. Задать подпись для проекта</a></li>
+            <li><a href="#s6">Шаг 5. Исправить подпись в последнем коммите</a></li>
+            <li><a href="#s7">Шаг 6. Задать подпись для всей учётной записи</a></li>
+            <li><a href="#s8">Шаг 7. Уходя с чужого компьютера</a></li>
+            <li><a href="#s9">Справка: команды и где бывает чужая подпись</a></li>
+            <li><a href="#s10">Частые вопросы</a></li>
+            <li><a href="#s11">Проверьте себя</a></li>
+            <li><a href="#s12">Шпаргалка по главе</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Задача главы</h2>
+        <p>В главе 1.3 имя и почта задавались один раз командами с ключом <code>--global</code>. На своём компьютере этого достаточно. В компьютерном классе, на компьютере коллеги или на новом рабочем месте этими командами мог уже воспользоваться другой человек, и тогда его имя стоит в настройках.</p>
+        <div class="analogy">
+          <p class="analogy__head">Ассоциация: печать на общем столе</p>
+          <div class="analogy__pair">
+            <div class="analogy__side">
+              <b>В жизни</b>
+              <p>В кабинете на столе лежит именная печать предыдущего сотрудника. Если новый сотрудник ставит её на свои документы, все бумаги выглядят как работа предыдущего. Пропуск в здание у нового сотрудника свой, но на подпись документов он не влияет.</p>
+            </div>
+            <div class="analogy__side">
+              <b>В Git</b>
+              <p>Подпись коммита берётся из настроек Git на компьютере — это печать на столе. Вход в аккаунт GitHub в VS Code — пропуск: он даёт право отправлять коммиты на сайт, но подпись в них не меняет.</p>
+            </div>
+          </div>
+          <p class="analogy__limit"><b>Где не совпадает</b>Печать видна сразу, а подпись коммита незаметна, пока не открыть историю. Поэтому её проверяют командой до начала работы.</p>
+        </div>
+        <p><b>Подпись коммита</b> — имя и почта автора, записанные внутри коммита. Git берёт их из двух настроек: <code>user.name</code> и <code>user.email</code>. Аккаунт, через который VS Code входит в GitHub, в подпись не попадает. Ниже кадр из главы 1.3: вход выполнен, в меню аккаунта стоит логин, но подпись коммитов от этого не меняется.</p>
+        <figure class="shot shot--panel">
+          <img src="img/vscode-account-check.png" alt="Меню аккаунта VS Code: в первой строке логин MaximBytecamp (GitHub)">
+          <figcaption>Меню аккаунта в VS Code. Логин GitHub отвечает за отправку коммитов на сайт, подпись коммитов задают настройки Git.</figcaption>
+        </figure>
+        <div class="why">
+          <p class="why__head">Зачем это нужно в работе</p>
+          <ul class="why__list">
+            <li><b>Ваша работа засчитана вам.</b> GitHub связывает коммит с профилем по почте из подписи. С чужой почтой коммит попадёт в чужой профиль или ни в чей.</li>
+            <li><b>История читается правильно.</b> По подписи в истории ищут, кто и когда внёс правку. Чужое имя путает и преподавателя, и команду.</li>
+            <li><b>Чужие данные не утекают.</b> Если вы задали свою подпись на общем компьютере, её нужно убрать, иначе следующий человек будет работать от вашего имени.</li>
+          </ul>
+        </div>
+        <p>Глава показывает такой случай на подготовленном компьютере. В его общих настройках записана Анна Смирнова, а работает за ним Иван Петров — тот же студент, что в главе 1.3. На вашем компьютере имена будут свои. Первым делом нужен проект, на котором видна подпись.</p>
+
+        <div class="part" role="separator"><span><b>1</b>Проверить</span></div>
+        <h2 id="s2"><span class="sec">§2</span>Шаг 1. Открыть пробный проект</h2>
+        <p>Подпись записывается в коммиты, поэтому для проверки нужен проект с историей. Такой проект подготовлен: в нём один файл и один коммит, сделанный на компьютере Анны.</p>
+        <div class="starter" id="start">
+          <p class="starter__head">Пробный проект для этой главы</p>
+          <div class="starter__body">
+            <p>Архив содержит папку <code>proba-avtor</code>: файл <code>privet.txt</code> и скрытую папку <code>.git</code> с историей Git — одним коммитом «Первая проба», подписанным Анной Смирновой.</p>
+            <a class="starter__btn" href="proba-avtor.zip" download>proba-avtor.zip <small>20 КБ</small></a>
+            <ol class="starter__steps">
+              <li>Распакуйте архив в папку, где будете хранить учебные проекты. Появится папка <code>proba-avtor</code>.</li>
+              <li>Откройте её в VS Code: <b>File → Open Folder</b> → <code>proba-avtor</code>.</li>
+              <li>Откройте терминал: <kbd>Ctrl</kbd> + <kbd>`</kbd>. Команды этой главы выполняются в нём.</li>
+            </ol>
+            <p class="starter__foot">Папка <code>.git</code> скрытая: в Finder и Проводнике её по умолчанию не видно, но VS Code и Git работают с ней как обычно.</p>
+          </div>
+        </div>
+        <p>В панели Source Control (значок с веткой на левой полосе), в разделе GRAPH, виден единственный коммит проекта и имя его автора — Анна Смирнова. Этот коммит сделан до вас, его подпись менять не нужно. Проверить нужно другое: чьё имя Git поставит в коммиты, которые сделаете вы.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Папка <code>proba-avtor</code> открыта в VS Code, терминал внизу окна. Дальше проверяем подпись.</p>
+
+        <h2 id="s3"><span class="sec">§3</span>Шаг 2. Проверить подпись</h2>
+        <p>Подпись, которую получит следующий коммит, показывает команда <code>git var GIT_AUTHOR_IDENT</code>. Коммит для этого делать не нужно.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке proba-avtor</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git var GIT_AUTHOR_IDENT</span>
+Анна Смирнова &lt;anna.smirnova@example.com&gt; 1792557752 +0300</pre>
+        </figure>
+        <p>В ответе четыре части: имя, почта в угловых скобках, время в секундах, прошедших с 1 января 1970 года, и часовой пояс. Время — текущее, оно встанет в коммит в момент его создания. Имя и почта — чужие: работает Иван Петров, а подпись Анны.</p>
+        <figure class="shot">
+          <img src="img/01-chuzhaya.png" alt="Окно VS Code с проектом proba-avtor: в разделе GRAPH коммит «Первая проба» с автором Анна Смирнова, в терминале ответ git var — Анна Смирнова и ответ git config с двумя строками global">
+          <figcaption>Чужая подпись. В терминале — Анна Смирнова, в разделе GRAPH её же имя у коммита «Первая проба».</figcaption>
+        </figure>
+        <p>Если на компьютере подпись не задана нигде, Git либо откажется делать коммит, как в главе 1.3, либо соберёт подпись сам. Во втором случае имя берётся из учётной записи компьютера, а почта — из логина и имени компьютера, вида <code>логин@имя-компьютера.local</code>. Так было на macOS при проверке для этой главы. Такая подпись тоже не ваша, и GitHub не свяжет её с вашим профилем.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Следующий коммит был бы подписан Анной Смирновой. Чтобы исправить подпись, нужно знать, где она записана.</p>
+
+        <h2 id="s4"><span class="sec">§4</span>Шаг 3. Узнать, где записана подпись</h2>
+        <p>Настройки Git хранятся в трёх местах, как правила в организации: общие для всего здания, для отдела и для одного кабинета. Правило кабинета действует только в нём, но там оно сильнее правил отдела и здания.</p>
+        <p>У Git это три <b>уровня настроек</b>. Системный (<code>system</code>) действует для всех учётных записей компьютера. Глобальный (<code>global</code>) — для всех проектов одной учётной записи; команды с ключом <code>--global</code> из главы 1.3 пишут сюда. Локальный (<code>local</code>) — только для одного проекта, он лежит в его папке <code>.git</code>. Уровень каждой настройки показывает ключ <code>--show-scope</code>:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке proba-avtor</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git config --show-scope --get-regexp user</span>
+global	user.name Анна Смирнова
+global	user.email anna.smirnova@example.com</pre>
+        </figure>
+        <p>Ключ <code>--get-regexp user</code> оставляет в ответе только настройки, в названии которых есть слово <code>user</code>. Обе строки начинаются со слова <code>global</code>: подпись Анны записана в глобальных настройках учётной записи, под которой открыт компьютер. Локальной подписи в проекте нет.</p>
+        <p>Когда одна настройка задана на нескольких уровнях, Git берёт её с самого узкого: сначала проект, затем учётная запись, затем весь компьютер. На схеме — что будет, если задать подпись в проекте.</p>
+        <figure class="scheme">
+          <svg viewBox="0 0 480 390" style="max-width:540px;margin:0 auto" role="img" aria-label="Схема: три уровня настроек. Локальный в папке проекта — Иван Петров, глобальный в домашней папке — Анна Смирнова, системный — не задано. Git берёт значение с самого верхнего уровня, где оно задано: подпись коммита — Иван Петров"><defs><marker id="ah15" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--fire-deep)"/></marker></defs><g><rect x="20" y="20" width="430" height="58" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="34" y="43" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" fill="var(--ink)">local — проект</text><text x="34" y="64" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink-soft)">файл .git/config в папке проекта</text><text x="440" y="64" text-anchor="end" font-family="Roboto Mono, monospace" font-size="12.5" fill="var(--ink)">user.name = Иван Петров</text></g><g opacity=".55"><rect x="20" y="96" width="430" height="58" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="34" y="119" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" fill="var(--ink)">global — учётная запись компьютера</text><text x="34" y="140" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink-soft)">файл .gitconfig в домашней папке</text><text x="440" y="140" text-anchor="end" font-family="Roboto Mono, monospace" font-size="12.5" fill="var(--ink)">user.name = Анна Смирнова</text></g><g opacity=".55"><rect x="20" y="172" width="430" height="58" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="34" y="195" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" fill="var(--ink)">system — весь компьютер</text><text x="34" y="216" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink-soft)">файл, который создаёт установщик Git</text><text x="440" y="216" text-anchor="end" font-family="Roboto Mono, monospace" font-size="12.5" fill="var(--ink)">не задано</text></g><text x="20" y="256" font-family="Inter, system-ui, sans-serif" font-size="12.5" fill="var(--ink-soft)">Git просматривает уровни сверху вниз</text><text x="20" y="273" font-family="Inter, system-ui, sans-serif" font-size="12.5" fill="var(--ink-soft)">и берёт первое найденное значение.</text><path d="M450 49 H466 V318 H456" stroke="var(--fire-deep)" stroke-width="3" fill="none" marker-end="url(#ah15)"/><rect x="20" y="290" width="430" height="80" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="34" y="314" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="var(--ink-soft)">подпись коммита в проекте proba-avtor</text><text x="34" y="348" font-family="Roboto Mono, monospace" font-size="15" font-weight="700" fill="var(--ink)">Иван Петров</text></svg>
+          <figcaption>Три уровня настроек. Локальная подпись в проекте закрывает глобальную, поэтому коммиты в <code>proba-avtor</code> получат подпись Ивана.</figcaption>
+        </figure>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Уровень</th><th>Ключ команды</th><th>Где лежит файл</th></tr></thead>
+            <tbody>
+              <tr><td>Проект</td><td>без ключа</td><td>Файл <code>config</code> в папке <code>.git</code> проекта</td></tr>
+              <tr><td>Учётная запись</td><td><code>--global</code></td><td>Файл <code>.gitconfig</code> в домашней папке: <code>C:\Users\имя</code> в Windows, <code>/Users/имя</code> в macOS, <code>/home/имя</code> в Linux</td></tr>
+              <tr><td>Весь компьютер</td><td><code>--system</code></td><td>Файл <code>gitconfig</code> в папке установки Git; меняется правами администратора</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="step-done"><b>Что получилось.</b>Подпись Анны лежит на уровне <code>global</code>. На чужом компьютере эту настройку не трогают и задают свою подпись уровнем выше — в проекте.</p>
+
+        <div class="part" role="separator"><span><b>2</b>Исправить</span></div>
+        <h2 id="s5"><span class="sec">§5</span>Шаг 4. Задать подпись для проекта</h2>
+        <p>Команды те же, что в главе 1.3, но без ключа <code>--global</code>. Без ключа Git записывает настройку в проект, в папке которого открыт терминал.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке proba-avtor</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git config user.name "Иван Петров"</span>
+<span class="cmd">git config user.email "ivan.petrov@example.com"</span>
+<span class="cmd">git config --show-scope --get-regexp user</span>
+global	user.name Анна Смирнова
+global	user.email anna.smirnova@example.com
+local	user.name Иван Петров
+local	user.email ivan.petrov@example.com
+<span class="cmd">git var GIT_AUTHOR_IDENT</span>
+Иван Петров &lt;ivan.petrov@example.com&gt; 1792557775 +0300</pre>
+        </figure>
+        <p>Первые две команды ничего не печатают. Третья показывает обе подписи: глобальную Анны и локальную Ивана. Глобальная осталась на месте, но в проекте действует локальная, поэтому <code>git var</code> показывает Ивана Петрова.</p>
+        <figure class="shot">
+          <img src="img/02-local.png" alt="Окно VS Code: в терминале команды git config без ключа global, ответ с двумя строками global и двумя строками local, ответ git var — Иван Петров">
+          <figcaption>Подпись для проекта задана. В ответе строки <code>local</code> с именем Ивана, <code>git var</code> показывает его подпись.</figcaption>
+        </figure>
+        <p>Локальная подпись действует только в этом проекте. Если выйти из папки <code>proba-avtor</code> на уровень выше и проверить снова, подпись опять будет Анны:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке, где лежит proba-avtor</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">cd ..</span>
+<span class="cmd">git var GIT_AUTHOR_IDENT</span>
+Анна Смирнова &lt;anna.smirnova@example.com&gt; 1792557802 +0300</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/04-outside.png" alt="Окно VS Code: в терминале cd .. и ответ git var — Анна Смирнова, приглашение терминала заканчивается словом proekty">
+          <figcaption>За пределами проекта действует глобальная подпись Анны. Для каждого нового проекта на чужом компьютере команды повторяют.</figcaption>
+        </figure>
+        <p>Возвращаемся в папку проекта командой <code>cd proba-avtor</code>.</p>
+
+        <p class="step-done"><b>Что получилось.</b>В проекте <code>proba-avtor</code> коммиты будут подписаны Иваном Петровым. Остаётся коммит, если он уже успел получить чужую подпись.</p>
+
+        <h2 id="s6"><span class="sec">§6</span>Шаг 5. Исправить подпись в последнем коммите</h2>
+        <p>Бывает, что подпись проверили уже после коммита. Если коммит последний и ещё не отправлен на GitHub, его подпись меняет команда:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке proba-avtor</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git commit --amend --reset-author --no-edit</span>
+[main f75890b] Первая проба
+ 1 file changed, 1 insertion(+)
+ create mode 100644 privet.txt</pre>
+        </figure>
+        <p><code>--amend</code> заменяет последний коммит новым. <code>--reset-author</code> ставит в новый коммит текущую подпись — ту, что показывает <code>git var</code>. <code>--no-edit</code> оставляет сообщение прежним. Файлы в коммите те же, но у него новое имя: было <code>49ebce1</code>, стало <code>f75890b</code>. Имя коммита вычисляется из его содержимого, а подпись — часть содержимого.</p>
+        <figure class="shot">
+          <img src="img/03-amend.png" alt="Окно VS Code: в разделе GRAPH коммит «Первая проба» с автором Иван Петров, в терминале ответ команды git commit --amend --reset-author">
+          <figcaption>В разделе GRAPH у коммита «Первая проба» теперь автор Иван Петров.</figcaption>
+        </figure>
+        <p>Отправленный на GitHub коммит так не исправляют: на сайте останется его копия с прежней подписью, и истории на компьютере и на сайте разойдутся. Для таких коммитов достаточно настроить подпись, чтобы следующие коммиты были вашими.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Единственный коммит проекта подписан Иваном Петровым. Дальше — свой компьютер, где подпись задают один раз.</p>
+
+        <h2 id="s7"><span class="sec">§7</span>Шаг 6. Задать подпись для всей учётной записи</h2>
+        <p>На своём компьютере или в своей учётной записи подпись задают глобально, как в главе 1.3. Тогда она действует во всех проектах сразу и не требует настройки в каждом.</p>
+        <figure class="code">
+          <figcaption><span>терминал в любой папке</span><span>ответа нет</span></figcaption>
+<pre>git config --global user.name "Иван Петров"
+git config --global user.email "ivan.petrov@example.com"</pre>
+        </figure>
+        <p>Если глобальная подпись чужая, эти команды её заменят. На общем компьютере так делать не стоит: следующий человек получит ваше имя во всех своих проектах. Выбор уровня зависит от того, чей компьютер:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Где работаете</th><th>Какой уровень</th><th>Команда</th></tr></thead>
+            <tbody>
+              <tr><td>Свой компьютер, своя учётная запись</td><td>Глобальный</td><td><code>git config --global user.name "…"</code></td></tr>
+              <tr><td>Компьютерный класс, общая учётная запись</td><td>Проект</td><td><code>git config user.name "…"</code> в папке проекта</td></tr>
+              <tr><td>Компьютер коллеги или чужая учётная запись</td><td>Проект</td><td><code>git config user.name "…"</code> в папке проекта</td></tr>
+              <tr><td>Проект, где нужна другая почта, например рабочая</td><td>Проект поверх своей глобальной</td><td><code>git config user.email "…"</code> в папке проекта</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="step-done"><b>Что получилось.</b>Известно, какой уровень выбрать на своём и на чужом компьютере. Остаётся убрать свои данные, когда работа на чужом компьютере закончена.</p>
+
+        <h2 id="s8"><span class="sec">§8</span>Шаг 7. Уходя с чужого компьютера</h2>
+        <p>Локальная подпись лежит в папке проекта. Если папку удалить или забрать с собой, подпись уходит вместе с ней. Если папка остаётся на компьютере, подпись убирают командами с ключом <code>--unset</code>:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>ответа нет</span></figcaption>
+<pre>git config --unset user.name
+git config --unset user.email</pre>
+        </figure>
+        <p>Если на общем компьютере по ошибке задана глобальная подпись, её убирают теми же командами с ключом <code>--global</code>:</p>
+        <figure class="code">
+          <figcaption><span>терминал в любой папке</span><span>ответа нет</span></figcaption>
+<pre>git config --global --unset user.name
+git config --global --unset user.email</pre>
+        </figure>
+        <p>Последнее действие — выйти из аккаунта GitHub в VS Code: значок аккаунта внизу левой полосы, ваш логин, <b>Sign Out</b>, как описано в главе 1.3. Иначе следующий человек сможет отправлять коммиты в ваши репозитории.</p>
+
+        <p class="step-done"><b>Что получилось.</b>На чужом компьютере не осталось вашей подписи и входа в ваш аккаунт. Ниже собраны команды главы.</p>
+
+        <div class="part" role="separator"><span><b>3</b>Справка</span></div>
+        <h2 id="s9"><span class="sec">§9</span>Справка: команды и где бывает чужая подпись</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что нужно</th><th>Команда</th></tr></thead>
+            <tbody>
+              <tr><td>Узнать подпись следующего коммита</td><td><code>git var GIT_AUTHOR_IDENT</code></td></tr>
+              <tr><td>Узнать, на каком уровне записана подпись</td><td><code>git config --show-scope --get-regexp user</code></td></tr>
+              <tr><td>Задать подпись для проекта</td><td><code>git config user.name "…"</code>, <code>git config user.email "…"</code></td></tr>
+              <tr><td>Задать подпись для учётной записи</td><td>те же команды с <code>--global</code></td></tr>
+              <tr><td>Исправить подпись последнего неотправленного коммита</td><td><code>git commit --amend --reset-author --no-edit</code></td></tr>
+              <tr><td>Убрать подпись из проекта</td><td><code>git config --unset user.name</code>, то же для <code>user.email</code></td></tr>
+              <tr><td>Убрать глобальную подпись</td><td><code>git config --global --unset user.name</code>, то же для <code>user.email</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Чужая или случайная подпись встречается не только за чужим компьютером. Проверять её стоит в любой новой среде:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Среда</th><th>Что бывает с подписью</th></tr></thead>
+            <tbody>
+              <tr><td>Компьютерный класс</td><td>В глобальных настройках общей учётной записи — подпись того, кто работал раньше</td></tr>
+              <tr><td>Новый компьютер или переустановленный Git</td><td>Подписи нет, Git собирает её из имени учётной записи и имени компьютера</td></tr>
+              <tr><td>WSL — Linux внутри Windows</td><td>У Linux своя домашняя папка и свой <code>.gitconfig</code>: подпись из Windows там не действует</td></tr>
+              <tr><td>Удалённый сервер, куда входят по сети</td><td>На сервере свой <code>.gitconfig</code>, часто общий для нескольких человек</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>На GitHub коммит попадает в профиль по почте из подписи. Имя в подписи на это не влияет.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Почта в подписи</th><th>Что покажет GitHub</th></tr></thead>
+            <tbody>
+              <tr><td>Почта из вашего аккаунта GitHub</td><td>Коммит с вашим аватаром и ссылкой на ваш профиль</td></tr>
+              <tr><td>Почта из аккаунта другого человека</td><td>Коммит с аватаром и профилем этого человека</td></tr>
+              <tr><td>Почта, которой нет ни в одном аккаунте</td><td>Имя из подписи без ссылки на профиль, в вашей активности коммита нет</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Если в подписи оказалась ваша вторая почта, её можно добавить в настройках аккаунта GitHub, раздел Emails. После подтверждения GitHub свяжет с профилем и уже сделанные коммиты с этой почтой.</p>
+
+        <div class="part" role="separator"><span><b>4</b>Проверка себя</span></div>
+        <h2 id="s10"><span class="sec">§10</span>Частые вопросы</h2>
+        <div class="myths">
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Если в VS Code выполнен вход в мой аккаунт GitHub, коммиты подписаны мной.</div>
+            <div class="myth__yes"><b>На самом деле</b>Вход нужен для отправки на GitHub. Подпись берётся из настроек <code>user.name</code> и <code>user.email</code>.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>На чужом компьютере нужно выполнить команды с <code>--global</code>, как в главе 1.3.</div>
+            <div class="myth__yes"><b>На самом деле</b>Так подпись владельца заменится вашей во всех его проектах. На чужом компьютере подпись задают в проекте, без <code>--global</code>.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Подпись в проекте заменяет глобальную.</div>
+            <div class="myth__yes"><b>На самом деле</b>Глобальная остаётся на месте. Локальная действует только в этом проекте и закрывает глобальную только в нём.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Если подпись не задана, Git обязательно откажется делать коммит.</div>
+            <div class="myth__yes"><b>На самом деле</b>Git может собрать подпись из имени учётной записи и имени компьютера. Тогда коммит создаётся, но подпись в нём не ваша.</div>
+          </div>
+        </div>
+
+        <h2 id="s11"><span class="sec">§11</span>Проверьте себя</h2>
+        <details>
+          <summary>Как до первого коммита узнать, чьё имя в нём будет?</summary>
+          <p>Выполнить в папке проекта <code>git var GIT_AUTHOR_IDENT</code>. Команда показывает имя и почту, которые получит следующий коммит.</p>
+        </details>
+        <details>
+          <summary>Ответ <code>git config --show-scope --get-regexp user</code> начинается словом <code>global</code>. Что это значит?</summary>
+          <p>Подпись записана в глобальных настройках учётной записи компьютера, в файле <code>.gitconfig</code> домашней папки. Она действует во всех проектах этой учётной записи, где нет своей подписи.</p>
+        </details>
+        <details>
+          <summary>Вы в компьютерном классе. Как подписать свои коммиты, не трогая чужие настройки?</summary>
+          <p>В папке проекта выполнить <code>git config user.name "…"</code> и <code>git config user.email "…"</code> без ключа <code>--global</code>. Проверить командой <code>git var GIT_AUTHOR_IDENT</code>.</p>
+        </details>
+        <details>
+          <summary>Подпись в проекте задана, а за его пределами <code>git var</code> показывает чужое имя. Это ошибка?</summary>
+          <p>Нет. Локальная подпись действует только в своём проекте. За его пределами действует глобальная.</p>
+        </details>
+        <details>
+          <summary>Последний коммит сделан с чужой подписью и ещё не отправлен. Как исправить?</summary>
+          <p>Задать свою подпись и выполнить <code>git commit --amend --reset-author --no-edit</code>. Коммит заменится новым с вашей подписью и новым именем.</p>
+        </details>
+        <details>
+          <summary>Что сделать перед уходом от общего компьютера?</summary>
+          <p>Убрать свою подпись: удалить папку проекта или выполнить <code>git config --unset</code> для <code>user.name</code> и <code>user.email</code>, а если она задана глобально — то же с <code>--global</code>. Выйти из аккаунта GitHub в VS Code.</p>
+        </details>
+
+        <h2 id="s12"><span class="sec">§12</span>Шпаргалка по главе</h2>
+        <div class="cheat">
+          <div>
+            <b>Проверить подпись</b>
+            <code>git var GIT_AUTHOR_IDENT</code>
+          </div>
+          <div>
+            <b>Где записана</b>
+            <code>git config --show-scope --get-regexp user</code>
+          </div>
+          <div>
+            <b>Уровни</b>
+            <code>local — проект</code>
+            <code>global — учётная запись</code>
+            <code>system — весь компьютер</code>
+          </div>
+          <div>
+            <b>Чужой компьютер</b>
+            <code>git config user.name "…"</code>
+            <code>git config user.email "…"</code>
+          </div>
+          <div>
+            <b>Свой компьютер</b>
+            <code>git config --global user.name "…"</code>
+            <code>git config --global user.email "…"</code>
+          </div>
+          <div>
+            <b>Исправить и убрать</b>
+            <code>git commit --amend --reset-author --no-edit</code>
+            <code>git config --unset user.name</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Подпись коммита — имя и почта автора — берётся из настроек Git <code>user.name</code> и <code>user.email</code>. Вход в аккаунт GitHub в VS Code на неё не влияет. Настройки бывают трёх уровней: проект, учётная запись компьютера и весь компьютер; Git берёт значение с самого узкого уровня, где оно задано. Подпись следующего коммита показывает <code>git var GIT_AUTHOR_IDENT</code>, уровень — <code>git config --show-scope --get-regexp user</code>. На своём компьютере подпись задают с ключом <code>--global</code>, на чужом — без ключа, в папке проекта. Последний неотправленный коммит с чужой подписью исправляет <code>git commit --amend --reset-author --no-edit</code>. Уходя с общего компьютера, свою подпись убирают и выходят из аккаунта GitHub.</p>
+
+        <div class="sources">
+          <b>Откуда взяты факты</b>
+          <ol>
+            <li>Кадры и ответы команд получены в Git версии 2.51.1 и VS Code версии 1.138 на подготовленной учётной записи, где в глобальных настройках записана Анна Смирнова.</li>
+            <li>Уровни настроек, ключи <code>--global</code>, <code>--system</code>, <code>--show-scope</code>, <code>--unset</code> — <a href="https://git-scm.com/docs/git-config">документация git-config</a>.</li>
+            <li>Команда <code>git var GIT_AUTHOR_IDENT</code> — <a href="https://git-scm.com/docs/git-var">документация git-var</a>.</li>
+            <li>Ключ <code>--reset-author</code> и сборка подписи при отсутствии настроек — <a href="https://git-scm.com/docs/git-commit">документация git-commit</a>, раздел COMMIT INFORMATION.</li>
+            <li>Связь коммита с профилем по почте — документация GitHub, <a href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address">Setting your commit email address</a>.</li>
+          </ol>
+        </div>
+
+        <div class="pager"><a href="../03-ustanovka-git-i-vs-code/index.html">← 1.3 Установка Git и VS Code</a><a href="../../index.html">К содержанию</a><a href="../04-panel-source-control/index.html">2.1 Панель Source Control →</a></div>
+
+        <div class="colophon">
+          <span>Глава 1.4 · Чужой компьютер: от чьего имени коммиты · Справочник по Git и GitHub</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../../book.js"></script>
+</body>
+</html>
