@@ -202,6 +202,10 @@ Automatic merge failed; fix conflicts and then commit the result.</pre>
         </figure>
         <p>Первая строка — Git начал сводить изменения в <code>index.html</code>. Вторая — в содержимом этого файла конфликт. Третья — автоматическое слияние не удалось, нужно исправить конфликты и сделать коммит. VS Code в этот момент показывает уведомление <b>There are merge conflicts. Please resolve them before committing your changes</b> — «есть конфликты слияния, разберите их перед коммитом».</p>
         <figure class="shot">
+          <img src="img/03b-notification.png" alt="Окно VS Code сразу после слияния из палитры: справа внизу уведомление There are merge conflicts с кнопкой Show Changes, в поле Message уже стоит Merge branch 'zagolovok-s-imenem', в файле метки конфликта">
+          <figcaption>Уведомление справа внизу. Кнопка <b>Show Changes</b> открывает файлы с конфликтом. В поле Message VS Code сразу подставил сообщение коммита слияния.</figcaption>
+        </figure>
+        <figure class="shot">
           <img src="img/03-conflict.png" alt="Окно VS Code во время конфликта: в панели раздел Merge Changes с файлом index.html и восклицательным знаком, кнопка Continue, в файле строки 9–13 с метками конфликта, над ними строка Accept Current Change, Accept Incoming Change, Accept Both Changes, Compare Changes, справа внизу кнопка Resolve in Merge Editor, в строке состояния main!">
           <figcaption>Конфликт в <code>index.html</code>. В файле строки 9–13 с метками, над ними кнопки разбора. В панели раздел <b>Merge Changes</b>.</figcaption>
         </figure>
@@ -308,7 +312,7 @@ UU index.html</pre>
 M  index.html</pre>
         </figure>
         <p>Буквы <code>UU</code> сменились на <code>M</code> в первой позиции: файл в индексе, конфликт отмечен разобранным. Перед этим шагом файл проверяют. Если в файле остались метки, VS Code при нажатии плюса переспрашивает. Вопрос такой: <b>Are you sure you want to stage index.html with merge conflicts?</b> — «отметить файл с конфликтами?». Команда <code>git add</code> такого вопроса не задаёт и отмечает файл вместе с метками, после чего они попадают в коммит.</p>
-        <p>Слияние завершает кнопка <b>Continue</b>. Дальше бывает два случая. Если в поле Message уже стоит сообщение <code>Merge branch 'zagolovok-s-imenem'</code>, коммит слияния создаётся сразу. Если поле пустое, VS Code открывает вкладку <code>COMMIT_EDITMSG</code> с готовым сообщением:</p>
+        <p>Слияние завершает кнопка <b>Continue</b>. Дальше бывает два случая. Если слияние запущено командой Git: Merge..., в поле Message уже стоит сообщение <code>Merge branch 'zagolovok-s-imenem'</code>, как на кадре уведомления, и Continue сразу создаёт коммит слияния. Если слияние запускали командой в терминале, поле остаётся пустым, и VS Code открывает вкладку <code>COMMIT_EDITMSG</code> с готовым сообщением:</p>
         <figure class="shot">
           <img src="img/06-commit-editmsg.png" alt="Вкладка COMMIT_EDITMSG: первая строка Merge branch 'zagolovok-s-imenem', ниже строки с решёткой — Conflicts: index.html и пояснения Git, справа внизу кнопка Commit">
           <figcaption>Вкладка <code>COMMIT_EDITMSG</code>. Первая строка — сообщение коммита. Строки с <code>#</code> — пояснения Git, в коммит они не попадут. Кнопка <b>Commit</b> справа внизу.</figcaption>
@@ -426,7 +430,7 @@ c6508f8 Добавил стиль кнопки
         <p>Повторяем слияние: палитра команд → <b>Git: Merge...</b> → <code>stil-podvala</code>. Конфликт тот же. Открываем <code>styles.css</code> и нажимаем кнопку <b>Resolve in Merge Editor</b> справа внизу. Открывается редактор слияния — отдельная вкладка из трёх частей:</p>
         <figure class="shot">
           <img src="img/10-merge-editor.png" alt="Редактор слияния VS Code: слева вверху Incoming из ветки stil-podvala с правилом footer, справа вверху Current из ветки main с правилом button, внизу Result с надписью No Changes Accepted и счётчиком 1 Conflict Remaining, справа внизу кнопка Complete Merge">
-          <figcaption>Редактор слияния. Вверху две версии, внизу итоговый файл. Над каждой версией кнопки Accept.</figcaption>
+          <figcaption>Редактор слияния. Вверху две версии, внизу итоговый файл. Над версиями кнопки <b>Accept Incoming</b>, <b>Accept Current</b> и <b>Accept Combination</b>.</figcaption>
         </figure>
         <div class="table-scroll">
           <table>

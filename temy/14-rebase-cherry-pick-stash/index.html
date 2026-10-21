@@ -65,7 +65,7 @@
         </nav>
 
         <h2 id="s1"><span class="sec">§1</span>Задача главы</h2>
-        <p>В главах 3.3 и 3.4 работа из ветки попадала в <code>main</code> слиянием целиком: все коммиты ветки, а при расхождении — ещё и коммит слияния. В работе встречаются три ситуации, где этого мало или это неудобно.</p>
+        <p>В главах 3.3 и 3.4 работа из ветки попадала в <code>main</code> слиянием целиком: все коммиты ветки, а при расхождении — ещё и коммит слияния. В работе встречаются три ситуации, где слияния целиком недостаточно.</p>
         <div class="table-scroll">
           <table>
             <thead><tr><th>Ситуация</th><th>Что нужно</th><th>Действие</th></tr></thead>
@@ -167,12 +167,22 @@ stash@{0}: On telefon: Телефон на странице контактов
           <img src="img/03-stashed.png" alt="Окно VS Code после stash: список изменений пуст, кнопка Publish Branch, в kontakty.html строки телефона нет, в строке состояния telefon без звёздочки">
           <figcaption>После stash. Список изменений пуст, в файле телефона нет, у имени ветки нет звёздочки.</figcaption>
         </figure>
-        <p>Что лежит в записи, показывает <b>Git: View Stash...</b>: команда предлагает выбрать запись и открывает её как окно сравнения.</p>
+        <p>Что лежит в записи, показывает <b>Git: View Stash...</b>. Команда предлагает выбрать запись:</p>
+        <figure class="shot">
+          <img src="img/04a-view-pick.png" alt="Список вверху окна с подсказкой Pick a stash to view и одной записью #0: Телефон на странице контактов, now, telefon">
+          <figcaption>Подсказка <b>Pick a stash to view</b>. В списке одна запись: номер, сообщение, время и ветка.</figcaption>
+        </figure>
+        <p>Выбранная запись открывается как окно сравнения:</p>
         <figure class="shot">
           <img src="img/04-view.png" alt="Вкладка Git Stash #0: Телефон на странице контактов (1 file), в ней kontakty.html со строкой 12 о телефоне, подсвеченной зелёным">
           <figcaption>Вкладка <b>Git Stash #0</b>. В записи один файл и одна добавленная строка — телефон.</figcaption>
         </figure>
-        <p>Новые файлы, за которыми Git ещё не следит, обычная команда stash не забирает. Для них есть <b>Git: Stash (Include Untracked)</b>, в терминале — <code>git stash push -u</code>. Кнопка <b>Stash &amp; Checkout</b> в окне отказа из шага 9 главы 3.2 делает stash и сразу переключает ветку.</p>
+        <p>Новые файлы, за которыми Git ещё не следит, обычная команда stash не забирает. Для них есть <b>Git: Stash (Include Untracked)</b>, в терминале — <code>git stash push -u</code>. Все команды хранилища видны в палитре, если набрать <code>Git: Stash</code>:</p>
+        <figure class="shot">
+          <img src="img/03b-stash-commands.png" alt="Палитра команд с набранным Git: Stash и списком: Apply Latest Stash, Apply Stash, Drop All Stashes, Drop Stash, Pop Latest Stash, Pop Stash, Stash, Stash (Include Untracked), Stash Staged, View Stash">
+          <figcaption>Команды хранилища в палитре. <b>Stash (Include Untracked)</b> забирает и новые файлы, <b>Stash Staged</b> — только отобранные в индекс.</figcaption>
+        </figure>
+        <p> Кнопка <b>Stash &amp; Checkout</b> в окне отказа из шага 9 главы 3.2 делает stash и сразу переключает ветку.</p>
 
         <p class="step-done"><b>Что получилось.</b>Правка лежит в записи <code>stash@{0}</code>, папка чистая. Теперь можно переключиться на <code>main</code>.</p>
 
@@ -305,7 +315,11 @@ Dropped refs/stash@{0} (a989cb8efaf2781bfbbd5162d3539f64a5b1baed)
  Date: Tue Oct 20 23:17:02 2026 +0300
  1 file changed, 1 insertion(+), 1 deletion(-)</pre>
         </figure>
-        <p>В <code>main</code> новый коммит <code>79cd7b5</code> с тем же сообщением. Строка <code>Date</code> — время исходной правки: Git сохранил его, потому что дата автора переносится вместе с изменениями. Та же команда есть в палитре — <b>Git: Cherry Pick...</b>; она спрашивает имя коммита (<b>Please provide the commit hash</b>).</p>
+        <p>В <code>main</code> новый коммит <code>79cd7b5</code> с тем же сообщением. Строка <code>Date</code> — время исходной правки: Git сохранил его, потому что дата автора переносится вместе с изменениями. Та же команда есть в палитре — <b>Git: Cherry Pick...</b>. Она спрашивает имя коммита:</p>
+        <figure class="shot">
+          <img src="img/07b-cherry-prompt.png" alt="Поле вверху окна с подсказкой Commit Hash и строкой Please provide the commit hash">
+          <figcaption>Запрос <b>Please provide the commit hash</b>. Имя коммита копируют в графе пунктом Copy Commit Hash.</figcaption>
+        </figure>
         <figure class="shot">
           <img src="img/08-after-cherry.png" alt="Окно VS Code на main после cherry-pick: в README.md строка 10 «страница контактов с формой обратной связи», в графе сверху коммит с меткой main, ниже на отдельной линии ветка temnaya-tema с коммитом того же сообщения">
           <figcaption>После cherry-pick. В README новая строка 10. В графе два коммита с одинаковым сообщением: новый в <code>main</code> и исходный в <code>temnaya-tema</code>.</figcaption>
