@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>3.6 Сообщения коммитов · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <script>
+    try {
+      var saved = localStorage.getItem('git-book-os');
+      if (!saved) {
+        var p = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+        saved = /win/i.test(p) ? 'win' : (/mac|iphone|ipad/i.test(p) ? 'mac' : 'linux');
+      }
+      document.documentElement.dataset.os = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Модуль 3 · Ветки</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 3 · ветки</p>
+          <p class="running__folio">Глава 3.6</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">3.6</span>
+          <h1>Сообщения коммитов:<br>заголовок, описание, генерация через ИИ</h1>
+          <p class="lead">В главе разобрано, из каких частей состоит сообщение коммита и по каким правилам его пишут. Первая часть — сообщения, написанные вручную: заголовок, описание после пустой строки, одна задача в одном коммите и исправление неудачного сообщения. Вторая часть — соглашения о формате, принятые в проектах. Третья часть — сообщения, которые генерирует модель: через чат и кнопкой Copilot в VS Code. На проекте <code>sait-vizitka</code> сделано пять коммитов.</p>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Коммиты</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Что получится</dt><dd>Пять коммитов с проверенными сообщениями, два из них составлены моделью</dd></div>
+          <div><dt>Сколько занимает</dt><dd>Около сорока минут за компьютером</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>Порядок действий</b>
+          <ol>
+            <li><a href="#s1">Задача главы</a></li>
+            <li><a href="#s2">Шаг 1. Прочитать историю по сообщениям</a></li>
+            <li><a href="#s3">Шаг 2. Включить проверку длины</a></li>
+            <li><a href="#s4">Шаг 3. Написать заголовок</a></li>
+            <li><a href="#s5">Шаг 4. Добавить описание</a></li>
+            <li><a href="#s6">Шаг 5. Разделить две задачи на два коммита</a></li>
+            <li><a href="#s7">Шаг 6. Исправить сообщение последнего коммита</a></li>
+            <li><a href="#s8">Соглашения о формате сообщений</a></li>
+            <li><a href="#s9">Шаг 7. Получить сообщение в чате с моделью</a></li>
+            <li><a href="#s10">Шаг 8. Сгенерировать сообщение в VS Code</a></li>
+            <li><a href="#s11">Проверка сгенерированного сообщения</a></li>
+            <li><a href="#s12">Справка: команды и настройки</a></li>
+            <li><a href="#s13">Частые вопросы</a></li>
+            <li><a href="#s14">Проверьте себя</a></li>
+            <li><a href="#s15">Шпаргалка по главе</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Задача главы</h2>
+        <p>В главе 2.3 сообщение коммита было одной строкой: что сделано в проекте. Для коротких правок этого достаточно. Когда из кода не видно, зачем сделана правка, или когда в историю заглядывают через месяц, одной строки не хватает. Поэтому у сообщения есть вторая часть — описание, а к первой строке предъявляют требования по длине и содержанию.</p>
+        <p>Сообщение коммита похоже на письмо. В списке входящих видна только тема письма, и по ней решают, открывать ли его. Текст письма читают, когда тема заинтересовала. У сообщения коммита то же устройство: первая строка видна в списках истории, остальной текст — при открытии коммита.</p>
+        <div class="analogy">
+          <p class="analogy__head">Ассоциация: тема и текст письма</p>
+          <div class="analogy__pair">
+            <div class="analogy__side">
+              <b>В жизни</b>
+              <p>Тема письма — одна короткая строка, по ней письмо находят в почтовом ящике. Подробности, причины и договорённости пишут в тексте письма.</p>
+            </div>
+            <div class="analogy__side">
+              <b>В Git</b>
+              <p>Первая строка сообщения — заголовок, он виден в графе и в ответе <code>git log --oneline</code>. Описание после пустой строки видно в полном ответе <code>git log</code> и в подсказке коммита в графе.</p>
+            </div>
+          </div>
+          <p class="analogy__limit"><b>Где не совпадает</b>Письмо можно отправить без темы. В Git без сообщения коммит не создаётся: команда <code>git commit</code> с пустым сообщением останавливается с ошибкой. Ещё одно отличие: длинную тему почта обрезает, а Git хранит заголовок любой длины, его обрезают только списки истории.</p>
+        </div>
+        <div class="why">
+          <p class="why__head">Зачем это нужно в работе</p>
+          <ul class="why__list">
+            <li><b>Найти коммит по задаче.</b> История из заголовков читается как перечень сделанных работ. Нужный коммит находят по первой строке, не открывая изменения.</li>
+            <li><b>Понять причину правки.</b> Код показывает, что изменилось. Почему так сделано, записывают в описании. Через месяц эту причину не восстановить по коду.</li>
+            <li><b>Отменить одну задачу.</b> Если каждая задача лежит в своём коммите, revert из главы 2.6 отменяет её, не трогая соседние.</li>
+            <li><b>Проверить черновик от модели.</b> Модель составляет сообщение по изменениям в коде. Причину правки она не получает, поэтому черновик проверяют и дописывают.</li>
+          </ul>
+        </div>
+        <p>В главе используется проект <code>sait-vizitka</code> в том виде, в каком он остался после главы 3.5. В нём одна ветка <code>main</code> и 30 коммитов, 26 из них на GitHub не отправлены, список изменений пуст. Имена коммитов, сделанных вами, будут отличаться от показанных. Первая часть главы — сообщение, написанное вручную.</p>
+        <div class="starter" id="start">
+          <p class="starter__head">Если проекта нет или он в другом состоянии</p>
+          <div class="starter__body">
+            <p>Архив содержит проект <code>sait-vizitka</code> в том состоянии, с которого начинается глава, — после главы 3.5. В нём файлы проекта, папка <code>.git</code> со всей историей и адрес <code>origin</code>. Имена коммитов, которые уже есть в архиве, совпадают с показанными в главе. Коммиты, которые вы сделаете по ходу главы, получат свои имена: имя коммита зависит от автора и времени.</p>
+            <a class="starter__btn" href="sait-vizitka-nachalo-3-6.zip" download>sait-vizitka-nachalo-3-6.zip <small>40 КБ</small></a>
+            <ol class="starter__steps">
+              <li>Распакуйте архив в папку, где лежат ваши проекты. Появится папка <code>sait-vizitka</code>. Если папка с таким именем там уже есть, сначала переименуйте старую, например в <code>sait-vizitka-staraya</code>.</li>
+              <li>Откройте новую папку в VS Code: <b>File → Open Folder</b> → <code>sait-vizitka</code>.</li>
+              <li>Проверьте историю в терминале (<kbd>Ctrl</kbd> + <kbd>`</kbd>). Ответ должен совпасть с этим:</li>
+            </ol>
+            <figure class="code code--out">
+              <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline -3</span>
+8d0dd10 Добавил телефон на страницу контактов
+79cd7b5 Дополнил описание страницы контактов в README
+895b31b Исправил адрес почты на странице контактов</pre>
+            </figure>
+            <p>В строке состояния — <code>main</code>, на кнопке <b>26↑</b>, список изменений пуст.</p>
+            <p class="starter__foot">Папка <code>.git</code> скрытая: в Finder и Проводнике её по умолчанию не видно, но VS Code и Git работают с ней как обычно. Имя и почту автора для ваших коммитов Git берёт из настроек главы 1.3. Кнопку Sync Changes не нажимайте: адрес <code>origin</code> ведёт в репозиторий автора справочника, и отправить туда коммиты не получится.</p>
+          </div>
+        </div>
+
+        <div class="part" role="separator"><span><b>1</b>Сообщение, написанное вручную</span></div>
+        <h2 id="s2"><span class="sec">§2</span>Шаг 1. Прочитать историю по сообщениям</h2>
+        <p>Перед тем как писать новые сообщения, посмотрим, как читаются уже записанные. Команда <code>git log --oneline</code> выводит по строке на коммит: имя и первую строку сообщения.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline -8</span>
+8d0dd10 Добавил телефон на страницу контактов
+79cd7b5 Дополнил описание страницы контактов в README
+895b31b Исправил адрес почты на странице контактов
+0d62db4 Merge branch 'stil-podvala'
+c6508f8 Добавил стиль кнопки
+f37fe1f Добавил стиль подвала
+84f13fc Merge branch 'zagolovok-s-imenem'
+2cc18f6 Уточнил заголовок главной страницы</pre>
+        </figure>
+        <p>Каждая строка называет одну работу, и по списку восстанавливается, что происходило с проектом: телефон, README, почта, стили подвала и кнопки, заголовок. Сообщения коммитов слияния Git составил сам из имени ветки. Те же строки стоят в разделе GRAPH панели Source Control.</p>
+        <p>Для сравнения — та же история, если бы сообщения писали без правил. Коммиты и правки те же, изменились только сообщения:</p>
+        <div class="swap">
+          <div class="swap__row">
+            <div class="swap__old"><b>Сообщение без правил</b>телефон</div>
+            <div class="swap__arrow">→</div>
+            <div class="swap__new"><b>Сообщение в проекте</b>Добавил телефон на страницу контактов</div>
+          </div>
+          <div class="swap__row">
+            <div class="swap__old"><b>Сообщение без правил</b>ещё правки</div>
+            <div class="swap__arrow">→</div>
+            <div class="swap__new"><b>Сообщение в проекте</b>Дополнил описание страницы контактов в README</div>
+          </div>
+          <div class="swap__row">
+            <div class="swap__old"><b>Сообщение без правил</b>фикс</div>
+            <div class="swap__arrow">→</div>
+            <div class="swap__new"><b>Сообщение в проекте</b>Исправил адрес почты на странице контактов</div>
+          </div>
+        </div>
+        <p>По левому столбцу нельзя понять, какой коммит исправил почту: чтобы найти его, придётся открывать изменения каждого коммита по очереди.</p>
+
+        <p class="step-done"><b>Что получилось.</b>История проекта читается по первым строкам сообщений. Следующие шаги — правила для этой строки и для текста под ней.</p>
+
+        <h2 id="s3"><span class="sec">§3</span>Шаг 2. Включить проверку длины</h2>
+        <p>Первая строка сообщения называется <b>заголовком</b> (subject). Его длину ограничивают, потому что списки истории показывают строку целиком только до определённой ширины. Документация Git советует держать заголовок не длиннее 50 знаков. Строки описания принято переносить примерно на 72 знаках.</p>
+        <p>VS Code проверяет обе длины, если включить настройку. Открываем палитру команд <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>, выбираем <b>Preferences: Open Settings (UI)</b> и набираем в поиске <code>git.inputValidation</code>:</p>
+        <figure class="shot">
+          <img src="img/02-settings-off.png" alt="Окно настроек VS Code с поиском git.inputValidation: найдено три настройки — Git: Input Validation с пустым флажком, Git: Input Validation Length со значением 72 и Git: Input Validation Subject Length со значением 50">
+          <figcaption>Три настройки проверки. Флажок <b>Input Validation</b> пуст: проверка выключена. Пороги — 72 знака для строк описания и 50 для заголовка.</figcaption>
+        </figure>
+        <p>Ставим флажок <b>Git: Input Validation</b>. Настройка сохраняется сразу, кнопки сохранения нет:</p>
+        <figure class="shot">
+          <img src="img/03-settings-on.png" alt="Та же страница настроек, флажок Git: Input Validation отмечен">
+          <figcaption>Флажок отмечен. Проверка действует в поле Message всех проектов.</figcaption>
+        </figure>
+        <p>Закрываем вкладку настроек.</p>
+
+        <p class="step-done"><b>Что получилось.</b>VS Code проверяет длину строк в поле Message. Проверка только предупреждает: коммит с длинной строкой Git всё равно запишет.</p>
+
+        <h2 id="s4"><span class="sec">§4</span>Шаг 3. Написать заголовок</h2>
+        <p>Задача: на странице контактов сделать номер телефона ссылкой. В <code>kontakty.html</code> меняем строку 12:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>kontakty.html</span><span>было</span></figcaption>
+<pre>  &lt;p&gt;Телефон: +7 900 123-45-67&lt;/p&gt;</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>kontakty.html</span><span>стало</span></figcaption>
+<pre><mark>  &lt;p&gt;Телефон: &lt;a href="tel:+79001234567"&gt;+7 900 123-45-67&lt;/a&gt;&lt;/p&gt;</mark></pre>
+          </figure>
+        </div>
+        <p>Адрес <code>tel:</code> — ссылка на телефонный номер. На смартфоне нажатие на неё открывает набор номера. Сохраняем файл и отбираем его плюсом. В поле Message пишем одной строкой и действие, и его причину:</p>
+        <figure class="code">
+          <figcaption><span>поле Message</span><span>62 знака</span></figcaption>
+<pre>Сделал номер телефона на странице контактов ссылкой для звонка</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/04-long.png" alt="Окно VS Code: в поле Message длинная строка, подчёркнутая жёлтой волнистой линией; в Staged Changes kontakty.html, в файле строка 12 со ссылкой tel">
+          <figcaption>Строка подчёркнута волнистой линией: проверка длины сработала.</figcaption>
+        </figure>
+        <p>Наводим курсор на подчёркнутое слово. Подсказка сообщает, на сколько строка длиннее порога:</p>
+        <figure class="shot">
+          <img src="img/05-hover.png" alt="Всплывающая подсказка под полем Message: 12 characters over 50 in current line (line_length), ниже ссылка Quick Fix">
+          <figcaption><b>12 characters over 50 in current line</b> — «в текущей строке на 12 знаков больше 50».</figcaption>
+        </figure>
+        <p>Заголовок сокращают так, чтобы в нём осталось только действие и то, к чему оно относится. Причина правки — «для звонка» — переносится в описание. Остаётся строка из 44 знаков:</p>
+        <figure class="code">
+          <figcaption><span>заголовок</span><span>44 знака</span></figcaption>
+<pre>Сделал телефон на странице контактов ссылкой</pre>
+        </figure>
+        <p>Заголовок в этом проекте строится по одному образцу: глагол в прошедшем времени и предмет правки. «Сделал», «Добавил», «Исправил» отвечают на вопрос «что сделано в коммите». Точка в конце заголовка не ставится.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Заголовок короче 50 знаков и называет одно действие. Причина правки пока нигде не записана.</p>
+
+        <h2 id="s5"><span class="sec">§5</span>Шаг 4. Добавить описание</h2>
+        <p><b>Описание</b> (body) — текст сообщения после заголовка. Его отделяют от заголовка пустой строкой: по ней Git и программы, которые показывают историю, отличают заголовок от остального текста. В описании пишут то, чего не видно из кода: причину правки и её последствия.</p>
+        <p>Новая строка в поле Message начинается клавишей <kbd>Enter</kbd>. Коммит из поля делается сочетанием <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Enter</kbd>, как написано в подсказке пустого поля. Пишем заголовок, нажимаем <kbd>Enter</kbd> два раза и пишем описание в две строки:</p>
+        <figure class="code">
+          <figcaption><span>поле Message</span><span>заголовок, пустая строка, описание</span></figcaption>
+<pre>Сделал телефон на странице контактов ссылкой
+
+На телефоне ссылка tel: открывает набор номера,
+номер не нужно переписывать вручную.</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/06-body.png" alt="Окно VS Code: в поле Message заголовок, пустая строка и две строки описания, волнистой линии нет; в Staged Changes kontakty.html">
+          <figcaption>Сообщение из двух частей. Поле стало выше, волнистой линии нет: все строки короче порогов.</figcaption>
+        </figure>
+        <p>Нажимаем <kbd><span data-os="win linux">Ctrl</span><span data-os="mac">Cmd</span></kbd> + <kbd>Enter</kbd> или кнопку <b>Commit</b>. В терминале то же сообщение передают двумя ключами <code>-m</code>: первый становится заголовком, второй — описанием, между ними Git вставляет пустую строку. Перевод строки внутри описания вводится клавишей <kbd>Enter</kbd> до закрывающей кавычки:</p>
+        <figure class="code">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit</span></figcaption>
+<pre>git add kontakty.html
+git commit -m "Сделал телефон на странице контактов ссылкой" -m "На телефоне ссылка tel: открывает набор номера,
+номер не нужно переписывать вручную."</pre>
+        </figure>
+        <p>Теперь сравним, как сообщение выглядит в коротком и полном выводе истории:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git log --oneline -2</span>
+dcb7149 Сделал телефон на странице контактов ссылкой
+8d0dd10 Добавил телефон на страницу контактов
+<span class="cmd">git log -1</span>
+commit dcb71494ac5e08b001e335b8bb98a536c0f42f1b
+Author: Student &lt;student@example.com&gt;
+Date:   Wed Oct 28 00:33:51 2026 +0300
+
+    Сделал телефон на странице контактов ссылкой
+
+    На телефоне ссылка tel: открывает набор номера,
+    номер не нужно переписывать вручную.</pre>
+        </figure>
+        <p>Короткий вывод показывает только заголовок. Полный вывод показывает сообщение целиком с отступом в четыре пробела. В VS Code полное сообщение видно в подсказке: наводим курсор на коммит в разделе GRAPH.</p>
+        <figure class="shot">
+          <img src="img/07-graph-hover.png" alt="Подсказка над коммитом в разделе GRAPH: автор Student, время, заголовок и две строки описания, ниже 1 file changed, метка main и имя dcb7149">
+          <figcaption>Подсказка коммита в графе: автор, время, сообщение целиком и число изменённых файлов. В строке графа под подсказкой — только заголовок.</figcaption>
+        </figure>
+        <p>На схеме — из каких частей состоит сообщение и где видна каждая часть.</p>
+        <figure class="scheme">
+          <svg class="svg-wide" viewBox="0 0 700 250" role="img" aria-label="Схема сообщения коммита: строка 1 — заголовок до 50 знаков, строка 2 пустая, строки 3 и 4 — описание до 72 знаков. Заголовок виден в git log --oneline и в строке графа, всё сообщение — в git log и в подсказке графа">
+            <text x="20" y="22" font-family="Inter, system-ui, sans-serif" font-size="12.5" font-weight="700" fill="var(--ink)">Сообщение коммита dcb7149</text>
+            <rect x="20" y="36" width="400" height="34" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="32" y="58" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--ink)">Сделал телефон на странице контактов ссылкой</text>
+            <rect x="20" y="70" width="400" height="26" fill="var(--page)" stroke="var(--ink)" stroke-width="3" stroke-dasharray="6 4"/>
+            <rect x="20" y="96" width="400" height="58" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="32" y="119" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--ink)">На телефоне ссылка tel: открывает набор номера,</text>
+            <text x="32" y="140" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--ink)">номер не нужно переписывать вручную.</text>
+            <path d="M424 53 H446" stroke="var(--fire-deep)" stroke-width="2.5"/>
+            <text x="452" y="49" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="var(--fire-deep)">заголовок</text>
+            <text x="452" y="64" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink-soft)">одна строка, до 50 знаков</text>
+            <path d="M424 83 H446" stroke="var(--ink-faint)" stroke-width="2.5"/>
+            <text x="452" y="87" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink-soft)">пустая строка — граница частей</text>
+            <path d="M424 125 H446" stroke="var(--steel)" stroke-width="2.5"/>
+            <text x="452" y="121" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="var(--steel)">описание</text>
+            <text x="452" y="136" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink-soft)">причина правки, строки до 72 знаков</text>
+            <rect x="20" y="180" width="300" height="56" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="20" y="180" width="300" height="20" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="2"/>
+            <text x="30" y="194" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="var(--ink)">Показывают только заголовок</text>
+            <text x="30" y="216" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">git log --oneline</text>
+            <text x="30" y="230" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink-soft)">строка коммита в разделе GRAPH</text>
+            <rect x="350" y="180" width="330" height="56" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="350" y="180" width="330" height="20" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="2"/>
+            <text x="360" y="194" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="var(--ink)">Показывают всё сообщение</text>
+            <text x="360" y="216" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">git log, git show</text>
+            <text x="360" y="230" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink-soft)">подсказка коммита в разделе GRAPH</text>
+          </svg>
+          <svg class="svg-narrow" viewBox="0 0 340 330" role="img" aria-label="Схема сообщения коммита: заголовок до 50 знаков, пустая строка, описание до 72 знаков; где видна каждая часть">
+            <text x="10" y="16" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="var(--ink)">Сообщение коммита dcb7149</text>
+            <rect x="10" y="26" width="320" height="32" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="18" y="47" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)">Сделал телефон на странице контактов ссылкой</text>
+            <text x="10" y="76" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--fire-deep)"><tspan font-weight="700">заголовок</tspan> — одна строка, до 50 знаков</text>
+            <rect x="10" y="86" width="320" height="24" fill="var(--page)" stroke="var(--ink)" stroke-width="3" stroke-dasharray="6 4"/>
+            <text x="18" y="102" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">пустая строка — граница частей</text>
+            <rect x="10" y="110" width="320" height="50" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="18" y="130" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)">На телефоне ссылка tel: открывает набор номера,</text>
+            <text x="18" y="148" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)">номер не нужно переписывать вручную.</text>
+            <text x="10" y="178" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--steel)"><tspan font-weight="700">описание</tspan> — причина правки, строки до 72 знаков</text>
+            <rect x="10" y="192" width="320" height="56" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="10" y="192" width="320" height="20" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="2"/>
+            <text x="18" y="206" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="var(--ink)">Показывают только заголовок</text>
+            <text x="18" y="228" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">git log --oneline</text>
+            <text x="18" y="242" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">строка коммита в разделе GRAPH</text>
+            <rect x="10" y="262" width="320" height="56" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="10" y="262" width="320" height="20" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="2"/>
+            <text x="18" y="276" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="var(--ink)">Показывают всё сообщение</text>
+            <text x="18" y="298" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">git log, git show</text>
+            <text x="18" y="312" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">подсказка коммита в разделе GRAPH</text>
+          </svg>
+          <figcaption>Сообщение из двух частей. Короткие списки истории показывают заголовок, полный вывод и подсказка в графе — всё сообщение.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>Коммит <code>dcb7149</code> с заголовком и описанием. На кнопке <b>27↑</b>.</p>
+
+        <h2 id="s6"><span class="sec">§6</span>Шаг 5. Разделить две задачи на два коммита</h2>
+        <p>Заголовок из 50 знаков вмещает одну задачу. Если правок две, сообщение получается либо длинным, либо общим, вроде «Правки стилей и README». Поэтому две задачи записывают двумя коммитами, каждый со своим заголовком. В главе 2.3 это правило звучало так: если в сообщении есть союз «и», проверьте, не две ли это задачи.</p>
+        <p>Делаем две независимые правки. В <code>styles.css</code> уменьшаем шрифт подвала:</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>styles.css</span><span>было</span></figcaption>
+<pre>footer {
+  margin-top: 40px;
+  color: #6B6560;
+}</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>styles.css</span><span>стало</span></figcaption>
+<pre>footer {
+  margin-top: 40px;
+<mark>  font-size: 14px;</mark>
+  color: #6B6560;
+}</pre>
+          </figure>
+        </div>
+        <p>В <code>README.md</code> уточняем строку о странице контактов: сейчас на ней почта, телефон и форма.</p>
+        <div class="code-pair">
+          <figure class="code code--was">
+            <figcaption><span>README.md</span><span>было, строка 10</span></figcaption>
+<pre>- `kontakty.html` — страница контактов с формой обратной связи</pre>
+          </figure>
+          <figure class="code code--now">
+            <figcaption><span>README.md</span><span>стало</span></figcaption>
+<pre><mark>- `kontakty.html` — страница контактов: почта, телефон, форма обратной связи</mark></pre>
+          </figure>
+        </div>
+        <figure class="shot">
+          <img src="img/08-two-files.png" alt="Окно VS Code: в разделе Changes два файла — README.md и styles.css, оба с буквой M; открыт styles.css">
+          <figcaption>Две правки из разных задач в <b>Changes</b>.</figcaption>
+        </figure>
+        <p>Отбираем плюсом только <code>styles.css</code> и делаем коммит «Уменьшил шрифт подвала». Затем отбираем <code>README.md</code> и пишем сообщение «Обновил README»:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что плюс и Commit два раза</span></figcaption>
+<pre><span class="cmd">git add styles.css</span>
+<span class="cmd">git commit -m "Уменьшил шрифт подвала"</span>
+[main 7dc3fca] Уменьшил шрифт подвала
+ 1 file changed, 1 insertion(+)
+<span class="cmd">git add README.md</span>
+<span class="cmd">git commit -m "Обновил README"</span>
+[main 5e39c73] Обновил README
+ 1 file changed, 1 insertion(+), 1 deletion(-)</pre>
+        </figure>
+        <figure class="shot">
+          <img src="img/09-vague.png" alt="Окно VS Code: в графе сверху коммит Обновил README с меткой main, под ним Уменьшил шрифт подвала; открыт README.md, строка 10 с почтой, телефоном и формой">
+          <figcaption>Два коммита вместо одного. Верхний заголовок «Обновил README» короткий, но не сообщает, что изменилось.</figcaption>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>Каждая задача в своём коммите. По сообщению второго коммита не понять, какую часть README обновили.</p>
+
+        <h2 id="s7"><span class="sec">§7</span>Шаг 6. Исправить сообщение последнего коммита</h2>
+        <p>Сообщение последнего коммита меняет amend из шага 2 главы 2.6. В главе 2.6 amend добавлял в коммит забытый файл. Если в индексе ничего нет, amend заменяет только сообщение:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команды и ответ</span></figcaption>
+<pre><span class="cmd">git commit --amend -m "Перечислил в README содержимое страницы контактов"</span>
+[main 3c7f7a3] Перечислил в README содержимое страницы контактов
+ Date: Wed Oct 28 00:34:48 2026 +0300
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+<span class="cmd">git log --oneline -3</span>
+3c7f7a3 Перечислил в README содержимое страницы контактов
+7dc3fca Уменьшил шрифт подвала
+dcb7149 Сделал телефон на странице контактов ссылкой</pre>
+        </figure>
+        <p>Коммит <code>5e39c73</code> заменён коммитом <code>3c7f7a3</code> с тем же изменением и новым сообщением. Строка <code>Date</code> — время исходного коммита: amend его сохраняет.</p>
+        <figure class="shot">
+          <img src="img/10-amended.png" alt="Окно VS Code: в графе сверху коммит Перечислил в README содержимое страницы контактов с меткой main, коммита Обновил README нет">
+          <figcaption>После amend. Коммита «Обновил README» в графе нет, на его месте коммит с точным заголовком.</figcaption>
+        </figure>
+        <div class="margin-note">
+          <b>На полях: сообщения старых и отправленных коммитов</b>
+          <p>Amend меняет только последний коммит. Сообщение более раннего коммита правят перезаписью истории: все коммиты после него получают новые имена, как при rebase в главе 3.5. Коммиты, отправленные на GitHub, так не исправляют. Поэтому сообщение проверяют до нажатия Commit.</p>
+        </div>
+
+        <p class="step-done"><b>Что получилось.</b>Три новых коммита с понятными заголовками, на кнопке <b>29↑</b>. Правила, по которым они написаны, в разных проектах записаны по-разному. Вторая часть главы — такие соглашения.</p>
+
+        <div class="part" role="separator"><span><b>2</b>Правила проекта</span></div>
+        <h2 id="s8"><span class="sec">§8</span>Соглашения о формате сообщений</h2>
+        <p>У Git нет требований к тексту сообщения, кроме того, что оно не пустое. Правила устанавливает проект: на каком языке писать, в какой форме глагол, нужна ли метка в начале. Их записывают в README или в отдельный файл с правилами участия в проекте и соблюдают всей командой, чтобы история читалась одинаково.</p>
+        <p>В проекте <code>sait-vizitka</code> и в этом справочнике действует такое соглашение:</p>
+        <div class="checklist">
+          <p class="checklist__head">Правила сообщений в проекте sait-vizitka</p>
+          <div class="checklist__item"><span><b>Язык — русский</b>На нём написаны сообщения всех коммитов проекта.</span></div>
+          <div class="checklist__item"><span><b>Глагол в прошедшем времени</b>«Добавил», «Исправил», «Убрал»: заголовок сообщает, что сделано в коммите.</span></div>
+          <div class="checklist__item"><span><b>Заголовок до 50 знаков, без точки в конце</b>Проверяется настройкой из шага 2.</span></div>
+          <div class="checklist__item"><span><b>Причина — в описании</b>После пустой строки, строки до 72 знаков.</span></div>
+        </div>
+        <p>Во многих проектах сообщения пишут по-английски в повелительном наклонении: <code>Add phone link</code>, «добавить ссылку на телефон». Так сформулированы и сообщения, которые составляет сам Git, например <code>Merge branch 'stil-podvala'</code> и <code>Revert "…"</code>.</p>
+        <p>Распространённое соглашение о формате — <b>Conventional Commits</b>. Заголовок начинается с типа изменения и двоеточия. По типу история фильтруется: например, отдельно выводятся исправления ошибок.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Тип</th><th>Что означает</th><th>Сообщение главы в этом формате</th></tr></thead>
+            <tbody>
+              <tr><td><code>feat</code></td><td>Новая возможность</td><td><code>feat: сделал телефон на странице контактов ссылкой</code></td></tr>
+              <tr><td><code>fix</code></td><td>Исправление ошибки</td><td><code>fix: исправил адрес почты на странице контактов</code></td></tr>
+              <tr><td><code>style</code></td><td>Оформление кода без изменения работы</td><td>—</td></tr>
+              <tr><td><code>docs</code></td><td>Документация</td><td><code>docs: перечислил в README содержимое страницы контактов</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Спецификация Conventional Commits определяет только типы <code>feat</code> и <code>fix</code>, остальные взяты из правил проекта Angular и меняются от проекта к проекту. Тип <code>style</code> в этом соглашении означает пробелы и отступы в коде. Правка CSS, которая меняет вид страницы, к нему не относится, поэтому шрифт подвала записали бы как <code>feat</code> или по правилам конкретного проекта. В <code>sait-vizitka</code> типы не используются.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Правила сообщений записаны списком. По этому же списку проверяется сообщение, которое составила модель. Третья часть главы — генерация сообщений.</p>
+
+        <div class="part" role="separator"><span><b>3</b>Генерация через ИИ</span></div>
+        <h2 id="s9"><span class="sec">§9</span>Шаг 7. Получить сообщение в чате с моделью</h2>
+        <p>Секретарю показали исправленный договор, но не позвали на совещание, где исправления обсуждали. По документу секретарь точно опишет, какие пункты изменились. Почему их изменили, он может только предположить, и такое предположение нужно проверить.</p>
+        <p>С языковой моделью то же самое. <b>Языковая модель</b> — программа, которая составляет текст по запросу. Для сообщения коммита ей передают изменения из индекса и правила проекта. Причина правки в эти данные не входит, поэтому модель её не получает, если причину не дописали в запрос.</p>
+        <p>Задача: добавить описание страницы для поисковых систем. В <code>index.html</code> после строки 4:</p>
+        <figure class="code">
+          <figcaption><span>index.html</span><span>после строки 4</span></figcaption>
+<pre>  &lt;meta charset="utf-8"&gt;
+<mark>  &lt;meta name="description" content="Сайт-визитка Максима: о себе и контакты для связи."&gt;</mark></pre>
+        </figure>
+        <p>Сохраняем файл и отбираем его плюсом. Изменения из индекса выводит команда <code>git diff --staged</code>:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git diff --staged</span>
+diff --git a/index.html b/index.html
+index d36db34..4ca3438 100644
+--- a/index.html
++++ b/index.html
+@@ -2,6 +2,7 @@
+ &lt;html lang="ru"&gt;
+ &lt;head&gt;
+   &lt;meta charset="utf-8"&gt;
++  &lt;meta name="description" content="Сайт-визитка Максима: о себе и контакты для связи."&gt;
+   &lt;title&gt;Сайт-визитка · Максим&lt;/title&gt;
+   &lt;link rel="stylesheet" href="styles.css"&gt;
+ &lt;/head&gt;</pre>
+        </figure>
+        <p>Ключ <code>--staged</code> выводит то, что попадёт в коммит, — содержимое индекса. Строка с <code>+</code> добавлена, строки без знака — соседние строки для ориентира. Этот текст и передаётся модели.</p>
+        <p>Запрос составляется из правил проекта и вывода команды. Последнее правило требует оставить пропуск на месте причины, если её нет в коде.</p>
+        <figure class="code">
+          <figcaption><span>запрос в чат</span><span>после двоеточия вставить вывод git diff --staged</span></figcaption>
+<pre>Составь сообщение коммита по изменениям ниже.
+Правила:
+- первая строка до 50 символов: что изменилось в проекте, глагол в прошедшем времени («Добавил…», «Исправил…»);
+- имена файлов не перечисляй;
+- если причина изменения не видна из кода, не придумывай её: после пустой строки напиши «Причина: ___».
+Ответь только текстом сообщения.
+
+Изменения (git diff --staged):</pre>
+        </figure>
+        <p>Запрос вставляется в любой чат с языковой моделью. Ответ ниже получен в Claude (модель Claude Opus 5):</p>
+        <figure class="code code--out">
+          <figcaption><span>ответ модели</span><span>текст без правок</span></figcaption>
+<pre>Добавил краткое описание сайта в метаданные
+
+Причина: ___</pre>
+        </figure>
+        <p>Заголовок из 43 знаков, глагол в прошедшем времени, имён файлов нет. Причину модель не указала: в коде её нет. Вставляем ответ в поле Message:</p>
+        <figure class="shot">
+          <img src="img/11-ai-raw.png" alt="Окно VS Code: в поле Message ответ модели — Добавил краткое описание сайта в метаданные, пустая строка, Причина: ___; открыт index.html, строка 5 с meta description">
+          <figcaption>Ответ модели в поле Message. Описание пока состоит из пропуска.</figcaption>
+        </figure>
+        <p>Причину правки дописываем сами: текст из <code>meta description</code> поисковые системы показывают под ссылкой на сайт. Описание заменяем:</p>
+        <figure class="shot">
+          <img src="img/12-ai-final.png" alt="Окно VS Code: в поле Message заголовок модели, пустая строка и две строки описания о поисковых системах">
+          <figcaption>Заголовок составлен моделью, описание дописано вручную.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Ctrl/Cmd + Enter, и проверка</span></figcaption>
+<pre><span class="cmd">git commit -m "Добавил краткое описание сайта в метаданные" -m "Поисковые системы показывают этот текст
+под ссылкой на сайт в результатах поиска."</span>
+<span class="cmd">git log --oneline -2</span>
+44d55d3 Добавил краткое описание сайта в метаданные
+3c7f7a3 Перечислил в README содержимое страницы контактов</pre>
+        </figure>
+        <p>На схеме — путь сообщения от индекса до коммита.</p>
+        <figure class="scheme">
+          <svg class="svg-wide" viewBox="0 0 700 215" role="img" aria-label="Схема: из индекса командой git diff --staged получают изменения, вместе с правилами проекта их передают модели, модель возвращает черновик, его проверяют и дописывают причину, затем делают коммит. Причины правки у модели нет">
+            <g font-family="Inter, system-ui, sans-serif">
+              <rect x="10" y="60" width="112" height="62" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+              <text x="66" y="86" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Индекс</text>
+              <text x="66" y="104" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">отобранные правки</text>
+              <rect x="150" y="60" width="122" height="62" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+              <text x="211" y="86" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" font-weight="700" fill="var(--ink)">git diff --staged</text>
+              <text x="211" y="104" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">текст изменений</text>
+              <rect x="300" y="60" width="112" height="62" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/>
+              <text x="356" y="86" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Модель</text>
+              <text x="356" y="104" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">черновик</text>
+              <rect x="440" y="60" width="122" height="62" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/>
+              <text x="501" y="86" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Проверка</text>
+              <text x="501" y="104" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">правила, причина</text>
+              <rect x="590" y="60" width="100" height="62" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+              <text x="640" y="86" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Коммит</text>
+              <text x="640" y="104" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">44d55d3</text>
+              <path d="M122 91 H144 M138 85 L144 91 L138 97" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/>
+              <path d="M272 91 H294 M288 85 L294 91 L288 97" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/>
+              <path d="M412 91 H434 M428 85 L434 91 L428 97" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/>
+              <path d="M562 91 H584 M578 85 L584 91 L578 97" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/>
+              <rect x="246" y="10" width="220" height="30" fill="var(--page)" stroke="var(--ink)" stroke-width="2" stroke-dasharray="5 4"/>
+              <text x="356" y="30" text-anchor="middle" font-size="11" fill="var(--ink)">правила проекта из запроса</text>
+              <path d="M356 40 V56" stroke="var(--ink)" stroke-width="2"/>
+              <rect x="300" y="150" width="262" height="50" fill="var(--page)" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="5 4"/>
+              <text x="431" y="171" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink-soft)">Модель не получает</text>
+              <text x="431" y="188" text-anchor="middle" font-size="11" fill="var(--ink-soft)">задачу и причину правки</text>
+              <path d="M501 146 V126" stroke="var(--fire-deep)" stroke-width="2" stroke-dasharray="4 3"/>
+            </g>
+          </svg>
+          <svg class="svg-narrow" viewBox="0 0 340 330" role="img" aria-label="Схема: индекс, git diff --staged, модель, проверка, коммит; модель получает правила из запроса и не получает задачу и причину правки"><rect x="20" y="10" width="190" height="44" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="115" y="29" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="var(--ink)">Индекс</text><text x="115" y="45" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">отобранные правки</text><rect x="20" y="76" width="190" height="44" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="115" y="95" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" font-weight="700" fill="var(--ink)">git diff --staged</text><text x="115" y="111" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">текст изменений</text><rect x="20" y="142" width="190" height="44" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="115" y="161" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="var(--ink)">Модель</text><text x="115" y="177" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">черновик</text><rect x="20" y="208" width="190" height="44" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="115" y="227" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="var(--ink)">Проверка</text><text x="115" y="243" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">правила, причина</text><rect x="20" y="274" width="190" height="44" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="115" y="293" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="var(--ink)">Коммит</text><text x="115" y="309" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">44d55d3</text><path d="M115 56 V72 M109 66 L115 72 L121 66" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/><path d="M115 122 V138 M109 132 L115 138 L121 132" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/><path d="M115 188 V204 M109 198 L115 204 L121 198" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/><path d="M115 254 V270 M109 264 L115 270 L121 264" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/><rect x="232" y="142" width="98" height="44" fill="var(--page)" stroke="var(--ink)" stroke-width="2" stroke-dasharray="5 4"/><text x="281" y="160" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink)">правила</text><text x="281" y="175" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink)">из запроса</text><path d="M232 164 H214" stroke="var(--ink)" stroke-width="2"/><rect x="232" y="208" width="98" height="44" fill="var(--page)" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="5 4"/><text x="281" y="226" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" font-weight="700" fill="var(--ink-soft)">не получает</text><text x="281" y="241" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--ink-soft)">задачу, причину</text><path d="M232 230 H214" stroke="var(--fire-deep)" stroke-width="2" stroke-dasharray="4 3"/></svg>
+          <figcaption>Модель получает изменения из индекса и правила проекта. Причину правки она не получает, поэтому её дописывают на этапе проверки.</figcaption>
+        </figure>
+        <div class="margin-note margin-note--steel">
+          <b>На полях: что уходит в чат</b>
+          <p>Вывод <code>git diff --staged</code> содержит код проекта, и после вставки в чат он хранится у сервиса, который работает с моделью. Закрытый код и файлы с ключами в чат отправляют только по правилам организации. Файл <code>.env</code> из главы 2.5 в вывод не попадает: он скрыт через <code>.gitignore</code> и в индекс не отбирается.</p>
+        </div>
+
+        <p class="step-done"><b>Что получилось.</b>Коммит <code>44d55d3</code>: заголовок составлен моделью, описание дописано вручную. На кнопке <b>30↑</b>.</p>
+
+        <h2 id="s10"><span class="sec">§10</span>Шаг 8. Сгенерировать сообщение в VS Code</h2>
+        <p>В VS Code сообщение составляет GitHub Copilot — сервис GitHub, который подключает к редактору языковые модели. Для работы нужен вход в аккаунт GitHub с доступом к Copilot. Без платной подписки работает план Copilot Free с ограничением числа запросов в месяц. Пока вход не выполнен, вверху окна стоит кнопка <b>Sign In</b>.</p>
+        <p>Задача: убрать подчёркивание ссылок при наведении курсора. В конец <code>styles.css</code>:</p>
+        <figure class="code">
+          <figcaption><span>styles.css</span><span>в конец файла</span></figcaption>
+<pre><mark>a:hover {</mark>
+<mark>  text-decoration: none;</mark>
+<mark>}</mark></pre>
+        </figure>
+        <p>Сохраняем файл и отбираем его плюсом. Справа в поле Message — кнопка со значком искры:</p>
+        <figure class="shot">
+          <img src="img/13-sparkle-hover.png" alt="Панель Source Control: курсор на значке искры справа в поле Message, подсказка Generate Commit Message; в Staged Changes styles.css; вверху окна кнопка Sign In">
+          <figcaption>Подсказка кнопки — <b>Generate Commit Message</b>, «сгенерировать сообщение коммита». Кадр снят до входа: вверху кнопка Sign In.</figcaption>
+        </figure>
+        <p>После входа нажимаем кнопку. Через несколько секунд в поле появляется текст:</p>
+        <figure class="shot">
+          <img src="img/14-copilot-raw.png" alt="Окно VS Code: в поле Message сгенерированный текст Добавил стиль для эффекта наведения на ссылки; открыт styles.css, строки 32–34 с правилом a:hover">
+          <figcaption>Сообщение от Copilot: «Добавил стиль для эффекта наведения на ссылки». В строках 32–34 — правило, по которому оно составлено.</figcaption>
+        </figure>
+        <p>Заголовок на русском, в прошедшем времени, 45 знаков: правилам проекта он соответствует. Но он общий: «стиль для эффекта наведения» не сообщает, какой эффект. Правило <code>text-decoration: none</code> убирает подчёркивание, и заголовок называет это прямо:</p>
+        <div class="swap">
+          <div class="swap__row">
+            <div class="swap__old"><b>Сообщение от Copilot</b>Добавил стиль для эффекта наведения на ссылки</div>
+            <div class="swap__arrow">→</div>
+            <div class="swap__new"><b>После проверки</b>Убрал подчёркивание ссылок при наведении</div>
+          </div>
+        </div>
+        <figure class="shot">
+          <img src="img/15-copilot-fixed.png" alt="Окно VS Code: в поле Message исправленный заголовок Убрал подчёркивание ссылок при наведении">
+          <figcaption>Исправленный заголовок в поле Message. Описание не нужно: из кода видно, что сделано, а причина — внешний вид страницы.</figcaption>
+        </figure>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке проекта</span><span>то же, что Ctrl/Cmd + Enter, и проверка</span></figcaption>
+<pre><span class="cmd">git commit -m "Убрал подчёркивание ссылок при наведении"</span>
+<span class="cmd">git log --oneline -6</span>
+316e202 Убрал подчёркивание ссылок при наведении
+44d55d3 Добавил краткое описание сайта в метаданные
+3c7f7a3 Перечислил в README содержимое страницы контактов
+7dc3fca Уменьшил шрифт подвала
+dcb7149 Сделал телефон на странице контактов ссылкой
+8d0dd10 Добавил телефон на страницу контактов</pre>
+        </figure>
+        <p>Правила для генерации Copilot задаются настройкой. В настройках набираем <code>commitMessageGeneration</code>:</p>
+        <figure class="shot">
+          <img src="img/16-copilot-settings.png" alt="Окно настроек с поиском commitMessageGeneration: настройка GitHub › Copilot › Chat › Commit Message Generation: Instructions с пометкой Experimental и ссылкой Edit in settings.json">
+          <figcaption>Настройка <b>Commit Message Generation: Instructions</b> с пометкой Experimental. Правила задаются текстом или файлом проекта.</figcaption>
+        </figure>
+        <p>Настройка задаётся в <code>settings.json</code> по ссылке <b>Edit in settings.json</b>. Правило записывается текстом в поле <code>text</code> или берётся из файла проекта через поле <code>file</code>:</p>
+        <figure class="code">
+          <figcaption><span>settings.json</span><span>правила проекта для Copilot</span></figcaption>
+<pre>"github.copilot.chat.commitMessageGeneration.instructions": [
+  { "text": "Пиши на русском. Первая строка до 50 символов, глагол в прошедшем времени." }
+]</pre>
+        </figure>
+
+        <p class="step-done"><b>Что получилось.</b>Коммит <code>316e202</code> с заголовком, исправленным после генерации. В проекте 35 коммитов, на кнопке <b>31↑</b>, список изменений пуст.</p>
+
+        <h2 id="s11"><span class="sec">§11</span>Проверка сгенерированного сообщения</h2>
+        <p>В шаге 7 модель оставила пропуск на месте причины, в шаге 8 составила слишком общий заголовок. Оба черновика пришлось править. Сгенерированное сообщение проверяют по тем же правилам, что и написанное вручную, и ещё по двум пунктам, связанным с тем, что модель получает только код.</p>
+        <div class="checklist">
+          <p class="checklist__head">Проверка сообщения перед коммитом</p>
+          <div class="checklist__item"><span><b>Заголовок называет конкретное действие</b>«Убрал подчёркивание ссылок» вместо «Добавил стиль для эффекта».</span></div>
+          <div class="checklist__item"><span><b>Заголовок до 50 знаков, в форме проекта</b>Язык, время глагола, тип в начале — по соглашению проекта.</span></div>
+          <div class="checklist__item"><span><b>Описано то, что есть в индексе</b>Сообщение сверяют с файлами в Staged Changes. Если модель упомянула правку, которой там нет, её убирают.</span></div>
+          <div class="checklist__item"><span><b>Причина написана вами</b>Причину, которую предложила модель, оставляют, только если она верна. Пропуск заполняют сами.</span></div>
+          <div class="checklist__item"><span><b>Одна задача</b>Если сгенерированный заголовок перечисляет несколько работ, коммит делят, как в шаге 5.</span></div>
+        </div>
+
+        <div class="part" role="separator"><span><b>4</b>Справка</span></div>
+        <h2 id="s12"><span class="sec">§12</span>Справка: команды и настройки</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что нужно</th><th>В VS Code</th><th>Команда или настройка</th></tr></thead>
+            <tbody>
+              <tr><td>Коммит из поля Message</td><td><kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>Enter</kbd> или Commit</td><td><code>git commit -m "заголовок"</code></td></tr>
+              <tr><td>Заголовок и описание</td><td><kbd>Enter</kbd> два раза после заголовка</td><td><code>git commit -m "заголовок" -m "описание"</code></td></tr>
+              <tr><td>Проверка длины строк</td><td>Настройки → Git: Input Validation</td><td><code>git.inputValidation</code>, пороги 50 и 72</td></tr>
+              <tr><td>Только заголовки истории</td><td>Строки раздела GRAPH</td><td><code>git log --oneline</code></td></tr>
+              <tr><td>Сообщение целиком</td><td>Подсказка коммита в GRAPH</td><td><code>git log</code>, <code>git show имя</code></td></tr>
+              <tr><td>Новое сообщение последнего коммита</td><td>—</td><td><code>git commit --amend -m "…"</code></td></tr>
+              <tr><td>Изменения из индекса для запроса</td><td>Staged Changes</td><td><code>git diff --staged</code></td></tr>
+              <tr><td>Сообщение от Copilot</td><td>Значок искры в поле Message</td><td>правила: <code>github.copilot.chat.commitMessageGeneration.instructions</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="part" role="separator"><span><b>5</b>Проверка себя</span></div>
+        <h2 id="s13"><span class="sec">§13</span>Частые вопросы</h2>
+        <div class="myths">
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Длинное сообщение подробнее, поэтому лучше.</div>
+            <div class="myth__yes"><b>На самом деле</b>Длинная первая строка обрезается в графе и в списках истории. Подробности пишут в описании после пустой строки.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Git не даст сделать коммит с заголовком длиннее 50 знаков.</div>
+            <div class="myth__yes"><b>На самом деле</b>Git запишет сообщение любой длины. Порог 50 знаков — соглашение, VS Code при включённой проверке только подчёркивает строку.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>В сообщении нужно перечислить изменённые файлы.</div>
+            <div class="myth__yes"><b>На самом деле</b>Список файлов Git хранит в коммите и выводит командой <code>git log --stat</code>. Сообщение называет задачу.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Сообщение от модели можно записывать без проверки.</div>
+            <div class="myth__yes"><b>На самом деле</b>Модель получает только код. В шаге 8 она составила общий заголовок, в шаге 7 не смогла указать причину правки. Черновик проверяют и дописывают.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Сообщение любого коммита можно исправить так же, как последнего.</div>
+            <div class="myth__yes"><b>На самом деле</b>Amend меняет только последний коммит. Исправление более раннего меняет имена всех коммитов после него, поэтому для отправленных коммитов его не делают.</div>
+          </div>
+        </div>
+
+        <h2 id="s14"><span class="sec">§14</span>Проверьте себя</h2>
+        <details>
+          <summary>Из каких частей состоит сообщение коммита и чем они разделены?</summary>
+          <p>Из заголовка — первой строки — и описания. Между ними пустая строка. Заголовок называет, что сделано, описание объясняет причину.</p>
+        </details>
+        <details>
+          <summary>Где видно описание коммита, а где только заголовок?</summary>
+          <p>Заголовок — в <code>git log --oneline</code> и в строке коммита раздела GRAPH. Всё сообщение — в <code>git log</code>, <code>git show</code> и в подсказке коммита в графе.</p>
+        </details>
+        <details>
+          <summary>VS Code подчеркнул заголовок волнистой линией и пишет <code>12 characters over 50</code>. Что делать?</summary>
+          <p>Сократить заголовок до действия и его предмета, а подробности и причину перенести в описание после пустой строки.</p>
+        </details>
+        <details>
+          <summary>Вы сделали коммит с сообщением «Обновил README». Как заменить сообщение?</summary>
+          <p>Если это последний коммит и он не отправлен, выполнить <code>git commit --amend -m "новое сообщение"</code> с пустым индексом. Изменения коммита останутся прежними, имя коммита станет другим.</p>
+        </details>
+        <details>
+          <summary>Что передают модели, чтобы она составила сообщение, и чего в этих данных нет?</summary>
+          <p>Вывод <code>git diff --staged</code> и правила проекта. Задачи и причины правки в этих данных нет, их дописывают вручную.</p>
+        </details>
+        <details>
+          <summary>Copilot предложил «Обновил стили». Подходит ли такой заголовок?</summary>
+          <p>Нет. Он короткий и в форме проекта, но не называет действие. Нужно посмотреть изменения в Staged Changes и написать, что изменилось в стилях.</p>
+        </details>
+
+        <h2 id="s15"><span class="sec">§15</span>Шпаргалка по главе</h2>
+        <div class="cheat">
+          <div>
+            <b>Сообщение</b>
+            <code>заголовок до 50 знаков</code>
+            <code>пустая строка</code>
+            <code>описание, строки до 72</code>
+          </div>
+          <div>
+            <b>Поле Message</b>
+            <code>Enter — новая строка</code>
+            <code>Ctrl/Cmd + Enter — коммит</code>
+            <code>Git: Input Validation</code>
+          </div>
+          <div>
+            <b>Терминал</b>
+            <code>git commit -m "…" -m "…"</code>
+            <code>git commit --amend -m "…"</code>
+          </div>
+          <div>
+            <b>Чтение истории</b>
+            <code>git log --oneline</code>
+            <code>git log, git show</code>
+            <code>подсказка в GRAPH</code>
+          </div>
+          <div>
+            <b>Чат с моделью</b>
+            <code>git diff --staged</code>
+            <code>запрос с правилами</code>
+            <code>причину дописать самим</code>
+          </div>
+          <div>
+            <b>Copilot</b>
+            <code>значок искры в поле Message</code>
+            <code>commitMessageGeneration</code>
+            <code>проверить перед коммитом</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Сообщение коммита состоит из заголовка и описания, разделённых пустой строкой. Заголовок — одна строка до 50 знаков: что сделано в коммите. Его видно в графе и в <code>git log --oneline</code>. В описании пишут причину правки, строки до 72 знаков, его видно в полном выводе <code>git log</code> и в подсказке графа. VS Code проверяет длину строк при включённой настройке Git: Input Validation. Одна задача записывается одним коммитом, а сообщение последнего коммита исправляет <code>git commit --amend</code>. Язык, форму глагола и метки в начале заголовка устанавливает проект. Модель составляет черновик сообщения по выводу <code>git diff --staged</code> в чате или кнопкой Copilot в поле Message. Причину правки модель не получает, поэтому черновик проверяют по правилам проекта и дописывают. В проекте 35 коммитов, 31 из них на GitHub не отправлен.</p>
+
+        <div class="sources">
+          <b>Откуда взяты факты</b>
+          <ol>
+            <li>Кадры и ответы команд получены на клоне проекта <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a> в Git версии 2.51.1 и VS Code версии 1.138. Ответ модели в шаге 7 получен в Claude (модель Claude Opus 5), сообщение в шаге 8 — в GitHub Copilot с планом Copilot Free.</li>
+            <li>Заголовок не длиннее 50 знаков и пустая строка перед описанием — <a href="https://git-scm.com/docs/git-commit#_discussion">документация git-commit, раздел Discussion</a>; несколько ключей <code>-m</code> как отдельные абзацы — там же, описание ключа <code>-m</code>.</li>
+            <li>Перенос строк описания на 72 знаках — книга <a href="https://git-scm.com/book/ru/v2/Распределённый-Git-Участие-в-проекте">Pro Git, «Участие в проекте»</a>.</li>
+            <li>Формат <code>тип: описание</code>, типы <code>feat</code> и <code>fix</code> — <a href="https://www.conventionalcommits.org/ru/v1.0.0/">спецификация Conventional Commits 1.0.0</a>.</li>
+            <li>Кнопка генерации и совет проверять сообщение перед коммитом — <a href="https://code.visualstudio.com/docs/sourcecontrol/staging-commits">документация VS Code, «Staging and committing»</a>; настройка <code>commitMessageGeneration.instructions</code> — <a href="https://code.visualstudio.com/docs/agents/reference/ai-settings">справочник настроек ИИ в VS Code</a>.</li>
+          </ol>
+        </div>
+
+        <div class="pager"><a href="../14-rebase-cherry-pick-stash/index.html">← 3.5 Stash, cherry-pick, rebase</a><a href="../../index.html">К содержанию справочника</a></div>
+
+        <div class="colophon">
+          <span>Глава 3.6 · Сообщения коммитов · Справочник по Git и GitHub</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../../book.js"></script>
+</body>
+</html>

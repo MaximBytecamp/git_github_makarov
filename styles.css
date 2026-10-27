@@ -704,3 +704,7 @@ figure.code--out .cmd:last-child { margin-bottom: 0; padding-bottom: 0; border-b
 /* Две схемы рядом; на узком экране — одна под другой во всю ширину */
 .scheme-pair { display: flex; flex-wrap: wrap; gap: 14px 24px; justify-content: center; }
 .scheme-pair svg { flex: 1 1 300px; max-width: 420px; width: 100%; height: auto; }
+
+/* Схема в двух вариантах: широкий и узкий, для экранов до 560 px */
+.scheme .svg-narrow { display: none; }
+@media (max-width: 560px) { .scheme .svg-wide { display: none; } .scheme .svg-narrow { display: block; } }
