@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<meta name="theme-color" content="#F4F1EC">
+<title>Тест · модуль 3, ветки</title>
+<meta name="description" content="Тест по модулю 3 справочника «Git и GitHub», главы 3.1–3.6: устройство ветки, переключение, слияние, конфликты, stash, cherry-pick, rebase, сообщения коммитов. 20 заданий, 50 минут, одна попытка, разбор после отправки.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="chrome">
+  <a class="brand" href="../../index.html" title="К содержанию справочника">
+    <span class="brand-mark">git</span>
+    <span>СПРАВОЧНИК ПО GIT И GITHUB<br><b>Тест · модуль 3</b></span>
+  </a>
+  <div id="timer" class="timer hidden" role="timer" aria-live="off">50:00</div>
+</header>
+
+<main class="wrap">
+
+  <!-- ЭКРАН 1. Начало -->
+  <section id="screen-start">
+    <p class="eyebrow">проверочная работа · модуль 3</p>
+    <h1>Ветки: слияние, конфликты, rebase и сообщения коммитов</h1>
+    <div class="panel">
+      <h2>Как это устроено</h2>
+      <ul class="rules">
+        <li><b>20 заданий</b> по главам модуля 3: 3.1 «Ветки: зачем нужны и как устроены», 3.2 «Вторая ветка», 3.3 «Слияние», 3.4 «Конфликты», 3.5 «Stash, cherry-pick, rebase» и 3.6 «Сообщения коммитов». Примеры — из глав: проект sait-vizitka и его ветки forma-kontaktov, podval, telefon, temnaya-tema.</li>
+        <li><b>Тренажёр веток.</b> Граф коммитов перерисовывается после каждого действия: кнопки Create new branch, переключение, Commit, Git: Merge, Git: Delete Branch, Git: Rebase Branch и Cherry Pick работают как в VS Code, а рядом в терминале видно, что ответил бы Git. Проверяется итоговый граф, поэтому засчитывается любой верный путь. «Шаг назад» отменяет последнее действие, «Начать заново» возвращает ветки к началу.</li>
+        <li><b>Разбор конфликта.</b> Файл с метками <span class="num-inline">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span> и <span class="num-inline">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span>, над каждым конфликтом кнопки Accept Current, Accept Incoming и Accept Both, как в VS Code. Если ни одна кнопка не подходит, свой вариант собирается из готовых строк.</li>
+        <li><b>Сборщики.</b> Команды git собираются в строках терминала из карточек, сообщение коммита — в поле Message со счётчиком знаков. На графе без меток ветки нужно поставить на свои коммиты. Есть и привычные задания: таблица отметок, карточки в пропуски, раскладка по группам, порядок шагов, строки в выводе команды, число.</li>
+        <li><b>Карточки перетаскиваются</b> мышью или пальцем. Можно и без перетаскивания: нажмите карточку, затем место, куда её поставить. В заданиях «убрать лишнее» достаточно нажать карточку — она уйдёт в корзину, повторное нажатие вернёт её.</li>
+        <li><b>50 минут.</b> Отсчёт начинается по кнопке «Начать» и не останавливается, если закрыть вкладку или перезагрузить страницу. Когда время выйдет, работа отправится сама с теми ответами, что успели дать.</li>
+        <li>Каждое задание — <b>1 балл</b>. В заданиях из нескольких частей — карточки, отметки, таблицы, тренажёры, конфликты, сборщики — за неполный ответ ставится часть балла: например, половина верных частей даёт <span class="num-inline">0,5</span>. Ошибочные отметки уменьшают эту часть. В заданиях с одним ответом — <span class="num-inline">0</span> или <span class="num-inline">1</span>. Оценка: от <span class="num-inline">17</span> баллов → «5», от <span class="num-inline">13</span> → «4», от <span class="num-inline">9</span> → «3», меньше <span class="num-inline">9</span> → «2».</li>
+        <li><b>Пройти можно один раз.</b> После отправки ответы не меняются, а повторное открытие ссылки покажет готовую оценку. Порядок заданий и карточек у каждого свой.</li>
+        <li><b>Уход со вкладки считается.</b> Переключение на другое окно или вкладку записывается в код результата.</li>
+        <li><b>После отправки откроется разбор:</b> по каждому заданию — ваш ответ, верный ответ и объяснение, в тренажёрах — ваш граф рядом с нужным, в конце — разделы глав, которые стоит перечитать, со ссылками, и код результата для преподавателя.</li>
+      </ul>
+
+      <label class="field">
+        <span>Фамилия и имя</span>
+        <input id="in-name" type="text" autocomplete="off" placeholder="Иванов Иван" maxlength="60">
+      </label>
+      <label class="field">
+        <span>Группа</span>
+        <input id="in-group" type="text" autocomplete="off" placeholder="ИС-31" maxlength="20">
+      </label>
+      <p id="start-err" class="err" role="alert"></p>
+      <button id="btn-start" class="btn">Начать · <span class="num-inline">50</span> минут</button>
+    </div>
+  </section>
+
+  <!-- ЭКРАН 2. Задания -->
+  <section id="screen-quiz" class="hidden">
+    <div class="progress">
+      <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+      <div class="progress-row">
+        <span id="progress-text" class="progress-text">ГОТОВО 0 ИЗ 20</span>
+        <span class="progress-text">GIT · ВЕТКИ</span>
+      </div>
+    </div>
+    <div id="leave-note" class="notice warn hidden"></div>
+    <p class="context" id="context"></p>
+    <div id="questions"></div>
+    <div class="submit-bar">
+      <button id="btn-finish" class="btn">Завершить и получить оценку</button>
+      <span id="finish-note" class="muted"></span>
+    </div>
+  </section>
+
+  <!-- ЭКРАН 3. Результат и разбор -->
+  <section id="screen-result" class="hidden">
+    <p class="eyebrow">результат</p>
+    <h1 id="result-title">Работа завершена</h1>
+
+    <div class="panel">
+      <div class="score">
+        <div id="mark" class="mark m2">2</div>
+        <div class="score-text">
+          <p class="score-line"><b id="score-line">0 из 20</b></p>
+          <p class="muted" id="who"></p>
+          <p class="muted" id="when"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Код результата</h2>
+      <p class="muted">Скопируйте и пришлите преподавателю. В коде зашиты фамилия, ответы, баллы, уходы со вкладки и контрольная сумма — правка вручную будет видна при проверке.</p>
+      <div class="code-box">
+        <textarea id="code" readonly spellcheck="false"></textarea>
+        <button id="btn-copy" class="btn ghost">Скопировать</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Ответы и разбор</h2>
+      <p class="muted">Номера — в том порядке, в каком вы видели задания. Нажмите номер, чтобы перейти к разбору.</p>
+      <div id="review-map" class="review-map"></div>
+      <div class="filter" role="group" aria-label="Какие задания показать">
+        <button class="chipbtn on" data-filter="all">Все задания</button>
+        <button class="chipbtn" data-filter="bad">Только ошибки</button>
+      </div>
+    </div>
+    <div id="review"></div>
+  </section>
+
+</main>
+
+<script src="quiz-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
