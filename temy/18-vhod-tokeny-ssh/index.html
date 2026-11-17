@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>4.2 Вход, токены и SSH · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <style>
+    .access-flow { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; margin:16px 0; }
+    .access-flow code { white-space:normal; overflow-wrap:anywhere; }
+    .access-flow__step { min-width:0; border:2px solid var(--ink); padding:14px; background:var(--page); overflow-wrap:anywhere; }
+    .access-flow__step b { display:block; margin-bottom:6px; }
+    .access-flow__step p { margin:0; }
+    .access-flow__arrow { text-align:center; font-family:'Roboto Mono',monospace; }
+    .access-flow__step--secret { border-color:var(--fire-deep); background:var(--fire-pale); }
+    .access-flow__step--remote { background:var(--steel-pale); }
+  </style>
+  <script>
+    try {
+      var saved = localStorage.getItem('git-book-os');
+      if (!saved) {
+        var p = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+        saved = /win/i.test(p) ? 'win' : (/mac|iphone|ipad/i.test(p) ? 'mac' : 'linux');
+      }
+      document.documentElement.dataset.os = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+<div class="book"><div class="book__body"><div class="spine"><span>Модуль 4 · GitHub</span></div>
+<main class="leaf">
+  <div class="running"><p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 4 · GitHub: вход и доступ</p><p class="running__folio">Глава 4.2</p></div>
+  <header class="chapter-head"><span class="chapter-num">4.2</span><h1>Как VS Code пускают на GitHub:<br>вход, токены, SSH-ключи</h1><p class="lead">В этой главе разобраны вход через VS Code, токен для HTTPS и SSH-ключи. Это альтернативные способы подключения к GitHub. Достаточно настроить один маршрут и проверить адрес удалённого репозитория.</p></header>
+  <dl class="passport"><div><dt>Категория</dt><dd>GitHub</dd></div><div><dt>Уровень</dt><dd>Начальный</dd></div><div><dt>Что получится</dt><dd>Проверен выбранный способ доступа к GitHub</dd></div><div><dt>Перед началом</dt><dd>Аккаунт GitHub, Git и VS Code</dd></div></dl>
+  <div class="mess"><p><b>Материал дополняется.</b> Текст и схемы доступны для чтения. Кадры интерфейса и проверка действий на трёх ОС ещё не завершены.</p></div>
+  <nav class="contents"><b>Порядок чтения</b><ol><li><a href="#s1">Задача главы</a></li><li><a href="#s2">Способы доступа</a></li><li><a href="#s3">Вход через VS Code</a></li><li><a href="#s4">Токен для HTTPS</a></li><li><a href="#s5">Подключение по SSH</a></li><li><a href="#s6">Проверить адрес и доступ</a></li><li><a href="#s7">Если вход не работает</a></li><li><a href="#s8">Проверка себя</a></li><li><a href="#s9">Шпаргалка</a></li><li><a href="#s10">Глоссарий</a></li></ol></nav>
+
+  <h2 id="s1"><span class="sec">§1</span>Задача главы</h2>
+  <p>В главе 4.1 разобраны аккаунт и двухфакторная защита. Для обращения локального Git к закрытому репозиторию нужен отдельный способ подтверждения личности. Открытая вкладка GitHub подтверждает вход только в этом браузере.</p>
+  <div class="analogy"><p class="analogy__head">Ассоциация: пропуск в здание</p><div class="analogy__pair"><div class="analogy__side"><b>В жизни</b><p>Паспорт подтверждает личность. Пропуск разрешает проход в определённые помещения. У пропуска может быть срок действия.</p></div><div class="analogy__side"><b>В GitHub</b><p>Аккаунт связан с человеком. Программа получает отдельное подтверждение доступа. Токен можно ограничить сроком и выбранными репозиториями.</p></div></div><p class="analogy__limit"><b>Где не совпадает</b>SSH-ключ подтверждает личность аккаунта. Доступ к конкретному репозиторию GitHub проверяет отдельно.</p></div>
+  <div class="why"><p class="why__head">Зачем это нужно в работе</p><ul class="why__list"><li><b>Доступ без пароля аккаунта.</b> GitHub прекратил принимать пароль аккаунта для Git по HTTPS в 2021 году.</li><li><b>Доступ можно отозвать.</b> Потерянный токен удаляют отдельно от пароля аккаунта.</li><li><b>Меньше доступных данных.</b> Токен ограничивают репозиториями, разрешениями и сроком действия.</li><li><b>Проверка ошибок.</b> По адресу удалённого репозитория определяют протокол подключения.</li></ul></div>
+  <p>Для работы через VS Code начните со встроенного входа. Ручной токен нужен для HTTPS-клиента без входа через браузер. SSH подходит для работы с парой ключей. Выбор зависит от способа подключения:</p>
+  <div class="table-scroll"><table><thead><tr><th>Маршрут</th><th>Что настроить</th><th>Что можно пропустить</th></tr></thead><tbody><tr><td>VS Code + HTTPS</td><td>Вход через браузер по запросу редактора</td><td>Ручное создание PAT и SSH-ключей</td></tr><tr><td>Git + HTTPS + PAT</td><td>Токен и его безопасное хранение</td><td>SSH-ключи</td></tr><tr><td>Git + SSH</td><td>Пара ключей и публичный ключ в GitHub</td><td>Создание PAT</td></tr></tbody></table></div>
+  <p>Эти строки показывают альтернативы. Для одного подключения достаточно одного маршрута. Теперь сравним, какие подтверждения доступа сохраняются у браузера и программы.</p>
+
+  <div class="part" role="separator"><span><b>1</b>Модели доступа</span></div>
+  <h2 id="s2"><span class="sec">§2</span>Способы доступа</h2>
+  <p>Пропуск в здание и отметка в журнале посетителей хранятся раздельно. Так же разделены вход в браузере и доступ из Git.</p>
+  <p><span class="term">Аутентификация</span> — проверка того, кем представляется программа или человек. <span class="term">Авторизация</span> — проверка разрешённых действий. После подтверждения личности GitHub ещё проверяет право чтения или записи конкретного репозитория.</p>
+  <p>В таблице показано, где сохраняется подтверждение входа. <span class="term">OAuth</span> — способ выдать приложению доступ через подтверждение в браузере.</p>
+  <div class="table-scroll"><table><thead><tr><th>Действие</th><th>Подтверждение</th><th>Где сохраняется</th></tr></thead><tbody><tr><td>Вход на github.com</td><td>Сессия браузера</td><td>Cookie браузера — данные текущего входа</td></tr><tr><td>Вход GitHub через VS Code</td><td>OAuth-токен приложения</td><td>В хранилище секретов, используемом редактором</td></tr><tr><td>Ручной вход Git по HTTPS</td><td>Personal access token, PAT</td><td>У пользователя или настроенного помощника хранения</td></tr><tr><td>Подключение Git по SSH</td><td>Подпись приватным ключом</td><td>Приватный ключ на компьютере, публичный в GitHub</td></tr></tbody></table></div>
+  <p>Сессия браузера не передаётся каждой запущенной программе автоматически. При входе через VS Code браузер используется для подтверждения доступа редактору. С этого маршрута и начнём.</p>
+
+  <div class="part" role="separator"><span><b>2</b>Доступ по HTTPS</span></div>
+  <h2 id="s3"><span class="sec">§3</span>Вход через VS Code</h2>
+  <p>Приложению можно выдать собственный пропуск через страницу владельца здания. Так работает вход VS Code через GitHub: подтверждение проходит на сайте, а разрешение получает редактор.</p>
+  <p>Для проверки используйте свой закрытый репозиторий. Клонирование публичного репозитория по HTTPS может пройти без входа, поэтому для проверки аккаунта оно не подходит.</p>
+  <ol class="steps"><li>Откройте палитру команд: <b>Ctrl+Shift+P</b> в Windows и Linux или <b>⌘⇧P</b> в macOS.</li><li>Выберите <b>Git: Clone</b> и вставьте HTTPS-адрес своего закрытого репозитория. Адрес берут на странице репозитория: <b>Code → HTTPS</b>.</li><li>Если VS Code предложит вход в GitHub, разрешите переход в браузер. Проверьте, что домен страницы входа — <code>github.com</code>, а соединение использует HTTPS.</li><li>Проверьте логин аккаунта и запрашиваемые приложением права. Подтвердите доступ и возврат в VS Code.</li><li>Выберите папку для клонирования. После завершения откройте полученный проект.</li></ol>
+  <!-- КАДР vscode-signin.png: запрос входа при клонировании закрытого репозитория и аккаунт, без секретов -->
+  <p>Обмен между приложениями показан по шагам. Стрелки обозначают переходы во время входа:</p>
+  <figure class="scheme"><div class="access-flow"><div class="access-flow__step"><b>1. VS Code</b><p>Запрос доступа к закрытому репозиторию по HTTPS.</p></div><div class="access-flow__arrow" aria-hidden="true">↓</div><div class="access-flow__step access-flow__step--remote"><b>2. Браузер → GitHub</b><p>Проверка аккаунта и подтверждение доступа приложению.</p></div><div class="access-flow__arrow" aria-hidden="true">↓</div><div class="access-flow__step"><b>3. VS Code</b><p>Получение подтверждения и продолжение клонирования.</p></div></div><figcaption>Вход через браузер для доступа из VS Code</figcaption></figure>
+  <p>Средний блок — подтверждение на GitHub. Нижний — возврат в редактор. Если доступ был сохранён раньше, повторного окна входа может не быть. Вход в синхронизацию настроек не заменяет проверку доступа к выбранному репозиторию.</p>
+  <p>Этот вход не меняет имя и почту автора коммитов. Их проверяют отдельно:</p>
+  <figure class="code"><figcaption><span>терминал проекта</span><span>проверка автора</span></figcaption><pre>git config user.name
+git config user.email</pre></figure>
+  <p>Первая команда выводит имя автора, вторая — его почту. Без <code>--global</code> они показывают действующее значение для текущего проекта. Эти поля записываются в коммиты и не служат паролем GitHub.</p>
+  <p class="step-done"><b>Результат.</b> Закрытый репозиторий клонирован через VS Code. Если выбран этот маршрут, вручную создавать токен не требуется. Отдельно рассмотрим случай, когда HTTPS-клиент запрашивает токен.</p>
+
+  <h2 id="s4"><span class="sec">§4</span>Токен для HTTPS</h2>
+  <p>Разовый пропуск можно ограничить зданием и датой окончания. Так же ограничивают <span class="term">personal access token</span> (PAT): секретную строку для доступа к GitHub.</p>
+  <p>Для собственного репозитория используйте <span class="term">fine-grained token</span> — токен с выбором владельца, репозиториев и разрешений. Полностью строку показывают при создании. После ухода со страницы получить ту же строку через GitHub нельзя.</p>
+  <ol class="steps"><li>Откройте аватар → <b>Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token</b>.</li><li>В <b>Token name</b> укажите назначение, например <code>ноутбук — Git</code>. В <b>Expiration</b> выберите ограниченный срок. В <b>Resource owner</b> выберите свой аккаунт.</li><li>В <b>Repository access</b> выберите <b>Only select repositories</b> и отметьте свой репозиторий.</li><li>Для чтения достаточно разрешения <b>Contents: Read-only</b>. Если требуется отправка коммитов, выберите <b>Contents: Read and write</b>. Разрешение <b>Metadata</b> на чтение добавляется автоматически.</li><li>Нажмите <b>Generate token</b> и сохраните строку в менеджер паролей. Не помещайте её в чат, письмо, README или снимок экрана.</li></ol>
+  <!-- КАДР token-form.png: Resource owner, Expiration, Repository access и Contents; без созданного токена -->
+  <p>Для этого маршрута права выдаются одному собственному репозиторию. Ограничения показаны как вложенные уровни доступа:</p>
+  <figure class="scheme"><div class="access-flow"><div class="access-flow__step"><b>Владелец: свой аккаунт</b><p>Токен относится к выбранному владельцу ресурсов.</p></div><div class="access-flow__arrow" aria-hidden="true">↓</div><div class="access-flow__step"><b>Репозиторий: только выбранный</b><p>Другие закрытые репозитории не включены в область действия.</p></div><div class="access-flow__arrow" aria-hidden="true">↓</div><div class="access-flow__step access-flow__step--secret"><b>Операции и срок</b><p>Contents: чтение или чтение с записью. Доступ прекращается после истечения срока или отзыва.</p></div></div><figcaption>Ограничения fine-grained токена</figcaption></figure>
+  <p>Каждый нижний уровень сужает доступ. Наличие строки токена не отменяет выбранных ограничений. Для изменения файлов в <code>.github/workflows</code> могут потребоваться дополнительные права <b>Workflows: Read and write</b>. Их добавляют для задач, связанных с изменением этих файлов.</p>
+  <p>Когда Git в терминале запрашивает данные для HTTPS, в поле <b>Username</b> вводят логин. В поле <b>Password</b> вставляют токен. Пароль аккаунта GitHub для Git по HTTPS не принимается.</p>
+  <div class="table-scroll"><table><thead><tr><th>Поле запроса Git</th><th>Что вводить</th></tr></thead><tbody><tr><td>Username</td><td>Свой логин GitHub</td></tr><tr><td>Password</td><td>Созданный PAT</td></tr></tbody></table></div>
+  <p>При вводе секрета терминал может не показывать символы. Если вместо запроса открывается браузер, используется настроенный вход через приложение. Самостоятельно менять его на ручной ввод токена не требуется.</p>
+  <details class="more"><summary>Где Git сохраняет токен</summary><p><span class="term">Credential helper</span> — помощник, который передаёт Git сохранённые данные входа. Способ хранения зависит от установленного помощника. Git Credential Manager использует защищённые системные хранилища. Помощник <code>store</code> сохраняет секреты открытым текстом, поэтому для PAT его здесь не настраиваем.</p><figure class="code"><figcaption><span>терминал</span><span>настроенные помощники</span></figcaption><pre>git config --show-origin --get-all credential.helper</pre></figure><p><code>--get-all</code> выводит все значения, <code>--show-origin</code> — файлы настроек, из которых они взяты. Отсутствие вывода означает отсутствие этого параметра в прочитанной конфигурации. Другие механизмы входа редактора также возможны.</p></details>
+  <p class="step-done"><b>Результат.</b> Подготовлен ограниченный токен для HTTPS. Его отзыв не меняет пароль аккаунта. Другой маршрут позволяет подтверждать вход ключом без создания PAT.</p>
+
+  <div class="part" role="separator"><span><b>3</b>Доступ по SSH</span></div>
+  <h2 id="s5"><span class="sec">§5</span>Подключение по SSH</h2>
+  <p>Подпись можно проверить по образцу, не передавая инструмент для её создания. На похожем разделении основана пара криптографических ключей.</p>
+  <p><span class="term">SSH</span> — протокол защищённого подключения. Приватный ключ создаёт цифровую подпись и остаётся на компьютере. Публичный ключ позволяет проверить эту подпись; его добавляют в GitHub.</p>
+  <p>Настройка и дальнейший вход — два разных действия. На схеме они разделены:</p>
+  <figure class="scheme"><div class="access-flow"><div class="access-flow__step access-flow__step--secret"><b>На компьютере</b><p><code>id_ed25519</code> — приватный ключ. <code>id_ed25519.pub</code> — публичный ключ.</p></div><div class="access-flow__arrow">↓ настройка: копирование только .pub</div><div class="access-flow__step access-flow__step--remote"><b>В GitHub</b><p>Публичный ключ добавлен в аккаунт для аутентификации.</p></div><div class="access-flow__arrow">↓ при подключении</div><div class="access-flow__step"><b>Проверка подписи</b><p>Компьютер подписывает данные приватным ключом. GitHub проверяет подпись публичным ключом.</p></div></div><figcaption>Публичный ключ при настройке и подпись при подключении</figcaption></figure>
+  <p>Красный блок отмечает место хранения приватного ключа. При настройке передают только публичную часть. При подключении передаётся доказательство владения ключом. Приватный файл на сайт не загружают.</p>
+  <h3>Проверить имеющиеся ключи</h3>
+  <p>В терминале VS Code используйте команды для своей оболочки:</p>
+  <figure class="code"><figcaption><span>PowerShell · Windows</span><span>список файлов</span></figcaption><pre>Get-ChildItem "$HOME/.ssh"</pre></figure>
+  <figure class="code"><figcaption><span>macOS / Linux / Git Bash</span><span>список файлов</span></figcaption><pre>ls ~/.ssh</pre></figure>
+  <p>Обе команды показывают содержимое папки <code>.ssh</code> в домашнем каталоге. Если папки нет, команда сообщит об этом. Если уже есть пара <code>id_ed25519</code> и <code>id_ed25519.pub</code>, остановитесь и проверьте её назначение. Существующие ключи не перезаписывайте.</p>
+  <h3>Создать пару</h3>
+  <p>Если такой пары нет, выполните команду ниже. <code>-t ed25519</code> выбирает алгоритм, <code>-C</code> добавляет подпись-комментарий к ключу. Замените пример почты на свою:</p>
+  <figure class="code"><figcaption><span>терминал</span><span>создание ключей</span></figcaption><pre>ssh-keygen -t ed25519 -C "ваша-почта@example.com"</pre></figure>
+  <p>На вопрос о пути нажмите Enter для стандартного имени. Если появится запрос на перезапись, отмените действие через Ctrl+C. Задайте <span class="term">passphrase</span> — парольную фразу для защиты приватного файла. При подключении её может потребоваться ввести снова.</p>
+  <p>Выведите содержимое только публичного файла:</p>
+  <figure class="code"><figcaption><span>PowerShell · Windows</span><span>публичный ключ</span></figcaption><pre>Get-Content "$HOME/.ssh/id_ed25519.pub"</pre></figure>
+  <figure class="code"><figcaption><span>macOS / Linux / Git Bash</span><span>публичный ключ</span></figcaption><pre>cat ~/.ssh/id_ed25519.pub</pre></figure>
+  <p>Скопируйте целиком строку, начинающуюся с <code>ssh-ed25519</code>. Обе команды читают файл с окончанием <code>.pub</code>. Команду для приватного файла не выполняйте.</p>
+  <h3>Добавить публичную часть и проверить подключение</h3>
+  <ol class="steps"><li>На GitHub откройте аватар → <b>Settings → SSH and GPG keys → New SSH key</b>.</li><li>В <b>Title</b> укажите компьютер. В <b>Key type</b> выберите <b>Authentication Key</b>.</li><li>В <b>Key</b> вставьте строку публичного ключа и нажмите <b>Add SSH key</b>.</li></ol>
+  <!-- КАДР ssh-settings.png: форма добавления публичного Authentication Key; приватный файл не открывать -->
+  <p>Теперь проверьте SSH-подключение. <code>-T</code> отключает выделение терминала, <code>git</code> — служебное имя пользователя GitHub для SSH. Его не заменяют своим логином:</p>
+  <figure class="code"><figcaption><span>терминал</span><span>проверка аккаунта</span></figcaption><pre>ssh -T git@github.com</pre></figure>
+  <p>При первом подключении может появиться запрос доверия серверу. <span class="term">Fingerprint</span> — отпечаток его публичного ключа. До ответа <code>yes</code> сравните алгоритм и отпечаток с <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints">официальным списком GitHub</a>. При несовпадении прекратите подключение. Этот ключ сервера отличается от созданной вами пары.</p>
+  <p>Успешный ответ содержит ваш логин и фразу <code>You've successfully authenticated, but GitHub does not provide shell access.</code> Это формулировка из документации GitHub. Локальный прогон этой команды при подготовке главы не выполнялся. Она означает успешную аутентификацию без доступа к командной оболочке сервера. Команда завершается с кодом <code>1</code>.</p>
+  <details class="simple"><summary>По-простому: что передаётся при входе</summary><p>Публичная часть похожа на образец для проверки подписи. Приватная часть похожа на инструмент, которым подпись создают. Сам инструмент остаётся у владельца.</p><div class="access-flow"><div class="access-flow__step">Компьютер создаёт подпись</div><div class="access-flow__arrow" aria-hidden="true">↓</div><div class="access-flow__step">GitHub проверяет её сохранённым публичным ключом</div></div><p><b>Что есть что.</b> Инструмент — приватный ключ. Образец проверки — публичный ключ. Электронная подпись математически связана с данными подключения, поэтому это сравнение не описывает её устройство полностью.</p></details>
+  <p class="step-done"><b>Результат.</b> GitHub подтвердил аккаунт по SSH-ключу. Теперь нужно проверить, использует ли текущий репозиторий SSH-адрес.</p>
+
+  <h2 id="s6"><span class="sec">§6</span>Проверить адрес и доступ</h2>
+  <p>Пропуск подходит к определённому входу в здание. Так же HTTPS-токен и SSH-ключ используются с разными адресами подключения.</p>
+  <p><span class="term">Remote</span> — сохранённое в Git имя удалённого репозитория и его адреса. Часто оно называется <code>origin</code>. Откройте терминал внутри существующего репозитория и выполните:</p>
+  <figure class="code"><figcaption><span>терминал проекта</span><span>адреса чтения и отправки</span></figcaption><pre>git remote -v</pre></figure>
+  <p><code>-v</code> добавляет адреса к именам. Строка <code>(fetch)</code> относится к получению данных, <code>(push)</code> — к отправке. Если строк нет, удалённый адрес пока не задан. Сам вывод не проверяет соединение.</p>
+  <p>Ниже показаны шаблоны двух адресов. <code>OWNER</code> обозначает владельца, <code>REPO</code> — имя репозитория:</p>
+  <figure class="scheme"><div class="access-flow"><div class="access-flow__step"><b>HTTPS</b><p><code>https://github.com/OWNER/REPO.git</code><br>Вход через приложение или PAT. Публичное чтение возможно без входа.</p></div><div class="access-flow__step access-flow__step--remote"><b>SSH</b><p><code>git@github.com:OWNER/REPO.git</code><br>Аутентификация парой SSH-ключей.</p></div></div><figcaption>Адрес репозитория определяет способ подключения</figcaption></figure>
+  <p>Верхний адрес начинается с <code>https://</code>. Нижний содержит <code>git@github.com:</code>. Добавление ключа на сайт само по себе не меняет адрес в локальном репозитории.</p>
+  <p>Если выбран SSH и удалённый репозиторий называется <code>origin</code>, измените адрес. В команде замените <code>OWNER</code> и <code>REPO</code> своими значениями. Адрес также можно скопировать на странице репозитория: <b>Code → SSH</b>.</p>
+  <figure class="code"><figcaption><span>терминал проекта</span><span>переключение на SSH</span></figcaption><pre>git remote set-url origin git@github.com:OWNER/REPO.git
+git remote -v</pre></figure>
+  <p><code>set-url</code> меняет адрес в настройках Git. Команда не редактирует рабочие файлы и не создаёт коммит. Повторный <code>remote -v</code> позволяет проверить записанный адрес. Для маршрута HTTPS переключение на SSH пропустите.</p>
+  <p>Проверить получение данных можно так:</p>
+  <figure class="code"><figcaption><span>терминал проекта</span><span>проверка чтения</span></figcaption><pre>git fetch origin
+git status</pre></figure>
+  <p><code>fetch</code> получает историю и обновляет ссылки на удалённые ветки. Рабочие файлы и текущую локальную ветку он не меняет. <code>status</code> показывает состояние рабочей папки и ветки после проверки.</p>
+  <p>Успешный <code>fetch</code> подтверждает чтение выбранного репозитория. Для публичного HTTPS-адреса это может быть анонимное чтение. Права на отправку коммитов такая проверка не подтверждает. Если чтение не удалось, сообщение об ошибке поможет выбрать проверку.</p>
+
+  <h2 id="s7"><span class="sec">§7</span>Если вход не работает</h2>
+  <div class="table-scroll"><table><thead><tr><th>Сообщение или симптом</th><th>Возможная причина</th><th>Что проверить</th></tr></thead><tbody><tr><td><code>Authentication failed</code></td><td>Неверный, отозванный или просроченный токен; сохранённые старые данные</td><td>Срок и права PAT. Удалить запись GitHub через используемый менеджер учётных данных и повторить вход</td></tr><tr><td><code>Permission denied (publickey)</code></td><td>Сервер не принял предложенный SSH-ключ</td><td>Публичная часть добавлена в нужный аккаунт. Файл находится по стандартному пути или выбран в SSH-настройках</td></tr><tr><td><code>Repository not found</code></td><td>Ошибка в адресе или отсутствие доступа</td><td><code>git remote -v</code>, владелец, имя, права аккаунта</td></tr><tr><td>VS Code вошёл в другой аккаунт</td><td>При подтверждении использована другая сессия браузера</td><td>Аккаунт редактора и логин на GitHub при повторном входе</td></tr></tbody></table></div>
+  <p>Помощник <span class="term">ssh-agent</span> может хранить разблокированный ключ в памяти, чтобы не вводить парольную фразу повторно. Его отсутствие само по себе не доказывает причину ошибки: SSH может читать стандартный файл напрямую.</p>
+  <p>Токен, который попал в публичное место, немедленно отзовите через <b>Settings → Developer settings → Personal access tokens</b>. Затем проверьте действия аккаунта и создайте новый токен с нужными правами. Удаление строки из текущего файла не отзывает опубликованный секрет.</p>
+  <p>Для проверки преподавателю достаточно сообщения об ошибке и адреса без секретов. Пароль, PAT и приватный ключ в отчёт не включают. После исправления повторите проверку выбранного маршрута.</p>
+
+  <div class="part" role="separator"><span><b>4</b>Проверка</span></div>
+  <h2 id="s8"><span class="sec">§8</span>Проверка себя</h2>
+  <details><summary>GitHub открыт в браузере. Почему Git снова запрашивает вход?</summary><p>Браузер хранит собственную сессию. Git требуется отдельное подтверждение для HTTPS или SSH. Способ подключения определяют по адресу remote.</p></details>
+  <details><summary>Нужно ли создавать PAT после успешного входа через VS Code?</summary><p>Для уже работающего HTTPS-маршрута через редактор ручной PAT не требуется. Он нужен, если выбран клиент с ручной передачей токена.</p></details>
+  <details><summary>Какой файл можно добавить на GitHub: id_ed25519 или id_ed25519.pub?</summary><p>Файл <code>id_ed25519.pub</code> содержит публичный ключ. Приватный <code>id_ed25519</code> остаётся на компьютере и не передаётся преподавателю.</p></details>
+  <details><summary>SSH-проверка успешна, но origin начинается с https://. Используется ли SSH?</summary><p>Нет. Для этого адреса Git использует HTTPS. Чтобы применять SSH-ключ, нужен SSH-адрес репозитория.</p></details>
+  <details><summary>Успешный fetch подтверждает право на push?</summary><p>Нет. Чтение и запись проверяются отдельно. Публичный репозиторий по HTTPS может читаться без аутентификации.</p></details>
+  <h3>Самостоятельная проверка</h3>
+  <ol class="steps"><li>Выберите один маршрут: VS Code + HTTPS, PAT + HTTPS или SSH. Выполните относящиеся к нему действия.</li><li>В существующем локальном репозитории проверьте <code>git remote -v</code>. Определите протокол по адресу.</li><li>Выполните <code>git fetch origin</code>. Запишите, что эта команда проверяет и чего она не подтверждает.</li><li>Для SSH дополнительно выполните <code>ssh -T git@github.com</code> и проверьте логин в ответе.</li></ol>
+  <p>В результате должны совпасть выбранный маршрут и адрес remote. Сохранить команды для повторной проверки можно в шпаргалке.</p>
+
+  <h2 id="s9"><span class="sec">§9</span>Шпаргалка</h2>
+  <div class="cheat"><div><b>VS Code</b><code>Git: Clone</code><span>Вход по запросу редактора</span></div><div><b>HTTPS + PAT</b><code>Username → логин</code><code>Password → токен</code></div><div><b>SSH</b><code>id_ed25519 — секрет</code><code>id_ed25519.pub — в GitHub</code></div><div><b>Адрес и чтение</b><code>git remote -v</code><code>git fetch origin</code></div><div><b>Аккаунт SSH</b><code>ssh -T git@github.com</code><span>Логин должен быть вашим</span></div><div><b>Утечка PAT</b><span>Немедленный отзыв токена</span><span>Затем проверка действий аккаунта</span></div></div>
+
+  <h2 id="s10"><span class="sec">§10</span>Глоссарий</h2>
+  <div class="table-scroll"><table><thead><tr><th>Термин</th><th>Значение в этой главе</th></tr></thead><tbody><tr><td>Аутентификация</td><td>Подтверждение личности программы или человека</td></tr><tr><td>Авторизация</td><td>Проверка права на конкретное действие</td></tr><tr><td>OAuth</td><td>Выдача приложению доступа через подтверждение пользователя</td></tr><tr><td>PAT</td><td>Секретный personal access token для доступа к GitHub</td></tr><tr><td>SSH-ключи</td><td>Связанная пара: приватный создаёт подпись, публичный проверяет её</td></tr><tr><td>Passphrase</td><td>Парольная фраза для защиты приватного ключа</td></tr><tr><td>Fingerprint</td><td>Отпечаток ключа, используемый для его сравнения</td></tr><tr><td>Remote</td><td>Сохранённое имя удалённого репозитория с адресами подключения</td></tr></tbody></table></div>
+  <h3>Итог главы</h3><ul><li>Вход через VS Code, ручной PAT и SSH — альтернативные маршруты.</li><li>Токен ограничивают сроком, репозиториями и разрешениями.</li><li>В GitHub добавляют публичный SSH-ключ. Приватный файл остаётся на компьютере.</li><li>Адрес remote определяет протокол подключения.</li><li><code>fetch</code> проверяет чтение. Право записи требует отдельной проверки.</li></ul>
+  <details class="more"><summary>Источники и границы проверки</summary><div class="sources"><b>Откуда взяты факты</b><ol><li><a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github">GitHub Docs: About authentication to GitHub</a>.</li><li><a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens">GitHub Docs: Managing your personal access tokens</a>.</li><li><a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">GitHub Docs: Generating a new SSH key</a>.</li><li><a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection">GitHub Docs: Testing your SSH connection</a>.</li><li><a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints">GitHub Docs: SSH key fingerprints</a>.</li><li><a href="https://code.visualstudio.com/docs/sourcecontrol/github">Visual Studio Code: Working with GitHub</a>.</li><li><a href="https://git-scm.com/docs/gitcredentials">Git: Credential helpers</a>.</li><li><a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository">GitHub Docs: Removing sensitive data</a>.</li></ol></div><p>Текст ответа SSH приведён по документации. Создание токена, добавление ключа и вход в личный аккаунт в рамках подготовки этой версии не выполнялись. Кадры интерфейса будут добавлены после отдельной проверки.</p></details>
+  <div class="pager"><a href="../17-akkaunt-i-profil/index.html">← 4.1 Аккаунт и профиль</a><a href="../../index.html">К содержанию справочника</a></div>
+  <div class="colophon"><span>Глава 4.2 · Вход, токены и SSH · Справочник по Git и GitHub</span><span class="author-line">Автор: Макаров Максим Николаевич</span></div>
+</main></div></div><script src="../../book.js"></script>
+</body>
+</html>
