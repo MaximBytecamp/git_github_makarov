@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>4.1 Аккаунт и профиль · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <script>
+    try {
+      var saved = localStorage.getItem('git-book-os');
+      if (!saved) {
+        var p = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+        saved = /win/i.test(p) ? 'win' : (/mac|iphone|ipad/i.test(p) ? 'mac' : 'linux');
+      }
+      document.documentElement.dataset.os = saved;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Модуль 4 · GitHub</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 4 · GitHub: аккаунт и связь с ним</p>
+          <p class="running__folio">Глава 4.1</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">4.1</span>
+          <h1>Аккаунт и профиль:<br>логин, почта, README, двухфакторная защита</h1>
+          <p class="lead">В главе разобрано, как устроен аккаунт на GitHub и что в нём настроить до первой отправки коммитов. Первая часть — логин и регистрация. Вторая — почта: по ней GitHub находит автора коммита и решает, попадёт ли коммит в активность профиля. Третья — страница профиля и её README. Четвёртая — двухфакторная защита: как приложение на телефоне и GitHub получают один и тот же код, не связываясь друг с другом.</p>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>GitHub</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Что получится</dt><dd>Аккаунт с заполненным профилем, README профиля, проверенной почтой и двухфакторной защитой</dd></div>
+          <div><dt>Сколько занимает</dt><dd>Около сорока минут за компьютером, нужен телефон</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>Порядок действий</b>
+          <ol>
+            <li><a href="#s1">Задача главы</a></li>
+            <li><a href="#s2">Шаг 1. Выбрать логин</a></li>
+            <li><a href="#s3">Шаг 2. Зарегистрироваться</a></li>
+            <li><a href="#s4">Как GitHub находит автора коммита</a></li>
+            <li><a href="#s5">Какие коммиты попадают в активность профиля</a></li>
+            <li><a href="#s6">Шаг 3. Проверить почту аккаунта и Git</a></li>
+            <li><a href="#s7">Шаг 4. Заполнить профиль</a></li>
+            <li><a href="#s8">Шаг 5. Сделать README профиля</a></li>
+            <li><a href="#s9">Зачем второй фактор</a></li>
+            <li><a href="#s10">Шаг 6. Включить двухфакторную защиту</a></li>
+            <li><a href="#s11">Как телефон и GitHub получают один код</a></li>
+            <li><a href="#s12">Шаг 7. Сохранить коды восстановления</a></li>
+            <li><a href="#s13">Справка: страницы настроек</a></li>
+            <li><a href="#s14">Частые вопросы</a></li>
+            <li><a href="#s15">Проверьте себя</a></li>
+            <li><a href="#s16">Шпаргалка по главе</a></li>
+            <li><a href="#s17">Глоссарий</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Задача главы</h2>
+        <p>В модулях 2 и 3 вся работа шла на своём компьютере. Коммиты лежат в папке <code>.git</code>, и на GitHub уходит только то, что вы отправите. В главе 1.3 VS Code уже вошёл в аккаунт GitHub. Дальше этот аккаунт станет местом, где лежат ваши репозитории, где вас находят преподаватель и команда и откуда приходят приглашения в чужие проекты. Перед первой отправкой аккаунт настраивают: проверяют почту, заполняют профиль и закрывают вход вторым фактором.</p>
+        <p>Аккаунт похож на квартиру с адресом. Адрес выбирают один раз, и по нему приходят письма и гости. Табличка на двери сообщает, кто здесь живёт. Замок на двери не пускает чужих, даже если у них есть адрес.</p>
+        <div class="analogy">
+          <p class="analogy__head">Ассоциация: адрес, табличка и замок</p>
+          <div class="analogy__pair">
+            <div class="analogy__side">
+              <b>В жизни</b>
+              <p>По адресу квартиру находят почтальон и гости. Табличка на двери говорит, кто живёт внутри. Замок с двумя ключами открывается, только если есть оба.</p>
+            </div>
+            <div class="analogy__side">
+              <b>В GitHub</b>
+              <p>Логин входит в адрес каждой вашей страницы. Профиль — страница по этому адресу: имя, описание, репозитории. Двухфакторная защита требует при входе пароль и код с телефона.</p>
+            </div>
+          </div>
+          <p class="analogy__limit"><b>Где не совпадает</b>Логин можно сменить. Ссылки на репозитории после этого GitHub перенаправляет на новый адрес, а старая ссылка на профиль перестаёт открываться. Поэтому логин выбирают так, чтобы не менять его.</p>
+        </div>
+        <div class="why">
+          <p class="why__head">Зачем это нужно в работе</p>
+          <ul class="why__list">
+            <li><b>Ссылка в резюме.</b> Работодатель открывает профиль по ссылке и видит имя, описание, проекты и активность за год. Пустой профиль с логином вроде <code>xXx-coder2008</code> ничего не говорит о человеке.</li>
+            <li><b>Коммиты под вашим именем.</b> GitHub связывает коммит с аккаунтом по почте автора. При чужой или ошибочной почте коммит остаётся без ссылки на профиль и не попадает в вашу активность.</li>
+            <li><b>Доступ к проектам группы.</b> Преподаватель или руководитель добавляет участников в репозиторий по логину. Логин нужно знать и писать без ошибок.</li>
+            <li><b>Утечка пароля.</b> Пароль, который использовался на другом сайте, может оказаться в базе украденных паролей. Со вторым фактором одного пароля для входа мало.</li>
+          </ul>
+        </div>
+        <p>Глава идёт по шагам на настоящем аккаунте <code>MaximBytecamp</code> — аккаунте автора справочника. Если аккаунт у вас уже есть, начните с шага 3: шаги 1 и 2 нужны для нового аккаунта. Проект <code>sait-vizitka</code> в этой главе не меняется, архив на начало главы не нужен.</p>
+
+        <div class="part" role="separator"><span><b>1</b>Аккаунт</span></div>
+        <h2 id="s2"><span class="sec">§2</span>Шаг 1. Выбрать логин</h2>
+        <p><span class="term">Логин</span> (username) — короткое имя аккаунта латиницей, уникальное на всём GitHub. Логин автора справочника — <code>MaximBytecamp</code>. Логин нельзя заменить пробелами и русскими буквами: он входит в адреса страниц, а адрес пишется латиницей.</p>
+        <p>Посмотрим, где логин встречается после регистрации. Ниже — пять адресов, которые получил аккаунт <code>MaximBytecamp</code>. Все пять относятся к этому аккаунту. Служебная почта нужна для подписи коммитов; письма на неё не доставляются.</p>
+        <figure class="scheme">
+          <svg class="svg-wide" viewBox="0 0 700 300" role="img" aria-label="Схема: логин MaximBytecamp входит в пять адресов — страницу профиля, адрес репозитория, адрес сайта на GitHub Pages, служебную почту и упоминание в обсуждении">
+            <rect x="8" y="118" width="170" height="64" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="93" y="144" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink-soft)">логин</text>
+            <text x="93" y="166" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="14" font-weight="700" fill="var(--ink)">MaximBytecamp</text>
+            <g font-family="Roboto Mono, monospace" font-size="12.5" fill="var(--ink)">
+              <path d="M178 150 C215 150 215 34 250 34" stroke="var(--ink)" stroke-width="2" fill="none"/>
+              <path d="M178 150 C215 150 215 92 250 92" stroke="var(--ink)" stroke-width="2" fill="none"/>
+              <path d="M178 150 H250" stroke="var(--ink)" stroke-width="2" fill="none"/>
+              <path d="M178 150 C215 150 215 208 250 208" stroke="var(--ink)" stroke-width="2" fill="none"/>
+              <path d="M178 150 C215 150 215 266 250 266" stroke="var(--ink)" stroke-width="2" fill="none"/>
+              <rect x="250" y="16" width="442" height="36" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/>
+              <text x="262" y="39">github.com/<tspan fill="var(--fire-deep)" font-weight="700">MaximBytecamp</tspan></text>
+              <text x="684" y="39" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink-soft)">профиль</text>
+              <rect x="250" y="74" width="442" height="36" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/>
+              <text x="262" y="97">github.com/<tspan fill="var(--fire-deep)" font-weight="700">MaximBytecamp</tspan>/sait-vizitka</text>
+              <text x="684" y="97" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink-soft)">репозиторий</text>
+              <rect x="250" y="132" width="442" height="36" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/>
+              <text x="262" y="155"><tspan fill="var(--fire-deep)" font-weight="700">maximbytecamp</tspan>.github.io</text>
+              <text x="684" y="155" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink-soft)">сайт на Pages</text>
+              <rect x="250" y="190" width="442" height="36" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/>
+              <text x="262" y="213" font-size="11.5">245827976+<tspan fill="var(--fire-deep)" font-weight="700">MaximBytecamp</tspan>@users.noreply.github.com</text>
+              <rect x="250" y="248" width="442" height="36" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/>
+              <text x="262" y="271">@<tspan fill="var(--fire-deep)" font-weight="700">MaximBytecamp</tspan></text>
+              <text x="684" y="271" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink-soft)">упоминание</text>
+            </g>
+          </svg><svg class="svg-narrow" viewBox="0 0 340 360" role="img" aria-label="Схема: логин MaximBytecamp входит в пять адресов — профиль, репозиторий, сайт на Pages, служебную почту и упоминание"><rect x="85" y="6" width="170" height="50" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="170" y="26" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)" text-anchor="middle">логин</text><text x="170" y="46" font-family="Roboto Mono, monospace" font-size="13" fill="var(--ink)" font-weight="700" text-anchor="middle">MaximBytecamp</text><text x="8" y="86" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">профиль</text><rect x="8" y="91" width="324" height="30" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="14" y="111" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">github.com/<tspan fill="var(--fire-deep)" font-weight="700">MaximBytecamp</tspan></text><text x="8" y="142" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">репозиторий</text><rect x="8" y="147" width="324" height="30" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="14" y="167" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">github.com/<tspan fill="var(--fire-deep)" font-weight="700">MaximBytecamp</tspan>/sait-vizitka</text><text x="8" y="198" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">сайт на Pages</text><rect x="8" y="203" width="324" height="30" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="14" y="223" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start"><tspan fill="var(--fire-deep)" font-weight="700">maximbytecamp</tspan>.github.io</text><text x="8" y="254" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">служебная почта</text><rect x="8" y="259" width="324" height="30" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="14" y="279" font-family="Roboto Mono, monospace" font-size="8.6" fill="var(--ink)" text-anchor="start">245827976+<tspan fill="var(--fire-deep)" font-weight="700">MaximBytecamp</tspan>@users.noreply.github.com</text><text x="8" y="310" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">упоминание</text><rect x="8" y="315" width="324" height="30" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="14" y="335" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">@<tspan fill="var(--fire-deep)" font-weight="700">MaximBytecamp</tspan></text></svg>
+          <figcaption>Пять адресов аккаунта MaximBytecamp. Оранжевым выделен логин. Четвёртая строка — служебная почта аккаунта, число перед логином — номер аккаунта.</figcaption>
+        </figure>
+        <p>Логин стоит в адресе профиля и в адресе каждого репозитория. Он же образует адрес сайта на GitHub Pages — <code>maximbytecamp.github.io</code>. Служебная почта начинается с номера аккаунта <code>245827976</code>, после него идёт логин. Упоминание <code>@MaximBytecamp</code> в обсуждении присылает владельцу логина уведомление. Регистр букв в адресе не важен: <code>github.com/maximbytecamp</code> открывает тот же профиль. Отсюда правило выбора: логин будет напечатан в резюме, в ссылках на ваши работы и в адресе вашего сайта.</p>
+        <p>Форма регистрации проверяет логин по мере ввода. Допустимы латинские буквы, цифры и одиночные дефисы. Дефис не может стоять первым или последним знаком. Занятый логин форма не примет:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Логин</th><th>Примет ли форма</th><th>Почему</th></tr></thead>
+            <tbody>
+              <tr><td><code>petrov-ivan-dev</code></td><td>да, если свободен</td><td>буквы и одиночные дефисы</td></tr>
+              <tr><td><code>ivan-petrov</code></td><td>нет</td><td>занят: <code>github.com/ivan-petrov</code> уже открывается</td></tr>
+              <tr><td><code>ivan--petrov</code></td><td>нет</td><td>два дефиса подряд</td></tr>
+              <tr><td><code>-ivanpetrov</code></td><td>нет</td><td>дефис в начале</td></tr>
+              <tr><td><code>ivan_petrov</code></td><td>нет</td><td>подчёркивание не допускается</td></tr>
+              <tr><td><code>иван-петров</code></td><td>нет</td><td>русские буквы не допускаются</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Логин из имени и фамилии латиницей читается в резюме без пояснений. Если такой занят, добавляют второе слово: <code>petrov-ivan-dev</code>, <code>ivanpetrov-web</code>. По логину из имени и фамилии профиль проще сопоставить с резюме.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Логин выбран и проверен по правилам. Следующий шаг — регистрация с этим логином.</p>
+
+        <h2 id="s3"><span class="sec">§3</span>Шаг 2. Зарегистрироваться</h2>
+        <p>Регистрация идёт на странице <a href="https://github.com/signup">github.com/signup</a>. На одной странице заполняются четыре поля:</p>
+        <ol class="steps">
+          <li><b>Email</b> — почта, на которую придёт код подтверждения. Берите личную почту, которой будете пользоваться и после колледжа. Почту колледжа закроют после выпуска, а вход в аккаунт и его восстановление идут через почту.</li>
+          <li><b>Password</b> — пароль. Подсказка формы требует не меньше 15 знаков или не меньше 8 знаков, среди которых цифра и строчная буква. Пароль от другого сайта не подходит: если тот сайт взломают, пароль окажется в базе украденных.</li>
+          <li><b>Username</b> — логин из шага 1. Под полем форма сообщает, свободен ли он.</li>
+          <li><b>Your Country/Region</b> — страна.</li>
+        </ol>
+        <!-- КАДР registraciya.png: форма регистрации с заполненными полями и подсказками; съёмка пока заблокирована GitHub -->
+        <p>Кнопка <b>Create account</b> открывает проверку, что регистрируется человек: головоломку из картинок. После неё GitHub отправляет на почту код из цифр и показывает поле для него. Код вводится на той же странице, и аккаунт создан.</p>
+        <p>Во время съёмки этой главы автоматический браузер GitHub на страницу регистрации не пустил: вместо формы появилось сообщение <code>Access is temporarily restricted</code>. Причину ограничения по этому сообщению определить нельзя. Если форма не загружается, проверьте, включён ли JavaScript, временно отключите блокировщик для GitHub и повторите попытку позднее.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Аккаунт создан, почта подтверждена кодом. У аккаунта есть логин и номер. Следующие разделы — о том, зачем GitHub нужна ваша почта, кроме входа.</p>
+
+        <div class="part" role="separator"><span><b>2</b>Почта и коммиты</span></div>
+        <h2 id="s4"><span class="sec">§4</span>Как GitHub находит автора коммита</h2>
+        <p>В главе 1.3 в Git записаны имя и почта: <code>user.name</code> и <code>user.email</code>. Git вписывает их в каждый коммит как подпись автора. Вход VS Code в GitHub в подпись не попадает, это показано в главе 1.4. Когда коммит оказывается на GitHub, у сервиса есть только подпись внутри коммита. По ней и ищется аккаунт.</p>
+        <p>Так работает сортировка писем в общежитии. На конверте написано имя и номер комнаты. Вахтёр сверяет номер со списком жильцов и кладёт письмо в нужную ячейку. Письмо с опечаткой в номере остаётся на общем столе, хотя имя на конверте верное.</p>
+        <p><span class="term">Связь коммита с аккаунтом</span> — отметка GitHub, что коммит сделан владельцем аккаунта. GitHub ставит её, если почта автора коммита есть в списке почт какого-то аккаунта. Имя автора при этом не сравнивается. У связанного коммита на GitHub стоит аватар аккаунта и ссылка на профиль, у несвязанного — серый значок и имя без ссылки.</p>
+        <p>Схема показывает это сравнение на двух настоящих коммитах репозитория этого справочника. У обоих коммитов одно и то же имя автора, почты отличаются одной буквой.</p>
+        <figure class="scheme">
+          <svg class="svg-wide" viewBox="0 0 700 270" role="img" aria-label="Схема: коммит 9a69f1f с почтой bytecampmm@gmail.com совпадает с почтой в списке аккаунта MaximBytecamp и получает ссылку на профиль; коммит 7c91a90 с почтой bytecampsm@gmail.com в списке не найден и остаётся без ссылки">
+            <g font-family="Inter, system-ui, sans-serif">
+              <text x="110" y="20" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">подпись в коммите</text>
+              <text x="350" y="20" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">почты аккаунта MaximBytecamp</text>
+              <text x="590" y="20" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">что показывает GitHub</text>
+            </g>
+            <rect x="8" y="36" width="204" height="76" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="20" y="60" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">9a69f1f</text>
+            <text x="20" y="80" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">MaximBytecamp</text>
+            <text x="20" y="99" font-family="Roboto Mono, monospace" font-size="11" fill="var(--moss)">bytecamp<tspan font-weight="700">mm</tspan>@gmail.com</text>
+            <rect x="8" y="166" width="204" height="76" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="20" y="190" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)">7c91a90</text>
+            <text x="20" y="210" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">MaximBytecamp</text>
+            <text x="20" y="229" font-family="Roboto Mono, monospace" font-size="11" fill="var(--fire-deep)">bytecamp<tspan font-weight="700">sm</tspan>@gmail.com</text>
+            <rect x="250" y="74" width="200" height="120" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="262" y="104" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink)">bytecampmm@gmail.com</text>
+            <text x="262" y="130" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink)">245827976+MaximBytecamp</text>
+            <text x="262" y="144" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink)">@users.noreply.github.com</text>
+            <text x="262" y="176" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)">bytecampsm@… здесь нет</text>
+            <path d="M212 74 C232 74 232 100 248 100" stroke="var(--moss)" stroke-width="2.5" fill="none"/>
+            <path d="M212 204 C232 204 232 172 248 172" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" stroke-dasharray="6 4"/>
+            <rect x="490" y="36" width="202" height="76" fill="var(--page)" stroke="var(--moss)" stroke-width="3"/>
+            <circle cx="516" cy="74" r="13" fill="#A6DD9E" stroke="var(--ink)" stroke-width="1.5"/>
+            <text x="538" y="70" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="var(--steel)" text-decoration="underline">MaximBytecamp</text>
+            <text x="538" y="88" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--moss)">аватар и ссылка</text>
+            <rect x="490" y="166" width="202" height="76" fill="var(--page)" stroke="var(--fire-deep)" stroke-width="3"/>
+            <circle cx="516" cy="204" r="13" fill="#E3E1DE" stroke="var(--ink-faint)" stroke-width="1.5"/>
+            <text x="538" y="200" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="var(--ink)">MaximBytecamp</text>
+            <text x="538" y="218" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--fire-deep)">серый значок, без ссылки</text>
+            <path d="M450 100 C470 100 470 74 488 74" stroke="var(--moss)" stroke-width="2.5" fill="none"/>
+            <path d="M450 172 C470 172 470 204 488 204" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" stroke-dasharray="6 4"/>
+          </svg><svg class="svg-narrow" viewBox="0 0 340 318" role="img" aria-label="Схема: коммит 9a69f1f с почтой bytecampmm@gmail.com найден в почтах аккаунта и получает ссылку на профиль; коммит 7c91a90 с почтой bytecampsm@gmail.com не найден и остаётся без ссылки"><text x="170" y="18" font-family="Inter, system-ui, sans-serif" font-size="12" fill="var(--ink)" font-weight="700" text-anchor="middle">почты аккаунта MaximBytecamp</text><rect x="8" y="26" width="324" height="64" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="3"/><text x="18" y="46" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">bytecampmm@gmail.com</text><text x="18" y="64" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink)" text-anchor="start">245827976+MaximBytecamp</text><text x="18" y="80" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink)" text-anchor="start">@users.noreply.github.com</text><text x="8" y="116" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink)" font-weight="700" text-anchor="start">подпись в коммите</text><text x="182" y="116" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink)" font-weight="700" text-anchor="start">что показывает GitHub</text><rect x="8" y="124" width="150" height="62" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="18" y="144" font-family="Roboto Mono, monospace" font-size="12" fill="var(--ink)" font-weight="700" text-anchor="start">9a69f1f</text><text x="18" y="161" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="start">MaximBytecamp</text><text x="18" y="177" font-family="Roboto Mono, monospace" font-size="10" fill="var(--moss)" text-anchor="start">bytecamp<tspan font-weight="700">mm</tspan>@gmail.com</text><path d="M158 155 H178" stroke="var(--moss)" stroke-width="2.5"/><rect x="182" y="124" width="150" height="62" fill="var(--page)" stroke="var(--moss)" stroke-width="3"/><circle cx="200" cy="146" r="10" fill="#A6DD9E" stroke="var(--ink)" stroke-width="1.5"/><text x="216" y="150" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--steel)" font-weight="700" text-anchor="start">MaximBytecamp</text><text x="192" y="174" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--moss)" text-anchor="start">аватар и ссылка</text><text x="8" y="210" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--moss)" text-anchor="start">почта есть в списке ↑</text><rect x="8" y="222" width="150" height="62" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="18" y="242" font-family="Roboto Mono, monospace" font-size="12" fill="var(--ink)" font-weight="700" text-anchor="start">7c91a90</text><text x="18" y="259" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="start">MaximBytecamp</text><text x="18" y="275" font-family="Roboto Mono, monospace" font-size="10" fill="var(--fire-deep)" text-anchor="start">bytecamp<tspan font-weight="700">sm</tspan>@gmail.com</text><path d="M158 253 H178" stroke="var(--fire-deep)" stroke-width="2.5" stroke-dasharray="5 4"/><rect x="182" y="222" width="150" height="62" fill="var(--page)" stroke="var(--fire-deep)" stroke-width="3"/><circle cx="200" cy="244" r="10" fill="#E3E1DE" stroke="var(--ink)" stroke-width="1.5"/><text x="216" y="248" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink)" font-weight="700" text-anchor="start">MaximBytecamp</text><text x="192" y="272" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--fire-deep)" text-anchor="start">серый значок, без ссылки</text><text x="8" y="308" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--fire-deep)" text-anchor="start">почты нет в списке</text></svg>
+          <figcaption>Почта первого коммита найдена в списке аккаунта (зелёная линия), почта второго — нет (пунктир). Имя автора у обоих одинаковое и в сравнении не участвует.</figcaption>
+        </figure>
+        <p>Слева — две подписи. Они отличаются одной буквой перед <code>@</code>: <code>mm</code> и <code>sm</code>. Вторая почта — опечатка: коммит <code>7c91a90</code> сделан в сентябре с этой почтой по ошибке. В середине — список почт аккаунта: основная почта и служебный адрес. Зелёная линия ведёт от совпавшей почты к аватару со ссылкой, пунктир — от ненайденной почты к серому значку. Из схемы следует: связь определяет почта, имя в <code>user.name</code> на неё не влияет.</p>
+        <p>Так выглядят страницы этих коммитов на GitHub. Страница коммита открывается по адресу репозитория, к которому добавлено <code>/commit/</code> и имя коммита.</p>
+        <figure class="shot">
+          <img src="img/commit-s-avtorom.png" alt="Страница коммита 9a69f1f на GitHub: строка автора с зелёным аватаром и именем MaximBytecamp, committed on Sep 16">
+          <figcaption>Коммит <code>9a69f1f</code>: слева от имени — аватар аккаунта, имя ведёт на профиль.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="img/commit-bez-avtora.png" alt="Страница коммита 7c91a90 на GitHub: строка автора с серым значком и именем MaximBytecamp, committed on Sep 20">
+          <figcaption>Коммит <code>7c91a90</code>: серый значок вместо аватара, имя не ведёт на профиль.</figcaption>
+        </figure>
+        <p>Почту автора коммита в публичном репозитории видно без входа в аккаунт. Если к адресу страницы коммита добавить <code>.patch</code>, GitHub отдаст коммит текстом, и во второй строке будет подпись. Этот способ советует документация GitHub для проверки почты коммита.</p>
+        <p><b>Прогон на живых данных.</b> Запросим обе подписи командой <code>curl</code> и спросим у GitHub, с каким аккаунтом связан каждый коммит. Вторая команда обращается к API GitHub через программу <code>gh</code>. Поле <code>author</code> в ответе — найденный аккаунт.</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал</span><span>команды и ответы, 11.11.2026</span></figcaption>
+<pre><span class="cmd">curl -sL https://github.com/MaximBytecamp/git_github_makarov/commit/9a69f1f.patch | sed -n 2p</span>
+From: MaximBytecamp &lt;bytecampmm@gmail.com&gt;
+<span class="cmd">curl -sL https://github.com/MaximBytecamp/git_github_makarov/commit/7c91a90.patch | sed -n 2p</span>
+From: MaximBytecamp &lt;bytecampsm@gmail.com&gt;
+<span class="cmd">gh api repos/MaximBytecamp/git_github_makarov/commits/9a69f1f --jq '.author.login'</span>
+MaximBytecamp
+<span class="cmd">gh api repos/MaximBytecamp/git_github_makarov/commits/7c91a90 --jq '.author'</span>
+null</pre>
+        </figure>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Коммит</th><th>Почта в подписи</th><th>Найденный аккаунт</th><th>На странице коммита</th></tr></thead>
+            <tbody>
+              <tr><td><code>9a69f1f</code></td><td><code>bytecampmm@gmail.com</code></td><td><code>MaximBytecamp</code></td><td>аватар, ссылка на профиль</td></tr>
+              <tr><td><code>7c91a90</code></td><td><code>bytecampsm@gmail.com</code></td><td><code>null</code> — не найден</td><td>серый значок, без ссылки</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Ответ <code>null</code> означает «аккаунт не найден». Коммит при этом лежит в репозитории, его изменения и сообщение на месте. Потеряна только связь с человеком. Прогон показал ещё одно: почту в подписи видит любой посетитель. Скрыть её можно служебным адресом — это шаг 3. Сначала разберём, что ещё зависит от связи коммита с аккаунтом.</p>
+
+        <h2 id="s5"><span class="sec">§5</span>Какие коммиты попадают в активность профиля</h2>
+        <p>На странице профиля есть таблица из квадратов — по квадрату на каждый день за последний год. Чем больше в этот день вклада, тем темнее квадрат.</p>
+        <figure class="shot">
+          <img src="img/graf-aktivnosti.png" alt="Годовой граф активности MaximBytecamp: строки дней недели и зелёные квадраты вкладов">
+          <figcaption>Граф активности: столбцы — недели, строки — дни недели. Более тёмный зелёный означает больше вкладов.</figcaption>
+        </figure>
+        <p><span class="term">Граф активности</span> (contribution graph) — эта таблица дней на странице профиля. Вкладом в ней считаются коммиты, открытые задачи и запросы на слияние, обзоры кода. Коммит засчитывается, если выполнены два условия из документации GitHub: почта автора связана с аккаунтом и коммит лежит в ветке по умолчанию — обычно <code>main</code>. Коммит в другой ветке засчитывается после слияния в <code>main</code>. Новый коммит появляется в графе в течение суток.</p>
+        <p>Проверим первое условие на тех же двух днях. В репозитории справочника 20 сентября был один коммит — <code>7c91a90</code> с опечаткой. На следующий день, 21 сентября, — два коммита с верной почтой. API GitHub отдаёт, сколько коммитов из каких репозиториев засчитано в граф за день.</p>
+        <p><b>Прогон на живых данных.</b> Сначала история репозитория за два дня, затем засчитанные коммиты по репозиториям за 20 и 21 сентября:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал в папке справочника</span><span>команды и ответы, 11.11.2026</span></figcaption>
+<pre><span class="cmd">git log --since=2026-09-20 --until=2026-09-22 --format='%h %ae %ad' --date=short</span>
+12f15c3 bytecampmm@gmail.com 2026-09-21
+507b92c bytecampmm@gmail.com 2026-09-21
+7c91a90 bytecampsm@gmail.com 2026-09-20
+<span class="cmd">gh api graphql -f query='{ user(login:"MaximBytecamp") { contributionsCollection(from:"2026-09-20T00:00:00Z", to:"2026-09-20T23:59:59Z") { commitContributionsByRepository { repository { name } contributions { totalCount } } } } }' --jq '.data.user.contributionsCollection.commitContributionsByRepository[] | "\(.repository.name) \(.contributions.totalCount)"'</span>
+python_theory_makarov 8
+mongodb_theory_makarov 4
+algorthimization_course_vvodnoe 3
+mongodb-practice 2
+<span class="cmd">то же для 21 сентября</span>
+mongodb_theory_makarov 9
+algorthimization_course_vvodnoe 9
+python_theory_makarov 3
+git_github_makarov 2
+data-platform-template 1
+backend-starter-template 1</pre>
+        </figure>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>День</th><th>Коммиты справочника в <code>main</code></th><th>Почта связана</th><th>Засчитано в граф</th></tr></thead>
+            <tbody>
+              <tr><td>20 сентября</td><td>1 — <code>7c91a90</code></td><td>нет</td><td>0: репозитория <code>git_github_makarov</code> в списке нет</td></tr>
+              <tr><td>21 сентября</td><td>2 — <code>507b92c</code>, <code>12f15c3</code></td><td>да</td><td>2</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>20 сентября коммит в справочнике был, но в списке засчитанных репозиториев справочника нет. 21 сентября оба коммита засчитаны. Значит, коммит с чужой почтой пропадает и из графа активности. Если добавить почту <code>bytecampsm@gmail.com</code> в аккаунт и подтвердить её, GitHub свяжет с аккаунтом и этот коммит, и граф пересчитается.</p>
+
+        <h3>Пример по шагам: неделя Ивана Петрова</h3>
+        <p>Второе условие — ветка по умолчанию — проверим на придуманных данных. Студент Иван Петров сделал за неделю шесть коммитов. В его аккаунте две почты: личная и служебная. Коммиты записаны в программе списком: имя коммита, день, почта автора, ветка. Программа проверяет два условия по очереди и считает, что останется в графе.</p>
+        <figure class="code">
+          <figcaption><span>vklad.py</span><span>данные придуманы для примера</span></figcaption>
+<pre># Какие коммиты GitHub засчитает в граф активности Ивана Петрова
+pochty_akkaunta = {"ivan.petrov@example.com", "12345678+ivan-petrov@users.noreply.github.com"}
+
+kommity = [  # (имя, день, почта автора, ветка)
+    ("a1", "пн", "ivan.petrov@example.com", "main"),
+    ("a2", "пн", "ivan.petrov@example.com", "main"),
+    ("b1", "вт", "ivan@MacBook-Ivana.local", "main"),
+    ("c1", "ср", "12345678+ivan-petrov@users.noreply.github.com", "main"),
+    ("d1", "чт", "ivan.petrov@example.com", "dizayn"),
+    ("e1", "пт", "ivan.petorv@example.com", "main"),
+]
+
+print("Шаг 1. Почта автора есть в аккаунте?")
+for k in kommity:
+    print(" ", k[0], k[2], "да" if k[2] in pochty_akkaunta else "нет")
+shag1 = [k for k in kommity if k[2] in pochty_akkaunta]
+
+print("Шаг 2. Коммит в ветке по умолчанию main?")
+for k in shag1:
+    print(" ", k[0], k[3], "да" if k[3] == "main" else "нет")
+shag2 = [k for k in shag1 if k[3] == "main"]
+
+dni = {}
+for k in shag2:
+    dni[k[1]] = dni.get(k[1], 0) + 1
+print("Граф:", {d: dni.get(d, 0) for d in ["пн", "вт", "ср", "чт", "пт"]})</pre>
+        </figure>
+        <p>Коммит <code>b1</code> подписан почтой, которую Git составил сам из имени пользователя и имени компьютера, — так бывает, если не выполнить настройку из главы 1.3. У <code>e1</code> опечатка в фамилии, как у настоящего <code>7c91a90</code>. Коммит <code>d1</code> лежит в ветке <code>dizayn</code>, которую ещё не слили в <code>main</code>.</p>
+        <p><b>Шаг 1.</b> Программа сверяет почту каждого коммита со списком почт аккаунта:</p>
+        <figure class="code code--out">
+          <figcaption><span>python3 vklad.py</span><span>первая часть ответа</span></figcaption>
+<pre>Шаг 1. Почта автора есть в аккаунте?
+  a1 ivan.petrov@example.com да
+  a2 ivan.petrov@example.com да
+  b1 ivan@MacBook-Ivana.local нет
+  c1 12345678+ivan-petrov@users.noreply.github.com да
+  d1 ivan.petrov@example.com да
+  e1 ivan.petorv@example.com нет</pre>
+        </figure>
+        <p>Отпали <code>b1</code> и <code>e1</code>: их почт в аккаунте нет. Служебный адрес у <code>c1</code> подошёл, потому что он входит в список почт аккаунта. Осталось четыре коммита.</p>
+        <p><b>Шаг 2.</b> Из оставшихся программа берёт коммиты ветки <code>main</code>:</p>
+        <figure class="code code--out">
+          <figcaption><span>python3 vklad.py</span><span>вторая часть ответа</span></figcaption>
+<pre>Шаг 2. Коммит в ветке по умолчанию main?
+  a1 main да
+  a2 main да
+  c1 main да
+  d1 dizayn нет
+Граф: {'пн': 2, 'вт': 0, 'ср': 1, 'чт': 0, 'пт': 0}</pre>
+        </figure>
+        <p>Отпал <code>d1</code>. В графе остались три коммита из шести. Схема показывает, как эта неделя выглядит в графе:</p>
+        <figure class="scheme">
+          <svg class="svg-wide" viewBox="0 0 700 200" role="img" aria-label="Схема: пять квадратов недели. Понедельник — два коммита, тёмный квадрат; вторник пустой, отпал b1; среда — один коммит; четверг пустой, отпал d1; пятница пустая, отпал e1">
+            <g font-family="Inter, system-ui, sans-serif" font-size="12.5" text-anchor="middle" fill="var(--ink)">
+              <text x="110" y="24" font-weight="700">пн</text><text x="230" y="24" font-weight="700">вт</text><text x="350" y="24" font-weight="700">ср</text><text x="470" y="24" font-weight="700">чт</text><text x="590" y="24" font-weight="700">пт</text>
+            </g>
+            <rect x="75" y="38" width="70" height="70" rx="6" fill="#216E39" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="195" y="38" width="70" height="70" rx="6" fill="#EBEDF0" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="315" y="38" width="70" height="70" rx="6" fill="#9BE9A8" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="435" y="38" width="70" height="70" rx="6" fill="#EBEDF0" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="555" y="38" width="70" height="70" rx="6" fill="#EBEDF0" stroke="var(--ink)" stroke-width="2"/>
+            <g font-family="Roboto Mono, monospace" font-size="20" font-weight="700" text-anchor="middle">
+              <text x="110" y="81" fill="#fff">2</text><text x="230" y="81" fill="var(--ink-faint)">0</text><text x="350" y="81" fill="var(--ink)">1</text><text x="470" y="81" fill="var(--ink-faint)">0</text><text x="590" y="81" fill="var(--ink-faint)">0</text>
+            </g>
+            <g font-family="Roboto Mono, monospace" font-size="11" text-anchor="middle">
+              <text x="110" y="134" fill="var(--moss)">a1, a2</text>
+              <text x="230" y="134" fill="var(--fire-deep)">b1 — почта</text>
+              <text x="350" y="134" fill="var(--moss)">c1</text>
+              <text x="470" y="134" fill="var(--fire-deep)">d1 — ветка</text>
+              <text x="590" y="134" fill="var(--fire-deep)">e1 — почта</text>
+            </g>
+            <text x="350" y="180" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" fill="var(--ink-soft)">коммиты были все пять дней, в графе — только два дня</text>
+          </svg><svg class="svg-narrow" viewBox="0 0 340 272" role="img" aria-label="Схема: пять дней недели. Понедельник — два коммита, среда — один; вторник и пятница пустые из-за почты, четверг — из-за ветки"><text x="14" y="36" font-family="Inter, system-ui, sans-serif" font-size="13" fill="var(--ink)" font-weight="700" text-anchor="start">пн</text><rect x="48" y="8" width="44" height="44" rx="5" fill="#216E39" stroke="var(--ink)" stroke-width="2"/><text x="70" y="37" font-family="Roboto Mono, monospace" font-size="17" fill="#fff" font-weight="700" text-anchor="middle">2</text><text x="106" y="35" font-family="Roboto Mono, monospace" font-size="11" fill="var(--moss)" text-anchor="start">a1, a2</text><text x="14" y="88" font-family="Inter, system-ui, sans-serif" font-size="13" fill="var(--ink)" font-weight="700" text-anchor="start">вт</text><rect x="48" y="60" width="44" height="44" rx="5" fill="#EBEDF0" stroke="var(--ink)" stroke-width="2"/><text x="70" y="89" font-family="Roboto Mono, monospace" font-size="17" fill="var(--ink-faint)" font-weight="700" text-anchor="middle">0</text><text x="106" y="87" font-family="Roboto Mono, monospace" font-size="11" fill="var(--fire-deep)" text-anchor="start">b1 — отпал по почте</text><text x="14" y="140" font-family="Inter, system-ui, sans-serif" font-size="13" fill="var(--ink)" font-weight="700" text-anchor="start">ср</text><rect x="48" y="112" width="44" height="44" rx="5" fill="#9BE9A8" stroke="var(--ink)" stroke-width="2"/><text x="70" y="141" font-family="Roboto Mono, monospace" font-size="17" fill="var(--ink)" font-weight="700" text-anchor="middle">1</text><text x="106" y="139" font-family="Roboto Mono, monospace" font-size="11" fill="var(--moss)" text-anchor="start">c1</text><text x="14" y="192" font-family="Inter, system-ui, sans-serif" font-size="13" fill="var(--ink)" font-weight="700" text-anchor="start">чт</text><rect x="48" y="164" width="44" height="44" rx="5" fill="#EBEDF0" stroke="var(--ink)" stroke-width="2"/><text x="70" y="193" font-family="Roboto Mono, monospace" font-size="17" fill="var(--ink-faint)" font-weight="700" text-anchor="middle">0</text><text x="106" y="191" font-family="Roboto Mono, monospace" font-size="11" fill="var(--fire-deep)" text-anchor="start">d1 — отпал по ветке</text><text x="14" y="244" font-family="Inter, system-ui, sans-serif" font-size="13" fill="var(--ink)" font-weight="700" text-anchor="start">пт</text><rect x="48" y="216" width="44" height="44" rx="5" fill="#EBEDF0" stroke="var(--ink)" stroke-width="2"/><text x="70" y="245" font-family="Roboto Mono, monospace" font-size="17" fill="var(--ink-faint)" font-weight="700" text-anchor="middle">0</text><text x="106" y="243" font-family="Roboto Mono, monospace" font-size="11" fill="var(--fire-deep)" text-anchor="start">e1 — отпал по почте</text></svg>
+          <figcaption>Неделя Ивана Петрова в графе активности. Зелёным подписаны засчитанные коммиты, красным — отпавшие и условие, на котором они отпали.</figcaption>
+        </figure>
+        <p>Иван работал пять дней из пяти, а граф показывает два. Во вторник и пятницу причина — почта, в четверг — ветка. Четверг вернётся в граф сам после слияния <code>dizayn</code> в <code>main</code>. Вторник и пятница вернутся, только если добавить эти почты в аккаунт. Почту <code>ivan@MacBook-Ivana.local</code> добавить нельзя: подтверждение на неё не придёт, такого почтового ящика нет. Поэтому почту в Git проверяют до первых коммитов — это следующий шаг.</p>
+
+        <h2 id="s6"><span class="sec">§6</span>Шаг 3. Проверить почту аккаунта и Git</h2>
+        <p>Почты аккаунта перечислены в настройках: аватар в правом верхнем углу → <b>Settings</b> → раздел <b>Emails</b> в левом меню. Прямой адрес — <a href="https://github.com/settings/emails">github.com/settings/emails</a>.</p>
+        <figure class="shot">
+          <img src="img/pochty.png" alt="Settings → Emails: почта с пометками Primary и Verified и выключенный переключатель Keep my email addresses private">
+          <figcaption>Почта подтверждена — <b>Verified</b> — и выбрана основной — <b>Primary</b>. Внизу показаны служебный адрес и переключатель скрытия почты; на кадре он выключен.</figcaption>
+        </figure>
+        <p>В списке почт пометка <b>Primary</b> стоит у основной: на неё приходят письма GitHub. Ниже расположен переключатель <b>Keep my email addresses private</b>. Если включить его, GitHub уберёт почту из публичного профиля и будет подставлять служебный адрес в коммиты, сделанные на сайте. Сам адрес указан в пояснении к переключателю. В настройках скрытой почты также можно встретить пункт <b>Block command line pushes that expose my email</b>: он отклоняет отправку, если подпись последнего коммита раскрывает скрытую почту. На показанном кадре скрытие выключено, и этого пункта нет.</p>
+        <p><span class="term">Служебный адрес</span> (noreply) — почта вида <code>номер+логин@users.noreply.github.com</code>, которую GitHub выдаёт каждому аккаунту. Письма на неё не доставляются, но коммиты с ней связываются с аккаунтом. У аккаунта <code>MaximBytecamp</code> это <code>245827976+MaximBytecamp@users.noreply.github.com</code>.</p>
+        <p>Схема сравнивает два варианта подписи. Различаются они тем, что увидит посетитель в ответе <code>.patch</code>.</p>
+        <figure class="scheme">
+          <svg class="svg-wide" viewBox="0 0 700 230" role="img" aria-label="Схема: две подписи. С личной почтой коммит связан с аккаунтом, и посетитель видит личную почту. Со служебным адресом коммит тоже связан, а посетитель видит только служебный адрес">
+            <g font-family="Inter, system-ui, sans-serif">
+              <text x="175" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">user.email — личная почта</text>
+              <text x="525" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">user.email — служебный адрес</text>
+            </g>
+            <rect x="8" y="36" width="334" height="50" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="20" y="66" font-family="Roboto Mono, monospace" font-size="12" fill="var(--ink)">ivan.petrov@example.com</text>
+            <rect x="358" y="36" width="334" height="50" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="368" y="66" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)">12345678+ivan-petrov@users.noreply.github.com</text>
+            <g font-family="Inter, system-ui, sans-serif" font-size="12.5">
+              <rect x="8" y="104" width="334" height="44" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2"/>
+              <text x="20" y="131" fill="var(--ink)">связь с аккаунтом: <tspan font-weight="700" fill="var(--moss)">есть</tspan></text>
+              <rect x="358" y="104" width="334" height="44" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2"/>
+              <text x="370" y="131" fill="var(--ink)">связь с аккаунтом: <tspan font-weight="700" fill="var(--moss)">есть</tspan></text>
+              <rect x="8" y="164" width="334" height="56" fill="var(--fire-pale)" stroke="var(--fire-deep)" stroke-width="2"/>
+              <text x="20" y="188" fill="var(--ink)">в .patch видно любому:</text>
+              <text x="20" y="208" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--fire-deep)">ivan.petrov@example.com</text>
+              <rect x="358" y="164" width="334" height="56" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2"/>
+              <text x="370" y="188" fill="var(--ink)">в .patch видно любому:</text>
+              <text x="370" y="208" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--moss)">12345678+ivan-petrov@users.noreply…</text>
+            </g>
+          </svg><svg class="svg-narrow" viewBox="0 0 340 312" role="img" aria-label="Схема: с личной почтой коммит связан с аккаунтом, и посетитель видит личную почту; со служебным адресом коммит тоже связан, а посетитель видит только служебный адрес"><text x="8" y="14" font-family="Inter, system-ui, sans-serif" font-size="12" fill="var(--ink)" font-weight="700" text-anchor="start">user.email — личная почта</text><rect x="8" y="22" width="324" height="32" fill="var(--page)" stroke="var(--ink)" stroke-width="2.5"/><text x="16" y="43" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">ivan.petrov@example.com</text><rect x="8" y="62" width="324" height="30" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2"/><text x="16" y="82" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink)" text-anchor="start">связь с аккаунтом: <tspan font-weight="700" fill="var(--moss)">есть</tspan></text><rect x="8" y="100" width="324" height="44" fill="var(--fire-pale)" stroke="var(--fire-deep)" stroke-width="2"/><text x="16" y="118" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink)" text-anchor="start">в .patch видно любому:</text><text x="16" y="135" font-family="Roboto Mono, monospace" font-size="10" fill="var(--fire-deep)" text-anchor="start">ivan.petrov@example.com</text><text x="8" y="174" font-family="Inter, system-ui, sans-serif" font-size="12" fill="var(--ink)" font-weight="700" text-anchor="start">user.email — служебный адрес</text><rect x="8" y="182" width="324" height="32" fill="var(--page)" stroke="var(--ink)" stroke-width="2.5"/><text x="16" y="203" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink)" text-anchor="start">12345678+ivan-petrov@users.noreply.github.com</text><rect x="8" y="222" width="324" height="30" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2"/><text x="16" y="242" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink)" text-anchor="start">связь с аккаунтом: <tspan font-weight="700" fill="var(--moss)">есть</tspan></text><rect x="8" y="260" width="324" height="44" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2"/><text x="16" y="278" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink)" text-anchor="start">в .patch видно любому:</text><text x="16" y="295" font-family="Roboto Mono, monospace" font-size="10" fill="var(--moss)" text-anchor="start">12345678+ivan-petrov@users.noreply…</text></svg>
+          <figcaption>Обе подписи связывают коммит с аккаунтом. Различается нижняя строка: личная почта видна посетителям (красная рамка), служебный адрес не ведёт в ваш почтовый ящик (зелёная).</figcaption>
+        </figure>
+        <p>Средняя строка одинакова: оба адреса есть в аккаунте, и коммит получит аватар и попадёт в граф. Различие в нижней строке. Личная почта, записанная в коммит и отправленная на GitHub, останется в истории репозитория. Её прочтёт любой, кто откроет <code>.patch</code>, в том числе программы, собирающие адреса для рассылок. Служебный адрес никуда не ведёт.</p>
+        <p>Выберите один из двух вариантов и сверьте Git с аккаунтом. Почта Git проверяется командой из главы 1.3:</p>
+        <figure class="code code--out">
+          <figcaption><span>терминал</span><span>команда и ответ</span></figcaption>
+<pre><span class="cmd">git config --global user.email</span>
+ivan.petrov@example.com</pre>
+        </figure>
+        <ol class="steps">
+          <li><b>Личная почта.</b> Адрес в ответе должен совпасть с одной из подтверждённых почт на странице Emails буква в букву. Переключатель Keep my email addresses private управляет публичным профилем и подписью коммитов на сайте. Отправку из Git блокирует отдельный пункт Block command line pushes that expose my email, если он включён.</li>
+          <li><b>Служебный адрес.</b> Отметьте Keep my email addresses private, скопируйте адрес из текста под флажком и запишите его в Git:</li>
+        </ol>
+        <figure class="code">
+          <figcaption><span>терминал</span><span>подставьте свой адрес со страницы Emails</span></figcaption>
+<pre>git config --global user.email "12345678+ivan-petrov@users.noreply.github.com"</pre>
+        </figure>
+        <p>Настройка действует на новые коммиты. Уже сделанные коммиты сохраняют прежнюю подпись: она входит в коммит, и её изменение меняет имя коммита. Бывает, что в ответе команды стоит адрес с ошибкой. Тогда этот адрес добавляют в аккаунт кнопкой <b>Add</b> на странице Emails, а настройку Git исправляют для следующих коммитов.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Почта в Git совпадает с почтой аккаунта. Коммиты будут связаны с аккаунтом и попадут в граф активности. Дальше — то, что видят посетители профиля.</p>
+
+        <div class="part" role="separator"><span><b>3</b>Профиль</span></div>
+        <h2 id="s7"><span class="sec">§7</span>Шаг 4. Заполнить профиль</h2>
+        <p><span class="term">Профиль</span> — страница аккаунта по адресу <code>github.com/логин</code>. Её видит любой посетитель без входа. Сразу после регистрации профиль почти пуст. Так выглядел профиль автора справочника до этого шага:</p>
+        <figure class="shot">
+          <img src="img/profil-do.png" alt="Страница профиля MaximBytecamp: вместо фотографии зелёный узор, под ним только логин и кнопка Follow; справа закреплённые репозитории и начало графа активности">
+          <figcaption>Профиль до заполнения. Вместо фотографии — узор, который GitHub генерирует из номера аккаунта. Под ним только логин. Имени и описания нет.</figcaption>
+        </figure>
+        <p>Посетитель видит логин и список репозиториев, но не понимает, чей это аккаунт. Имя и описание заполняют в настройках: <b>Settings</b> → раздел <b>Public profile</b>. Прямой адрес — <a href="https://github.com/settings/profile">github.com/settings/profile</a>.</p>
+        <figure class="shot">
+          <img src="img/profil-nastroyki.png" alt="Public profile: в Name введено Maxim Bytecamp, в Bio — описание учебных материалов">
+          <figcaption>В настройках заполнены имя и короткое описание. Поле Public email оставлено без публичной почты.</figcaption>
+        </figure>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Поле</th><th>Что писать</th><th>Пример</th></tr></thead>
+            <tbody>
+              <tr><td><b>Name</b></td><td>имя и фамилию так, как они стоят в резюме</td><td>Иван Петров</td></tr>
+              <tr><td><b>Bio</b></td><td>одну-две строки: кто вы и чем занимаетесь</td><td>Студент колледжа, веб-разработка. Учебные проекты на HTML, CSS и Python.</td></tr>
+              <tr><td><b>URL</b></td><td>ссылку на свой сайт или резюме, если есть</td><td><code>https://ivan-petrov.github.io</code></td></tr>
+              <tr><td><b>Location</b></td><td>город</td><td>Москва</td></tr>
+              <tr><td><b>Profile picture</b></td><td>фотографию, по которой вас узнают; кнопка Edit на картинке справа</td><td>фото лица на светлом фоне</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Поле <b>Public email</b> оставьте с пунктом «не показывать», если в шаге 3 скрыли почту. Изменения сохраняет кнопка <b>Update profile</b> внизу страницы. После сохранения профиль выглядит так:</p>
+        <figure class="shot">
+          <img src="img/profil-posle.png" alt="Профиль после сохранения: имя Maxim Bytecamp и описание под логином MaximBytecamp">
+          <figcaption>После Update profile имя и описание появились под картинкой. В этом примере вместо фотографии оставлен стандартный узор GitHub.</figcaption>
+        </figure>
+        <p>Под картинкой теперь стоит имя, под логином — описание. Посетитель понимает, чей это аккаунт и чем человек занимается, ещё до того, как откроет репозитории.</p>
+
+        <p class="step-done"><b>Что получилось.</b>В профиле есть имя и описание. Для картинки в этом примере оставлен стандартный узор GitHub. Следующий шаг добавит на страницу профиля текст, который вы составите сами.</p>
+
+        <h2 id="s8"><span class="sec">§8</span>Шаг 5. Сделать README профиля</h2>
+        <p>В главе 2.5 файл <code>README.md</code> описывал проект: GitHub показывает его под списком файлов репозитория. Тот же механизм работает для профиля. <span class="term">README профиля</span> — файл <code>README.md</code> в особом репозитории, имя которого совпадает с логином. GitHub показывает этот файл вверху страницы профиля. Документация называет три условия: имя репозитория совпадает с логином, репозиторий публичный, файл <code>README.md</code> лежит в корне.</p>
+        <figure class="scheme">
+          <svg class="svg-wide" viewBox="0 0 700 220" role="img" aria-label="Схема: репозиторий MaximBytecamp/MaximBytecamp с файлом README.md; его текст показан вверху страницы профиля github.com/MaximBytecamp над закреплёнными репозиториями">
+            <rect x="8" y="30" width="250" height="160" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="20" y="56" font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--ink-soft)">репозиторий</text>
+            <text x="20" y="78" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--ink)"><tspan fill="var(--fire-deep)">MaximBytecamp</tspan>/</text>
+            <text x="20" y="96" font-family="Roboto Mono, monospace" font-size="12.5" font-weight="700" fill="var(--fire-deep)">MaximBytecamp</text>
+            <rect x="20" y="114" width="226" height="62" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="2"/>
+            <text x="32" y="138" font-family="Roboto Mono, monospace" font-size="12" font-weight="700" fill="var(--ink)">README.md</text>
+            <text x="32" y="160" font-family="Inter, system-ui, sans-serif" font-size="11" fill="var(--ink-soft)">публичный, в корне</text>
+            <path d="M258 145 C320 145 330 92 392 92" stroke="var(--fire-deep)" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/>
+            <path d="M383 85 L393 92 L383 99" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/>
+            <rect x="398" y="12" width="294" height="198" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="410" y="34" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink-soft)">github.com/MaximBytecamp</text>
+            <circle cx="430" cy="74" r="18" fill="#A6DD9E" stroke="var(--ink)" stroke-width="1.5"/>
+            <rect x="410" y="100" width="40" height="6" fill="var(--ink-faint)"/>
+            <rect x="466" y="50" width="214" height="84" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="2"/>
+            <text x="478" y="74" font-family="Inter, system-ui, sans-serif" font-size="11.5" font-weight="700" fill="var(--ink)">текст README.md</text>
+            <rect x="478" y="86" width="170" height="6" fill="var(--ink-faint)"/>
+            <rect x="478" y="100" width="140" height="6" fill="var(--ink-faint)"/>
+            <rect x="478" y="114" width="156" height="6" fill="var(--ink-faint)"/>
+            <rect x="466" y="146" width="102" height="50" fill="var(--page)" stroke="var(--ink-faint)" stroke-width="1.5"/>
+            <rect x="578" y="146" width="102" height="50" fill="var(--page)" stroke="var(--ink-faint)" stroke-width="1.5"/>
+            <text x="573" y="206" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--ink-soft)">закреплённые репозитории ниже</text>
+          </svg><svg class="svg-narrow" viewBox="0 0 340 320" role="img" aria-label="Схема: репозиторий MaximBytecamp/MaximBytecamp с файлом README.md; его текст показан вверху страницы профиля"><rect x="8" y="8" width="324" height="112" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="18" y="30" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)" text-anchor="start">репозиторий</text><text x="18" y="50" font-family="Roboto Mono, monospace" font-size="12" fill="var(--ink)" font-weight="700" text-anchor="start"><tspan fill="var(--fire-deep)">MaximBytecamp</tspan>/<tspan fill="var(--fire-deep)">MaximBytecamp</tspan></text><rect x="18" y="62" width="304" height="46" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="2"/><text x="30" y="82" font-family="Roboto Mono, monospace" font-size="12" fill="var(--ink)" font-weight="700" text-anchor="start">README.md</text><text x="30" y="99" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink-soft)" text-anchor="start">публичный, в корне</text><path d="M170 122 V150" stroke="var(--fire-deep)" stroke-width="2.5" stroke-dasharray="6 5"/><path d="M164 143 L170 152 L176 143" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/><rect x="8" y="154" width="324" height="160" fill="var(--page)" stroke="var(--ink)" stroke-width="3"/><text x="18" y="174" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)" text-anchor="start">github.com/MaximBytecamp</text><circle cx="44" cy="212" r="20" fill="#A6DD9E" stroke="var(--ink)" stroke-width="1.5"/><rect x="76" y="186" width="244" height="66" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="2"/><text x="88" y="206" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink)" font-weight="700" text-anchor="start">текст README.md</text><rect x="88" y="216" width="190" height="6" fill="var(--ink-faint)"/><rect x="88" y="230" width="150" height="6" fill="var(--ink-faint)"/><rect x="76" y="262" width="116" height="40" fill="var(--page)" stroke="var(--ink-faint)" stroke-width="1.5"/><rect x="204" y="262" width="116" height="40" fill="var(--page)" stroke="var(--ink-faint)" stroke-width="1.5"/><text x="198" y="286" font-family="Inter, system-ui, sans-serif" font-size="9.5" fill="var(--ink-soft)" text-anchor="middle">закреплённые</text></svg>
+          <figcaption>Имя репозитория повторяет логин (оранжевым). Текст его README.md GitHub выводит на странице профиля над закреплёнными репозиториями.</figcaption>
+        </figure>
+        <p>Слева — репозиторий, у которого владелец и имя одинаковые: <code>MaximBytecamp/MaximBytecamp</code>. Внутри — <code>README.md</code>. Пунктирная стрелка ведёт на страницу профиля справа: текст файла встаёт рядом с фотографией, выше закреплённых репозиториев. Если хотя бы одно из трёх условий нарушено, страница профиля остаётся прежней, а репозиторий выглядит как обычный.</p>
+        <p>Репозиторий создаётся на сайте: значок <b>+</b> в правом верхнем углу → <b>New repository</b>, или адрес <a href="https://github.com/new">github.com/new</a>. В поле <b>Repository name</b> вписываем логин. GitHub сразу сообщает, что репозиторий особый:</p>
+        <figure class="shot">
+          <img src="img/novyy-repozitoriy.png" alt="Create a new repository: имя MaximBytecamp, сообщение о special repository, Public и включённый Add README">
+          <figcaption>Имя совпадает с логином. GitHub показывает голубую подсказку об особом репозитории; Add README включён — On.</figcaption>
+        </figure>
+        <p>Видимость оставляем <b>Public</b> и отмечаем добавление файла README. Кнопка <b>Create repository</b> создаёт репозиторий с файлом <code>README.md</code>. Файл правится прямо на сайте: значок карандаша над текстом файла открывает редактор.</p>
+        <figure class="shot">
+          <img src="img/readme-redaktor.png" alt="Веб-редактор README.md в ветке main: Markdown с описанием и ссылками на учебные материалы">
+          <figcaption>Редактор README.md: заголовок, описание, список тем и две ссылки. Кнопка Commit changes… сохраняет правку коммитом.</figcaption>
+        </figure>
+        <p>Текст README пишется в разметке Markdown из главы 2.5. Для студента достаточно трёх частей: кто вы, что умеете, где посмотреть работы.</p>
+        <figure class="code">
+          <figcaption><span>README.md</span><span>пример для студента</span></figcaption>
+<pre>## Иван Петров
+
+Студент колледжа, специальность «Информационные системы и программирование».
+
+**Умею:** HTML, CSS, Python, Git.
+
+**Проекты:**
+- [Сайт-визитка](https://github.com/ivan-petrov/sait-vizitka) — первый сайт с ветками и слияниями
+- [Кофейня](https://github.com/ivan-petrov/kofeynya) — домашние задания по Git</pre>
+        </figure>
+        <p>Правка в окне браузера сохраняется коммитом: кнопка <b>Commit changes</b>, сообщение и снова <b>Commit changes</b>. Это обычный коммит в ветку <code>main</code> репозитория профиля. Его подпись GitHub составляет сам, с основной почтой аккаунта или со служебным адресом, если почта скрыта. После коммита открываем профиль:</p>
+        <figure class="shot">
+          <img src="img/profil-readme.png" alt="Профиль MaximBytecamp: README с описанием, темами и ссылками появился выше закреплённых репозиториев">
+          <figcaption>Над закреплёнными репозиториями появился README профиля. Ссылки «Git и GitHub» и «Сайт-визитка» ведут к материалам и проекту.</figcaption>
+        </figure>
+        <p>Текст README стоит вверху страницы. Ссылки в нём ведут к справочнику и репозиторию проекта: посетитель переходит к работам сразу с профиля.</p>
+
+        <p class="step-done"><b>Что получилось.</b>У профиля есть имя, описание и README со ссылками на работы. Профиль готов для посетителей. Последняя часть главы — защита входа в аккаунт.</p>
+
+        <div class="part" role="separator"><span><b>4</b>Двухфакторная защита</span></div>
+        <h2 id="s9"><span class="sec">§9</span>Зачем второй фактор</h2>
+        <p>Банковская карта защищена дважды. Чтобы снять деньги в банкомате, нужна сама карта и ПИН-код. Украденный ПИН без карты бесполезен, найденная карта без ПИН-кода тоже. Защита держится на том, что вор редко получает обе вещи сразу.</p>
+        <p><span class="term">Двухфакторная защита</span> (two-factor authentication, 2FA) — вход, при котором кроме пароля нужен второй признак: код из приложения на телефоне, ключ безопасности или подтверждение на телефоне. Пароль — то, что вы знаете. Телефон — то, что у вас есть. Для входа нужны оба. В марте 2023 года GitHub начал поэтапно вводить обязательную двухфакторную защиту для участников, публикующих код. Если аккаунт включён в эту программу, GitHub показывает уведомление со сроком подключения.</p>
+        <figure class="scheme">
+          <svg class="svg-wide" viewBox="0 0 700 230" role="img" aria-label="Схема: вход владельца — пароль принят, код с телефона принят, вход выполнен. Вход того, кто узнал пароль, — пароль принят, кода нет, вход остановлен">
+            <g font-family="Inter, system-ui, sans-serif" font-size="12.5">
+              <text x="8" y="26" font-weight="700" fill="var(--ink)">владелец аккаунта</text>
+              <rect x="8" y="38" width="190" height="52" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2.5"/>
+              <text x="20" y="60" fill="var(--ink)">1. пароль</text><text x="20" y="79" font-weight="700" fill="var(--moss)">принят</text>
+              <path d="M198 64 H248" stroke="var(--ink)" stroke-width="2.5"/><path d="M240 57 L249 64 L240 71" stroke="var(--ink)" stroke-width="2.5" fill="none"/>
+              <rect x="250" y="38" width="210" height="52" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2.5"/>
+              <text x="262" y="60" fill="var(--ink)">2. код с телефона <tspan font-family="Roboto Mono, monospace">173616</tspan></text><text x="262" y="79" font-weight="700" fill="var(--moss)">совпал</text>
+              <path d="M460 64 H510" stroke="var(--ink)" stroke-width="2.5"/><path d="M502 57 L511 64 L502 71" stroke="var(--ink)" stroke-width="2.5" fill="none"/>
+              <rect x="512" y="38" width="180" height="52" fill="var(--moss)" stroke="var(--ink)" stroke-width="2.5"/>
+              <text x="602" y="70" text-anchor="middle" font-weight="700" fill="#fff">вход выполнен</text>
+
+              <text x="8" y="136" font-weight="700" fill="var(--ink)">тот, кто узнал пароль</text>
+              <rect x="8" y="148" width="190" height="52" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2.5"/>
+              <text x="20" y="170" fill="var(--ink)">1. пароль</text><text x="20" y="189" font-weight="700" fill="var(--moss)">принят</text>
+              <path d="M198 174 H248" stroke="var(--ink)" stroke-width="2.5"/><path d="M240 167 L249 174 L240 181" stroke="var(--ink)" stroke-width="2.5" fill="none"/>
+              <rect x="250" y="148" width="210" height="52" fill="var(--fire-pale)" stroke="var(--fire-deep)" stroke-width="2.5"/>
+              <text x="262" y="170" fill="var(--ink)">2. код с телефона</text><text x="262" y="189" font-weight="700" fill="var(--fire-deep)">телефона нет</text>
+              <path d="M460 174 H510" stroke="var(--ink-faint)" stroke-width="2.5" stroke-dasharray="5 4"/>
+              <rect x="512" y="148" width="180" height="52" fill="var(--page)" stroke="var(--fire-deep)" stroke-width="2.5"/>
+              <text x="602" y="180" text-anchor="middle" font-weight="700" fill="var(--fire-deep)">вход остановлен</text>
+            </g>
+          </svg><svg class="svg-narrow" viewBox="0 0 340 222" role="img" aria-label="Схема: вход владельца — пароль принят, код принят, вход выполнен; вход того, кто узнал пароль — пароль принят, кода нет, вход остановлен"><text x="8" y="16" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink)" font-weight="700" text-anchor="start">владелец аккаунта</text><rect x="8" y="26" width="156" height="48" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2.5"/><text x="16" y="46" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink)" text-anchor="start">1. пароль</text><text x="16" y="64" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--moss)" font-weight="700" text-anchor="start">принят</text><path d="M86 74 V96" stroke="var(--ink)" stroke-width="2.5"/><path d="M80 89 L86 98 L92 89" stroke="var(--ink)" stroke-width="2.5" fill="none"/><rect x="8" y="100" width="156" height="48" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2.5"/><text x="16" y="120" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink)" text-anchor="start">2. код 173616</text><text x="16" y="138" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--moss)" font-weight="700" text-anchor="start">совпал</text><path d="M86 148 V170" stroke="var(--ink)" stroke-width="2.5"/><path d="M80 163 L86 172 L92 163" stroke="var(--ink)" stroke-width="2.5" fill="none"/><rect x="8" y="174" width="156" height="44" fill="var(--moss)" stroke="var(--ink)" stroke-width="2.5"/><text x="86" y="201" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="#fff" font-weight="700" text-anchor="middle">вход выполнен</text><text x="176" y="16" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink)" font-weight="700" text-anchor="start">узнал пароль</text><rect x="176" y="26" width="156" height="48" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2.5"/><text x="184" y="46" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink)" text-anchor="start">1. пароль</text><text x="184" y="64" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--moss)" font-weight="700" text-anchor="start">принят</text><path d="M254 74 V96" stroke="var(--ink)" stroke-width="2.5"/><path d="M248 89 L254 98 L260 89" stroke="var(--ink)" stroke-width="2.5" fill="none"/><rect x="176" y="100" width="156" height="48" fill="var(--fire-pale)" stroke="var(--fire-deep)" stroke-width="2.5"/><text x="184" y="120" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--ink)" text-anchor="start">2. код с телефона</text><text x="184" y="138" font-family="Inter, system-ui, sans-serif" font-size="10.5" fill="var(--fire-deep)" font-weight="700" text-anchor="start">телефона нет</text><path d="M254 148 V170" stroke="var(--ink-faint)" stroke-width="2.5" stroke-dasharray="5 4"/><path d="M248 163 L254 172 L260 163" stroke="var(--ink-faint)" stroke-width="2.5" fill="none"/><rect x="176" y="174" width="156" height="44" fill="var(--page)" stroke="var(--fire-deep)" stroke-width="2.5"/><text x="254" y="201" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--fire-deep)" font-weight="700" text-anchor="middle">вход остановлен</text></svg>
+          <figcaption>Два входа с одним и тем же паролем. Зелёным отмечены пройденные проверки, красным — непройденная. Второй вход останавливается на коде.</figcaption>
+        </figure>
+        <p>Верхняя строка — вход владельца: пароль принят, код с телефона совпал, вход выполнен. Нижняя — вход человека, который узнал пароль. Первая проверка пройдена так же, как у владельца: пароль верный. На второй проверке ему нечего ввести, и вход останавливается. В показанном случае одного украденного пароля для входа недостаточно.</p>
+
+        <h2 id="s10"><span class="sec">§10</span>Шаг 6. Включить двухфакторную защиту</h2>
+        <p>Перед шагом установите на телефон приложение-аутентификатор. GitHub называет такие приложения TOTP app. Подходят Google Authenticator, Microsoft Authenticator, Яндекс Ключ и другие, которые сканируют QR-код и выдают шестизначные коды. GitHub советует приложение как основной способ, а ключ доступа (passkey) или ключ безопасности — как запасной.</p>
+        <p>Защита включается в настройках: <b>Settings</b> → раздел <b>Password and authentication</b> → кнопка <b>Enable two-factor authentication</b>. Прямой адрес — <a href="https://github.com/settings/security">github.com/settings/security</a>.</p>
+        <figure class="shot">
+          <img src="img/2fa-nastroyki.png" alt="Password and authentication: Sign in methods и блок Two-factor authentication со ссылкой Enable two-factor authentication">
+          <figcaption>Под способами входа — блок Two-factor authentication. Защита ещё не включена; ссылка Enable two-factor authentication открывает мастер настройки.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="img/2fa-prilozhenie.png" alt="Setup authenticator app: QR-код скрыт, ниже поле Verify the code from the app и кнопка Continue">
+          <figcaption>Первый шаг мастера: добавление аккаунта в приложение и проверка кода. QR-код на кадре закрыт: он содержит секрет для входа.</figcaption>
+        </figure>
+        <ol class="steps">
+          <li>GitHub показывает QR-код. Откройте приложение на телефоне, нажмите добавление аккаунта и наведите камеру на код. В приложении появится строка <b>GitHub</b> с шестизначным числом.</li>
+          <li>Введите число из приложения в поле <b>Verify the code from the app</b>. Число меняется каждые 30 секунд: вводите текущее.</li>
+          <li>После проверки кода GitHub открывает сохранение кодов восстановления. Завершите этот этап по инструкции в мастере; коды понадобятся при потере телефона.</li>
+        </ol>
+        <p>После завершения мастера вход на <code>github.com</code> с нового устройства после пароля запросит второй фактор. VS Code, в который вы вошли в главе 1.3, продолжает работать: он получил разрешение раньше и пароль заново не вводит.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Вход в аккаунт требует пароль и код из приложения. Приложение показывает новый код каждые 30 секунд, хотя телефон не связывается с GitHub. Остаётся понять, откуда телефон берёт тот же код, что и GitHub.</p>
+
+        <h2 id="s11"><span class="sec">§11</span>Как телефон и GitHub получают один код</h2>
+        <p>Двое договорились о секретном слове и сверили часы. Каждые полминуты оба берут слово и текущее время и считают по одной формуле короткое число. Если слово и часы одинаковые, числа совпадут, хотя эти двое ничего друг другу не передают. Посторонний без слова получить это число не может.</p>
+        <p>Приложение и GitHub работают так же. <span class="term">Общий ключ</span> (secret) — строка, которую GitHub создаёт при включении защиты и передаёт в приложение через QR-код. После этого ключ лежит в двух местах: в приложении и на сервере GitHub. <span class="term">Одноразовый код по времени</span> (time-based one-time password, TOTP) — шестизначное число из общего ключа и текущего времени. Каждая сторона вычисляет его сама по стандарту RFC 6238. Время делится на окна по 30 секунд, и в каждом окне получается своё число.</p>
+        <figure class="scheme">
+          <svg class="svg-wide" viewBox="0 0 700 250" role="img" aria-label="Схема: у телефона и у GitHub один и тот же общий ключ JBSWY3DPEHPK3PXP и одно время 12:00:15, окно 58762080; каждая сторона сама вычисляет код 173616, коды сравниваются и совпадают">
+            <g font-family="Inter, system-ui, sans-serif" font-size="12.5">
+              <text x="120" y="22" text-anchor="middle" font-weight="700" fill="var(--ink)">телефон</text>
+              <text x="580" y="22" text-anchor="middle" font-weight="700" fill="var(--ink)">сервер GitHub</text>
+            </g>
+            <g font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--ink)">
+              <rect x="8" y="34" width="224" height="40" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="2.5"/>
+              <text x="20" y="59">ключ JBSWY3DPEHPK3PXP</text>
+              <rect x="8" y="84" width="224" height="40" fill="var(--page)" stroke="var(--ink)" stroke-width="2.5"/>
+              <text x="20" y="109">часы 12:00:15 → окно 58762080</text>
+              <rect x="468" y="34" width="224" height="40" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="2.5"/>
+              <text x="480" y="59">ключ JBSWY3DPEHPK3PXP</text>
+              <rect x="468" y="84" width="224" height="40" fill="var(--page)" stroke="var(--ink)" stroke-width="2.5"/>
+              <text x="480" y="109">часы 12:00:15 → окно 58762080</text>
+            </g>
+            <path d="M120 124 V150" stroke="var(--ink)" stroke-width="2.5"/><path d="M113 142 L120 151 L127 142" stroke="var(--ink)" stroke-width="2.5" fill="none"/>
+            <path d="M580 124 V150" stroke="var(--ink)" stroke-width="2.5"/><path d="M573 142 L580 151 L587 142" stroke="var(--ink)" stroke-width="2.5" fill="none"/>
+            <rect x="40" y="154" width="160" height="46" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="120" y="184" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="20" font-weight="700" fill="var(--ink)">173616</text>
+            <rect x="500" y="154" width="160" height="46" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/>
+            <text x="580" y="184" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="20" font-weight="700" fill="var(--ink)">173616</text>
+            <path d="M200 177 H330" stroke="var(--ink)" stroke-width="2" stroke-dasharray="6 4"/>
+            <path d="M370 177 H500" stroke="var(--ink)" stroke-width="2"/>
+            <path d="M490 170 L500 177 L490 184" stroke="var(--ink)" stroke-width="2" fill="none"/>
+            <text x="350" y="160" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink-soft)">человек вводит код</text>
+            <text x="580" y="222" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11.5" font-weight="700" fill="var(--moss)">GitHub сравнивает: совпали</text>
+            <text x="350" y="244" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink-soft)">по сети при входе идёт только код, ключ остаётся на своих местах</text>
+          </svg><svg class="svg-narrow" viewBox="0 0 340 266" role="img" aria-label="Схема: у телефона и у GitHub один ключ JBSWY3DPEHPK3PXP и одно время 12:00:15, окно 58762080; каждая сторона сама вычисляет код 173616, коды совпадают"><text x="86" y="16" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink)" font-weight="700" text-anchor="middle">телефон</text><rect x="8" y="26" width="156" height="46" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="2.5"/><text x="16" y="44" font-family="Inter, system-ui, sans-serif" font-size="9.5" fill="var(--ink-soft)" text-anchor="start">ключ</text><text x="16" y="62" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">JBSWY3DPEHPK3PXP</text><rect x="8" y="80" width="156" height="46" fill="var(--page)" stroke="var(--ink)" stroke-width="2.5"/><text x="16" y="98" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">часы 12:00:15</text><text x="16" y="116" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">окно 58762080</text><path d="M86 126 V148" stroke="var(--ink)" stroke-width="2.5"/><path d="M80 141 L86 150 L92 141" stroke="var(--ink)" stroke-width="2.5" fill="none"/><rect x="26" y="152" width="120" height="40" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="86" y="179" font-family="Roboto Mono, monospace" font-size="18" fill="var(--ink)" font-weight="700" text-anchor="middle">173616</text><text x="254" y="16" font-family="Inter, system-ui, sans-serif" font-size="11.5" fill="var(--ink)" font-weight="700" text-anchor="middle">сервер GitHub</text><rect x="176" y="26" width="156" height="46" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="2.5"/><text x="184" y="44" font-family="Inter, system-ui, sans-serif" font-size="9.5" fill="var(--ink-soft)" text-anchor="start">ключ</text><text x="184" y="62" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">JBSWY3DPEHPK3PXP</text><rect x="176" y="80" width="156" height="46" fill="var(--page)" stroke="var(--ink)" stroke-width="2.5"/><text x="184" y="98" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">часы 12:00:15</text><text x="184" y="116" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">окно 58762080</text><path d="M254 126 V148" stroke="var(--ink)" stroke-width="2.5"/><path d="M248 141 L254 150 L260 141" stroke="var(--ink)" stroke-width="2.5" fill="none"/><rect x="194" y="152" width="120" height="40" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="3"/><text x="254" y="179" font-family="Roboto Mono, monospace" font-size="18" fill="var(--ink)" font-weight="700" text-anchor="middle">173616</text><path d="M146 216 H188" stroke="var(--ink)" stroke-width="2"/><path d="M180 209 L189 216 L180 223" stroke="var(--ink)" stroke-width="2" fill="none"/><path d="M86 194 V216 H146" stroke="var(--ink)" stroke-width="2" fill="none" stroke-dasharray="5 4"/><path d="M189 216 H254 V196" stroke="var(--ink)" stroke-width="2" fill="none"/><text x="170" y="238" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--moss)" text-anchor="middle">человек вводит код, GitHub сравнивает: совпали</text><text x="170" y="258" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="middle">по сети идёт только код, ключ остаётся на месте</text></svg>
+          <figcaption>Голубым — общий ключ, одинаковый у обеих сторон. Белым — время и номер окна. Оранжевым — код, который каждая сторона вычисляет сама. Ключ и время на схеме — из прогона ниже.</figcaption>
+        </figure>
+        <p>Левая и правая колонки устроены одинаково. Сверху — общий ключ, под ним — время и номер окна. Стрелка вниз — вычисление, его каждая сторона делает у себя. Внизу — результат: у обеих сторон <code>173616</code>. Человек переносит число с телефона в форму входа, и GitHub сравнивает его со своим. Ключ при входе по сети не передаётся. Поэтому QR-код при включении защиты показывают один раз и никому не пересылают: кто сфотографирует QR-код, будет получать те же коды.</p>
+        <p>Вычисление занимает несколько строк на Python. Программа ниже считает код для ключа-примера <code>JBSWY3DPEHPK3PXP</code> в пять моментов времени 11 ноября 2025 года (UTC). Ключ взят для примера, ни к одному аккаунту он не относится.</p>
+        <figure class="code">
+          <figcaption><span>totp.py</span><span>стандарт RFC 6238, только стандартная библиотека Python</span></figcaption>
+<pre>import base64, hashlib, hmac, struct, time
+
+def totp(secret_b32, t, digits=6, step=30):
+    key = base64.b32decode(secret_b32)
+    counter = int(t) // step                      # номер 30-секундного окна
+    mac = hmac.new(key, struct.pack(">Q", counter), hashlib.sha1).digest()
+    off = mac[-1] &amp; 0x0F                          # где брать 4 байта
+    num = struct.unpack(">I", mac[off:off + 4])[0] &amp; 0x7FFFFFFF
+    return counter, str(num % 10 ** digits).zfill(digits)
+
+secret = "JBSWY3DPEHPK3PXP"                       # ключ из QR-кода (пример)
+for t in [1762862400, 1762862415, 1762862429, 1762862430, 1762862461]:
+    counter, code = totp(secret, t)
+    print(time.strftime("%H:%M:%S", time.gmtime(t)), "окно", counter, "код", code)</pre>
+        </figure>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Строка</th><th>Что делает</th></tr></thead>
+            <tbody>
+              <tr><td><code>base64.b32decode(secret_b32)</code></td><td>переводит ключ из записи буквами и цифрами, как его показывает GitHub, в байты</td></tr>
+              <tr><td><code>int(t) // step</code></td><td>номер окна: число секунд с 1 января 1970 года, делённое на 30 без остатка</td></tr>
+              <tr><td><code>hmac.new(key, …, hashlib.sha1).digest()</code></td><td>подпись номера окна ключом: 20 байт, которые без ключа не получить</td></tr>
+              <tr><td><code>off = mac[-1] &amp; 0x0F</code></td><td>последние 4 бита подписи выбирают, с какого байта брать 4 байта</td></tr>
+              <tr><td><code>struct.unpack(…) &amp; 0x7FFFFFFF</code></td><td>4 байта превращаются в целое число, старший бит сбрасывается</td></tr>
+              <tr><td><code>num % 10 ** digits</code></td><td>последние 6 цифр числа — это и есть код; <code>zfill</code> дописывает нули слева</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><b>Прогон на живых данных.</b> Сначала проверка, что программа считает по стандарту. В RFC 6238 приведены контрольные значения для ключа <code>12345678901234567890</code> и кодов из восьми цифр. Программа выдала все три:</p>
+        <figure class="code code--out">
+          <figcaption><span>python3</span><span>время, код программы, код из RFC 6238</span></figcaption>
+<pre>59 94287082 94287082
+1111111109 07081804 07081804
+2000000000 69279037 69279037</pre>
+        </figure>
+        <p>Теперь промежуточные значения для момента 12:00:00. Их печатает та же последовательность строк, дополненная выводом после каждой:</p>
+        <figure class="code code--out">
+          <figcaption><span>python3</span><span>промежуточные значения для t = 1762862400</span></figcaption>
+<pre>key b'Hello!\xde\xad\xbe\xef' 10
+counter 58762080
+mac ca294572752c6defb47c2291d9a4052dc966300f 20
+last byte 0xf off 15
+4 bytes 2dc96630
+num 768173616 code 173616</pre>
+        </figure>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Строка программы</th><th>Что получилось на прогоне</th></tr></thead>
+            <tbody>
+              <tr><td><code>b32decode</code></td><td>10 байт ключа</td></tr>
+              <tr><td><code>t // 30</code></td><td>окно <code>58762080</code></td></tr>
+              <tr><td><code>hmac … sha1</code></td><td>20 байт подписи, последний байт <code>0f</code></td></tr>
+              <tr><td><code>mac[-1] &amp; 0x0F</code></td><td>смещение 15: байты с 15-го по 18-й — <code>2dc96630</code></td></tr>
+              <tr><td><code>&amp; 0x7FFFFFFF</code></td><td>число <code>768173616</code></td></tr>
+              <tr><td><code>% 10 ** 6</code></td><td>последние шесть цифр — код <code>173616</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Код <code>173616</code> — это последние шесть цифр числа <code>768173616</code>. Дальше программа считает коды в пять моментов времени:</p>
+        <figure class="code code--out">
+          <figcaption><span>python3 totp.py</span><span>ответ</span></figcaption>
+<pre>12:00:00 окно 58762080 код 173616
+12:00:15 окно 58762080 код 173616
+12:00:29 окно 58762080 код 173616
+12:00:30 окно 58762081 код 733688
+12:01:01 окно 58762082 код 586664</pre>
+        </figure>
+        <p>Три первых момента лежат в одном окне — и код один. В 12:00:30 начинается следующее окно, и код другой. Схема раскладывает те же пять моментов по шкале времени:</p>
+        <figure class="scheme">
+          <svg class="svg-wide" viewBox="0 0 700 170" role="img" aria-label="Схема: шкала времени с 12:00:00 до 12:01:30, три окна по 30 секунд с кодами 173616, 733688, 586664; пять отметок прогона — три в первом окне, одна во втором, одна в третьем">
+            <rect x="20" y="50" width="220" height="56" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="2.5"/>
+            <rect x="240" y="50" width="220" height="56" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="2.5"/>
+            <rect x="460" y="50" width="220" height="56" fill="#E4F2E8" stroke="var(--ink)" stroke-width="2.5"/>
+            <g font-family="Roboto Mono, monospace" text-anchor="middle">
+              <text x="130" y="34" font-size="11" fill="var(--ink-soft)">окно 58762080</text>
+              <text x="350" y="34" font-size="11" fill="var(--ink-soft)">окно 58762081</text>
+              <text x="570" y="34" font-size="11" fill="var(--ink-soft)">окно 58762082</text>
+              <text x="130" y="86" font-size="20" font-weight="700" fill="var(--ink)">173616</text>
+              <text x="350" y="86" font-size="20" font-weight="700" fill="var(--ink)">733688</text>
+              <text x="570" y="86" font-size="20" font-weight="700" fill="var(--ink)">586664</text>
+              <text x="20" y="160" font-size="10.5" fill="var(--ink-soft)" text-anchor="start">12:00:00</text>
+              <text x="240" y="160" font-size="10.5" fill="var(--ink-soft)">12:00:30</text>
+              <text x="460" y="160" font-size="10.5" fill="var(--ink-soft)">12:01:00</text>
+              <text x="680" y="160" font-size="10.5" fill="var(--ink-soft)" text-anchor="end">12:01:30</text>
+            </g>
+            <path d="M20 128 H680" stroke="var(--ink)" stroke-width="2"/>
+            <g fill="var(--fire-deep)" stroke="var(--ink)" stroke-width="1.5">
+              <circle cx="20" cy="128" r="6"/><circle cx="130" cy="128" r="6"/><circle cx="233" cy="128" r="6"/><circle cx="240" cy="128" r="6" fill="var(--steel)"/><circle cx="467" cy="128" r="6" fill="var(--moss)"/>
+            </g>
+          </svg><svg class="svg-narrow" viewBox="0 0 340 232" role="img" aria-label="Схема: три окна по 30 секунд с кодами 173616, 733688, 586664 и моменты прогона в каждом"><rect x="8" y="8" width="324" height="64" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="2.5"/><text x="18" y="30" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)" text-anchor="start">окно 58762080</text><text x="18" y="48" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">12:00:00–12:00:29</text><text x="18" y="64" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">моменты :00, :15, :29</text><text x="320" y="50" font-family="Roboto Mono, monospace" font-size="20" fill="var(--ink)" font-weight="700" text-anchor="end">173616</text><rect x="8" y="82" width="324" height="64" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="2.5"/><text x="18" y="104" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)" text-anchor="start">окно 58762081</text><text x="18" y="122" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">12:00:30–12:00:59</text><text x="18" y="138" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">момент :30</text><text x="320" y="124" font-family="Roboto Mono, monospace" font-size="20" fill="var(--ink)" font-weight="700" text-anchor="end">733688</text><rect x="8" y="156" width="324" height="64" fill="#E4F2E8" stroke="var(--ink)" stroke-width="2.5"/><text x="18" y="178" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)" text-anchor="start">окно 58762082</text><text x="18" y="196" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)" text-anchor="start">12:01:00–12:01:29</text><text x="18" y="212" font-family="Inter, system-ui, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">момент 12:01:01</text><text x="320" y="198" font-family="Roboto Mono, monospace" font-size="20" fill="var(--ink)" font-weight="700" text-anchor="end">586664</text></svg>
+          <figcaption>Три окна по 30 секунд и код в каждом. Пять моментов прогона: 12:00:00, :15 и :29 попали в первое окно, 12:00:30 — во второе, 12:01:01 — в третье.</figcaption>
+        </figure>
+        <p>Цвет точки на шкале совпадает с цветом окна, в которое попал момент. Моменты 12:00:29 и 12:00:30 разделяет одна секунда, но они лежат в разных окнах, и коды у них разные. Отсюда два следствия для входа. Код, введённый на границе окон, может не пройти — тогда вводят следующий. Часы телефона должны идти точно: если они отстали на минуту, телефон считает код чужого окна. Поэтому в настройках телефона оставляют автоматическую установку времени.</p>
+
+        <h2 id="s12"><span class="sec">§12</span>Шаг 7. Сохранить коды восстановления</h2>
+        <p>Если телефон потерян, общий ключ пропал вместе с ним, и код для входа взять негде. На этот случай GitHub при включении защиты выдаёт <span class="term">коды восстановления</span> (recovery codes) — набор одноразовых кодов. Каждый из них заменяет код из приложения один раз.</p>
+        <!-- КАДР kody-vosstanovleniya.png: страница кодов восстановления, коды скрыты -->
+        <ol class="steps">
+          <li>Нажмите <b>Download</b>: GitHub сохранит коды файлом <code>github-recovery-codes.txt</code>.</li>
+          <li>Положите файл туда, где он не пропадёт вместе с телефоном: в менеджер паролей или в облачное хранилище, распечатайте и уберите. Папка «Загрузки» на компьютере в аудитории для этого не подходит.</li>
+          <li>После сохранения кодов продолжите мастер и убедитесь, что GitHub подтвердил включение защиты.</li>
+        </ol>
+        <p>Документация GitHub предупреждает: если потерян и второй фактор, и коды восстановления, служба поддержки доступ к аккаунту не вернёт. Поэтому коды сохраняют сразу при включении защиты. Посмотреть коды заново и получить новый набор можно в разделе Password and authentication, пока вход в аккаунт есть.</p>
+
+        <p class="step-done"><b>Что получилось.</b>Аккаунт защищён паролем и кодом из приложения, коды восстановления сохранены. Аккаунт готов к отправке коммитов.</p>
+
+        <div class="part" role="separator"><span><b>5</b>Справка</span></div>
+        <h2 id="s13"><span class="sec">§13</span>Справка: страницы настроек</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Что нужно</th><th>Где на GitHub</th><th>Адрес или команда</th></tr></thead>
+            <tbody>
+              <tr><td>Регистрация</td><td>Sign up на главной</td><td><code>github.com/signup</code></td></tr>
+              <tr><td>Почты аккаунта, скрыть почту</td><td>Settings → Emails</td><td><code>github.com/settings/emails</code></td></tr>
+              <tr><td>Имя, описание, фотография</td><td>Settings → Public profile</td><td><code>github.com/settings/profile</code></td></tr>
+              <tr><td>README профиля</td><td>New repository с именем, равным логину</td><td><code>github.com/new</code></td></tr>
+              <tr><td>Двухфакторная защита, коды восстановления</td><td>Settings → Password and authentication</td><td><code>github.com/settings/security</code></td></tr>
+              <tr><td>Почта в Git</td><td>—</td><td><code>git config --global user.email</code></td></tr>
+              <tr><td>Почта автора коммита на GitHub</td><td>адрес коммита + <code>.patch</code></td><td>строка <code>From:</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="part" role="separator"><span><b>6</b>Проверка себя</span></div>
+        <h2 id="s14"><span class="sec">§14</span>Частые вопросы</h2>
+        <div class="myths">
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Коммит связывается с аккаунтом, через который VS Code вошёл в GitHub.</div>
+            <div class="myth__yes"><b>На самом деле</b>GitHub связывает коммит с аккаунтом по почте в подписи коммита. Коммит <code>7c91a90</code> отправлен с того же компьютера и тем же человеком, что и соседние, но с опечаткой в почте и остался без связи.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Достаточно, чтобы в <code>user.name</code> стоял логин GitHub.</div>
+            <div class="myth__yes"><b>На самом деле</b>Имя автора в сравнении не участвует. У коммитов <code>9a69f1f</code> и <code>7c91a90</code> имя одинаковое, а связан только первый.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Служебный адрес noreply не связывает коммиты с аккаунтом, раз письма на него не доходят.</div>
+            <div class="myth__yes"><b>На самом деле</b>Служебный адрес входит в список почт аккаунта. Коммиты с ним получают аватар и попадают в граф активности.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Приложение-аутентификатор получает код с сервера GitHub через интернет.</div>
+            <div class="myth__yes"><b>На самом деле</b>Приложение само вычисляет код из общего ключа и времени. Интернет телефону для этого не нужен, нужны верные часы.</div>
+          </div>
+          <div class="myth">
+            <div class="myth__no"><b>Обычно думают</b>Если потерять телефон, поддержка GitHub вернёт доступ по паспорту.</div>
+            <div class="myth__yes"><b>На самом деле</b>При включённой защите без второго фактора и кодов восстановления поддержка доступ не возвращает. Коды сохраняют сразу при включении.</div>
+          </div>
+        </div>
+
+        <h2 id="s15"><span class="sec">§15</span>Проверьте себя</h2>
+        <details>
+          <summary>Какие из логинов примет форма регистрации: <code>anna-sidorova</code>, <code>anna_sidorova</code>, <code>anna-sidorova-</code>?</summary>
+          <p>Только первый, если он свободен. Во втором подчёркивание, в третьем дефис в конце.</p>
+        </details>
+        <details>
+          <summary>Коммит на GitHub показан с серым значком, имя не ведёт на профиль. Как узнать причину?</summary>
+          <p>Добавить к адресу коммита <code>.patch</code> и прочитать строку <code>From:</code>. Почту из неё сравнить со списком в Settings → Emails. Если её там нет, коммит не связан с аккаунтом.</p>
+        </details>
+        <details>
+          <summary>Студент неделю делал коммиты в ветке <code>forma</code>, а граф активности пустой. Почта верная. Почему?</summary>
+          <p>В граф засчитываются коммиты ветки по умолчанию. Коммиты ветки <code>forma</code> появятся в графе после её слияния в <code>main</code>.</p>
+        </details>
+        <details>
+          <summary>Какие три условия нужны, чтобы README появился на странице профиля?</summary>
+          <p>Репозиторий называется так же, как логин; репозиторий публичный; файл <code>README.md</code> лежит в корне.</p>
+        </details>
+        <details>
+          <summary>Почему код из приложения меняется каждые 30 секунд, а GitHub всё равно его принимает?</summary>
+          <p>Код вычисляется из общего ключа и номера 30-секундного окна. У GitHub хранится тот же ключ, и время на сервере то же. Поэтому GitHub получает то же число.</p>
+        </details>
+        <details>
+          <summary>Друг просит прислать снимок QR-кода, чтобы «тоже получать коды». Чем это опасно?</summary>
+          <p>В QR-коде лежит общий ключ. Кто его отсканирует, будет получать те же коды, что и ваш телефон. Вместе с паролем этого хватит для входа в аккаунт.</p>
+        </details>
+
+        <h2 id="s16"><span class="sec">§16</span>Шпаргалка по главе</h2>
+        <div class="cheat">
+          <div>
+            <b>Логин</b>
+            <code>латиница, цифры, одиночные дефисы</code>
+            <code>github.com/логин</code>
+            <code>логин.github.io</code>
+          </div>
+          <div>
+            <b>Почта</b>
+            <code>Settings → Emails</code>
+            <code>Keep my email addresses private</code>
+            <code>git config --global user.email</code>
+          </div>
+          <div>
+            <b>Связь коммита</b>
+            <code>почта в подписи = почта аккаунта</code>
+            <code>адрес коммита + .patch</code>
+          </div>
+          <div>
+            <b>Граф активности</b>
+            <code>почта связана</code>
+            <code>ветка по умолчанию</code>
+            <code>до суток на обновление</code>
+          </div>
+          <div>
+            <b>Профиль</b>
+            <code>Settings → Public profile</code>
+            <code>репозиторий логин/логин</code>
+            <code>README.md в корне, Public</code>
+          </div>
+          <div>
+            <b>Двухфакторная защита</b>
+            <code>Settings → Password and authentication</code>
+            <code>QR-код в приложение</code>
+            <code>коды восстановления — Download</code>
+          </div>
+        </div>
+
+        <h2 id="s17"><span class="sec">§17</span>Глоссарий</h2>
+        <p>Термины главы, включая введённые раньше. У каждого — определение, пример и рисунок.</p>
+        <div class="glossary">
+          <article class="gl">
+            <div class="gl__text">
+              <h3>Аккаунт<i>account</i></h3>
+              <p class="gl__def">Учётная запись на GitHub: логин, пароль, почты, репозитории и настройки одного человека.</p>
+              <p class="gl__ex"><b>Пример</b>аккаунт <code>MaximBytecamp</code> с номером <code>245827976</code>.</p>
+              <p class="gl__where"><b>Где</b>главы 1.2, 4.1</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Аккаунт: карточка с логином, почтами и репозиториями"><rect x="20" y="14" width="220" height="92" fill="var(--page)" stroke="var(--ink)" stroke-width="2.5"/><circle cx="50" cy="44" r="16" fill="#A6DD9E" stroke="var(--ink)" stroke-width="1.5"/><text x="76" y="40" font-family="Roboto Mono, monospace" font-size="12" font-weight="700" fill="var(--ink)">MaximBytecamp</text><text x="76" y="56" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink-soft)">№ 245827976</text><text x="34" y="82" font-family="Inter, sans-serif" font-size="10.5" fill="var(--ink-soft)">почты · пароль · репозитории</text><text x="34" y="97" font-family="Inter, sans-serif" font-size="10.5" fill="var(--ink-soft)">настройки · 2FA</text></svg></figure>
+          </article>
+          <article class="gl">
+            <div class="gl__text">
+              <h3>Логин<i>username</i></h3>
+              <p class="gl__def">Уникальное имя аккаунта латиницей. Входит в адрес профиля, репозиториев и сайта на Pages.</p>
+              <p class="gl__ex"><b>Пример</b><code>github.com/MaximBytecamp/sait-vizitka</code>.</p>
+              <p class="gl__where"><b>Где</b>глава 4.1, шаг 1</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Логин внутри трёх адресов"><g font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)"><text x="14" y="34">github.com/<tspan fill="var(--fire-deep)" font-weight="700">логин</tspan></text><text x="14" y="64">github.com/<tspan fill="var(--fire-deep)" font-weight="700">логин</tspan>/проект</text><text x="14" y="94"><tspan fill="var(--fire-deep)" font-weight="700">логин</tspan>.github.io</text></g></svg></figure>
+          </article>
+          <article class="gl">
+            <div class="gl__text">
+              <h3>Профиль<i>profile</i></h3>
+              <p class="gl__def">Публичная страница аккаунта по адресу <code>github.com/логин</code>: фото, имя, описание, README, репозитории, граф активности.</p>
+              <p class="gl__ex"><b>Пример</b><code>github.com/MaximBytecamp</code>.</p>
+              <p class="gl__where"><b>Где</b>глава 4.1, шаг 4</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Профиль: фото и имя слева, README и репозитории справа"><rect x="14" y="10" width="232" height="100" fill="var(--page)" stroke="var(--ink)" stroke-width="2.5"/><circle cx="48" cy="44" r="20" fill="#A6DD9E" stroke="var(--ink)" stroke-width="1.5"/><rect x="28" y="72" width="40" height="6" fill="var(--ink)"/><rect x="28" y="84" width="34" height="5" fill="var(--ink-faint)"/><rect x="88" y="22" width="146" height="34" fill="var(--fire-pale)" stroke="var(--ink-faint)"/><rect x="88" y="64" width="68" height="34" fill="var(--page)" stroke="var(--ink-faint)"/><rect x="166" y="64" width="68" height="34" fill="var(--page)" stroke="var(--ink-faint)"/></svg></figure>
+          </article>
+          <article class="gl">
+            <div class="gl__text">
+              <h3>README профиля<i>profile README</i></h3>
+              <p class="gl__def">Файл <code>README.md</code> в публичном репозитории с именем, равным логину. GitHub показывает его вверху профиля.</p>
+              <p class="gl__ex"><b>Пример</b>репозиторий <code>MaximBytecamp/MaximBytecamp</code>.</p>
+              <p class="gl__where"><b>Где</b>глава 4.1, шаг 5; README проекта — глава 2.5</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Файл README.md переходит на страницу профиля"><rect x="14" y="36" width="86" height="48" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="2"/><text x="57" y="65" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" font-weight="700" fill="var(--ink)">README.md</text><path d="M100 60 H148" stroke="var(--fire-deep)" stroke-width="2.5" stroke-dasharray="5 4"/><path d="M140 53 L149 60 L140 67" stroke="var(--fire-deep)" stroke-width="2.5" fill="none"/><rect x="152" y="14" width="94" height="92" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><rect x="162" y="24" width="74" height="34" fill="var(--fire-pale)"/><text x="199" y="80" text-anchor="middle" font-family="Inter, sans-serif" font-size="9.5" fill="var(--ink-soft)">профиль</text></svg></figure>
+          </article>
+          <article class="gl">
+            <div class="gl__text">
+              <h3>Подпись коммита<i>user.name, user.email</i></h3>
+              <p class="gl__def">Имя и почта автора, которые Git записывает в каждый коммит из настроек. Меняются командой <code>git config</code>.</p>
+              <p class="gl__ex"><b>Пример</b><code>From: MaximBytecamp &lt;bytecampmm@gmail.com&gt;</code> в ответе <code>.patch</code>.</p>
+              <p class="gl__where"><b>Где</b>главы 1.3, 1.4, 4.1</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Коммит с подписью: имя и почта"><rect x="20" y="20" width="220" height="80" fill="var(--page)" stroke="var(--ink)" stroke-width="2.5"/><text x="34" y="44" font-family="Roboto Mono, monospace" font-size="12" font-weight="700" fill="var(--ink)">9a69f1f</text><text x="34" y="66" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink-soft)">user.name  MaximBytecamp</text><text x="34" y="86" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--fire-deep)">user.email bytecampmm@…</text></svg></figure>
+          </article>
+          <article class="gl">
+            <div class="gl__text">
+              <h3>Связь коммита с аккаунтом</h3>
+              <p class="gl__def">Отметка GitHub, что коммит сделал владелец аккаунта. Ставится, если почта в подписи есть среди почт аккаунта.</p>
+              <p class="gl__ex"><b>Пример</b><code>9a69f1f</code> связан, <code>7c91a90</code> с почтой <code>bytecampsm@…</code> — нет.</p>
+              <p class="gl__where"><b>Где</b>глава 4.1, §4</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Связанный коммит с аватаром и несвязанный с серым значком"><circle cx="40" cy="38" r="14" fill="#A6DD9E" stroke="var(--ink)" stroke-width="1.5"/><text x="64" y="42" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="var(--steel)" text-decoration="underline">MaximBytecamp</text><text x="196" y="42" font-family="Roboto Mono, monospace" font-size="10" fill="var(--moss)">9a69f1f</text><circle cx="40" cy="86" r="14" fill="#E3E1DE" stroke="var(--ink-faint)" stroke-width="1.5"/><text x="64" y="90" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="var(--ink)">MaximBytecamp</text><text x="196" y="90" font-family="Roboto Mono, monospace" font-size="10" fill="var(--fire-deep)">7c91a90</text></svg></figure>
+          </article>
+          <article class="gl">
+            <div class="gl__text">
+              <h3>Служебный адрес<i>noreply</i></h3>
+              <p class="gl__def">Почта вида <code>номер+логин@users.noreply.github.com</code>. Письма на неё не доставляются, коммиты с ней связываются с аккаунтом.</p>
+              <p class="gl__ex"><b>Пример</b><code>245827976+MaximBytecamp@users.noreply.github.com</code>.</p>
+              <p class="gl__where"><b>Где</b>главы 1.3, 4.1, шаг 3</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Служебный адрес из номера аккаунта и логина"><text x="130" y="44" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink)"><tspan fill="var(--steel)" font-weight="700">245827976</tspan>+<tspan fill="var(--fire-deep)" font-weight="700">MaximBytecamp</tspan></text><text x="130" y="62" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10" fill="var(--ink)">@users.noreply.github.com</text><text x="70" y="94" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="var(--steel)">номер аккаунта</text><text x="190" y="94" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="var(--fire-deep)">логин</text></svg></figure>
+          </article>
+          <article class="gl">
+            <div class="gl__text">
+              <h3>Граф активности<i>contribution graph</i></h3>
+              <p class="gl__def">Таблица дней за год на странице профиля. Коммит в ней считается, если почта связана с аккаунтом и коммит лежит в ветке по умолчанию.</p>
+              <p class="gl__ex"><b>Пример</b>20 сентября коммит <code>7c91a90</code> в граф не попал, 21 сентября два коммита попали.</p>
+              <p class="gl__where"><b>Где</b>глава 4.1, §5</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Пять квадратов дней разной яркости"><rect x="20" y="36" width="36" height="36" rx="4" fill="#216E39"/><rect x="66" y="36" width="36" height="36" rx="4" fill="#EBEDF0" stroke="var(--ink-faint)"/><rect x="112" y="36" width="36" height="36" rx="4" fill="#9BE9A8"/><rect x="158" y="36" width="36" height="36" rx="4" fill="#EBEDF0" stroke="var(--ink-faint)"/><rect x="204" y="36" width="36" height="36" rx="4" fill="#40C463"/><text x="130" y="96" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="var(--ink-soft)">темнее — больше вклада за день</text></svg></figure>
+          </article>
+          <article class="gl">
+            <div class="gl__text">
+              <h3>Ветка по умолчанию<i>default branch</i></h3>
+              <p class="gl__def">Ветка репозитория, которую GitHub показывает первой и чьи коммиты засчитывает в граф активности. В проектах курса — <code>main</code>.</p>
+              <p class="gl__ex"><b>Пример</b>коммит <code>d1</code> в ветке <code>dizayn</code> попадёт в граф после слияния в <code>main</code>.</p>
+              <p class="gl__where"><b>Где</b>главы 3.1, 4.1</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Ветка main и боковая ветка dizayn"><path d="M20 84 H240" stroke="var(--ink)" stroke-width="3"/><path d="M90 84 C120 84 120 36 150 36 H190" stroke="var(--fire-deep)" stroke-width="3" fill="none"/><circle cx="50" cy="84" r="9" fill="#9BE9A8" stroke="var(--ink)" stroke-width="2"/><circle cx="130" cy="84" r="9" fill="#9BE9A8" stroke="var(--ink)" stroke-width="2"/><circle cx="210" cy="84" r="9" fill="#9BE9A8" stroke="var(--ink)" stroke-width="2"/><circle cx="170" cy="36" r="9" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="2"/><text x="20" y="110" font-family="Roboto Mono, monospace" font-size="10.5" font-weight="700" fill="var(--ink)">main</text><text x="198" y="30" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--fire-deep)">dizayn</text></svg></figure>
+          </article>
+          <article class="gl">
+            <div class="gl__text">
+              <h3>Двухфакторная защита<i>2FA</i></h3>
+              <p class="gl__def">Вход, при котором кроме пароля нужен второй признак — код из приложения, ключ безопасности или подтверждение на телефоне.</p>
+              <p class="gl__ex"><b>Пример</b>пароль, затем код <code>173616</code> из приложения.</p>
+              <p class="gl__where"><b>Где</b>глава 4.1, шаг 6</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Пароль и код с телефона ведут ко входу"><rect x="14" y="40" width="70" height="40" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2"/><text x="49" y="65" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--ink)">пароль</text><text x="96" y="66" font-family="Inter, sans-serif" font-size="16" font-weight="700" fill="var(--ink)">+</text><rect x="112" y="40" width="70" height="40" fill="#E4F2E8" stroke="var(--moss)" stroke-width="2"/><text x="147" y="65" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--ink)">173616</text><path d="M184 60 H206" stroke="var(--ink)" stroke-width="2"/><rect x="208" y="40" width="40" height="40" fill="var(--moss)"/><text x="228" y="65" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#fff">вход</text></svg></figure>
+          </article>
+          <article class="gl">
+            <div class="gl__text">
+              <h3>Общий ключ<i>secret</i></h3>
+              <p class="gl__def">Строка, которую GitHub создаёт при включении защиты и передаёт в приложение через QR-код. Хранится в приложении и на сервере.</p>
+              <p class="gl__ex"><b>Пример</b><code>JBSWY3DPEHPK3PXP</code> — ключ-пример из прогона.</p>
+              <p class="gl__where"><b>Где</b>глава 4.1, §11</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Один ключ у телефона и у сервера"><rect x="14" y="30" width="90" height="60" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="2"/><text x="59" y="56" text-anchor="middle" font-family="Inter, sans-serif" font-size="10.5" fill="var(--ink)">телефон</text><text x="59" y="74" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="8.5" fill="var(--ink)">JBSWY3DP…</text><rect x="156" y="30" width="90" height="60" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="2"/><text x="201" y="56" text-anchor="middle" font-family="Inter, sans-serif" font-size="10.5" fill="var(--ink)">GitHub</text><text x="201" y="74" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="8.5" fill="var(--ink)">JBSWY3DP…</text><text x="130" y="64" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" font-weight="700" fill="var(--moss)">=</text></svg></figure>
+          </article>
+          <article class="gl">
+            <div class="gl__text">
+              <h3>Одноразовый код по времени<i>TOTP</i></h3>
+              <p class="gl__def">Шестизначное число из общего ключа и номера 30-секундного окна по стандарту RFC 6238. Каждая сторона вычисляет его сама.</p>
+              <p class="gl__ex"><b>Пример</b>12:00:00–12:00:29 — <code>173616</code>, с 12:00:30 — <code>733688</code>.</p>
+              <p class="gl__where"><b>Где</b>глава 4.1, §11</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Два окна по 30 секунд с разными кодами"><rect x="14" y="36" width="116" height="44" fill="var(--fire-pale)" stroke="var(--ink)" stroke-width="2"/><rect x="130" y="36" width="116" height="44" fill="var(--steel-pale)" stroke="var(--ink)" stroke-width="2"/><text x="72" y="64" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="14" font-weight="700" fill="var(--ink)">173616</text><text x="188" y="64" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="14" font-weight="700" fill="var(--ink)">733688</text><text x="14" y="100" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-soft)">12:00:00</text><text x="130" y="100" font-family="Roboto Mono, monospace" font-size="9.5" fill="var(--ink-soft)">12:00:30</text></svg></figure>
+          </article>
+          <article class="gl">
+            <div class="gl__text">
+              <h3>Коды восстановления<i>recovery codes</i></h3>
+              <p class="gl__def">Набор одноразовых кодов, каждый из которых один раз заменяет код из приложения. Нужны, если телефон потерян.</p>
+              <p class="gl__ex"><b>Пример</b>файл <code>github-recovery-codes.txt</code>, сохранённый кнопкой Download.</p>
+              <p class="gl__where"><b>Где</b>глава 4.1, шаг 7</p>
+            </div>
+            <figure class="gl__pic"><svg viewBox="0 0 260 120" role="img" aria-label="Лист с кодами, два кода зачёркнуты как использованные"><rect x="60" y="10" width="140" height="100" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><g font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--ink)"><text x="76" y="34">xxxxx-xxxxx</text><text x="76" y="54">xxxxx-xxxxx</text><text x="76" y="74">xxxxx-xxxxx</text><text x="76" y="94">xxxxx-xxxxx</text></g><path d="M72 30 H186 M72 50 H186" stroke="var(--fire-deep)" stroke-width="2"/></svg></figure>
+          </article>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Логин — уникальное имя аккаунта латиницей с одиночными дефисами. Он входит в адрес профиля, репозиториев и сайта на Pages, поэтому выбирается из имени и фамилии. GitHub связывает коммит с аккаунтом по почте в подписи, имя не сравнивается. Коммит с почтой, которой нет в аккаунте, остаётся без аватара и не попадает в граф активности, как <code>7c91a90</code> с опечаткой в почте. В граф засчитываются коммиты ветки по умолчанию со связанной почтой. Почту Git сверяют со страницей Settings → Emails. Чтобы почта не была видна в коммитах, её скрывают и используют служебный адрес noreply. Профиль заполняют в Settings → Public profile, а текст на странице профиля задаёт README в публичном репозитории с именем, равным логину. Двухфакторная защита требует при входе код из приложения. Приложение и GitHub вычисляют этот код сами из общего ключа и номера 30-секундного окна. Коды восстановления сохраняют сразу при включении защиты: без них потерянный телефон означает потерянный аккаунт.</p>
+
+        <div class="sources">
+          <b>Откуда взяты факты</b>
+          <ol>
+            <li>Ответы <code>curl</code> и <code>gh</code> получены 11.11.2026; кадры настроек, README и графа активности обновлены 18.11.2026 на аккаунте <a href="https://github.com/MaximBytecamp">MaximBytecamp</a> и репозитории <a href="https://github.com/MaximBytecamp/git_github_makarov">git_github_makarov</a>.</li>
+            <li>Связь коммита с аккаунтом по почте, проверка через <code>.patch</code>, условия засчитывания в граф — <a href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/managing-contribution-settings-on-your-profile/why-are-my-contributions-not-showing-up-on-my-profile">документация GitHub, «Why are my contributions not showing up on my profile?»</a>.</li>
+            <li>Служебный адрес, флажки Keep my email addresses private и Block command line pushes — <a href="https://docs.github.com/en/account-and-profile/concepts/email-addresses">документация GitHub, «Email addresses»</a> и <a href="https://docs.github.com/en/account-and-profile/how-tos/email-preferences/blocking-command-line-pushes-that-expose-your-personal-email-address">«Blocking command line pushes…»</a>.</li>
+            <li>Смена логина: перенаправление репозиториев и недоступный старый адрес профиля — <a href="https://docs.github.com/articles/changing-your-github-username">документация GitHub, «Changing your GitHub username»</a>.</li>
+            <li>Три условия README профиля — <a href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme">документация GitHub, «Managing your profile README»</a>.</li>
+            <li>Обязательная двухфакторная защита с марта 2023 года, приложение как основной способ, отказ поддержки восстанавливать доступ без второго фактора и кодов — <a href="https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/about-mandatory-two-factor-authentication">«About mandatory two-factor authentication»</a> и <a href="https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication">«Configuring two-factor authentication»</a>.</li>
+            <li>Алгоритм одноразового кода и контрольные значения — <a href="https://datatracker.ietf.org/doc/html/rfc6238">RFC 6238, TOTP</a>, приложение B.</li>
+          </ol>
+        </div>
+
+        <div class="pager"><a href="../16-soobshcheniya-kommitov/index.html">← 3.6 Сообщения коммитов</a><a href="../../index.html">К содержанию справочника</a></div>
+
+        <div class="colophon">
+          <span>Глава 4.1 · Аккаунт и профиль · Справочник по Git и GitHub</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../../book.js"></script>
+</body>
+</html>
