@@ -708,3 +708,22 @@ figure.code--out .cmd:last-child { margin-bottom: 0; padding-bottom: 0; border-b
 /* Схема в двух вариантах: широкий и узкий, для экранов до 560 px */
 .scheme .svg-narrow { display: none; }
 @media (max-width: 560px) { .scheme .svg-wide { display: none; } .scheme .svg-narrow { display: block; } }
+
+/* Глоссарий в конце главы: определение, пример и рисунок */
+.glossary { display: grid; gap: 14px; margin: 22px 0; }
+.gl { display: grid; grid-template-columns: minmax(0, 1fr) 260px; border: 2px solid var(--ink); background: var(--page); }
+.gl__text { padding: 14px 18px 12px; min-width: 0; }
+.gl h3 { margin: 0 0 8px; font-family: var(--display); font-size: 19px; overflow-wrap: anywhere; }
+.gl h3 i { margin-left: 8px; font: 500 12.5px var(--mono); font-style: normal; color: var(--fire-deep); }
+.gl__def { margin: 0 0 8px; font-size: 15.5px; line-height: 1.5; }
+.gl__ex { margin: 0 0 8px; font-size: 14.5px; color: var(--ink-soft); }
+.gl__ex b, .gl__where b { font: 600 10px/1 var(--pixel); letter-spacing: 1px; text-transform: uppercase; color: var(--fire-deep); margin-right: 6px; }
+.gl__where { margin: 0; font-size: 13.5px; color: var(--ink-faint); }
+.gl__text code { overflow-wrap: anywhere; }
+.gl__pic { margin: 0; display: grid; place-items: center; border-left: 1px solid var(--rule); }
+.gl__pic svg { display: block; width: 100%; height: auto; padding: 8px; }
+@media (max-width: 720px) {
+  .gl { grid-template-columns: minmax(0, 1fr); }
+  .gl__pic { border-left: 0; border-top: 1px solid var(--rule); }
+  .gl__pic svg { max-width: 320px; }
+}
