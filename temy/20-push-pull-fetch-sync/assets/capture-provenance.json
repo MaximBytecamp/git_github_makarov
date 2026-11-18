@@ -1,151 +1,329 @@
 {
   "screenshots": [
     {
+      "file": "github-empty.png",
+      "original": "github-empty.png",
+      "original_sha256": "91d1b9cbebdce87791fd73ffe961068e9bcce186a7cc395d08c163c60b5dc871",
+      "crop": [
+        0,
+        0,
+        1280,
+        450
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "github-code.png",
+      "original": "github-code.png",
+      "original_sha256": "369546be0d07744eeeeb844c97aa8c942dc11bdc994f3f849b00f9847164d278",
+      "crop": [
+        0,
+        0,
+        1280,
+        490
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "github-published.png",
+      "original": "github-published.png",
+      "original_sha256": "31d742d3452d7800485b249a537e7ba5063b8adbc37ecda35f58e3d90ff32449",
+      "crop": [
+        0,
+        0,
+        1280,
+        540
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "github-after-push.png",
+      "original": "github-after-push.png",
+      "original_sha256": "17ae761b4cf34a446e54db401793e7c4bae6e76f07e8db6b4b4324558de88ee4",
+      "crop": [
+        0,
+        0,
+        1280,
+        620
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "github-add-url.png",
+      "original": "github-02-url.png",
+      "original_sha256": "8b9d5fde5265ae24448473d670d51ba02eaef26399a8cb33201a206655bac99c",
+      "crop": [
+        740,
+        55,
+        2060,
+        295
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "github-add-origin.png",
+      "original": "github-03-origin.png",
+      "original_sha256": "6baefe5d7e05fdc9aa0624a30645a678ed9b7397be3dadafe8f4e4c46dbef9d6",
+      "crop": [
+        740,
+        55,
+        2060,
+        255
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "github-before-publish.png",
+      "original": "github-04-before-publish.png",
+      "original_sha256": "3d33a94b3a96d1a3b9470bd505bba6da5ae7744b7875f1027d11d40fd8c83510",
+      "crop": [
+        0,
+        65,
+        720,
+        1757
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "github-after-publish.png",
+      "original": "github-05-after-publish.png",
+      "original_sha256": "e70f9636afc6c1a5731899f782b5b309d352a15dbeb60c259404f6b040e02759",
+      "crop": [
+        0,
+        65,
+        720,
+        1757
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
       "file": "08-after-pull-focus.png",
       "original": "08-after-pull.png",
-      "original_sha256": "3c9b132c6380101cbff40733489f247e041f11477c891156bde5f181937ff084",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+      "original_sha256": "14ae42085a9cb66a3dee686bd99235158ec2063cd8ec336904d4a5aa71addc4e",
+      "crop": [
+        1120,
+        65,
+        2560,
+        335
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
     },
     {
-      "file": "07-before-pull-focus.png",
-      "original": "07-before-pull.png",
-      "original_sha256": "50d4b420f0cc5e0425d4e3cee627c8ff749eece1a7daa67ccec4aa9f86cbb092",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+      "file": "github-10-sync-confirm-focus.png",
+      "original": "10-sync-confirm.png",
+      "original_sha256": "26a99ed5724c2354f2ef6432f057a26bb55b618930e279e8f851b0382c19d6ce",
+      "crop": [
+        920,
+        760,
+        1960,
+        1040
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
     },
     {
-      "file": "02-add-remote-focus.png",
-      "original": "02-add-remote.png",
-      "original_sha256": "56ed4e4e3d2cc828848fde1562d78c889155804d0ac5b8698e0237804afdda5f",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "07-before-pull-status.png",
-      "original": "07-before-pull.png",
-      "original_sha256": "50d4b420f0cc5e0425d4e3cee627c8ff749eece1a7daa67ccec4aa9f86cbb092",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "09-before-sync-focus.png",
-      "original": "09-before-sync.png",
-      "original_sha256": "e5d600ebba4856b081208c1b7627089b4d535a96bd2c5fcee0ab4563c2f8c45d",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "01-unpublished-focus.png",
-      "original": "01-unpublished.png",
-      "original_sha256": "ba7c81e7c7bda562392e251b7263d58c9854be89a4fa4090b940f3d5b4b5d561",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "14-final-focus.png",
-      "original": "14-final.png",
-      "original_sha256": "a67b44fd5c99ed8a3e47e3df162ceada1646792d825edb06e3782ad9c7647a2c",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "12-before-sync-pull-status.png",
-      "original": "12-before-sync-pull.png",
-      "original_sha256": "453cc0b6e118b84895a91f8c2e884e4f82204b268c48f378dcb7e005321c0ac9",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+      "file": "github-04-before-push-focus.png",
+      "original": "04-before-push.png",
+      "original_sha256": "2089bf983d529e7e004e5af27750eb514a89f544d8e3be7969380771d29b9727",
+      "crop": [
+        0,
+        65,
+        1140,
+        1757
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
     },
     {
       "file": "04-before-push-status.png",
       "original": "04-before-push.png",
-      "original_sha256": "0fabb710ded93f76bae72fea6b1e725797196d560a5d112c55d22c61cca5d637",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "08-after-pull-status.png",
-      "original": "08-after-pull.png",
-      "original_sha256": "3c9b132c6380101cbff40733489f247e041f11477c891156bde5f181937ff084",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "03-published-focus.png",
-      "original": "03-published.png",
-      "original_sha256": "c453c18afbde33adfde3c4929d9959ee9c314b437a99fb884481f2d5c2980a84",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "14-final-status.png",
-      "original": "14-final.png",
-      "original_sha256": "a67b44fd5c99ed8a3e47e3df162ceada1646792d825edb06e3782ad9c7647a2c",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "12-before-sync-pull-focus.png",
-      "original": "12-before-sync-pull.png",
-      "original_sha256": "453cc0b6e118b84895a91f8c2e884e4f82204b268c48f378dcb7e005321c0ac9",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "04-before-push-focus.png",
-      "original": "04-before-push.png",
-      "original_sha256": "0fabb710ded93f76bae72fea6b1e725797196d560a5d112c55d22c61cca5d637",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+      "original_sha256": "2089bf983d529e7e004e5af27750eb514a89f544d8e3be7969380771d29b9727",
+      "crop": [
+        0,
+        1756,
+        1140,
+        1800
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
     },
     {
       "file": "05-after-push-focus.png",
       "original": "05-after-push.png",
-      "original_sha256": "a10a70ee8a4286b512a18d049b31b7b0f8bcb0ceb51079627a590c4b23a0b60f",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "10-sync-confirm-focus.png",
-      "original": "10-sync-confirm.png",
-      "original_sha256": "52375bac26abb6c620efcb32f5a93a6c02f7335f4573a60a36682175771040c5",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "03-published-status.png",
-      "original": "03-published.png",
-      "original_sha256": "c453c18afbde33adfde3c4929d9959ee9c314b437a99fb884481f2d5c2980a84",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+      "original_sha256": "7bc9355978a20ec6715315db8477bef8e9493d483c1ae72344115a70af0a1e1b",
+      "crop": [
+        0,
+        65,
+        1140,
+        1757
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
     },
     {
       "file": "05-after-push-status.png",
       "original": "05-after-push.png",
-      "original_sha256": "a10a70ee8a4286b512a18d049b31b7b0f8bcb0ceb51079627a590c4b23a0b60f",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
-    },
-    {
-      "file": "06-after-fetch-status.png",
-      "original": "06-after-fetch.png",
-      "original_sha256": "98c334f167e8cabde89bb467845c7eac040bc10b667fa83cf168fc0819f36fc0",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+      "original_sha256": "7bc9355978a20ec6715315db8477bef8e9493d483c1ae72344115a70af0a1e1b",
+      "crop": [
+        0,
+        1756,
+        1140,
+        1800
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
     },
     {
       "file": "06-after-fetch-focus.png",
       "original": "06-after-fetch.png",
-      "original_sha256": "98c334f167e8cabde89bb467845c7eac040bc10b667fa83cf168fc0819f36fc0",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+      "original_sha256": "eec9b0a3acec99db43b78800e37fc73de41c8b1c83906c2ea083ce42262a8a6c",
+      "crop": [
+        0,
+        65,
+        1140,
+        1757
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "06-after-fetch-status.png",
+      "original": "06-after-fetch.png",
+      "original_sha256": "eec9b0a3acec99db43b78800e37fc73de41c8b1c83906c2ea083ce42262a8a6c",
+      "crop": [
+        0,
+        1756,
+        1140,
+        1800
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "github-07-before-pull-focus.png",
+      "original": "07-before-pull.png",
+      "original_sha256": "44d5dfe0e1f37bd671ecd68e6f7dbe5ddad06ed53b57c078c0b2133c5f0fe48d",
+      "crop": [
+        0,
+        65,
+        1140,
+        1757
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "07-before-pull-status.png",
+      "original": "07-before-pull.png",
+      "original_sha256": "44d5dfe0e1f37bd671ecd68e6f7dbe5ddad06ed53b57c078c0b2133c5f0fe48d",
+      "crop": [
+        0,
+        1756,
+        1140,
+        1800
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "github-09-before-sync-focus.png",
+      "original": "09-before-sync.png",
+      "original_sha256": "b5aa029a9fe9f19cc64f15a49ff621588d6eed62f89db45ca70339d988b6c108",
+      "crop": [
+        0,
+        65,
+        1140,
+        1757
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
     },
     {
       "file": "09-before-sync-status.png",
       "original": "09-before-sync.png",
-      "original_sha256": "e5d600ebba4856b081208c1b7627089b4d535a96bd2c5fcee0ab4563c2f8c45d",
-      "transformation": "native-resolution crop, no resizing, no interface alteration",
-      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+      "original_sha256": "b5aa029a9fe9f19cc64f15a49ff621588d6eed62f89db45ca70339d988b6c108",
+      "crop": [
+        0,
+        1756,
+        1140,
+        1800
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "github-12-before-sync-pull-focus.png",
+      "original": "12-before-sync-pull.png",
+      "original_sha256": "7212122f000e1555b9956d72e670b6913536220547ce56a6a0463936ae9ddefb",
+      "crop": [
+        0,
+        65,
+        1140,
+        1757
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "12-before-sync-pull-status.png",
+      "original": "12-before-sync-pull.png",
+      "original_sha256": "7212122f000e1555b9956d72e670b6913536220547ce56a6a0463936ae9ddefb",
+      "crop": [
+        0,
+        1756,
+        1140,
+        1800
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "14-final-focus.png",
+      "original": "14-final.png",
+      "original_sha256": "673b04846ae1eace9588619c2a1c1f306c0d7a66d766642b638b69e92af72da7",
+      "crop": [
+        0,
+        65,
+        1140,
+        1757
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "14-final-status.png",
+      "original": "14-final.png",
+      "original_sha256": "673b04846ae1eace9588619c2a1c1f306c0d7a66d766642b638b69e92af72da7",
+      "crop": [
+        0,
+        1756,
+        1140,
+        1800
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
+    },
+    {
+      "file": "14-final-file.png",
+      "original": "14-final.png",
+      "original_sha256": "673b04846ae1eace9588619c2a1c1f306c0d7a66d766642b638b69e92af72da7",
+      "crop": [
+        1120,
+        65,
+        2560,
+        335
+      ],
+      "transformation": "Native-resolution rectangular crop only; no resizing or interface alteration",
+      "capture": "Playwright, isolated gh47 VS Code or isolated browser"
     }
   ]
 }

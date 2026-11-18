@@ -6,8 +6,6 @@
 .gist h2{margin:0 0 12px;font-size:24px}.gist p:last-child{margin-bottom:0}
 .command{border-left:3px solid var(--rule);padding:8px 14px;margin:16px 0;color:var(--ink-soft);font-size:15px}
 .command code{color:var(--ink)}
-.lab-note{border:2px dashed var(--ink);padding:16px 18px;margin:24px 0}
-.lab-note p:last-child{margin-bottom:0}
 figure.shot .status-shot{border-top:1px solid var(--rule);width:100%;max-width:500px;cursor:zoom-in}
 figure.shot img{background:var(--page)}
 figure.shot--dialog{max-width:650px}
@@ -41,3 +39,6 @@ th{background:var(--page)}
 .self-check{border-top:3px solid var(--ink);margin-top:40px;padding-top:6px}
 @media(max-width:650px){.diagram__body{grid-template-columns:minmax(0,1fr);padding:12px;gap:8px}.transfer b{transform:rotate(90deg);font-size:28px;line-height:1}.transfer{padding:3px}.refs{grid-template-columns:1fr}.repo{padding:12px}.gist{padding:12px 14px}.diagram{box-shadow:3px 3px 0 var(--ink)}.diagram__title{padding:10px 12px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* Узкие кадры сохраняют читаемый размер интерфейса. */
+figure.shot:has(img[src="assets/github-before-publish.png"]),figure.shot:has(img[src="assets/github-after-publish.png"]){max-width:360px}
