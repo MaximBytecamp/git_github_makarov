@@ -1,0 +1,51 @@
+Public read-only example: octocat/Hello-World
+commit=b3cbd5bbd7e81436d2eee04537ea2b4c0cad4cdf
+parents=7fd1a60b01f91b314f59955a4e4d4e80d8edf11d
+tree=a99769c0f635bfd0610ee7a6c2f2b864fa23f3dc
+author=The Octocat
+committer=The Octocat
+author_date=2014-06-10T15:22:26-07:00
+committer_date=2014-06-10T15:22:26-07:00
+message=Create CONTRIBUTING.md
+commit=b1b3f9723831141a31a1a7252a213e216ea76e56
+parents=7fd1a60b01f91b314f59955a4e4d4e80d8edf11d
+tree=be0788944df13c5d170e050f2fe178360c3df5a5
+author=The Octocat
+committer=GitHub
+author_date=2018-05-10T12:55:19-05:00
+committer_date=2018-05-10T12:55:19-05:00
+message=sentence case
+commit=7fd1a60b01f91b314f59955a4e4d4e80d8edf11d
+parents=553c2077f0edc3d5dc5d17262f6aa498e69d6f8e 762941318ee16e59dabbacb1b4049eec22f0d303
+tree=b4eecafa9be2f2006ce1b709d6857b07069b4608
+author=The Octocat
+committer=The Octocat
+author_date=2012-03-06T15:06:50-08:00
+committer_date=2012-03-06T15:06:50-08:00
+message=Merge pull request #6 from Spaceghost/patch-1
+
+b3cbd5bbd7e81436d2eee04537ea2b4c0cad4cdf..b1b3f9723831141a31a1a7252a213e216ea76e56
+0	1	CONTRIBUTING.md
+1	1	README
+
+b1b3f9723831141a31a1a7252a213e216ea76e56..b3cbd5bbd7e81436d2eee04537ea2b4c0cad4cdf
+1	0	CONTRIBUTING.md
+1	1	README
+
+b3cbd5bbd7e81436d2eee04537ea2b4c0cad4cdf...b1b3f9723831141a31a1a7252a213e216ea76e56
+1	1	README
+
+b1b3f9723831141a31a1a7252a213e216ea76e56...b3cbd5bbd7e81436d2eee04537ea2b4c0cad4cdf
+1	0	CONTRIBUTING.md
+
+--- graph ---
+* b1b3f97 (octocat-patch-1) sentence case
+| * b3cbd5b (test) Create CONTRIBUTING.md
+|/
+*   7fd1a60 (HEAD -> master) Merge pull request #6 from Spaceghost/patch-1
+|\
+| * 7629413 New line at end of file. --Signed off by Spaceghost
+|/
+* 553c207 first commit
+
+PASS common ancestor and exact numstat in all four directions
