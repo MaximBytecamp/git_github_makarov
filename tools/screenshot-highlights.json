@@ -1,0 +1,1007 @@
+[
+  {
+    "path": "temy/17-akkaunt-i-profil/img/2fa-nastroyki.png",
+    "original_blob": "b0dc46642f2c54215ee39ebb04d71c46e51c1f91",
+    "boxes": [
+      {
+        "label": "Enable two-factor authentication",
+        "rect": [
+          0.5454545488787879,
+          0.6773675761637239,
+          0.20545454545454545,
+          0.011235955056179803
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/17-akkaunt-i-profil/img/2fa-prilozhenie.png",
+    "original_blob": "614b68de1acf158473ba48bd5831aec33da02b88",
+    "boxes": [
+      {
+        "label": "Verify the code from the app",
+        "rect": [
+          0.23255814383200119,
+          0.6444444446385911,
+          0.14970929622650148,
+          0.014646464453803243
+        ]
+      },
+      {
+        "label": "Continue",
+        "rect": [
+          0.703488372156294,
+          0.762396694548469,
+          0.05232558250427244,
+          0.016528925365871805
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/17-akkaunt-i-profil/img/novyy-repozitoriy.png",
+    "original_blob": "1590d2ca6df085a4ad75f80775789794cbd832bd",
+    "boxes": [
+      {
+        "label": "# Public -",
+        "rect": [
+          0.6859988305207491,
+          0.5667260358950033,
+          0.06695582866668703,
+          0.018986952383095668
+        ]
+      },
+      {
+        "label": "On",
+        "rect": [
+          0.7049418606449545,
+          0.7500000001613465,
+          0.015988372266292572,
+          0.014227641750477638
+        ]
+      },
+      {
+        "label": "Create repository",
+        "rect": [
+          0.672965118717649,
+          0.9735772363238934,
+          0.09302325248718268,
+          0.01829268165438136
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/17-akkaunt-i-profil/img/pochty.png",
+    "original_blob": "cb04a79f4fbc7d01f90ad301870e8be20a45143c",
+    "boxes": [
+      {
+        "label": "Add email address *",
+        "rect": [
+          0.30545454702272723,
+          0.2552166933186195,
+          0.12545454545454543,
+          0.011235955056179803
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/17-akkaunt-i-profil/img/profil-nastroyki.png",
+    "original_blob": "d33dd2d6a03d133f62e7fa156efa9ffa8bf6fff0",
+    "boxes": [
+      {
+        "label": "Name",
+        "rect": [
+          0.30543955059022077,
+          0.25549420824821545,
+          0.03639362681995739,
+          0.013456027772691392
+        ]
+      },
+      {
+        "label": "Public email",
+        "rect": [
+          0.3054545467272727,
+          0.38222222214814816,
+          0.07636363636363641,
+          0.01333333333333342
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/17-akkaunt-i-profil/img/readme-redaktor.png",
+    "original_blob": "85b51763a99044867ff8ad383a7eaeace1f25532",
+    "boxes": [
+      {
+        "label": "Edit",
+        "rect": [
+          0.03454545501849182,
+          0.2964705879607843,
+          0.027272725538773968,
+          0.016470588235294126
+        ]
+      },
+      {
+        "label": "Preview",
+        "rect": [
+          0.08181818096969701,
+          0.29882352949019597,
+          0.050909090909090904,
+          0.014117647058823568
+        ]
+      },
+      {
+        "label": "Commit changes...",
+        "rect": [
+          0.8618181832272727,
+          0.2329411764411765,
+          0.11272727272727279,
+          0.016470588235294126
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/18-vhod-tokeny-ssh/assets/github-code-https.png",
+    "original_blob": "f4d2aa8f0b04c1cc0652e9f80f1a38fcf0cf13c5",
+    "boxes": [
+      {
+        "label": "HTTPS",
+        "rect": [
+          0.07249999914285712,
+          0.2150537636456733,
+          0.12,
+          0.043010752688172005
+        ]
+      },
+      {
+        "label": "https://github.com/git/git.git",
+        "rect": [
+          0.07250000387499994,
+          0.3584229388376856,
+          0.5425,
+          0.04659498207885315
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/18-vhod-tokeny-ssh/assets/ssh-settings.png",
+    "original_blob": "cf68a651c2f25c1ce50cbadd8eed622d6bbb50f9",
+    "boxes": [
+      {
+        "label": "Title",
+        "rect": [
+          0.015988372644864628,
+          0.14016172536888472,
+          0.031976743539174395,
+          0.02425875931228838
+        ]
+      },
+      {
+        "label": "Key type",
+        "rect": [
+          0.015871196810116617,
+          0.2821452750392053,
+          0.0627343495686849,
+          0.03139678099169263
+        ]
+      },
+      {
+        "label": "Add SSH key",
+        "rect": [
+          0.033430233654524924,
+          0.9052224368622578,
+          0.09011627833048502,
+          0.02739211807398545
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/18-vhod-tokeny-ssh/assets/token-form.png",
+    "original_blob": "d01965ddb7aaa63c460299876ddd317d2c5247c5",
+    "boxes": [
+      {
+        "label": "Token name *",
+        "rect": [
+          3.0785499519995576e-09,
+          0.0028409089394758613,
+          0.12234042088190714,
+          0.00887784090909094
+        ]
+      },
+      {
+        "label": "Expiration",
+        "rect": [
+          1.3269832917680209e-09,
+          0.2834302324527447,
+          0.09042553106943768,
+          0.008720930327068777
+        ]
+      },
+      {
+        "label": "Generate token",
+        "rect": [
+          0.015957449614588354,
+          0.9360465120810123,
+          0.1356382966041565,
+          0.010331328958272934
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/18-vhod-tokeny-ssh/assets/token-permissions.png",
+    "original_blob": "52211a984cb8fc58c7075ab3c806615540115d0e",
+    "boxes": [
+      {
+        "label": "Contents",
+        "rect": [
+          0.031909027467251404,
+          0.30564680530509736,
+          0.08007729550202689,
+          0.02253936577209359
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/18-vhod-tokeny-ssh/assets/token-scope.png",
+    "original_blob": "38e55d6f6bf7bfd24f332ae20b7a2029ce0b8f79",
+    "boxes": [
+      {
+        "label": "• Only select repositories",
+        "rect": [
+          7.533205226284423e-09,
+          0.7732558142672059,
+          0.23993287483851117,
+          0.0188953481370997
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/18-vhod-tokeny-ssh/assets/vscode-git-clone.png",
+    "original_blob": "8daada635271155e9b2d0adac7cb23d5501bffa7",
+    "boxes": [
+      {
+        "label": "Git: Clone",
+        "rect": [
+          0.04032257958064519,
+          0.28823529435294115,
+          0.1064516129032258,
+          0.08235294117647063
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/18-vhod-tokeny-ssh/assets/vscode-repository-url.png",
+    "original_blob": "c9b4948a9a577477c0d35cf2eec5fc015cb830ec",
+    "boxes": [
+      {
+        "label": "Provide repository URL or pick a repository source.",
+        "rect": [
+          0.03750001440156654,
+          0.2117647072571236,
+          0.49583331692603333,
+          0.1823529411764706
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/19-readme-markdown/assets/github-edit.png",
+    "original_blob": "9e4db84f6b29553fc99ef3bd2c1f42897fa244b8",
+    "boxes": [
+      {
+        "label": "Edit",
+        "rect": [
+          0.02911392445767219,
+          0.21250000040537453,
+          0.022784809768199923,
+          0.03333333218925094
+        ]
+      },
+      {
+        "label": "Preview",
+        "rect": [
+          0.06700539298720316,
+          0.21102094965994533,
+          0.04573605060577392,
+          0.032124766960242135
+        ]
+      },
+      {
+        "label": "Commit changes...",
+        "rect": [
+          0.8782495331874227,
+          0.06590542032177582,
+          0.10046820640563958,
+          0.04669838147788552
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/19-readme-markdown/assets/github-preview.png",
+    "original_blob": "a3c5df7dcabfec4796063b655fa957ddddfec403",
+    "boxes": [
+      {
+        "label": "Preview",
+        "rect": [
+          0.07122092958891746,
+          0.08853118706950858,
+          0.043604651093482966,
+          0.014084506679225672
+        ]
+      },
+      {
+        "label": "Commit changes...",
+        "rect": [
+          0.8808139554128898,
+          0.028108108010609145,
+          0.09883720874786384,
+          0.016216216216216273
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/19-readme-markdown/assets/vscode-preview.png",
+    "original_blob": "7dbf888d44f7c15031f1a798d044f3244d9a2d2c",
+    "boxes": [
+      {
+        "label": "@ [Preview] README.md X",
+        "rect": [
+          0.5174418607817421,
+          0.08932461912975342,
+          0.1584302266438803,
+          0.01755038082599636
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/19-readme-markdown/assets/vscode-source-control.png",
+    "original_blob": "d2449886c94907432de9359593723a394aefcf3c",
+    "boxes": [
+      {
+        "label": "V Commit",
+        "rect": [
+          0.44341154436948005,
+          0.45946218686418505,
+          0.10321013238342891,
+          0.05933649850928269
+        ]
+      },
+      {
+        "label": "f README.md",
+        "rect": [
+          0.00996677607973425,
+          0.6782608701811593,
+          0.1893687707641196,
+          0.07391304347826089
+        ]
+      },
+      {
+        "label": "• home.png screenshots",
+        "rect": [
+          0.04152823709856039,
+          0.7869565218478262,
+          0.25249169435215946,
+          0.05652173913043479
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/20-push-pull-fetch-sync/assets/01-unpublished-focus.png",
+    "original_blob": "6fb395f2f9a4eee75a0ef74835e024f49285b16e",
+    "boxes": [
+      {
+        "label": "o Publish Branch",
+        "rect": [
+          0.14389534718806077,
+          0.17540687182213177,
+          0.11918604742620412,
+          0.01818287189190204
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/20-push-pull-fetch-sync/assets/02-add-remote-focus.png",
+    "original_blob": "bd496238ce675e029b1c871f9def5cd615d3348c",
+    "boxes": [
+      {
+        "label": "Add remote from URL /private/tmp/gh47/lab/remote.git",
+        "rect": [
+          0.4088651403631653,
+          0.29751941995319364,
+          0.29619773793443344,
+          0.06586559295654293
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/20-push-pull-fetch-sync/assets/04-before-push-focus.png",
+    "original_blob": "a704cbf6ca82dbbe66f17fc8ee3ac06335c8348b",
+    "boxes": [
+      {
+        "label": "V Outgoing Changes main",
+        "rect": [
+          0.05377906974820563,
+          0.6416666664183395,
+          0.1686046482361469,
+          0.027564102564102577
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/20-push-pull-fetch-sync/assets/07-before-pull-focus.png",
+    "original_blob": "0aa880ac97d093996b0d50b82bb24e2bfd5cbcbe",
+    "boxes": [
+      {
+        "label": "E Sync Changes 1V",
+        "rect": [
+          0.13662790612589276,
+          0.16794871836272462,
+          0.13081395257379586,
+          0.023733017994807426
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/20-push-pull-fetch-sync/assets/09-before-sync-focus.png",
+    "original_blob": "a027378145eb9a1c03d99f3c12b992a4baba8173",
+    "boxes": [
+      {
+        "label": "E Sync Changes 11",
+        "rect": [
+          0.13662790612589276,
+          0.17359855355811726,
+          0.13081395257379586,
+          0.018083182359353134
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/20-push-pull-fetch-sync/assets/10-sync-confirm-focus.png",
+    "original_blob": "b9f5cb2b7298180cb0aeae1654aa074520836794",
+    "boxes": [
+      {
+        "label": "A This action will pull and push commits from and to \"origin/main\".",
+        "rect": [
+          0.1145454481060607,
+          0.1878787881313131,
+          0.7727272727272727,
+          0.11515151515151523
+        ]
+      },
+      {
+        "label": "OK",
+        "rect": [
+          0.9072727270568182,
+          0.5030303033333334,
+          0.034545454545454546,
+          0.07272727272727275
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/20-push-pull-fetch-sync/assets/12-before-sync-pull-focus.png",
+    "original_blob": "bf49e0f51862288f6f416949273c661cafc4409d",
+    "boxes": [
+      {
+        "label": "C Sync Changes 1V",
+        "rect": [
+          0.13662790612589276,
+          0.17359855355811726,
+          0.13081395257379586,
+          0.018083182359353134
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/21-esli-vetki-razoshlis/assets/rebase-accept-both.png",
+    "original_blob": "398a6d235db681585783be6e694d0c75e6d0ecbe",
+    "boxes": [
+      {
+        "label": "Two conflicting start times remain",
+        "rect": [
+          0.08545136403941749,
+          0.2944032480356732,
+          0.16135533240533645,
+          0.1605967521518269
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/21-esli-vetki-razoshlis/assets/rebase-conflict-detail.png",
+    "original_blob": "08e323db4c07dc15837c98a936b70db65aca1fea",
+    "boxes": [
+      {
+        "label": "Accept Both Changes",
+        "rect": [
+          0.524370167330426,
+          0.29487179435303523,
+          0.1629360465116279,
+          0.06512820482254023
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/21-esli-vetki-razoshlis/assets/rebase-resolution.png",
+    "original_blob": "281a2b406664bf4f228456c0f0f7f58ffb48d9d3",
+    "boxes": [
+      {
+        "label": "Preparation: 11:00",
+        "rect": [
+          0.10483870816532262,
+          0.4000000008125,
+          0.21129032258064515,
+          0.06499999999999995
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/23-navigaciya-i-poisk/assets/01-root.png",
+    "original_blob": "14cae0f7540b131bacf10236ee9c06418dec2ff3",
+    "boxes": [
+      {
+        "label": "! master -",
+        "rect": [
+          0.08720930509641976,
+          0.25955734403413766,
+          0.06395348442925346,
+          0.014481117633672769
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/23-navigaciya-i-poisk/assets/03-tags.png",
+    "original_blob": "2285de60e2163e43f2a78d3ddde6c3359bfe191f",
+    "boxes": [
+      {
+        "label": "Tags",
+        "rect": [
+          0.14241245003910324,
+          0.38820688582522234,
+          0.03058207564883761,
+          0.014330695225642343
+        ]
+      },
+      {
+        "label": "V5.1.0",
+        "rect": [
+          0.09738372085786764,
+          0.432595573218428,
+          0.03197674486372207,
+          0.01810865218822777
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/23-navigaciya-i-poisk/assets/04-version.png",
+    "original_blob": "d730dbbcb2675c57296974fa4de6d04866435a84",
+    "boxes": [
+      {
+        "label": "• V5.1.0 -",
+        "rect": [
+          0.08720930366820107,
+          0.2595573439335339,
+          0.05813953081766765,
+          0.01448111763367288
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/23-navigaciya-i-poisk/assets/06-folder.png",
+    "original_blob": "f82208eb8686597e4256d8e929631f2518b8400d",
+    "boxes": [
+      {
+        "label": "response.js",
+        "rect": [
+          0.0348837200510385,
+          0.5269230764893923,
+          0.06831395361158583,
+          0.016346153846153788
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/23-navigaciya-i-poisk/assets/07-go-to-file.png",
+    "original_blob": "cd91190e55b79f7ab4ac29dc8a8983c0bee35def",
+    "boxes": [
+      {
+        "label": "Q response.js",
+        "rect": [
+          0.4723837237121385,
+          0.001923076709244742,
+          0.06976743804083924,
+          0.014423076923076983
+        ]
+      },
+      {
+        "label": "• lib/response.js",
+        "rect": [
+          0.19912790825101553,
+          0.5855130784154253,
+          0.08430232471889923,
+          0.014486921750582193
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/23-navigaciya-i-poisk/assets/08-file.png",
+    "original_blob": "4fc426c9a1b7e99743927ce4fea05cdf5a8bc629",
+    "boxes": [
+      {
+        "label": "D History",
+        "rect": [
+          0.9258720922986013,
+          0.23742454753343223,
+          0.05087209277682836,
+          0.016421605990483146
+        ]
+      },
+      {
+        "label": "Blame",
+        "rect": [
+          0.29358595780455315,
+          0.29971196604100014,
+          0.02910715474022757,
+          0.012246087881234935
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/23-navigaciya-i-poisk/assets/09-search-signin.png",
+    "original_blob": "9d02fecb28a2b0d597c3bf7ed93b308f560c9744",
+    "boxes": [
+      {
+        "label": "Sign in to search code on GitHub",
+        "rect": [
+          0.43878646951107453,
+          0.3824929535095679,
+          0.3302661048041449,
+          0.03645340479337256
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/23-navigaciya-i-poisk/assets/10-file-actions.png",
+    "original_blob": "e62280b42042e5c11eb894461ae4de4dd01190f3",
+    "boxes": [
+      {
+        "label": "Jump to line",
+        "rect": [
+          0.8197243002431229,
+          0.30351881300857575,
+          0.05822581715053987,
+          0.016704828922565307
+        ]
+      },
+      {
+        "label": "Copy permalink",
+        "rect": [
+          0.8212209312594037,
+          0.37980769220378807,
+          0.07267441749572756,
+          0.020594721574049624
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/23-navigaciya-i-poisk/assets/11-history.png",
+    "original_blob": "992d57827090bec5781b454fd66869f9e535dc27",
+    "boxes": [
+      {
+        "label": "History for express / lib / response.js on",
+        "rect": [
+          0.0552325580276214,
+          0.251509054776893,
+          0.18895348442925347,
+          0.016096579111539278
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/23-navigaciya-i-poisk/assets/12-blame.png",
+    "original_blob": "cc9453a6e0a751cf5c23cff24adbd0b0b7c3cec8",
+    "boxes": [
+      {
+        "label": "deps: statuses@2.0.1",
+        "rect": [
+          0.32267442003001445,
+          0.7480769234804663,
+          0.0915697627597385,
+          0.0185226743037884
+        ]
+      },
+      {
+        "label": "var body=statuses.message[statusCode] || String(statusCode)",
+        "rect": [
+          0.5508720920275627,
+          0.7480769230924262,
+          0.30668604109022346,
+          0.01651060214409461
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/23-navigaciya-i-poisk/assets/14-download-zip.png",
+    "original_blob": "8aea9621985f963c893a60cbfe88937d641d0cf6",
+    "boxes": [
+      {
+        "label": "Download ZIP",
+        "rect": [
+          0.4345930241087133,
+          0.5230769228980992,
+          0.08720929887559675,
+          0.014423076923076872
+        ]
+      },
+      {
+        "label": "‹> Code -",
+        "rect": [
+          0.6365555799534537,
+          0.25908969619438404,
+          0.05973767704433863,
+          0.01904394810016341
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/23-navigaciya-i-poisk/assets/15-jump-line.png",
+    "original_blob": "97c1d1bda2f9cc88b5613309b57d4c994eec83ac",
+    "boxes": [
+      {
+        "label": "Go",
+        "rect": [
+          0.616279069993824,
+          0.5171026161274784,
+          0.015988371107313437,
+          0.012072433875157329
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/24-proverka-izmeneniy/assets/commit.png",
+    "original_blob": "7b44820d17c0d7236fc0d4c7b6bfb199512beb5c",
+    "boxes": [
+      {
+        "label": "1 file changed",
+        "rect": [
+          0.02470930361025471,
+          0.6080645160640447,
+          0.06686046388414171,
+          0.024193548387096753
+        ]
+      },
+      {
+        "label": "- Hello World!",
+        "rect": [
+          0.2848837223931246,
+          0.9189189193112296,
+          0.07267441749572756,
+          0.02027026914781138
+        ]
+      },
+      {
+        "label": "+ Hello world!",
+        "rect": [
+          0.28343023384855603,
+          0.9594594597115236,
+          0.07412790192498098,
+          0.016891891725601682
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/24-proverka-izmeneniy/assets/compare-fixed.png",
+    "original_blob": "366f495662ff156e964fe21d38cd1788d7342bab",
+    "boxes": [
+      {
+        "label": "base: b3cbd5bbd7e81436d2eee04.. -",
+        "rect": [
+          0.1177325637476169,
+          0.29079497889908035,
+          0.1627906905280219,
+          0.012552301406860367
+        ]
+      },
+      {
+        "label": "compare: b1b3f9723831141a31a1a725.×",
+        "rect": [
+          0.3124999977354065,
+          0.29079497961999,
+          0.1802325566609701,
+          0.012552300453186005
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/24-proverka-izmeneniy/assets/compare-reverse.png",
+    "original_blob": "d9064221784505ad349556cad12b75f384361e75",
+    "boxes": [
+      {
+        "label": "base: octocat-patch-1-",
+        "rect": [
+          0.11773256207734334,
+          0.2907949794107849,
+          0.10319766998291016,
+          0.012552300453186005
+        ]
+      },
+      {
+        "label": "compare: test -",
+        "rect": [
+          0.2529069788665851,
+          0.29079497889908035,
+          0.07122092776828337,
+          0.012552301406860367
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/24-proverka-izmeneniy/assets/compare-three.png",
+    "original_blob": "9f0bfb0821441e25c11441cd12cb5a2a7ccd8c22",
+    "boxes": [
+      {
+        "label": "base: test -",
+        "rect": [
+          0.11751120177127697,
+          0.2905416210160272,
+          0.05417644182840983,
+          0.013120434761047406
+        ]
+      },
+      {
+        "label": "compare: octocat-patch-1-",
+        "rect": [
+          0.20348837298494876,
+          0.29079497889908035,
+          0.12063953611585826,
+          0.012552301406860367
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/24-proverka-izmeneniy/assets/compare-two-reverse.png",
+    "original_blob": "c46e2b0cd910e5e375acd618286bc20e7a35644b",
+    "boxes": [
+      {
+        "label": "base: b1b3f9723831141a31a1a725...-",
+        "rect": [
+          0.11627907474691691,
+          0.29079497920433584,
+          0.1656976699829102,
+          0.01464435100555428
+        ]
+      },
+      {
+        "label": "compare: b3cbd5bbd7e81436d2eee04.. ×",
+        "rect": [
+          0.31250000374315823,
+          0.29079497934105003,
+          0.18023255666097004,
+          0.012552300453186005
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/24-proverka-izmeneniy/assets/compare-two.png",
+    "original_blob": "d8e341411a1b8b9f9a09a4a46013ba23fe935451",
+    "boxes": [
+      {
+        "label": "Load diff",
+        "rect": [
+          0.4752226746533782,
+          0.49734842559915604,
+          0.04955464998881021,
+          0.018519008034154072
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/24-proverka-izmeneniy/assets/history.png",
+    "original_blob": "3828a24f7a58bb8ff34878d19e932d5f99efb2f8",
+    "boxes": [
+      {
+        "label": "sentence case",
+        "rect": [
+          0.09593023399936883,
+          0.41625615776126845,
+          0.07558139165242513,
+          0.014778324575985158
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/24-proverka-izmeneniy/assets/html.png",
+    "original_blob": "5ae486763ebcb3076abdc4a8f76d90451ee58a53",
+    "boxes": [
+      {
+        "label": "<р>учусь работать с Git и веду этот сайт как учебный проект.</р>",
+        "rect": [
+          0.30523255730966187,
+          0.7536945814734177,
+          0.32267441219753684,
+          0.017241379232967535
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/24-proverka-izmeneniy/assets/large.png",
+    "original_blob": "48d544ca359e637e94338c12686156b113b992a7",
+    "boxes": [
+      {
+        "label": "Load diff",
+        "rect": [
+          0.5799418624233322,
+          0.5396475773825992,
+          0.04796511332194009,
+          0.015418501402202467
+        ]
+      }
+    ]
+  },
+  {
+    "path": "temy/24-proverka-izmeneniy/assets/layout.png",
+    "original_blob": "b8503b83de3d3e346f301296ed58149ba407cb85",
+    "boxes": [
+      {
+        "label": "• Unified",
+        "rect": [
+          0.4767441874651335,
+          0.7788461536600815,
+          0.04941860304938428,
+          0.025000000000000022
+        ]
+      },
+      {
+        "label": "Split",
+        "rect": [
+          0.49125386493586315,
+          0.8392176797282445,
+          0.023306224081251325,
+          0.03240801371060886
+        ]
+      }
+    ]
+  }
+]

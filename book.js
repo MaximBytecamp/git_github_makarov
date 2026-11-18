@@ -4,7 +4,7 @@
    3. Светлые блоки кода копируются кнопкой. */
 (() => {
   /* ---- Увеличение картинки ------------------------------------- */
-  const shots = [...document.querySelectorAll('.shot img:not(.shot--logo img)')];
+  const shots = [...document.querySelectorAll('.shot img:not(.shot--logo img), .access-shot img')];
   if (shots.length) {
     const box = document.createElement('div');
     box.className = 'lightbox';
@@ -34,7 +34,10 @@
 
     shots.forEach(source => {
       source.tabIndex = 0;
-      source.addEventListener('click', () => open(source));
+      source.addEventListener('click', event => {
+        event.preventDefault();
+        open(source);
+      });
       source.addEventListener('keydown', event => {
         if (event.key !== 'Enter' && event.key !== ' ') return;
         event.preventDefault();
