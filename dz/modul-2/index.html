@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>ДЗ по модулю 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1B1A19; --ink-soft: #4A4644; --ink-faint: #918A85;
+  --fire: #F05133; --fire-deep: #C8380F; --fire-pale: #FBE0D8;
+  --steel: #2C5D8F; --steel-pale: #DDE7F1; --moss: #2F7D4F;
+  --paper: #F4F1EC; --rule: rgba(27,26,25,.16);
+  --body: Inter, system-ui, sans-serif;
+  --display: Literata, Georgia, serif;
+  --mono: "Roboto Mono", Consolas, monospace;
+}
+@page { size: A4; margin: 16mm 16mm 18mm; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: var(--ink); font: 10.5pt/1.5 var(--body); }
+.sheet { max-width: 178mm; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.2; margin: 0; }
+h1 { font-size: 23pt; margin: 4mm 0 3mm; }
+h2 { font-size: 15pt; margin: 8mm 0 2mm; padding-top: 3mm; border-top: 2px solid var(--ink); break-after: avoid; }
+h2 .num { color: var(--fire); margin-right: 2mm; }
+h3 { font-size: 11.5pt; margin: 5mm 0 1.5mm; break-after: avoid; }
+p { margin: 0 0 2.2mm; }
+ul, ol { margin: 0 0 2.5mm; padding-left: 6mm; }
+li { margin-bottom: 1mm; }
+code, kbd, .mono { font-family: var(--mono); font-size: .88em; }
+code { background: var(--paper); padding: .5px 4px; border-radius: 3px; }
+kbd { border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 3px; padding: 0 4px; background: #fff; white-space: nowrap; }
+a { color: var(--steel); }
+
+.top { display: flex; justify-content: space-between; align-items: center;
+  font-size: 8.5pt; color: var(--ink-soft); border-bottom: 3px solid var(--fire); padding-bottom: 2mm; }
+.top b { color: var(--ink); letter-spacing: .02em; }
+.lead { font-size: 11pt; color: var(--ink-soft); margin-bottom: 3mm; }
+
+.passport { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--ink); margin: 0 0 4mm; }
+.passport div { padding: 2mm 3mm; border-bottom: 1px solid var(--rule); }
+.passport div:nth-child(odd) { border-right: 1px solid var(--rule); }
+.passport div:nth-last-child(-n+2) { border-bottom: 0; }
+.passport b { display: block; font-size: 7.5pt; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-faint); font-weight: 600; }
+
+.box { border-radius: 4px; padding: 3mm 4mm; margin: 3mm 0; break-inside: avoid; }
+.box > b:first-child { display: block; margin-bottom: 1mm; }
+.box p:last-child, .box ul:last-child { margin-bottom: 0; }
+.box--stop { background: var(--fire-pale); border-left: 4px solid var(--fire-deep); }
+.box--info { background: var(--steel-pale); border-left: 4px solid var(--steel); }
+.box--note { background: var(--paper); border-left: 4px solid var(--ink-faint); }
+
+.shot { display: flex; gap: 3mm; align-items: flex-start; border: 1.5px dashed var(--fire); border-radius: 4px;
+  padding: 2.5mm 3.5mm; margin: 3mm 0; break-inside: avoid; }
+.shot .n { flex: none; background: var(--fire); color: #fff; font-weight: 700; border-radius: 3px; padding: .5mm 2mm; font-size: 9pt; white-space: nowrap; }
+.shot p { margin: 0; }
+.shot .cap { font-size: 9pt; color: var(--ink-soft); margin-top: 1mm; }
+
+figure.code { margin: 2mm 0 3mm; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; break-inside: avoid; }
+figure.code figcaption { display: flex; justify-content: space-between; font: 8pt var(--mono); background: var(--paper); padding: 1mm 3mm; color: var(--ink-soft); border-bottom: 1px solid var(--rule); }
+figure.code figcaption b { color: var(--ink); font-weight: 500; }
+figure.code pre { margin: 0; padding: 2mm 3mm; font: 8.6pt/1.45 var(--mono); white-space: pre-wrap; background: #fff; }
+pre mark { background: #DDF0E3; color: var(--moss); font-weight: 500; }
+pre del { background: var(--fire-pale); color: var(--fire-deep); text-decoration: none; }
+figure.code.term pre { background: #1E1E1E; color: #D4D4D4; }
+.term pre .c { color: #9CDCFE; }
+.term pre .o { color: #B5CEA8; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
+.pair figure.code { margin: 2mm 0 3mm; }
+
+table { width: 100%; border-collapse: collapse; margin: 2mm 0 3mm; font-size: 9.5pt; break-inside: avoid; }
+th, td { text-align: left; vertical-align: top; padding: 1.5mm 2mm; border-bottom: 1px solid var(--rule); }
+th { font-size: 8pt; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); border-bottom: 1.5px solid var(--ink); }
+td.num { font-family: var(--mono); color: var(--fire-deep); font-weight: 500; white-space: nowrap; }
+
+.ref { margin: 3mm 0; break-inside: avoid; }
+.ref img { display: block; max-width: 100%; border: 1px solid var(--rule); border-radius: 3px; }
+.ref figcaption { font-size: 8.5pt; color: var(--ink-soft); margin-top: 1mm; }
+.ref--half img { width: 62%; }
+
+.steps { counter-reset: s; list-style: none; padding-left: 0; }
+.steps > li { counter-increment: s; position: relative; padding-left: 8mm; margin-bottom: 2mm; }
+.steps > li::before { content: counter(s); position: absolute; left: 0; top: .3mm; width: 5.5mm; height: 5.5mm; border-radius: 50%;
+  background: var(--ink); color: #fff; font: 600 8pt/5.5mm var(--mono); text-align: center; }
+
+.grade td:first-child { font-family: var(--display); font-weight: 700; font-size: 13pt; width: 12mm; color: var(--fire-deep); }
+.page-break { break-before: page; }
+.foot { margin-top: 8mm; padding-top: 2mm; border-top: 1px solid var(--rule); font-size: 8.5pt; color: var(--ink-faint); display: flex; justify-content: space-between; }
+</style>
+<style>
+.answers td:last-child { width: 46%; border-left: 1px solid var(--rule); }
+.answers td.num { width: 8mm; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<div class="top"><span><b>Git и GitHub</b> · практическое домашнее задание</span><span>Модуль 2, темы 2.1–2.6</span></div>
+
+<h1>Кофейня «Зерно»: история, служебные файлы и&nbsp;отмена изменений</h1>
+<p class="lead">Задание проходит по всему модулю 2 на одном проекте. Часть 1 — свежий клон и два коммита. Часть 2 — поиск ответов в истории. Часть 3 — <code>.gitignore</code>, <code>.gitkeep</code> и README. Часть 4 — все способы отмены из главы 2.6. Сдаётся документ Word со снимками экрана и ответами на вопросы.</p>
+
+<div class="passport">
+  <div><b>Темы справочника</b>2.1 Source Control · 2.2 clone · 2.3 индекс и коммит · 2.4 история · 2.5 служебные файлы · 2.6 отмена изменений</div>
+  <div><b>Учебный репозиторий</b><span class="mono">github.com/MaximBytecamp/kofeynya</span></div>
+  <div><b>Что нужно на компьютере</b>VS Code и Git, настроенные по главе 1.3: в Git заданы ваши имя и почта</div>
+  <div><b>Что сдаётся</b>Документ Word: девятнадцать снимков экрана и таблица из пяти ответов</div>
+  <div><b>Сколько занимает</b>Около двух часов за компьютером</div>
+  <div><b>Срок</b>До начала следующего практического занятия</div>
+</div>
+
+<div class="box box--stop">
+  <b>На GitHub ничего не отправляем</b>
+  <p>Отправка коммитов (<b>Sync Changes</b>, <code>git push</code>) — глава 4.3. Работа выполняется только на вашем компьютере и сдаётся снимками экрана. Кнопку <b>Sync Changes</b> и стрелку <span class="mono">↑</span> в строке состояния не нажимайте: прав на запись в учебный репозиторий у вас нет.</p>
+  <p>Это же условие разрешает amend, Undo Last Commit и reset в части 4: все эти команды переписывают только коммиты, которых нет на GitHub.</p>
+</div>
+
+<div class="box box--info">
+  <b>Нужен новый клон, а не папка из ДЗ 1</b>
+  <p>Задание рассчитано на исходные пять коммитов проекта. Клон из ДЗ 1 не используйте и не удаляйте: для ДЗ 2 создаётся отдельная папка.</p>
+</div>
+
+<h3>Как делать снимки</h3>
+<ul>
+  <li>Снимается окно VS Code целиком (на снимке 7 — окно браузера), текст должен читаться.</li>
+  <li>Снимок в буфер обмена: Windows — <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>; macOS — <kbd>Cmd</kbd> + <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>4</kbd>, затем пробел и щелчок по окну.</li>
+  <li>Под каждым снимком в Word — подпись из оранжевой рамки задания.</li>
+  <li>Терминал: <kbd>Ctrl</kbd> + <kbd>`</kbd> (клавиша «ё»). Длинный ответ, который не помещается в окно, снимается двумя снимками под одним номером.</li>
+  <li>Имена коммитов (хеши) у вас будут свои. Совпадут только имена пяти исходных коммитов проекта: <span class="mono">69a4f0b</span>, <span class="mono">c971be5</span>, <span class="mono">07b88ef</span>, <span class="mono">c016d04</span>, <span class="mono">d451256</span>.</li>
+</ul>
+
+<!-- ============ ЧАСТЬ 1 ============ -->
+<h2><span class="num">1</span>Клон и два коммита</h2>
+<p>Главы 2.1–2.3. Проект клонируется заново, затем две правки из разных задач записываются двумя коммитами.</p>
+
+<ol class="steps">
+  <li>Создайте папку <code>dz2-familiya</code>, где вместо <code>familiya</code> — ваша фамилия латиницей. Папка не должна лежать внутри другого репозитория и в облачной папке (OneDrive, iCloud Drive, Яндекс Диск).</li>
+  <li>В VS Code: <b>File → New Window</b>, палитра команд <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> → <code>Git: Clone</code> → вставить адрес → <kbd>Enter</kbd>:
+    <figure class="code"><figcaption><b>адрес репозитория</b><span>заканчивается на .git</span></figcaption><pre>https://github.com/MaximBytecamp/kofeynya.git</pre></figure></li>
+  <li>В качестве места выберите папку <code>dz2-familiya</code>. Получится <code>dz2-familiya/kofeynya</code>. Нажмите <b>Open</b>.</li>
+  <li>Откройте терминал и проверьте историю:
+    <figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git log --oneline</span>
+<span class="o">d451256 Добавил какао в меню
+c016d04 Добавил README с описанием проекта
+07b88ef Добавил страницу меню
+c971be5 Подключил файл со стилями
+69a4f0b Первая страница кофейни</span></pre></figure></li>
+</ol>
+
+<div class="shot"><span class="n">Снимок 1</span><div><p>Окно VS Code с проектом <code>kofeynya</code>: в проводнике четыре файла, в терминале ответ <code>git log --oneline</code> с пятью коммитами.</p><p class="cap">Подпись: «Рисунок 1 — Свежий клон учебного проекта»</p></div></div>
+
+<p><b>Правка 1, styles.css</b> — цвет подзаголовков, в конец файла:</p>
+<figure class="code"><figcaption><b>styles.css</b><span>в конец файла</span></figcaption><pre><mark>h2 {
+  color: #A0522D;
+}</mark></pre></figure>
+
+<p><b>Правка 2, index.html</b> — совет дня, строка 14:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>index.html</b><span>было, строка 14</span></figcaption><pre>  &lt;p&gt;<del>Капучино на овсяном молоке и булочку с корицей.</del>&lt;/p&gt;</pre></figure>
+<figure class="code"><figcaption><b>index.html</b><span>стало</span></figcaption><pre>  &lt;p&gt;<mark>Раф с лавандой и сырник с изюмом.</mark>&lt;/p&gt;</pre></figure>
+</div>
+<p>Вместо рафа и сырника можно вписать свой вариант. Сохраните оба файла.</p>
+
+<ol class="steps" start="5" style="counter-reset: s 4">
+  <li><b>+</b> у <code>styles.css</code> → сообщение <code>Покрасил подзаголовки</code> → <b>✓ Commit</b>.</li>
+  <li><b>+</b> у <code>index.html</code> → сообщение <code>Обновил совет дня</code> → <b>✓ Commit</b>.</li>
+</ol>
+
+<div class="shot"><span class="n">Снимок 2</span><div><p>Панель Source Control: список изменений пуст, в разделе GRAPH семь коммитов, два верхних — с вашим именем.</p><p class="cap">Подпись: «Рисунок 2 — Два коммита по двум задачам»</p></div></div>
+
+<!-- ============ ЧАСТЬ 2 ============ -->
+<h2><span class="num">2</span>Ответы из истории</h2>
+<p>Глава 2.4. В этой части файлы не меняются. Ответы на вопросы ищутся в истории, а в Word заполняется таблица в конце части.</p>
+
+<h3>Шаг 1. Состав коммита в графе</h3>
+<p>В разделе <b>GRAPH</b> нажмите на коммит <b>Добавил страницу меню</b>. Под ним раскроется список изменённых файлов. Щёлкните по <code>index.html</code> в этом списке — откроется сравнение «до и после коммита».</p>
+
+<div class="shot"><span class="n">Снимок 3</span><div><p>Раскрытый коммит «Добавил страницу меню» в графе и окно сравнения <code>index.html</code> из этого коммита.</p><p class="cap">Подпись: «Рисунок 3 — Что изменил коммит „Добавил страницу меню“»</p></div></div>
+
+<h3>Шаг 2. История одного файла</h3>
+<p>Откройте <code>menu.html</code>, перейдите в проводник (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>E</kbd>) и раскройте внизу раздел <b>TIMELINE</b>.</p>
+
+<div class="shot"><span class="n">Снимок 4</span><div><p>Раздел TIMELINE для <code>menu.html</code> со списком коммитов, которые меняли этот файл.</p><p class="cap">Подпись: «Рисунок 4 — История файла menu.html»</p></div></div>
+
+<h3>Шаг 3. История в терминале</h3>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git log --oneline -- index.html</span>
+<span class="o">9b815fe Обновил совет дня
+07b88ef Добавил страницу меню
+c971be5 Подключил файл со стилями
+69a4f0b Первая страница кофейни</span>
+<span class="c">git show --stat --oneline 07b88ef</span>
+<span class="o">07b88ef Добавил страницу меню
+ index.html | 10 ++++++++++
+ menu.html  | 18 ++++++++++++++++++
+ 2 files changed, 28 insertions(+)</span></pre></figure>
+<p>Имя верхнего коммита у вас будет своё. Команда <code>git show</code> подтверждает то, что видно на снимке 3: файлов два, в <code>index.html</code> добавлено десять строк.</p>
+
+<div class="shot"><span class="n">Снимок 5</span><div><p>Терминал с ответами обеих команд.</p><p class="cap">Подпись: «Рисунок 5 — История index.html и состав коммита 07b88ef»</p></div></div>
+
+<h3>Шаг 4. Кто написал строку</h3>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git blame -L 9,15 index.html</span>
+<span class="o">^69a4f0b (MaximBytecamp 2026-09-28 10:05:00 +0300  9)   &lt;h1&gt;Кофейня «Зерно»&lt;/h1&gt;
+^69a4f0b (MaximBytecamp 2026-09-28 10:05:00 +0300 10)   &lt;p&gt;Варим кофе и печём булочки …&lt;/p&gt;
+07b88ef8 (MaximBytecamp 2026-09-28 11:02:00 +0300 11)   &lt;p&gt;Часы работы: с 08:00 до 20:00, …&lt;/p&gt;
+07b88ef8 (MaximBytecamp 2026-09-28 11:02:00 +0300 12)
+07b88ef8 (MaximBytecamp 2026-09-28 11:02:00 +0300 13)   &lt;h2&gt;Сегодня советуем&lt;/h2&gt;
+9b815fe9 (Иванов Иван   2026-10-07 23:54:03 +0300 14)   &lt;p&gt;Раф с лавандой и сырник с изюмом.&lt;/p&gt;
+07b88ef8 (MaximBytecamp 2026-09-28 11:02:00 +0300 15)   &lt;p&gt;Зёрна привозим со своей обжарки …&lt;/p&gt;</span></pre></figure>
+<p>Тексты строк в образце сокращены. В строке 14 должны стоять ваш коммит и ваше имя.</p>
+
+<div class="shot"><span class="n">Снимок 6</span><div><p>Терминал с ответом <code>git blame -L 9,15 index.html</code>, в строке 14 ваше имя.</p><p class="cap">Подпись: «Рисунок 6 — Авторы строк index.html»</p></div></div>
+
+<h3>Шаг 5. Та же история на GitHub</h3>
+<p>Откройте <a href="https://github.com/MaximBytecamp/kofeynya">github.com/MaximBytecamp/kofeynya</a>, затем файл <code>menu.html</code> и вкладку <b>Blame</b>. Ваших коммитов на GitHub нет: там пять исходных коммитов проекта.</p>
+
+<div class="shot"><span class="n">Снимок 7</span><div><p>Окно браузера: <code>menu.html</code> на вкладке Blame, видна строка «Какао» и коммит, который её добавил.</p><p class="cap">Подпись: «Рисунок 7 — Blame файла menu.html на GitHub»</p></div></div>
+
+<h3>Вопросы: ответы вписать в таблицу в Word</h3>
+<p>Таблицу перенесите в Word целиком, правый столбец заполните. В ответе — имя коммита из семи знаков и его сообщение, где это требуется.</p>
+<table class="answers">
+  <tr><th>№</th><th>Вопрос</th><th>Ответ</th></tr>
+  <tr><td class="num">1</td><td>Каким коммитом на главную страницу добавлена строка с часами работы? Подсказка: не первым.</td><td></td></tr>
+  <tr><td class="num">2</td><td>Сколько коммитов меняли <code>menu.html</code> и какие это коммиты?</td><td></td></tr>
+  <tr><td class="num">3</td><td>Какие файлы изменил коммит <span class="mono">c971be5</span> и сколько строк добавлено в каждый?</td><td></td></tr>
+  <tr><td class="num">4</td><td>Каким коммитом, когда (дата и время) и кем добавлено какао в меню?</td><td></td></tr>
+  <tr><td class="num">5</td><td>Почему на GitHub у строки 14 файла <code>index.html</code> в Blame указан не ваш коммит?</td><td></td></tr>
+</table>
+
+<!-- ============ ЧАСТЬ 3 ============ -->
+<h2><span class="num">3</span>Служебные файлы</h2>
+<p>Глава 2.5. В проекте появляются файлы, которым не место в истории. Их нужно скрыть от Git, а один уже закоммиченный — убрать из репозитория.</p>
+
+<h3>Шаг 1. Создать лишние файлы</h3>
+<p>В корне проекта создайте три файла (<b>New File</b> и <b>New Folder</b> в проводнике):</p>
+<div class="pair">
+<figure class="code"><figcaption><b>.env</b><span>новый файл</span></figcaption><pre>PAYMENT_KEY=test-4f9a2c</pre></figure>
+<figure class="code"><figcaption><b>zakazy.log</b><span>новый файл</span></figcaption><pre>2026-10-07 09:15 заказ №1</pre></figure>
+</div>
+<figure class="code"><figcaption><b>chernoviki/idei.txt</b><span>новый файл в новой папке</span></figcaption><pre>Идея: осенний сезонный напиток</pre></figure>
+<p>В разделе Changes появятся три новых файла с буквой <b>U</b>: <code>.env</code>, <code>zakazy.log</code> и <code>idei.txt</code> из папки <code>chernoviki</code>.</p>
+
+<h3>Шаг 2. Создать .gitignore</h3>
+<p>В корне проекта создайте файл <code>.gitignore</code>:</p>
+<figure class="code"><figcaption><b>.gitignore</b><span>новый файл</span></figcaption><pre># секреты: ключи и пароли
+.env
+
+# личные черновики
+chernoviki/
+
+# журналы работы
+*.log
+
+# служебные файлы систем
+.DS_Store
+Thumbs.db</pre></figure>
+<p>После сохранения в Changes остаётся одна строка — <code>.gitignore</code>. В проводнике скрытые файлы показаны серым.</p>
+
+<div class="shot"><span class="n">Снимок 8</span><div><p>Открытый <code>.gitignore</code>, в разделе Changes только он, в проводнике <code>.env</code>, <code>zakazy.log</code> и <code>chernoviki</code> серые.</p><p class="cap">Подпись: «Рисунок 8 — Лишние файлы скрыты от Git»</p></div></div>
+
+<h3>Шаг 3. Проверить правила и закоммитить</h3>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git check-ignore -v .env chernoviki/idei.txt zakazy.log</span>
+<span class="o">.gitignore:2:.env	.env
+.gitignore:5:chernoviki/	chernoviki/idei.txt
+.gitignore:8:*.log	zakazy.log</span>
+<span class="c">git status --short --ignored</span>
+<span class="o">?? .gitignore
+!! .env
+!! chernoviki/
+!! zakazy.log</span></pre></figure>
+<p>Каждая строка ответа <code>check-ignore</code>: файл с правилами, номер строки, само правило и файл, к которому оно применилось. Метка <span class="mono">!!</span> отмечает скрытые файлы.</p>
+
+<div class="shot"><span class="n">Снимок 9</span><div><p>Терминал с ответами обеих команд.</p><p class="cap">Подпись: «Рисунок 9 — Какое правило скрыло каждый файл»</p></div></div>
+
+<p>Закоммитьте <code>.gitignore</code>: <b>+</b> → <code>Добавил .gitignore</code> → <b>✓ Commit</b>.</p>
+
+<h3>Шаг 4. Файл, который уже в истории</h3>
+<ol class="steps">
+  <li>Создайте файл <code>zametki.txt</code> с текстом <code>Спросить у бариста цены на сиропы</code> и закоммитьте его: <code>Добавил заметки</code>.</li>
+  <li>Заметки личные, им не место в проекте. Допишите в конец <code>.gitignore</code>:
+    <figure class="code"><figcaption><b>.gitignore</b><span>в конец файла</span></figcaption><pre><mark>
+# личные заметки
+zametki.txt</mark></pre></figure></li>
+  <li>Допишите в <code>zametki.txt</code> вторую строку <code>Заказать стаканы</code> и сохраните.</li>
+</ol>
+<p>У <code>zametki.txt</code> буква <b>M</b>: правило в <code>.gitignore</code> не действует на файл, который уже есть в коммитах.</p>
+
+<div class="shot"><span class="n">Снимок 10</span><div><p>Раздел Changes: <code>.gitignore</code> и <code>zametki.txt</code>, оба с буквой M; рядом открыт <code>.gitignore</code> с правилом <code>zametki.txt</code>.</p><p class="cap">Подпись: «Рисунок 10 — Правило не скрывает отслеживаемый файл»</p></div></div>
+
+<p>Уберите файл из репозитория, оставив его на диске:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git rm --cached zametki.txt</span>
+<span class="o">rm 'zametki.txt'</span>
+<span class="c">git add .gitignore</span>
+<span class="c">git commit -m "Убрал zametki.txt из репозитория"</span></pre></figure>
+<p>Проверьте результат. Вместо <span class="mono">c63c34d</span> подставьте имя своего коммита «Добавил заметки» из графа:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git status --short --ignored</span>
+<span class="o">!! .env
+!! chernoviki/
+!! zakazy.log
+!! zametki.txt</span>
+<span class="c">git show c63c34d:zametki.txt</span>
+<span class="o">Спросить у бариста цены на сиропы</span></pre></figure>
+<p>Файл остался на диске и теперь скрыт. Но старая версия по-прежнему лежит в коммите «Добавил заметки». Поэтому пароли и ключи закрывают в <code>.gitignore</code> до первого коммита.</p>
+
+<div class="shot"><span class="n">Снимок 11</span><div><p>Терминал с ответами <code>git status --short --ignored</code> и <code>git show …:zametki.txt</code>.</p><p class="cap">Подпись: «Рисунок 11 — Файл скрыт, но остался в старом коммите»</p></div></div>
+
+<h3>Шаг 5. Пустая папка и README</h3>
+<ol class="steps">
+  <li>Создайте папку <code>img</code>. В Changes она не появится: Git не хранит пустые папки. Создайте в ней пустой файл <code>.gitkeep</code> и закоммитьте его: <code>Добавил папку для картинок</code>.</li>
+  <li>Допишите в <code>README.md</code> две строки в список файлов:
+    <figure class="code"><figcaption><b>README.md</b><span>раздел «Файлы»</span></figcaption><pre>- `styles.css` — оформление всех страниц
+<mark>- `img/` — картинки сайта, пока пустая папка
+- `.gitignore` — список файлов, которые не попадают в историю</mark></pre></figure>
+    Закоммитьте: <code>Добавил в README папку img и .gitignore</code>.</li>
+</ol>
+
+<div class="shot"><span class="n">Снимок 12</span><div><p>Проводник с папкой <code>img</code> и файлом <code>.gitkeep</code> внутри, в графе верхние коммиты «Добавил в README папку img и .gitignore» и «Добавил папку для картинок».</p><p class="cap">Подпись: «Рисунок 12 — Папка для картинок и обновлённый README»</p></div></div>
+
+<!-- ============ ЧАСТЬ 4 ============ -->
+<h2><span class="num">4</span>Отмена изменений</h2>
+<p>Глава 2.6. Каждый шаг — отдельный случай: правка только в файле, ошибка в последнем коммите, лишний последний коммит, ошибка в старом коммите.</p>
+
+<h3>Шаг 1. Отменить правку в файле</h3>
+<ol class="steps">
+  <li>В <code>menu.html</code> удалите все пять строк с ценами (строки 11–15) и сохраните.</li>
+  <li>Щёлкните по <code>menu.html</code> в Changes — в окне сравнения пять красных строк.</li>
+</ol>
+
+<div class="shot"><span class="n">Снимок 13</span><div><p>Окно сравнения <code>menu.html</code> с пятью удалёнными строками до отмены.</p><p class="cap">Подпись: «Рисунок 13 — Правка, которую нужно отменить»</p></div></div>
+
+<ol class="steps" start="3" style="counter-reset: s 2">
+  <li>Наведите курсор на <code>menu.html</code> в Changes → круговая стрелка <b>Discard Changes</b> → <b>Discard File</b>. Цены вернулись.</li>
+  <li>Создайте файл <code>proba.html</code> с любым текстом, затем удалите его той же стрелкой → <b>Move to Trash</b>. Список изменений пуст.</li>
+</ol>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же командами</span></figcaption><pre><span class="c">git restore menu.html</span>
+<span class="c">git clean -f proba.html</span></pre></figure>
+
+<h3>Шаг 2. Исправить последний коммит</h3>
+<p>Добавьте адрес кофейни. В <code>index.html</code> под строкой с часами работы:</p>
+<figure class="code"><figcaption><b>index.html</b><span>после строки 11</span></figcaption><pre>  &lt;p&gt;Часы работы: с 08:00 до 20:00, без выходных.&lt;/p&gt;
+<mark>  &lt;p class="adres"&gt;Адрес: ул. Студенческая, 1, вход со двора.&lt;/p&gt;</mark></pre></figure>
+<p>В конец <code>styles.css</code>:</p>
+<figure class="code"><figcaption><b>styles.css</b><span>в конец файла</span></figcaption><pre><mark>.adres {
+  font-weight: bold;
+}</mark></pre></figure>
+<p>Отберите плюсом <b>только</b> <code>index.html</code> и сделайте коммит с сообщением <code>Добавил адресс кофейни</code>. В коммите две ошибки: опечатка «адресс» и забытый <code>styles.css</code>.</p>
+<ol class="steps">
+  <li>Отберите плюсом <code>styles.css</code>.</li>
+  <li>В поле Message напишите правильное сообщение: <code>Добавил адрес кофейни</code>.</li>
+  <li>Стрелка справа от кнопки <b>Commit</b> → <b>Commit (Amend)</b>.</li>
+</ol>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же командами</span></figcaption><pre><span class="c">git add styles.css</span>
+<span class="c">git commit --amend -m "Добавил адрес кофейни"</span></pre></figure>
+<p>Проверка:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git show --stat --oneline HEAD</span>
+<span class="o">bd1e024 Добавил адрес кофейни
+ index.html | 1 +
+ styles.css | 3 +++
+ 2 files changed, 4 insertions(+)</span></pre></figure>
+
+<div class="shot"><span class="n">Снимок 14</span><div><p>Терминал с ответом <code>git show --stat --oneline HEAD</code>: сообщение без опечатки, два файла. В графе коммита с опечаткой нет.</p><p class="cap">Подпись: «Рисунок 14 — Исправленный последний коммит»</p></div></div>
+
+<h3>Шаг 3. Отменить последний коммит целиком</h3>
+<ol class="steps">
+  <li>В <code>index.html</code> замените часы работы:
+    <div class="pair">
+    <figure class="code"><figcaption><b>index.html</b><span>было</span></figcaption><pre>Часы работы: <del>с 08:00 до 20:00, без выходных</del>.</pre></figure>
+    <figure class="code"><figcaption><b>index.html</b><span>стало</span></figcaption><pre>Часы работы: <mark>закрыто на ремонт до 15 октября</mark>.</pre></figure>
+    </div>
+    Закоммитьте: <code>Закрыли кофейню на ремонт</code>.</li>
+  <li>Ремонт перенесли, коммит сделан рано. Наведите курсор на строку <b>CHANGES</b>, нажмите «…» → <b>Commit → Undo Last Commit</b>.</li>
+</ol>
+<p>Коммита в графе больше нет, его правка вернулась в <b>Staged Changes</b>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же командой, ответа нет</span></figcaption><pre><span class="c">git reset --soft HEAD~</span></pre></figure>
+
+<div class="shot"><span class="n">Снимок 15</span><div><p>Панель: <code>index.html</code> в Staged Changes, в графе верхний коммит «Добавил адрес кофейни».</p><p class="cap">Подпись: «Рисунок 15 — Последний коммит отменён, правка в индексе»</p></div></div>
+
+<p>Правка больше не нужна: <b>−</b> у <code>index.html</code> в Staged Changes, затем <b>Discard Changes</b> в Changes. Список изменений пуст.</p>
+
+<h3>Шаг 4. Отменить старый коммит</h3>
+<p>Какао решили убрать из меню. Его добавил коммит <span class="mono">d451256</span>, после него уже восемь ваших коммитов. Правой кнопкой по коммиту «Добавил какао в меню» в графе → <b>Copy Commit Hash</b>, затем в терминале:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git revert --no-edit d451256</span>
+<span class="o">[main e54ddb8] Revert "Добавил какао в меню"
+ Date: Wed Oct 7 23:54:12 2026 +0300
+ 1 file changed, 1 deletion(-)</span>
+<span class="c">git show HEAD</span>
+<span class="o">commit e54ddb85a63c716702b3b1cd09df8043672aa673
+Author: Иванов Иван &lt;ivanov@example.com&gt;
+Date:   Wed Oct 7 23:54:12 2026 +0300
+
+    Revert "Добавил какао в меню"
+
+    This reverts commit d4512568452424ec6240ebbed0da722cb97778f6.
+
+     &lt;li&gt;Латте — 210 ₽&lt;/li&gt;
+-    &lt;li&gt;Какао — 170 ₽&lt;/li&gt;
+   &lt;/ul&gt;</span></pre></figure>
+<p>Ответ <code>git show</code> в образце сокращён. Какао из меню пропало, а коммит <span class="mono">d451256</span> остался в истории.</p>
+
+<div class="shot"><span class="n">Снимок 16</span><div><p>Терминал с ответом <code>git show HEAD</code>: ваше имя, сообщение Revert и удалённая строка «Какао».</p><p class="cap">Подпись: «Рисунок 16 — Старый коммит отменён новым»</p></div></div>
+
+<h3>Шаг 5. Три режима reset и возврат через reflog</h3>
+<p>В <code>styles.css</code> замените цвет фона <code>#FBF6EE</code> на <code>#FFFFFF</code>. Коммит <code>Проба reset</code> делается три раза — по разу на каждый режим:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git add styles.css</span>
+<span class="c">git commit -m "Проба reset"</span>
+<span class="c">git reset --soft HEAD~</span>
+<span class="c">git status --short</span>
+<span class="o">M  styles.css</span>
+<span class="c">git commit -m "Проба reset"</span>
+<span class="c">git reset HEAD~</span>
+<span class="o">Unstaged changes after reset:
+M	styles.css</span>
+<span class="c">git status --short</span>
+<span class="o"> M styles.css</span>
+<span class="c">git add styles.css</span>
+<span class="c">git commit -m "Проба reset"</span>
+<span class="c">git reset --hard HEAD~</span>
+<span class="o">HEAD is now at e54ddb8 Revert "Добавил какао в меню"</span>
+<span class="c">git status --short</span></pre></figure>
+<p>Буква <b>M</b> в первом столбце — правка в индексе, во втором — только в файле. После <code>--hard</code> ответа нет: правка стёрта и в индексе, и в файле.</p>
+
+<div class="shot"><span class="n">Снимок 17</span><div><p>Терминал с тремя ответами <code>git status --short</code>: <span class="mono">M&nbsp;&nbsp;styles.css</span>, <span class="mono">&nbsp;M styles.css</span> и пустой.</p><p class="cap">Подпись: «Рисунок 17 — Что оставляет каждый режим reset»</p></div></div>
+
+<p>Коммит «Проба reset» после <code>--hard</code> пропал из графа, но журнал <code>reflog</code> его помнит:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git reflog -6</span>
+<span class="o">e54ddb8 HEAD@{0}: reset: moving to HEAD~
+529a44d HEAD@{1}: commit: Проба reset
+e54ddb8 HEAD@{2}: reset: moving to HEAD~
+5168604 HEAD@{3}: commit: Проба reset
+e54ddb8 HEAD@{4}: reset: moving to HEAD~
+0b442de HEAD@{5}: commit: Проба reset</span>
+<span class="c">git reset --hard 'HEAD@{1}'</span>
+<span class="o">HEAD is now at 529a44d Проба reset</span></pre></figure>
+<p>Коммит вернулся: фон в <code>styles.css</code> снова <code>#FFFFFF</code>. Пробный коммит в проекте не нужен, уберите его окончательно:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git reset --hard HEAD~</span>
+<span class="o">HEAD is now at e54ddb8 Revert "Добавил какао в меню"</span></pre></figure>
+
+<div class="shot"><span class="n">Снимок 18</span><div><p>Терминал с ответом <code>git reflog -6</code> и строкой <span class="mono">HEAD is now at … Проба reset</span>.</p><p class="cap">Подпись: «Рисунок 18 — Стёртый коммит возвращён через reflog»</p></div></div>
+
+<h3>Итоговая проверка</h3>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git status --short</span>
+<span class="c">git log --oneline</span>
+<span class="o">e54ddb8 Revert "Добавил какао в меню"
+bd1e024 Добавил адрес кофейни
+535f709 Добавил в README папку img и .gitignore
+a57a527 Добавил папку для картинок
+7cb20b9 Убрал zametki.txt из репозитория
+c63c34d Добавил заметки
+cce14f3 Добавил .gitignore
+9b815fe Обновил совет дня
+3174f42 Покрасил подзаголовки
+d451256 Добавил какао в меню
+c016d04 Добавил README с описанием проекта
+07b88ef Добавил страницу меню
+c971be5 Подключил файл со стилями
+69a4f0b Первая страница кофейни</span></pre></figure>
+<p>Список изменений пуст. Четырнадцать коммитов: пять исходных и девять ваших. Коммитов «Добавил адресс кофейни», «Закрыли кофейню на ремонт» и «Проба reset» в истории нет.</p>
+
+<div class="shot"><span class="n">Снимок 19</span><div><p>Пустая панель Source Control и терминал с ответом <code>git log --oneline</code>: четырнадцать коммитов.</p><p class="cap">Подпись: «Рисунок 19 — Итоговая история проекта»</p></div></div>
+
+<!-- ============ СДАЧА ============ -->
+<h2><span class="num">5</span>Как сдать работу</h2>
+<ol class="steps">
+  <li>Документ Word: в первой строке ФИО, группа, «ДЗ по Git, модуль 2».</li>
+  <li>Снимки по порядку с подписями. Таблица с ответами на пять вопросов — после снимка 7.</li>
+  <li>Имя файла: <code>Фамилия_Git_ДЗ_модуль_2.docx</code>.</li>
+</ol>
+
+<h3>Критерии оценки</h3>
+<table class="grade">
+  <tr><td>5</td><td>Все снимки и пять верных ответов. В итоговой истории четырнадцать коммитов, лишних нет.</td></tr>
+  <tr><td>4</td><td>Нет двух-трёх снимков или один-два ответа неверны.</td></tr>
+  <tr><td>3</td><td>Выполнены части 1–3, в части 4 сделаны хотя бы amend и revert.</td></tr>
+</table>
+<p>Не принимается, если на снимках 2, 6 и 16 в имени автора не ваше имя.</p>
+
+<h3>Если что-то пошло не так</h3>
+<table>
+  <tr><th>Что видно</th><th>Что делать</th></tr>
+  <tr><td>При клонировании ошибка: папка <code>kofeynya</code> уже существует</td><td>Выбрана папка из ДЗ 1. Повторить клонирование в <code>dz2-familiya</code>.</td></tr>
+  <tr><td>При коммите сообщение <span class="mono">Please tell me who you are</span></td><td><code>git config --global user.name "Иванов Иван"</code><br><code>git config --global user.email "почта"</code></td></tr>
+  <tr><td>Файл из <code>.gitignore</code> всё равно виден в Changes</td><td>Проверить имя в правиле и <code>git check-ignore -v имя_файла</code>. Если файл уже в коммитах — шаг 4 части 3.</td></tr>
+  <tr><td><code>git revert</code> пишет <span class="mono">CONFLICT</span></td><td>В <code>menu.html</code> остались правки рядом с какао. <code>git revert --abort</code>, вернуть файл к последнему коммиту и повторить.</td></tr>
+  <tr><td>Открылся редактор Vim при revert или amend</td><td><kbd>Esc</kbd>, затем <code>:wq</code> и <kbd>Enter</kbd>.</td></tr>
+  <tr><td>После <code>reset --hard</code> пропал нужный коммит</td><td><code>git reflog</code>, найти коммит и <code>git reset --hard 'HEAD@{N}'</code>.</td></tr>
+</table>
+
+<p>Справочник: <a href="https://maximbytecamp.github.io/git_github_makarov/">maximbytecamp.github.io/git_github_makarov</a>, главы 2.1–2.6.</p>
+
+<div class="foot"><span>Справочник по Git и GitHub · домашнее задание по модулю 2</span><span>Макаров Максим Николаевич</span></div>
+
+</div>
+</body>
+</html>

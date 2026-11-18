@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>ДЗ по темам 3.1–3.3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1B1A19; --ink-soft: #4A4644; --ink-faint: #918A85;
+  --fire: #F05133; --fire-deep: #C8380F; --fire-pale: #FBE0D8;
+  --steel: #2C5D8F; --steel-pale: #DDE7F1; --moss: #2F7D4F;
+  --paper: #F4F1EC; --rule: rgba(27,26,25,.16);
+  --body: Inter, system-ui, sans-serif;
+  --display: Literata, Georgia, serif;
+  --mono: "Roboto Mono", Consolas, monospace;
+}
+@page { size: A4; margin: 16mm 16mm 18mm; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: var(--ink); font: 10.5pt/1.5 var(--body); }
+.sheet { max-width: 178mm; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.2; margin: 0; }
+h1 { font-size: 23pt; margin: 4mm 0 3mm; }
+h2 { font-size: 15pt; margin: 8mm 0 2mm; padding-top: 3mm; border-top: 2px solid var(--ink); break-after: avoid; }
+h2 .num { color: var(--fire); margin-right: 2mm; }
+h3 { font-size: 11.5pt; margin: 5mm 0 1.5mm; break-after: avoid; }
+p { margin: 0 0 2.2mm; }
+ul, ol { margin: 0 0 2.5mm; padding-left: 6mm; }
+li { margin-bottom: 1mm; }
+code, kbd, .mono { font-family: var(--mono); font-size: .88em; }
+code { background: var(--paper); padding: .5px 4px; border-radius: 3px; }
+kbd { border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 3px; padding: 0 4px; background: #fff; white-space: nowrap; }
+a { color: var(--steel); }
+
+.top { display: flex; justify-content: space-between; align-items: center;
+  font-size: 8.5pt; color: var(--ink-soft); border-bottom: 3px solid var(--fire); padding-bottom: 2mm; }
+.top b { color: var(--ink); letter-spacing: .02em; }
+.lead { font-size: 11pt; color: var(--ink-soft); margin-bottom: 3mm; }
+
+.passport { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--ink); margin: 0 0 4mm; }
+.passport div { padding: 2mm 3mm; border-bottom: 1px solid var(--rule); }
+.passport div:nth-child(odd) { border-right: 1px solid var(--rule); }
+.passport div:nth-last-child(-n+2) { border-bottom: 0; }
+.passport b { display: block; font-size: 7.5pt; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-faint); font-weight: 600; }
+
+.box { border-radius: 4px; padding: 3mm 4mm; margin: 3mm 0; break-inside: avoid; }
+.box > b:first-child { display: block; margin-bottom: 1mm; }
+.box p:last-child, .box ul:last-child { margin-bottom: 0; }
+.box--stop { background: var(--fire-pale); border-left: 4px solid var(--fire-deep); }
+.box--info { background: var(--steel-pale); border-left: 4px solid var(--steel); }
+.box--note { background: var(--paper); border-left: 4px solid var(--ink-faint); }
+
+.shot { display: flex; gap: 3mm; align-items: flex-start; border: 1.5px dashed var(--fire); border-radius: 4px;
+  padding: 2.5mm 3.5mm; margin: 3mm 0; break-inside: avoid; }
+.shot .n { flex: none; background: var(--fire); color: #fff; font-weight: 700; border-radius: 3px; padding: .5mm 2mm; font-size: 9pt; white-space: nowrap; }
+.shot p { margin: 0; }
+.shot .cap { font-size: 9pt; color: var(--ink-soft); margin-top: 1mm; }
+
+figure.code { margin: 2mm 0 3mm; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; break-inside: avoid; }
+figure.code figcaption { display: flex; justify-content: space-between; font: 8pt var(--mono); background: var(--paper); padding: 1mm 3mm; color: var(--ink-soft); border-bottom: 1px solid var(--rule); }
+figure.code figcaption b { color: var(--ink); font-weight: 500; }
+figure.code pre { margin: 0; padding: 2mm 3mm; font: 8.6pt/1.45 var(--mono); white-space: pre-wrap; background: #fff; }
+pre mark { background: #DDF0E3; color: var(--moss); font-weight: 500; }
+pre del { background: var(--fire-pale); color: var(--fire-deep); text-decoration: none; }
+figure.code.term pre { background: #1E1E1E; color: #D4D4D4; }
+.term pre .c { color: #9CDCFE; }
+.term pre .o { color: #B5CEA8; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
+.pair figure.code { margin: 2mm 0 3mm; }
+
+table { width: 100%; border-collapse: collapse; margin: 2mm 0 3mm; font-size: 9.5pt; break-inside: avoid; }
+th, td { text-align: left; vertical-align: top; padding: 1.5mm 2mm; border-bottom: 1px solid var(--rule); }
+th { font-size: 8pt; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); border-bottom: 1.5px solid var(--ink); }
+td.num { font-family: var(--mono); color: var(--fire-deep); font-weight: 500; white-space: nowrap; }
+
+.ref { margin: 3mm 0; break-inside: avoid; }
+.ref img { display: block; max-width: 100%; border: 1px solid var(--rule); border-radius: 3px; }
+.ref figcaption { font-size: 8.5pt; color: var(--ink-soft); margin-top: 1mm; }
+.ref--half img { width: 62%; }
+
+.steps { counter-reset: s; list-style: none; padding-left: 0; }
+.steps > li { counter-increment: s; position: relative; padding-left: 8mm; margin-bottom: 2mm; }
+.steps > li::before { content: counter(s); position: absolute; left: 0; top: .3mm; width: 5.5mm; height: 5.5mm; border-radius: 50%;
+  background: var(--ink); color: #fff; font: 600 8pt/5.5mm var(--mono); text-align: center; }
+
+.grade td:first-child { font-family: var(--display); font-weight: 700; font-size: 13pt; width: 12mm; color: var(--fire-deep); }
+.page-break { break-before: page; }
+.foot { margin-top: 8mm; padding-top: 2mm; border-top: 1px solid var(--rule); font-size: 8.5pt; color: var(--ink-faint); display: flex; justify-content: space-between; }
+</style>
+<style>
+.answers td:last-child { width: 46%; border-left: 1px solid var(--rule); }
+.answers td.num { width: 8mm; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<div class="top"><span><b>Git и GitHub</b> · практическое домашнее задание</span><span>Модуль 3, темы 3.1–3.3</span></div>
+
+<h1>Кофейня «Зерно»: ветки, переключение и&nbsp;слияние</h1>
+<p class="lead">Задание проходит по темам 3.1–3.3 на одном проекте. Часть 1 — как Git хранит ветку. Часть 2 — ветка для десертов и переключение между ветками. Часть 3 — два вида слияния и удаление веток. Сдаётся документ Word со снимками экрана и ответами на вопросы.</p>
+
+<div class="passport">
+  <div><b>Темы справочника</b>3.1 зачем нужны ветки · 3.2 вторая ветка · 3.3 слияние</div>
+  <div><b>Учебный репозиторий</b><span class="mono">github.com/MaximBytecamp/kofeynya</span></div>
+  <div><b>Что нужно на компьютере</b>VS Code и Git, настроенные по главе 1.3: в Git заданы ваши имя и почта</div>
+  <div><b>Что сдаётся</b>Документ Word: восемнадцать снимков экрана и таблица из шести ответов</div>
+  <div><b>Сколько занимает</b>Около полутора часов за компьютером</div>
+  <div><b>Срок</b>До начала следующего практического занятия</div>
+</div>
+
+<div class="box box--stop">
+  <b>На GitHub ничего не отправляем</b>
+  <p>Отправка коммитов и веток — модуль 4. Работа выполняется только на вашем компьютере и сдаётся снимками экрана. Прав на запись в учебный репозиторий у вас нет, поэтому кнопки <b>Sync Changes</b> и <b>Publish Branch</b> оставьте как есть: отправка закончится ошибкой.</p>
+</div>
+
+<div class="box box--info">
+  <b>Нужен новый клон</b>
+  <p>Задание рассчитано на исходные пять коммитов проекта. Клоны из ДЗ 1 и ДЗ 2 оставьте на месте: для ДЗ 3 создаётся отдельная папка.</p>
+</div>
+
+<h3>Как делать снимки</h3>
+<ul>
+  <li>Снимается окно VS Code целиком, текст должен читаться.</li>
+  <li>Снимок в буфер обмена: Windows — <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>; macOS — <kbd>Cmd</kbd> + <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>4</kbd>, затем пробел и щелчок по окну.</li>
+  <li>Под каждым снимком в Word — подпись из оранжевой рамки задания.</li>
+  <li>Терминал: <kbd>Ctrl</kbd> + <kbd>`</kbd> (клавиша «ё»). Длинный ответ, который не помещается в окно, снимается двумя снимками под одним номером.</li>
+  <li>Имена коммитов (хеши) у вас будут свои. Совпадут только имена пяти исходных коммитов проекта: <span class="mono">69a4f0b</span>, <span class="mono">c971be5</span>, <span class="mono">07b88ef</span>, <span class="mono">c016d04</span>, <span class="mono">d451256</span>.</li>
+  <li>Перед каждым коммитом посмотрите на имя ветки в строке состояния внизу слева: коммит попадёт в эту ветку.</li>
+</ul>
+
+<!-- ============ ЧАСТЬ 1 ============ -->
+<h2><span class="num">1</span>Ветка изнутри</h2>
+<p>Глава 3.1. Проект клонируется заново. В нём одна ветка, <code>main</code>: нужно найти, где VS Code показывает её имя и в каких файлах папки <code>.git</code> она записана.</p>
+
+<ol class="steps">
+  <li>Создайте папку <code>dz3-familiya</code>, где вместо <code>familiya</code> — ваша фамилия латиницей. Папка должна лежать вне других репозиториев и вне облачных папок (OneDrive, iCloud Drive, Яндекс Диск).</li>
+  <li>В VS Code: <b>File → New Window</b>, палитра команд <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> → <code>Git: Clone</code> → вставить адрес → <kbd>Enter</kbd>:
+    <figure class="code"><figcaption><b>адрес репозитория</b><span>заканчивается на .git</span></figcaption><pre>https://github.com/MaximBytecamp/kofeynya.git</pre></figure></li>
+  <li>В качестве места выберите папку <code>dz3-familiya</code>. Получится <code>dz3-familiya/kofeynya</code>. Нажмите <b>Open</b>.</li>
+</ol>
+
+<h3>Шаг 1. Имя ветки и список веток</h3>
+<p>Откройте терминал и проверьте историю и ветки:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git log --oneline</span>
+<span class="o">d451256 Добавил какао в меню
+c016d04 Добавил README с описанием проекта
+07b88ef Добавил страницу меню
+c971be5 Подключил файл со стилями
+69a4f0b Первая страница кофейни</span>
+<span class="c">git branch -a</span>
+<span class="o">* main
+  remotes/origin/HEAD -&gt; origin/main
+  remotes/origin/main</span></pre></figure>
+<p>Звёздочка отмечает ветку, на которой вы стоите. Строки <code>remotes/</code> — записи о ветках копии проекта на GitHub.</p>
+
+<div class="shot"><span class="n">Снимок 1</span><div><p>Окно VS Code с проектом <code>kofeynya</code>: в строке состояния внизу слева <code>main</code>, в терминале ответы обеих команд.</p><p class="cap">Подпись: «Рисунок 1 — Свежий клон и его ветки»</p></div></div>
+
+<p>Нажмите на имя <code>main</code> в строке состояния. Вверху окна откроется список: команды создания ветки, ветка <code>main</code> в группе <b>branches</b> и <code>origin/main</code> в группе <b>remote branches</b>.</p>
+
+<div class="shot"><span class="n">Снимок 2</span><div><p>Открытый список веток: видны строка <b>Create new branch…</b>, <code>main</code> и <code>origin/main</code>.</p><p class="cap">Подпись: «Рисунок 2 — Список веток в VS Code»</p></div></div>
+
+<p>Закройте список клавишей <kbd>Esc</kbd>, ничего не выбирая.</p>
+
+<h3>Шаг 2. Файл ветки и запись HEAD</h3>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">ls .git/refs/heads</span>
+<span class="o">main</span>
+<span class="c">cat .git/refs/heads/main</span>
+<span class="o">d4512568452424ec6240ebbed0da722cb97778f6</span>
+<span class="c">cat .git/HEAD</span>
+<span class="o">ref: refs/heads/main</span></pre></figure>
+<p>В PowerShell ответ <code>ls</code> выглядит как таблица, имя файла в ней то же. Сравните первые семь знаков из файла ветки с верхней строкой <code>git log --oneline</code> из шага 1.</p>
+
+<div class="shot"><span class="n">Снимок 3</span><div><p>Терминал с ответами трёх команд.</p><p class="cap">Подпись: «Рисунок 3 — Где Git записал ветку main»</p></div></div>
+
+<h3>Шаг 3. Коммит сдвигает ветку</h3>
+<p>В <code>index.html</code> под строкой с часами работы добавьте телефон:</p>
+<figure class="code"><figcaption><b>index.html</b><span>после строки 11</span></figcaption><pre>  &lt;p&gt;Часы работы: с 08:00 до 20:00, без выходных.&lt;/p&gt;
+<mark>  &lt;p&gt;Телефон: +7 900 123-45-67.&lt;/p&gt;</mark></pre></figure>
+<p>Сохраните файл, отберите его плюсом и сделайте коммит <code>Добавил телефон кофейни</code>.</p>
+<figure class="code"><figcaption><b>терминал в папке kofeynya</b><span>то же, что плюс и Commit</span></figcaption><pre>git add index.html
+git commit -m "Добавил телефон кофейни"</pre></figure>
+<p>Прочитайте файлы ещё раз и сравните ветку с записью о сервере:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">cat .git/refs/heads/main</span>
+<span class="o">34a27e9cfa29d2168751a999e5a09fff91b27d16</span>
+<span class="c">cat .git/HEAD</span>
+<span class="o">ref: refs/heads/main</span>
+<span class="c">git branch -a -v</span>
+<span class="o">* main                34a27e9 [ahead 1] Добавил телефон кофейни
+  remotes/origin/HEAD -&gt; origin/main
+  remotes/origin/main d451256 Добавил какао в меню</span></pre></figure>
+<p>Имя коммита <span class="mono">34a27e9</span> у вас будет своё. Пометка <span class="mono">[ahead 1]</span> означает, что в <code>main</code> один коммит, которого нет в <code>origin/main</code>.</p>
+
+<div class="shot"><span class="n">Снимок 4</span><div><p>Терминал с ответами трёх команд: в файле ветки новое имя коммита, в HEAD прежняя запись, у <code>main</code> пометка <span class="mono">[ahead 1]</span>.</p><p class="cap">Подпись: «Рисунок 4 — Ветка main после нового коммита»</p></div></div>
+
+<!-- ============ ЧАСТЬ 2 ============ -->
+<h2><span class="num">2</span>Ветка для десертов</h2>
+<p>Глава 3.2. Кофейня добавляет в меню десерты. Работа ведётся в ветке <code>deserty</code>, а в <code>main</code> тем временем делается отдельная правка часов работы.</p>
+
+<h3>Шаг 1. Создать ветку</h3>
+<p>Нажмите на <code>main</code> в строке состояния → <b>Create new branch…</b> → введите имя <code>deserty</code> → <kbd>Enter</kbd>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же командой</span></figcaption><pre><span class="c">git switch -c deserty</span>
+<span class="o">Switched to a new branch 'deserty'</span></pre></figure>
+<p>В строке состояния теперь <code>deserty</code>, вместо <b>Sync Changes</b> появилась кнопка <b>Publish Branch</b>: ветка есть только на вашем компьютере.</p>
+
+<h3>Шаг 2. Проверить записи в папке .git</h3>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">ls .git/refs/heads</span>
+<span class="o">deserty
+main</span>
+<span class="c">cat .git/HEAD</span>
+<span class="o">ref: refs/heads/deserty</span>
+<span class="c">git branch -v</span>
+<span class="o">* deserty 34a27e9 Добавил телефон кофейни
+  main    34a27e9 [ahead 1] Добавил телефон кофейни</span></pre></figure>
+<p>Обе ветки стоят на одном коммите: пока они различаются только именем.</p>
+
+<div class="shot"><span class="n">Снимок 5</span><div><p>Окно VS Code: в строке состояния <code>deserty</code>, в терминале ответы трёх команд.</p><p class="cap">Подпись: «Рисунок 5 — Новая ветка deserty»</p></div></div>
+
+<h3>Шаг 3. Коммит в новой ветке</h3>
+<p>В <code>menu.html</code> после списка напитков добавьте раздел с десертами:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>menu.html</b><span>было, строки 15–17</span></figcaption><pre>    &lt;li&gt;Какао — 170 ₽&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;p&gt;&lt;a href="index.html"&gt;На главную&lt;/a&gt;&lt;/p&gt;</pre></figure>
+<figure class="code"><figcaption><b>menu.html</b><span>стало</span></figcaption><pre>    &lt;li&gt;Какао — 170 ₽&lt;/li&gt;
+  &lt;/ul&gt;
+<mark>
+  &lt;h2&gt;Десерты&lt;/h2&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Чизкейк — 230 ₽&lt;/li&gt;
+    &lt;li&gt;Морковный торт — 250 ₽&lt;/li&gt;
+  &lt;/ul&gt;</mark>
+  &lt;p&gt;&lt;a href="index.html"&gt;На главную&lt;/a&gt;&lt;/p&gt;</pre></figure>
+</div>
+<p>Сохраните файл, отберите его плюсом и сделайте коммит <code>Добавил десерты в меню</code>.</p>
+<figure class="code"><figcaption><b>терминал в папке kofeynya</b><span>то же, что плюс и Commit</span></figcaption><pre>git add menu.html
+git commit -m "Добавил десерты в меню"</pre></figure>
+
+<h3>Шаг 4. Переключиться на main</h3>
+<p>Нажмите на <code>deserty</code> в строке состояния и выберите в списке <code>main</code>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же командой</span></figcaption><pre><span class="c">git switch main</span>
+<span class="o">Switched to branch 'main'
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)</span></pre></figure>
+<p>Откройте <code>menu.html</code>: десертов нет, после строки 16 сразу ссылка «На главную». Десерты записаны в коммите ветки <code>deserty</code> и вернутся в файл при переходе на неё.</p>
+
+<div class="shot"><span class="n">Снимок 6</span><div><p>Окно VS Code: в строке состояния <code>main</code>, открыт <code>menu.html</code> без раздела «Десерты».</p><p class="cap">Подпись: «Рисунок 6 — Файл menu.html на ветке main»</p></div></div>
+
+<h3>Шаг 5. Коммит в main</h3>
+<p>Пока десерты не готовы, в <code>main</code> меняются часы работы. В <code>index.html</code>, строка 11:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>index.html</b><span>было</span></figcaption><pre>Часы работы: с 08:00 до <del>20:00</del>, без выходных.</pre></figure>
+<figure class="code"><figcaption><b>index.html</b><span>стало</span></figcaption><pre>Часы работы: с 08:00 до <mark>21:00</mark>, без выходных.</pre></figure>
+</div>
+<p>Сохраните, отберите плюсом и сделайте коммит <code>Продлил часы работы до 21:00</code>. Затем выведите обе линии:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git log --oneline --graph --all -4</span>
+<span class="o">* 1fea5c3 Продлил часы работы до 21:00
+| * cc3547e Добавил десерты в меню
+|/
+* 34a27e9 Добавил телефон кофейни
+* d451256 Добавил какао в меню</span></pre></figure>
+<p>Порядок двух верхних строк у вас может быть другим. Важно, что от коммита «Добавил телефон кофейни» вверх идут две линии.</p>
+
+<div class="shot"><span class="n">Снимок 7</span><div><p>Терминал с ответом <code>git log --oneline --graph --all -4</code>: две линии от коммита «Добавил телефон кофейни».</p><p class="cap">Подпись: «Рисунок 7 — Ветки разошлись»</p></div></div>
+
+<h3>Шаг 6. Обе ветки в графе</h3>
+<p>В панели Source Control в заголовке раздела <b>GRAPH</b> нажмите на слово <b>Auto</b>, отметьте <b>All</b> и нажмите <b>OK</b>. Граф покажет те же две линии, что терминал.</p>
+
+<div class="shot"><span class="n">Снимок 8</span><div><p>Раздел GRAPH в режиме All: две линии, метки <code>main</code> и <code>deserty</code> у разных коммитов.</p><p class="cap">Подпись: «Рисунок 8 — Две ветки в графе VS Code»</p></div></div>
+
+<h3>Шаг 7. Правка, которая переходит вместе с вами</h3>
+<p>Вернитесь на ветку <code>deserty</code> через строку состояния. В <code>index.html</code> снова часы <code>20:00</code>: правка часов сделана в <code>main</code>.</p>
+<p>В <code>README.md</code> измените описание меню и сохраните файл. Коммит пока не делайте:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>README.md</b><span>было, строка 9</span></figcaption><pre>- `menu.html` — меню с ценами</pre></figure>
+<figure class="code"><figcaption><b>README.md</b><span>стало</span></figcaption><pre>- `menu.html` — меню с ценами<mark>: напитки и десерты</mark></pre></figure>
+</div>
+<p>Переключитесь на <code>main</code> командой и проверьте список изменений:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git switch main</span>
+<span class="o">M	README.md
+Switched to branch 'main'
+Your branch is ahead of 'origin/main' by 2 commits.
+  (use "git push" to publish your local commits)</span>
+<span class="c">git status --short</span>
+<span class="o"> M README.md</span></pre></figure>
+<p>Переключение прошло, правка осталась в файле: <code>README.md</code> в обеих ветках одинаковый, и Git перенёс изменённый файл на <code>main</code>. Коммит сейчас попал бы в <code>main</code>, а правка относится к десертам.</p>
+
+<div class="shot"><span class="n">Снимок 9</span><div><p>Окно VS Code: в строке состояния <code>main</code>, в Changes <code>README.md</code> с буквой M, в терминале ответы обеих команд.</p><p class="cap">Подпись: «Рисунок 9 — Незакоммиченная правка перешла на main»</p></div></div>
+
+<p>Вернитесь на <code>deserty</code> и закоммитьте правку там:</p>
+<figure class="code"><figcaption><b>терминал в папке kofeynya</b><span>то же, что выбор ветки, плюс и Commit</span></figcaption><pre>git switch deserty
+git add README.md
+git commit -m "Добавил десерты в описание меню"</pre></figure>
+
+<h3>Шаг 8. Правка, которая останавливает переключение</h3>
+<p>На ветке <code>deserty</code> поднимите цену чизкейка в <code>menu.html</code> и сохраните файл. Коммит пока не делайте:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>menu.html</b><span>было, строка 20</span></figcaption><pre>    &lt;li&gt;Чизкейк — <del>230</del> ₽&lt;/li&gt;</pre></figure>
+<figure class="code"><figcaption><b>menu.html</b><span>стало</span></figcaption><pre>    &lt;li&gt;Чизкейк — <mark>240</mark> ₽&lt;/li&gt;</pre></figure>
+</div>
+<p>Выберите <code>main</code> в списке веток в строке состояния. VS Code откроет окно с сообщением и четырьмя кнопками.</p>
+
+<div class="shot"><span class="n">Снимок 10</span><div><p>Окно VS Code с сообщением о том, что правки в <code>menu.html</code> будут перезаписаны, и кнопками Cancel, Stash &amp; Checkout, Migrate Changes, Force Checkout.</p><p class="cap">Подпись: «Рисунок 10 — Git отказал в переключении»</p></div></div>
+
+<p>Нажмите <b>Cancel</b>: вы останетесь на <code>deserty</code>, правка сохранится. То же в терминале:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git switch main</span>
+<span class="o">error: Your local changes to the following files would be overwritten by checkout:
+	menu.html
+Please commit your changes or stash them before you switch branches.
+Aborting</span></pre></figure>
+<p>Закоммитьте правку в текущей ветке: <code>Поднял цену чизкейка</code>. Список изменений пуст, в <code>deserty</code> три своих коммита.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git branch -v</span>
+<span class="o">* deserty 43ca2a0 Поднял цену чизкейка
+  main    1fea5c3 [ahead 2] Продлил часы работы до 21:00</span></pre></figure>
+
+<!-- ============ ЧАСТЬ 3 ============ -->
+<h2><span class="num">3</span>Слияние</h2>
+<p>Глава 3.3. Сначала в <code>main</code> сливается короткая ветка с адресом кофейни — Git просто перенесёт имя ветки вперёд. Затем сливается ветка десертов, которая разошлась с <code>main</code>, — Git создаст коммит слияния.</p>
+
+<h3>Шаг 1. Короткая ветка с адресом</h3>
+<p>Перейдите на <code>main</code>. Затем в списке веток <b>Create new branch…</b> → имя <code>adres</code>.</p>
+<figure class="code"><figcaption><b>терминал в папке kofeynya</b><span>то же, что выбор main и Create new branch…</span></figcaption><pre>git switch main
+git switch -c adres</pre></figure>
+<p>В <code>index.html</code> под телефоном добавьте адрес:</p>
+<figure class="code"><figcaption><b>index.html</b><span>после строки 12</span></figcaption><pre>  &lt;p&gt;Телефон: +7 900 123-45-67.&lt;/p&gt;
+<mark>  &lt;p&gt;Адрес: ул. Студенческая, 1, вход со двора.&lt;/p&gt;</mark></pre></figure>
+<p>Сохраните, отберите плюсом и сделайте коммит <code>Добавил адрес кофейни</code>.</p>
+
+<div class="shot"><span class="n">Снимок 11</span><div><p>Раздел GRAPH: коммит «Добавил адрес кофейни» с меткой <code>adres</code> стоит прямо над коммитом с меткой <code>main</code>, без отдельной линии.</p><p class="cap">Подпись: «Рисунок 11 — Ветка adres продолжает main»</p></div></div>
+
+<h3>Шаг 2. Fast-forward</h3>
+<p>Перейдите на <code>main</code>: слияние делают из той ветки, которая получает коммиты. Палитра команд → <code>Git: Merge...</code> → в списке выберите <code>adres</code>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Git: Merge... → adres</span></figcaption><pre><span class="c">git switch main</span>
+<span class="c">git merge adres</span>
+<span class="o">Updating 1fea5c3..16f5fa9
+Fast-forward
+ index.html | 1 +
+ 1 file changed, 1 insertion(+)</span></pre></figure>
+<p>Проверьте ветки:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git branch -v</span>
+<span class="o">  adres   16f5fa9 Добавил адрес кофейни
+  deserty 43ca2a0 Поднял цену чизкейка
+* main    16f5fa9 [ahead 3] Добавил адрес кофейни</span></pre></figure>
+<p><code>main</code> и <code>adres</code> стоят на одном коммите, нового коммита не появилось.</p>
+
+<div class="shot"><span class="n">Снимок 12</span><div><p>Окно VS Code: в графе метки <code>main</code> и <code>adres</code> у одного коммита, в <code>index.html</code> строка с адресом, в терминале ответ <code>git branch -v</code>.</p><p class="cap">Подпись: «Рисунок 12 — Слияние перемоткой вперёд»</p></div></div>
+
+<p>Ветка <code>adres</code> больше не нужна: палитра команд → <code>Git: Delete Branch...</code> → <code>adres</code>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же командой</span></figcaption><pre><span class="c">git branch -d adres</span>
+<span class="o">Deleted branch adres (was 16f5fa9).</span></pre></figure>
+
+<h3>Шаг 3. Сравнить ветки перед слиянием</h3>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git log --oneline main..deserty</span>
+<span class="o">43ca2a0 Поднял цену чизкейка
+d40986a Добавил десерты в описание меню
+cc3547e Добавил десерты в меню</span>
+<span class="c">git log --oneline deserty..main</span>
+<span class="o">16f5fa9 Добавил адрес кофейни
+1fea5c3 Продлил часы работы до 21:00</span>
+<span class="c">git merge-base main deserty</span>
+<span class="o">34a27e9cfa29d2168751a999e5a09fff91b27d16</span></pre></figure>
+<p>Первая команда показывает коммиты, которые слияние добавит в <code>main</code>. Вторая — коммиты <code>main</code>, которых нет в <code>deserty</code>. Третья — общий предок, последний коммит, который есть в обеих ветках.</p>
+
+<div class="shot"><span class="n">Снимок 13</span><div><p>Терминал с ответами трёх команд.</p><p class="cap">Подпись: «Рисунок 13 — Что придёт в main и где ветки разошлись»</p></div></div>
+
+<h3>Шаг 4. Слить ветку десертов</h3>
+<p>Проверьте, что в строке состояния <code>main</code> и список изменений пуст. Палитра команд → <code>Git: Merge...</code> → <code>deserty</code>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Git: Merge... → deserty</span></figcaption><pre><span class="c">git merge --no-edit deserty</span>
+<span class="o">Merge made by the 'ort' strategy.
+ README.md | 2 +-
+ menu.html | 6 ++++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)</span>
+<span class="c">git log --oneline --graph -9</span>
+<span class="o">*   4ebadf2 Merge branch 'deserty'
+|\
+| * 43ca2a0 Поднял цену чизкейка
+| * d40986a Добавил десерты в описание меню
+| * cc3547e Добавил десерты в меню
+* | 16f5fa9 Добавил адрес кофейни
+* | 1fea5c3 Продлил часы работы до 21:00
+|/
+* 34a27e9 Добавил телефон кофейни
+* d451256 Добавил какао в меню
+* c016d04 Добавил README с описанием проекта</span></pre></figure>
+<p>Ключ <code>--no-edit</code> оставляет сообщение по умолчанию. Без него Git откроет редактор для сообщения коммита слияния.</p>
+
+<div class="shot"><span class="n">Снимок 14</span><div><p>Окно VS Code: в графе верхний коммит «Merge branch 'deserty'», к нему сходятся две линии; открыт <code>menu.html</code> с десертами и ценой чизкейка 240 ₽.</p><p class="cap">Подпись: «Рисунок 14 — Коммит слияния в графе»</p></div></div>
+
+<h3>Шаг 5. Коммит слияния изнутри</h3>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git cat-file -p HEAD</span>
+<span class="o">tree 4fd3990b9421478336e3e781cf980fb5fc6431ab
+parent 16f5fa9cbb2846e46baacdcdd9770c4426d0e5a0
+parent 43ca2a0465e090939ad794f4b320ad20cb7f7391
+author Иванов Иван &lt;ivanov@example.com&gt; 1792782440 +0300
+committer Иванов Иван &lt;ivanov@example.com&gt; 1792782440 +0300
+
+Merge branch 'deserty'</span></pre></figure>
+<p>В строках <code>author</code> и <code>committer</code> должны стоять ваши имя и почта.</p>
+
+<div class="shot"><span class="n">Снимок 15</span><div><p>Терминал с ответом <code>git cat-file -p HEAD</code>: две строки <code>parent</code>, ваше имя в строке <code>author</code>.</p><p class="cap">Подпись: «Рисунок 15 — Два родителя коммита слияния»</p></div></div>
+
+<h3>Шаг 6. Удалить слитую и неслитую ветку</h3>
+<p>Удалите <code>deserty</code>: палитра команд → <code>Git: Delete Branch...</code> → <code>deserty</code>. Коммиты десертов остаются в истории <code>main</code>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же командой</span></figcaption><pre><span class="c">git branch -d deserty</span>
+<span class="o">Deleted branch deserty (was 43ca2a0).</span></pre></figure>
+<p>Теперь проба, которую решено выбросить. Создайте ветку <code>proba-fona</code>, в <code>styles.css</code> замените цвет фона <code>#FBF6EE</code> на <code>#E8F1FB</code> и сделайте коммит <code>Попробовал голубой фон</code>. Голубой фон не подошёл: перейдите на <code>main</code> и удалите <code>proba-fona</code> через <code>Git: Delete Branch...</code>.</p>
+
+<div class="shot"><span class="n">Снимок 16</span><div><p>Окно VS Code с вопросом <span class="mono">The branch "proba-fona" is not fully merged. Delete anyway?</span></p><p class="cap">Подпись: «Рисунок 16 — Ветка с неслитым коммитом»</p></div></div>
+
+<p>Нажмите <b>Delete Branch</b>. То же в терминале:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git branch -d proba-fona</span>
+<span class="o">error: the branch 'proba-fona' is not fully merged
+hint: If you are sure you want to delete it, run 'git branch -D proba-fona'</span>
+<span class="c">git branch -D proba-fona</span>
+<span class="o">Deleted branch proba-fona (was 1ade5dc).</span></pre></figure>
+<p>Ключ <code>-d</code> удаляет только ветку, коммиты которой уже есть в текущей. Коммит «Попробовал голубой фон» был только в <code>proba-fona</code>, поэтому понадобился ключ <code>-D</code>.</p>
+
+<div class="shot"><span class="n">Снимок 17</span><div><p>Терминал с ответами <code>git branch -d proba-fona</code> и <code>git branch -D proba-fona</code>.</p><p class="cap">Подпись: «Рисунок 17 — Отказ ключа -d и удаление ключом -D»</p></div></div>
+
+<h3>Итоговая проверка</h3>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git status --short</span>
+<span class="c">git branch -a -v</span>
+<span class="o">* main                4ebadf2 [ahead 7] Merge branch 'deserty'
+  remotes/origin/HEAD -&gt; origin/main
+  remotes/origin/main d451256 Добавил какао в меню</span>
+<span class="c">git log --oneline --graph</span>
+<span class="o">*   4ebadf2 Merge branch 'deserty'
+|\
+| * 43ca2a0 Поднял цену чизкейка
+| * d40986a Добавил десерты в описание меню
+| * cc3547e Добавил десерты в меню
+* | 16f5fa9 Добавил адрес кофейни
+* | 1fea5c3 Продлил часы работы до 21:00
+|/
+* 34a27e9 Добавил телефон кофейни
+* d451256 Добавил какао в меню
+* c016d04 Добавил README с описанием проекта
+* 07b88ef Добавил страницу меню
+* c971be5 Подключил файл со стилями
+* 69a4f0b Первая страница кофейни</span></pre></figure>
+<p>Список изменений пуст. Одна ветка, <code>main</code>. Двенадцать коммитов: пять исходных, шесть ваших и коммит слияния. Коммита «Попробовал голубой фон» в истории нет.</p>
+
+<div class="shot"><span class="n">Снимок 18</span><div><p>Пустая панель Source Control и терминал с ответами <code>git branch -a -v</code> и <code>git log --oneline --graph</code>.</p><p class="cap">Подпись: «Рисунок 18 — Итоговая история проекта»</p></div></div>
+
+<h3>Вопросы: ответы вписать в таблицу в Word</h3>
+<p>Таблицу перенесите в Word целиком, правый столбец заполните. Ответы ищутся на ваших снимках и в терминале. Имена коммитов пишите по семь знаков.</p>
+<table class="answers">
+  <tr><th>№</th><th>Вопрос</th><th>Ответ</th></tr>
+  <tr><td class="num">1</td><td>Какое имя коммита было записано в <code>.git/refs/heads/main</code> сразу после клонирования и какое сообщение у этого коммита?</td><td></td></tr>
+  <tr><td class="num">2</td><td>Что изменилось после коммита «Добавил телефон кофейни» в файле <code>.git/refs/heads/main</code> и что — в файле <code>.git/HEAD</code>?</td><td></td></tr>
+  <tr><td class="num">3</td><td>На каком коммите стоит <code>origin/main</code> в итоговой проверке? Почему ваши коммиты его не сдвинули?</td><td></td></tr>
+  <tr><td class="num">4</td><td>Почему в шаге 7 части 2 правка <code>README.md</code> перешла вместе с вами на <code>main</code>, а в шаге 8 правка <code>menu.html</code> остановила переключение?</td><td></td></tr>
+  <tr><td class="num">5</td><td>Какой коммит — общий предок <code>main</code> и <code>deserty</code>? Почему ветку <code>deserty</code> нельзя было слить так же, как <code>adres</code>?</td><td></td></tr>
+  <tr><td class="num">6</td><td>Какие коммиты записаны в двух строках <code>parent</code> коммита слияния? Какой из них последний коммит <code>main</code>, а какой — <code>deserty</code>?</td><td></td></tr>
+</table>
+
+<!-- ============ СДАЧА ============ -->
+<h2><span class="num">4</span>Как сдать работу</h2>
+<ol class="steps">
+  <li>Документ Word: в первой строке ФИО, группа, «ДЗ по Git, темы 3.1–3.3».</li>
+  <li>Снимки по порядку с подписями. Таблица с ответами на шесть вопросов — после снимка 18.</li>
+  <li>Имя файла: <code>Фамилия_Git_ДЗ_3.1-3.3.docx</code>.</li>
+</ol>
+
+<h3>Критерии оценки</h3>
+<table class="grade">
+  <tr><td>5</td><td>Все снимки и шесть верных ответов. В итоговой истории двенадцать коммитов и одна ветка <code>main</code>.</td></tr>
+  <tr><td>4</td><td>Нет двух-трёх снимков или один-два ответа неверны.</td></tr>
+  <tr><td>3</td><td>Выполнены части 1 и 2, в части 3 сделаны fast-forward и коммит слияния.</td></tr>
+</table>
+<p>Не принимается, если на снимке 15 в строке <code>author</code> не ваше имя.</p>
+
+<h3>Если что-то пошло не так</h3>
+<table>
+  <tr><th>Что видно</th><th>Что делать</th></tr>
+  <tr><td>При клонировании ошибка: папка <code>kofeynya</code> уже существует</td><td>Выбрана папка из прошлого ДЗ. Повторить клонирование в <code>dz3-familiya</code>.</td></tr>
+  <tr><td>При коммите сообщение <span class="mono">Please tell me who you are</span></td><td><code>git config --global user.name "Иванов Иван"</code><br><code>git config --global user.email "почта"</code></td></tr>
+  <tr><td>Коммит попал не в ту ветку: например, часы работы закоммичены в <code>deserty</code></td><td>навести курсор на строку <b>CHANGES</b>, «…» → <b>Commit → Undo Last Commit</b>, перейти на нужную ветку, сделать коммит заново. Правка перейдёт вместе с вами, как в шаге 7 части 2.</td></tr>
+  <tr><td>Окно с кнопкой <b>Force Checkout</b> при переключении</td><td>Нажать <b>Cancel</b>, закоммитить правку в текущей ветке и переключиться снова. Force Checkout стирает правку без возможности вернуть.</td></tr>
+  <tr><td>Коммит слияния появился в ветке <code>deserty</code>, а <code>main</code> не изменилась</td><td>Слияние запущено на <code>deserty</code>. На ней выполнить <code>git reset --hard HEAD~</code>, перейти на <code>main</code> и повторить шаг 4 части 3.</td></tr>
+  <tr><td><code>git merge</code> пишет <span class="mono">CONFLICT</span></td><td>В ветках правились одни и те же строки. <code>git merge --abort</code>, сверить файлы с образцами задания и повторить. Конфликты разобраны в главе 3.4.</td></tr>
+  <tr><td>Открылся редактор Vim при слиянии</td><td><kbd>Esc</kbd>, затем <code>:wq</code> и <kbd>Enter</kbd>.</td></tr>
+  <tr><td>Удалена не та ветка</td><td>В ответе Git в скобках указан её коммит: <code>git branch имя_ветки коммит</code>, например <code>git branch deserty 43ca2a0</code>.</td></tr>
+</table>
+
+<p>Справочник: <a href="https://maximbytecamp.github.io/git_github_makarov/">maximbytecamp.github.io/git_github_makarov</a>, главы 3.1–3.3.</p>
+
+<div class="foot"><span>Справочник по Git и GitHub · домашнее задание по темам 3.1–3.3</span><span>Макаров Максим Николаевич</span></div>
+
+</div>
+</body>
+</html>
