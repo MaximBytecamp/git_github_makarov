@@ -1,0 +1,169 @@
+$ git remote get-url origin
+/private/tmp/gh47/aabd2669/reproduction/origin.git
+[exit 0]
+
+$ git rev-parse --short=7 merge-demo
+d6d9d74
+[exit 0]
+
+$ git rev-parse --short=7 rebase-demo
+1e0264a
+[exit 0]
+
+$ git switch merge-demo
+Already on 'merge-demo'
+Your branch is ahead of 'origin/merge-demo' by 1 commit.
+  (use "git push" to publish your local commits)
+[exit 0]
+
+$ git push origin merge-demo
+To /private/tmp/gh47/aabd2669/reproduction/origin.git
+ ! [rejected]        merge-demo -> merge-demo (fetch first)
+error: failed to push some refs to '/private/tmp/gh47/aabd2669/reproduction/origin.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+[exit 1]
+
+$ git fetch origin
+From /private/tmp/gh47/aabd2669/reproduction/origin
+   ed8f2b4..c6438d4  merge-demo  -> origin/merge-demo
+   ed8f2b4..a36fc4c  rebase-demo -> origin/rebase-demo
+[exit 0]
+
+$ git rev-list --left-right --count HEAD...@{u}
+1	1
+[exit 0]
+
+$ git log --graph --oneline --decorate HEAD origin/merge-demo
+* c6438d4 (origin/merge-demo) Add room contact
+| * d6d9d74 (HEAD -> merge-demo) Add equipment note
+|/  
+* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan
+[exit 0]
+
+$ git merge --no-edit origin/merge-demo
+Merge made by the 'ort' strategy.
+ contact.txt | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 contact.txt
+[exit 0]
+
+$ git show --format=%h %s%nParents: %p --no-patch HEAD
+a1597da Merge remote-tracking branch 'origin/merge-demo' into merge-demo
+Parents: d6d9d74 c6438d4
+[exit 0]
+
+$ git status --short
+[exit 0]
+
+$ git diff --check
+[exit 0]
+
+$ git push origin merge-demo
+To /private/tmp/gh47/aabd2669/reproduction/origin.git
+   c6438d4..a1597da  merge-demo -> merge-demo
+[exit 0]
+
+$ git fetch origin
+[exit 0]
+
+$ git rev-list --left-right --count HEAD...@{u}
+0	0
+[exit 0]
+
+$ git switch rebase-demo
+Switched to branch 'rebase-demo'
+Your branch and 'origin/rebase-demo' have diverged,
+and have 1 and 1 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
+[exit 0]
+
+$ git merge --no-edit origin/rebase-demo
+Auto-merging plan.txt
+CONFLICT (content): Merge conflict in plan.txt
+Automatic merge failed; fix conflicts and then commit the result.
+[exit 1]
+
+$ git merge --abort
+[exit 0]
+
+$ git rebase origin/rebase-demo
+Rebasing (1/1)
+Auto-merging plan.txt
+CONFLICT (content): Merge conflict in plan.txt
+error: could not apply 1e0264a... Move start to 11:00
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Could not apply 1e0264a... # Move start to 11:00
+[exit 1]
+
+$ git rebase --abort
+[exit 0]
+
+$ git rebase origin/rebase-demo
+Rebasing (1/1)
+Auto-merging plan.txt
+CONFLICT (content): Merge conflict in plan.txt
+error: could not apply 1e0264a... Move start to 11:00
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Could not apply 1e0264a... # Move start to 11:00
+[exit 1]
+
+$ git add plan.txt
+[exit 0]
+
+$ git diff --cached --check
+[exit 0]
+
+$ git rebase --continue
+[detached HEAD 0a140dd] Move start to 11:00
+ 1 file changed, 1 insertion(+)
+Successfully rebased and updated refs/heads/rebase-demo.
+[exit 0]
+
+$ git show --format=%h %s%nParents: %p --no-patch HEAD
+0a140dd Move start to 11:00
+Parents: a36fc4c
+[exit 0]
+
+$ git status --short
+[exit 0]
+
+$ git diff --check
+[exit 0]
+
+$ git push origin rebase-demo
+To /private/tmp/gh47/aabd2669/reproduction/origin.git
+   a36fc4c..0a140dd  rebase-demo -> rebase-demo
+[exit 0]
+
+$ git fetch origin
+[exit 0]
+
+$ git rev-list --left-right --count HEAD...@{u}
+0	0
+[exit 0]
+
+$ git -C work-b fetch origin
+From /private/tmp/gh47/aabd2669/reproduction/origin
+   a36fc4c..0a140dd  rebase-demo -> origin/rebase-demo
+   c6438d4..a1597da  merge-demo  -> origin/merge-demo
+
+$ git -C work-b status -sb
+## rebase-demo...origin/rebase-demo [behind 1]
+
+$ git -C work-b merge --ff-only origin/rebase-demo
+Updating a36fc4c..0a140dd
+Fast-forward
+ plan.txt | 1 +
+ 1 file changed, 1 insertion(+)

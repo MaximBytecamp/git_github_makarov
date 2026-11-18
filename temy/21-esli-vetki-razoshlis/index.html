@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#F4F1EC"><title>4.5 Если ветки разошлись · Справочник по Git и GitHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="assets/chapter.css"></head><body><div class="book"><div class="book__body"><div class="spine"><span>Модуль 4 · GitHub</span></div><main class="leaf">
+<div class="running"><p class="eyebrow"><a href="../../index.html">Справочник по Git и GitHub</a> · модуль 4 · GitHub: аккаунт и связь с ним</p>
+<p class="running__folio">Глава 4.5</p>
+</div>
+<header class="chapter-head"><span class="chapter-num">4.5</span><h1>Если ветки<br>разошлись</h1><p class="lead">В главе разобрано, почему Git отклоняет отправку, когда в двух рабочих копиях появились разные коммиты. На локальном стенде проверены Fetch, слияние и rebase, разрешение конфликта, отмена операции и повторный Push.</p>
+</header>
+<dl class="passport"><div><dt>Категория</dt><dd>Связь с удалённым репозиторием</dd></div><div><dt>Уже знакомо</dt><dd>Коммит, ветка, merge, конфликт, rebase, push / pull / fetch</dd></div><div><dt>Что получится</dt><dd>Объединённая история без принудительной отправки</dd></div><div><dt>Время</dt><dd>Около часа; Git, Python 3 и VS Code</dd></div></dl>
+<aside class="notice45" aria-label="Статус проверки материала"><b>Редакторская версия: проверка интерфейса не завершена</b><p>Опыты и хеши проверены запуском. Настоящие кадры редактора конфликта сняты в VS Code 1.138.0. Съёмка Push, Fetch, графа и запуска merge/rebase заблокирована Restricted Mode; изменение доверия запрещено средой. Эти действия описаны по встроенным командам VS Code, но не выданы за проверенные нажатия. До включения главы в книгу нужны кадры и очная проверка этих шагов.</p>
+</aside>
+<section class="gist45" aria-label="Суть за две минуты"><div><b>Два экземпляра плана</b><p>В каждый внесли свою правку. Новая дата одного экземпляра не делает второй ненужным.</p>
+</div><div><b>Сначала сверка</b><p>Fetch получает чужие коммиты. После этого видно, какие изменения есть только с одной стороны.</p>
+</div><div><b>Затем объединение</b><p>Merge сохраняет обе линии. Rebase переносит свои неопубликованные изменения поверх полученной линии.</p>
+</div></section>
+<nav class="contents"><b>Порядок действий</b><ol>
+<li><a href="#s1">Подготовить безопасный стенд</a></li>
+<li><a href="#s2">Откуда берётся расхождение</a></li>
+<li><a href="#s3">Почему Push отклонён</a></li>
+<li><a href="#s4">Получить сведения и прочитать граф</a></li>
+<li><a href="#s5">Включить изменения через merge</a></li>
+<li><a href="#s6">Проверить и отправить</a></li>
+<li><a href="#s7">Независимый вариант: rebase</a></li>
+<li><a href="#s8">Конфликт, продолжение и отмена</a></li>
+<li><a href="#s9">Новые хеши и повторная отправка</a></li>
+<li><a href="#s10">Частые ошибки</a></li>
+<li><a href="#s11">Проверьте себя</a></li>
+<li><a href="#s12">Самостоятельная работа</a></li>
+<li><a href="#s13">Шпаргалка и источники</a></li>
+</ol></nav>
+<h2 id="s1"><span class="sec">§1</span>Подготовить безопасный стенд</h2>
+<p class="purpose"><b>Зачем этот шаг.</b> Получить отказ Push, не затрагивая проект на GitHub.</p>
+
+<p>Две рабочие копии похожи на два экземпляра расписания у разных участников. Каждый может изменить свой экземпляр, пока другой работает. В нашем стенде <code>work-a</code> — ваша копия, <code>work-b</code> — копия второго участника. Их <code>origin</code> указывает на одну папку <code>origin.git</code> на диске. Это <b>bare-репозиторий</b>: в нём хранится история без рабочего каталога.</p>
+
+<div class="labtree45" role="img" aria-label="Один bare-репозиторий origin.git связан с двумя клонами work-a и work-b">git45-lab/
+├── origin.git/   ← общая история, только на вашем диске
+├── work-a/       ↔ origin.git
+├── work-b/       ↔ origin.git
+└── evidence/     ← журнал и снимки состояния Git</div>
+<p>Обе копии отправляют коммиты в один bare. Git проверяет допустимость обновления ветки и при такой локальной отправке. Для опыта не нужны GitHub, токен и сеть. Проверяется включение истории без настройки входа на сервер.</p>
+
+<ol class="steps"><li>Скачайте <a href="assets/lab.py" download>lab.py</a> в отдельную служебную папку, например <code>git45-tools</code>. Не кладите сценарий в реальный репозиторий.</li>
+<li>Откройте терминал в этой папке. Следующая команда создаст <b>новую, ещё не существующую</b> соседнюю папку <code>git45-lab</code>. При совпадении имени сценарий остановится.</li>
+</ol><figure class="code code--out"><figcaption>Одноразовая подготовка стенда</figcaption><pre><code>python3 lab.py --root ../git45-lab setup</code></pre></figure>
+
+<p><code>python3</code> запускает Python. Файл <code>lab.py</code> — скачанный сценарий. Параметр <code>--root</code> задаёт папку стенда, действие <code>setup</code> создаёт bare и два клона. В Windows команда Python может называться <code>python</code>. Для подготовки нужен терминал. Команда Clone в VS Code не создаёт bare. Сценарий также воспроизводит две расходящиеся истории с фиксированными датами.</p>
+
+<ol class="steps"><li>В VS Code выберите <b>File → Open Folder…</b> и откройте только <code>git45-lab/work-a</code>. В названии папки проверьте <code>work-a</code>.</li>
+<li>До любых Git-действий проверьте путь удалённого репозитория. Во внешнем терминале перейдите в <code>work-a</code> и выполните команду ниже. Конец ответа должен быть <code>git45-lab/origin.git</code>, без <code>https://</code> и <code>git@github.com</code>.</li>
+</ol><figure class="code code--out"><figcaption>Проверка: только локальный адрес</figcaption><pre><code>git remote get-url origin</code></pre></figure>
+
+<p><code>remote get-url origin</code> печатает адрес, ничего не отправляя. Все дальнейшие команды Git выполняются из <code>work-a</code>, кроме явно помеченной проверки второй копии. Рабочие файлы перед началом чистые. На реальном проекте сначала сохраните свою работу отдельным коммитом или stash; незакоммиченные правки нельзя терять при устранении расхождения.</p>
+
+<details class="more"><summary>Что подготовлено и как повторить весь опыт автоматически</summary><p>Сценарий создаёт исходные <code>README.md</code> и <code>plan.txt</code>, затем две независимые ветки: <code>merge-demo</code> и <code>rebase-demo</code>. В каждой A делает свой коммит, B — другой и отправляет его. A ещё не выполняла Fetch. В конце открыта <code>merge-demo</code>. Автообновление Git (<code>git.autofetch</code>) в проверочном профиле выключено, чтобы поймать устаревшую remote-tracking ссылку.</p>
+
+<p>Для полного повтора скачайте рядом с <code>lab.py</code> сценарий <a href="assets/replay.py" download>replay.py</a>. Он запускает те же Git-операции, проверяет содержимое файлов и код возврата. Запускайте его только в свежем стенде, не после ручного прохождения:</p>
+<figure class="code code--out"><figcaption>Автоматический повтор в другой новой папке</figcaption><pre><code>python3 lab.py --root ../git45-repeat setup
+python3 replay.py --root ../git45-repeat</code></pre></figure>
+
+<p><code>replay.py</code> проверяет, что <code>origin</code> — bare внутри выбранного стенда. Воспроизведение использует команды вместо кнопок только для автоматической проверки. <a href="assets/setup.log">Журнал подготовки</a>, <a href="assets/replay.log">журнал опыта</a> и <a href="assets/states.json">состояния Git</a> сохранены с реального запуска. Пути в журналах относятся к авторскому временному стенду. Имена, даты и хеши фиксированы для Git 2.51.1; другой алгоритм слияния или версия Git могут изменить итоговый хеш.</p>
+</details>
+
+<p>Теперь проследим, как в двух копиях появились разные коммиты.</p>
+
+<h2 id="s2"><span class="sec">§2</span>Откуда берётся расхождение</h2>
+<p class="purpose"><b>Зачем этот шаг.</b> Отличить изменение общей истории от изменения сведений о ней на своём компьютере.</p>
+
+<p>Оба экземпляра расписания сначала совпадают. Участник A добавляет заметку об оборудовании, B — номер кабинета. В Git это два разных потомка одного исходного коммита. Сценарий подготовки уже выполнил эти действия; повторно коммитить их не нужно.</p>
+
+<details class="more"><summary>История подготовки merge-demo: после каждого коммита</summary><p>После исходного коммита и настройки отслеживания обе ссылки совпадают. HEAD указывает на текущую локальную ветку.</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 90" role="img" aria-label="Исходный план: обе стороны на ed8f2b4."><defs><marker id="arrow-1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><g><title>ed8f2b4: общий коммит</title><rect x="98" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий коммит</text></g></svg><div class="refs45"><div><b>Ветка</b><code>merge-demo → ed8f2b4</code></div><div><b>Копия</b><code>origin/merge-demo → ed8f2b4</code></div><div><b>HEAD</b><code>→ merge-demo → ed8f2b4</code></div><div><b>Bare</b><code>merge-demo → ed8f2b4</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>Исходный план: обе стороны на ed8f2b4.</figcaption></figure>
+
+<p>Затем A добавила <code>notes.txt</code> со строкой <code>Bring laptop</code>. Коммит существует только у A; ссылка <code>origin/merge-demo</code> пока на исходном плане.</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 185" role="img" aria-label="После коммита A: d6d9d74 поверх исходного плана."><defs><marker id="arrow-2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M160 62 L160 113" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-2)"/><g><title>d6d9d74: локальный</title><rect x="98" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">d6d9d74</text><text x="160" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">локальный</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="113" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="132" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="148" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>merge-demo → d6d9d74</code></div><div><b>Копия</b><code>origin/merge-demo → ed8f2b4</code></div><div><b>HEAD</b><code>→ merge-demo → d6d9d74</code></div><div><b>Bare</b><code>merge-demo → ed8f2b4</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>После коммита A: d6d9d74 поверх исходного плана.</figcaption></figure>
+
+<p>Коммит B <code>c6438d4</code> добавляет <code>contact.txt</code> со строкой <code>Room 204</code>. После его Push bare уже указывает на B, но в A пока отсутствуют этот коммит и новое положение ветки.</p>
+</details>
+
+<p>Сравним положение ссылок после отправки из B. Правый коммит на схеме уже есть в bare; в локальной истории A до Fetch его ещё нет.</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 205" role="img" aria-label="После коммита и Push из B: две линии от ed8f2b4."><defs><marker id="arrow-3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M77 62 L160 133" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-3)"/><path d="M243 62 L160 133" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-3)"/><g><title>d6d9d74: локальный</title><rect x="15" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="77" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">d6d9d74</text><text x="77" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">локальный</text></g><g><title>c6438d4: удалённый</title><rect x="181" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="243" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">c6438d4</text><text x="243" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">удалённый</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="133" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="152" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="168" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>merge-demo → d6d9d74</code></div><div><b>Копия</b><code>origin/merge-demo → ed8f2b4 (устарела)</code></div><div><b>HEAD</b><code>→ merge-demo → d6d9d74</code></div><div><b>Bare</b><code>merge-demo → c6438d4</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>После коммита и Push из B: две линии от ed8f2b4.</figcaption></figure>
+
+<p><code>merge-demo</code> — редактируемая локальная ветка. <code>origin/merge-demo</code> — локальная <b>удалённая отслеживаемая ветка</b> (remote-tracking branch), запись последнего известного положения ветки на origin. Одинаковое имя после косой черты не означает, что эта запись обновляется в реальном времени.</p>
+
+<p>До Fetch команда <code>git status -sb</code> сообщает <code>[ahead 1]</code>: у A один коммит сверх <em>известной</em> ссылки. Фактическое расхождение с bare уже существует. Проверим, что произойдёт при отправке.</p>
+
+<h2 id="s3"><span class="sec">§3</span>Почему Push отклонён</h2>
+<p class="purpose"><b>Зачем этот шаг.</b> Установить причину отказа до выбора способа включения чужих коммитов.</p>
+
+<p>На общей странице расписания уже записан кабинет из экземпляра B. Замена страницы только экземпляром A убрала бы запись B. Для обычного Push текущая удалённая вершина должна входить в историю отправляемой вершины. Тогда удалённую ссылку можно передвинуть вперёд с сохранением всех прежних коммитов. Это обновление <b>fast-forward</b>.</p>
+
+<ol class="steps"><li>В панели <b>Source Control</b> откройте меню <b>… → Pull, Push → Push</b>. Если расположение меню отличается, откройте палитру команд через <b>F1</b> и найдите <b>Git: Push</b>. Это одна операция — отправка текущей ветки.</li>
+<li>При отказе не соглашайтесь на автоматическую синхронизацию и не выбирайте <b>Push (Force)</b>. Для разбора нам нужен отдельный Fetch.</li>
+</ol>
+<p>Операции соответствует <code>git push origin merge-demo</code>. Реальный первый запуск дал следующий фрагмент:</p>
+<figure class="code code--out"><figcaption>Отказ до Fetch; точная причина в этом прогоне</figcaption><pre><code>! [rejected]        merge-demo -&gt; merge-demo (fetch first)
+error: failed to push some refs</code></pre></figure>
+
+<p>Это отказ от non-fast-forward обновления: <code>c6438d4</code> не является предком <code>d6d9d74</code>. В нашем прогоне Git напечатал <code>fetch first</code>, потому что чужого коммита ещё не было в A. После Fetch при той же попытке формулировка может быть <code>non-fast-forward</code>. Отказ не изменил коммиты, локальную ветку или bare: действует предыдущая схема.</p>
+
+<details class="more"><summary>Почему не нажимаем Sync и не используем force push</summary><p><b>Sync</b> объединяет получение/включение изменений и отправку. Способ включения зависит от настроек, в том числе <code>git.rebaseWhenSync</code>. Здесь мы сначала смотрим историю и сами выбираем merge либо rebase.</p>
+<p>Принудительная отправка может переставить удалённую ветку так, что коммиты B перестанут быть достижимы из неё. Это не включение чужой работы. В обоих вариантах достаточно обычного Push: переносим только свои неопубликованные коммиты.</p>
+</details>
+
+<p>Чтобы выбрать способ включения, сначала получим актуальную историю.</p>
+
+<h2 id="s4"><span class="sec">§4</span>Получить сведения и прочитать граф</h2>
+<p class="purpose"><b>Зачем этот шаг.</b> Увидеть обе линии до изменения своих файлов.</p>
+
+<p>При сверке двух экземпляров можно сначала прочитать чужие правки, не вписывая их в свой экземпляр. <b>Fetch</b> получает объекты Git и обновляет remote-tracking ссылки. Обычный Fetch в нашем опыте не переставляет текущую локальную ветку и не меняет рабочие файлы.</p>
+
+<ol class="steps"><li>Через <b>F1</b> выполните <b>Git: Fetch</b>. Соответствующая команда — <code>git fetch origin</code>.</li>
+<li>В панели Source Control откройте представление <b>Source Control Graph</b>. Найдите подписи <code>merge-demo</code> и <code>origin/merge-demo</code>. В журнале есть обе ветки стенда; для этого шага рассматривайте только <code>merge-demo</code>.</li>
+</ol>
+<p>После Fetch ссылка <code>origin/merge-demo</code> передвинулась с <code>ed8f2b4</code> на <code>c6438d4</code>. HEAD и локальная ветка остались на <code>d6d9d74</code>. Вот обновлённая схема.</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 205" role="img" aria-label="После Fetch: в A получены оба потомка общего коммита."><defs><marker id="arrow-4" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M77 62 L160 133" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-4)"/><path d="M243 62 L160 133" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-4)"/><g><title>d6d9d74: локальный</title><rect x="15" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="77" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">d6d9d74</text><text x="77" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">локальный</text></g><g><title>c6438d4: удалённый</title><rect x="181" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="243" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">c6438d4</text><text x="243" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">удалённый</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="133" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="152" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="168" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>merge-demo → d6d9d74</code></div><div><b>Копия</b><code>origin/merge-demo → c6438d4</code></div><div><b>HEAD</b><code>→ merge-demo → d6d9d74</code></div><div><b>Bare</b><code>merge-demo → c6438d4</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>После Fetch: в A получены оба потомка общего коммита.</figcaption></figure>
+
+<p>Общая точка снизу — <code>ed8f2b4</code>. Слева выше неё один коммит только у A, справа — один только в полученной истории. Это <b>diverged</b>: локальная ветка одновременно <b>ahead 1</b> (на один уникальный коммит впереди) и <b>behind 1</b> (на один уникальный коммит позади). Сравнение считает коммиты, до которых можно дойти по связям с родителями. Количество изменённых строк и даты создания на этот счёт не влияют.</p>
+
+<details class="more"><summary>Проверка графа командами, если его представление скрыто</summary><p>Эти команды только читают историю. Команда <code>log</code> строит граф двух названных вершин. Параметр <code>--decorate</code> добавляет подписи ссылок. Команда <code>rev-list</code> считает уникальные коммиты с каждой стороны <code>...</code>. Слева указан <code>HEAD</code>, справа — upstream <code>@{u}</code>, отслеживаемая ветка для сравнения. Поэтому порядок чисел — ahead, затем behind.</p>
+<figure class="code code--out"><figcaption>Числа после Fetch</figcaption><pre><code>git log --graph --oneline --decorate HEAD origin/merge-demo
+git rev-list --left-right --count HEAD...@{u}
+1	1</code></pre></figure>
+
+<p>Если ветка не имеет upstream, выражение <code>@{u}</code> не сработает. В нашем стенде связь локальной ветки с upstream уже настроена. Для явного сравнения можно заменить его на <code>origin/merge-demo</code>.</p>
+</details>
+
+<details class="more simple"><summary>По-простому: что обновил Fetch</summary><p>У вас есть свой экземпляр плана и записка «какой экземпляр сейчас общий». Fetch приносит новую копию общей истории и исправляет записку. Ваш экземпляр пока не переделан. Что есть что: свой экземпляр — <code>merge-demo</code>, записка — <code>origin/merge-demo</code>, общий экземпляр — ветка внутри bare. В отличие от бумажной записки Git также загружает сами недостающие коммиты.</p>
+</details>
+
+<p>Обе правки нужны. Сначала включим их способом, сохраняющим исходные коммиты.</p>
+
+<h2 id="s5"><span class="sec">§5</span>Включить изменения через merge</h2>
+<p class="purpose"><b>Зачем этот шаг.</b> Объединить две уже существующие линии, сохранив их хеши.</p>
+
+<p>К двум экземплярам плана можно составить согласованный третий, в котором учтены оба. <b>Merge</b> в разошедшейся истории создаёт коммит с двумя родителями. В нашем случае правки затронули разные файлы, поэтому конфликт не возник.</p>
+
+<ol class="steps"><li>Проверьте текущую ветку: <code>merge-demo</code>.</li>
+<li>Через <b>F1 → Git: Merge…</b> выберите <code>origin/merge-demo</code>. Выбор <code>merge-demo</code> означал бы слияние ветки с самой собой.</li>
+<li>Если откроется сообщение коммита, сохраните сообщение слияния и подтвердите завершение. Проверьте, что появился новый коммит и нет незавершённой операции.</li>
+</ol>
+<p>Эквивалент проверочного запуска — <code>git merge --no-edit origin/merge-demo</code>: <code>--no-edit</code> принимает стандартное сообщение без запуска редактора. Результат — <code>Merge made by the 'ort' strategy.</code> Новая вершина имеет два родителя:</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 275" role="img" aria-label="После merge: a1597da объединяет d6d9d74 и c6438d4."><defs><marker id="arrow-5" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M160 57 L77 108" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-5)"/><path d="M160 57 L243 108" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-5)"/><path d="M77 152 L160 203" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-5)"/><path d="M243 152 L160 203" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-5)"/><g><title>a1597da: слияние</title><rect x="98" y="13" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="32" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">a1597da</text><text x="160" y="48" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">слияние</text></g><g><title>d6d9d74: локальный</title><rect x="15" y="108" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="77" y="127" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">d6d9d74</text><text x="77" y="143" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">локальный</text></g><g><title>c6438d4: удалённый</title><rect x="181" y="108" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="243" y="127" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">c6438d4</text><text x="243" y="143" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">удалённый</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="203" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="222" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="238" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>merge-demo → a1597da</code></div><div><b>Копия</b><code>origin/merge-demo → c6438d4</code></div><div><b>HEAD</b><code>→ merge-demo → a1597da</code></div><div><b>Bare</b><code>merge-demo → c6438d4</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>После merge: a1597da объединяет d6d9d74 и c6438d4.</figcaption></figure>
+
+<p>От <code>a1597da</code> идут две стрелки: к своей линии и к полученной. Исходные хеши <code>d6d9d74</code> и <code>c6438d4</code> сохранились. В рабочей папке теперь есть и <code>notes.txt</code>, и <code>contact.txt</code>. Remote-tracking ссылка ещё на B: операция merge ничего не отправляет.</p>
+
+<details class="more simple"><summary>По-простому: почему ahead теперь равен двум</summary><p>От полученной вершины B в локальной истории добавились два достижимых коммита: прежний локальный <code>d6d9d74</code> и само слияние <code>a1597da</code>. Поэтому результат сравнения — <code>2 / 0</code>, хотя после Fetch была выполнена одна команда merge. Что есть что: два исходных экземпляра — родители, согласованный экземпляр — коммит слияния. Git хранит ссылки на родителей; слияние не склеивает два старых коммита в один.</p>
+</details>
+
+<p>Граф объединён, но перед отправкой нужно проверить содержимое результата.</p>
+
+<h2 id="s6"><span class="sec">§6</span>Проверить и отправить</h2>
+<p class="purpose"><b>Зачем этот шаг.</b> Убедиться, что обе правки сохранились и отправляется законченная история.</p>
+
+<p>После согласования расписания проверяют содержание записей. В Git успешное слияние тоже не заменяет проверку файлов.</p>
+
+<ol class="steps"><li>Откройте в проводнике VS Code <code>notes.txt</code> и <code>contact.txt</code>: ожидаются строки <code>Bring laptop</code> и <code>Room 204</code>. Source Control должен быть без незакоммиченных файлов.</li>
+<li>У проекта с кодом запустите его тесты или сборку. Наш стенд содержит только текст; здесь проверяется содержимое обоих файлов и отсутствие ошибок пробелов командой <code>git diff --check</code>.</li>
+<li>Повторите <b>Git: Push</b>. Затем выполните <b>Git: Fetch</b> и снова сравните ветки.</li>
+</ol>
+<p>В проверочном запуске <code>git push origin merge-demo</code> ответил <code>c6438d4..a1597da merge-demo → merge-demo</code>. Две точки обозначают обычное продвижение, без принудительной замены. Теперь обе ссылки на одном коммите.</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 275" role="img" aria-label="После успешного Push: обе стороны на a1597da."><defs><marker id="arrow-6" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M160 57 L77 108" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-6)"/><path d="M160 57 L243 108" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-6)"/><path d="M77 152 L160 203" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-6)"/><path d="M243 152 L160 203" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-6)"/><g><title>a1597da: слияние</title><rect x="98" y="13" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="32" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">a1597da</text><text x="160" y="48" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">слияние</text></g><g><title>d6d9d74: локальный</title><rect x="15" y="108" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="77" y="127" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">d6d9d74</text><text x="77" y="143" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">локальный</text></g><g><title>c6438d4: удалённый</title><rect x="181" y="108" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="243" y="127" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">c6438d4</text><text x="243" y="143" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">удалённый</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="203" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="222" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="238" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>merge-demo → a1597da</code></div><div><b>Копия</b><code>origin/merge-demo → a1597da</code></div><div><b>HEAD</b><code>→ merge-demo → a1597da</code></div><div><b>Bare</b><code>merge-demo → a1597da</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>После успешного Push: обе стороны на a1597da.</figcaption></figure>
+
+<p>HEAD по-прежнему указывает на локальную ветку; bare и remote-tracking ссылка совпали с ней. Проверка <code>git rev-list --left-right --count HEAD...@{u}</code> дала <code>0 / 0</code>, а <code>git status --short</code> — пустой вывод. Это совпадение с последним известным состоянием: другой участник может отправить новые коммиты после проверки.</p>
+
+<details class="more"><summary>Если между Fetch и Push успел отправить кто-то ещё</summary><p>Новый отказ означает, что bare снова изменился. Повторите Fetch, посмотрите новые коммиты и включите их согласованным способом. Не используйте force push для обхода этой проверки.</p>
+</details>
+
+<p>Слияние завершено. Теперь сравним его с переносом неопубликованной локальной работы в независимом опыте.</p>
+
+<h2 id="s7"><span class="sec">§7</span>Независимый вариант: rebase</h2>
+<p class="purpose"><b>Зачем этот шаг.</b> Получить линейную историю, не переписывая уже опубликованные чужие коммиты.</p>
+
+<p>Свою ещё не переданную правку расписания можно заново внести в уже обновлённый общий экземпляр. Так работает <b>rebase</b>: Git повторно применяет изменения локальных коммитов поверх выбранной базы. Для опубликованной общей ветки такой перенос без согласования не подходит.</p>
+
+<ol class="steps"><li>В левом нижнем углу VS Code нажмите имя ветки и переключитесь на <code>rebase-demo</code>. Рабочее дерево перед переключением должно быть чистым.</li>
+<li>Выполните <b>Git: Fetch</b> и рассмотрите <code>rebase-demo</code> с <code>origin/rebase-demo</code>. Это другая ветка от исходного плана; коммиты опыта merge в неё не входят.</li>
+</ol>
+<details class="more"><summary>Как подготовлена независимая ветка</summary><p>От общего исходного коммита A изменила время с 10:00 на 11:00 и получила <code>1e0264a</code>. До отправки B состояние было таким:</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 185" role="img" aria-label="После локального коммита A в rebase-demo."><defs><marker id="arrow-7" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M160 62 L160 113" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-7)"/><g><title>1e0264a: локальный</title><rect x="98" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">1e0264a</text><text x="160" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">локальный</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="113" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="132" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="148" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>rebase-demo → 1e0264a</code></div><div><b>Копия</b><code>origin/rebase-demo → ed8f2b4</code></div><div><b>HEAD</b><code>→ rebase-demo → 1e0264a</code></div><div><b>Bare</b><code>rebase-demo → ed8f2b4</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>После локального коммита A в rebase-demo.</figcaption></figure>
+
+<p>B независимо от A изменила ту же строку на 12:00 и получила <code>a36fc4c</code>. После Push из B bare сдвинулся на этот коммит, а remote-tracking ссылка A до Fetch оставалась на <code>ed8f2b4</code>. Общий предок у обеих веток тот же исходный коммит; слияние из предыдущего опыта к этой линии не относится.</p>
+</details>
+
+<p>После получения сведений обе стороны содержат по одному своему коммиту. Изменения затронули одну и ту же строку <code>plan.txt</code>.</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 205" role="img" aria-label="До rebase: 11:00 только у A, 12:00 только у B."><defs><marker id="arrow-8" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M77 62 L160 133" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-8)"/><path d="M243 62 L160 133" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-8)"/><g><title>1e0264a: локальный</title><rect x="15" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="77" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">1e0264a</text><text x="77" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">локальный</text></g><g><title>a36fc4c: удалённый</title><rect x="181" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="243" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">a36fc4c</text><text x="243" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">удалённый</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="133" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="152" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="168" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>rebase-demo → 1e0264a</code></div><div><b>Копия</b><code>origin/rebase-demo → a36fc4c</code></div><div><b>HEAD</b><code>→ rebase-demo → 1e0264a</code></div><div><b>Bare</b><code>rebase-demo → a36fc4c</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>До rebase: 11:00 только у A, 12:00 только у B.</figcaption></figure>
+
+<ol class="steps"><li>Оставаясь на <code>rebase-demo</code>, выполните <b>F1 → Git: Rebase Branch…</b> и выберите <code>origin/rebase-demo</code> как базу. Не выбирайте локальную <code>merge-demo</code>.</li>
+<li>При остановке на конфликте не запускайте новый merge или pull. Откройте <code>plan.txt</code> и разрешите текущую операцию либо отмените её.</li>
+</ol>
+<p>В проверочном запуске использована команда <code>git rebase origin/rebase-demo</code>. Она остановилась с сообщением <code>could not apply 1e0264a... Move start to 11:00</code>. Разберём эту остановку и безопасный выход из неё.</p>
+
+<h2 id="s8"><span class="sec">§8</span>Конфликт, продолжение и отмена</h2>
+<p class="purpose"><b>Зачем этот шаг.</b> Сохранить нужный смысл обеих правок и не потерять исходное состояние при отмене.</p>
+
+<p>В одном расписании нельзя автоматически выбрать между двумя разными часами начала. При rebase Git уже переключился на полученную базу и пытается применить локальную правку к ней. Поэтому в нашем конфликте <b>Current</b> — время из B, а <b>Incoming</b> — повторно применяемая локальная правка A. Слова «текущий» и «входящий» здесь нельзя заменять правилом «мой» и «чужой».</p>
+
+<p>Откройте <code>plan.txt</code> в обычном редакторе VS Code. На настоящем кадре верхняя часть содержит 12:00 из базы, нижняя — 11:00 из переносимого коммита. Над блоком расположены команды выбора.</p>
+<figure class="shot shot--detail45"><img src="assets/rebase-conflict-detail.png" alt="Конфликт plan.txt: HEAD содержит Start 12:00, incoming-коммит 1e0264a содержит Start 11:00; видны Accept Current Change, Accept Incoming Change, Accept Both Changes, Compare Changes" loading="lazy"><figcaption>VS Code 1.138.0: обычный редактор конфликтующего файла. Current — база a36fc4c; Incoming — переносимый 1e0264a. Кадр редактора доступен даже при заблокированной панели Git.</figcaption></figure>
+
+<p>Во время этой остановки файловый конфликт ещё не стал новым коммитом. HEAD временно отделён от ветки и находится на базе; сама ветка сохраняет прежнюю вершину до завершения rebase.</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 205" role="img" aria-label="Rebase остановлен: HEAD на базе, ветка пока на 1e0264a."><defs><marker id="arrow-9" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M77 62 L160 133" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-9)"/><path d="M243 62 L160 133" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-9)"/><g><title>1e0264a: локальный</title><rect x="15" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="77" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">1e0264a</text><text x="77" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">локальный</text></g><g><title>a36fc4c: удалённый</title><rect x="181" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="243" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">a36fc4c</text><text x="243" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">удалённый</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="133" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="152" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="168" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>rebase-demo → 1e0264a</code></div><div><b>Копия</b><code>origin/rebase-demo → a36fc4c</code></div><div><b>HEAD</b><code>→ a36fc4c (отделён)</code></div><div><b>Bare</b><code>rebase-demo → a36fc4c</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>Rebase остановлен: HEAD на базе, ветка пока на 1e0264a.</figcaption></figure>
+
+<p>Две стрелки к общему предку остались прежними; новый коммит ещё не создан. <code>git status -sb</code> выводит <code>HEAD (no branch)</code> и <code>UU plan.txt</code>. Это ожидаемая остановка операции. Команда с <code>@{u}</code> в этот момент не подходит: отделённый HEAD не имеет upstream.</p>
+
+<ol class="steps"><li>Для сравнения нажмите <b>Accept Both Changes</b>. На кадре ниже — фактический результат: обе строки сохранены одна за другой.</li>
+</ol><figure class="shot shot--detail45"><img src="assets/rebase-accept-both.png" alt="После Accept Both Changes в редакторе две строки: Start 12:00 и Start 11:00" loading="lazy"><figcaption>Accept Both Changes убрала маркеры, но оставила два разных времени начала. Это ещё требует содержательной правки.</figcaption></figure>
+
+<p>Для опыта принято решение: занятие начинается в 12:00, подготовка — в 11:00. Исправьте вторую строку на <code>Preparation: 11:00</code> и сохраните файл. Удаление маркеров конфликта само по себе не гарантирует правильный текст.</p>
+<figure class="shot shot--detail45"><img src="assets/rebase-resolution.png" alt="Согласованное содержимое plan.txt в VS Code: Start 12:00 и Preparation 11:00" loading="lazy"><figcaption>Итоговый текст в настоящем редакторе. В проверочном прогоне финальная правка записана внешним инструментом после сбоя автоматизации ввода; кадр подтверждает содержимое файла. Ручное сохранение через Save не проверено.</figcaption></figure>
+
+<ol class="steps"><li>В Source Control перенесите <code>plan.txt</code> в индекс кнопкой <b>+</b> (<b>Stage Changes</b>). Это соответствует <code>git add plan.txt</code>: вы отмечаете текущий текст как разрешение конфликта.</li>
+<li>Продолжите <code>git rebase --continue</code>. Для этого шага приведена явная команда: она продолжает уже начатый rebase. Если откроется редактор сообщения, сохраните сообщение переносимого коммита и закройте файл сообщения.</li>
+</ol>
+<details class="more"><summary>Почему в проверочном прогоне команды выполнялись во внешнем терминале</summary><p>Изолированный профиль VS Code открыл стенд в Restricted Mode; панель Source Control сообщила, что зарегистрированные провайдеры там не работают. Среда запретила менять доверие. Поэтому выполнение Git-команд проверено во внешнем терминале, а выбор текста — кнопкой редактора. Отключать защиту ради повтора не требуется: если ваша среда тоже запрещает доверие, используйте команды в отдельном стенде и считайте Git-кнопки непроверенными.</p>
+<figure class="code code--out"><figcaption>Из work-a, после сохранения согласованного plan.txt</figcaption><pre><code>git add plan.txt
+git diff --cached --check
+git rebase --continue</code></pre></figure>
+
+<p><code>add</code> записывает разрешённый файл в индекс. <code>diff --cached --check</code> проверяет пробельные ошибки в подготовленном содержимом. Смысл расписания нужно проверить по тексту. <code>rebase --continue</code> продолжает перенос. До этой последней команды коммиты и ссылки всё ещё соответствуют схеме остановки; поменялся только индекс.</p>
+</details>
+
+<details class="more"><summary>Вместо продолжения: отмена rebase и отмена merge</summary><p>Если решение не согласовано, отмените текущую операцию. Для rebase есть <b>Git: Abort Rebase</b>, для merge — <b>Git: Abort Merge</b>. Однозначные команды ниже относятся к разным операциям; выполняется только подходящая.</p>
+<figure class="code code--out"><figcaption>Выбор отмены зависит от git status</figcaption><pre><code>git rebase --abort
+# либо, только во время merge:
+git merge --abort</code></pre></figure>
+
+<p>В нашем опыте обе отмены проверены. На той же независимой ветке сначала выполнены <code>git merge --no-edit origin/rebase-demo</code> → конфликт → <code>git merge --abort</code>. Затем rebase доведён до конфликта и отменён через <code>git rebase --abort</code>. Каждый раз вернулись ветка <code>1e0264a</code>, HEAD на ней и чистый файл <code>Start: 11:00</code>. Полученная ссылка осталась на B:</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 205" role="img" aria-label="После проверенной отмены: исходное расхождение восстановлено."><defs><marker id="arrow-10" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M77 62 L160 133" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-10)"/><path d="M243 62 L160 133" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-10)"/><g><title>1e0264a: локальный</title><rect x="15" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="77" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">1e0264a</text><text x="77" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">локальный</text></g><g><title>a36fc4c: удалённый</title><rect x="181" y="18" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="243" y="37" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">a36fc4c</text><text x="243" y="53" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">удалённый</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="133" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="152" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="168" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>rebase-demo → 1e0264a</code></div><div><b>Копия</b><code>origin/rebase-demo → a36fc4c</code></div><div><b>HEAD</b><code>→ rebase-demo → 1e0264a</code></div><div><b>Bare</b><code>rebase-demo → a36fc4c</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>После проверенной отмены: исходное расхождение восстановлено.</figcaption></figure>
+
+<p>При конфликте merge HEAD остаётся на своей ветке; во время rebase он отделяется. Поэтому команда продолжения тоже отличается: после разрешения merge — индекс и обычный коммит слияния; после разрешения rebase — индекс и <code>rebase --continue</code>. Не подменяйте продолжение rebase командой <code>rebase --skip</code>: skip исключает текущий переносимый коммит.</p>
+<p>Отмена возвращает состояние до операции. Незакоммиченные правки, внесённые уже во время разрешения конфликта, не следует считать сохранёнными. В стенде перед началом операций дерево было чистым. В реальной работе сохраните нужный текст отдельно до отмены. После проверки отмены опыт заново запущен из того же расхождения и завершён.</p>
+</details>
+
+<p>После продолжения появится новая вершина. Сравним её с прежним локальным коммитом.</p>
+
+<h2 id="s9"><span class="sec">§9</span>Новые хеши и повторная отправка</h2>
+<p class="purpose"><b>Зачем этот шаг.</b> Проверить, что перенос не исключил удалённый коммит и не требует force push.</p>
+
+<p>Правка, заново внесённая в другой экземпляр расписания, имеет другую основу. У Git родитель входит в данные коммита, поэтому после rebase меняется идентификатор даже при одинаковом сообщении. В нашем опыте также изменился текст разрешения конфликта.</p>
+
+<p>Проверенный ответ — <code>Successfully rebased and updated refs/heads/rebase-demo.</code> Ветка теперь указывает на <code>0a140dd</code>. Родитель нового коммита — <code>a36fc4c</code>; у старого локального коммита родителем был <code>ed8f2b4</code>.</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 275" role="img" aria-label="После rebase: локальный коммит перенесён поверх a36fc4c."><defs><marker id="arrow-11" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M160 57 L160 108" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-11)"/><path d="M160 152 L160 203" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-11)"/><g><title>0a140dd: новый коммит</title><rect x="98" y="13" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="32" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">0a140dd</text><text x="160" y="48" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">новый коммит</text></g><g><title>a36fc4c: удалённый</title><rect x="98" y="108" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="127" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">a36fc4c</text><text x="160" y="143" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">удалённый</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="203" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="222" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="238" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>rebase-demo → 0a140dd</code></div><div><b>Копия</b><code>origin/rebase-demo → a36fc4c</code></div><div><b>HEAD</b><code>→ rebase-demo → 0a140dd</code></div><div><b>Bare</b><code>rebase-demo → a36fc4c</code></div><div><b>Раньше</b><code>1e0264a — вне новой линии ветки</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>После rebase: локальный коммит перенесён поверх a36fc4c.</figcaption></figure>
+
+<p>Новая линия последовательно включает общий план, удалённую правку и согласованную локальную правку. Старый <code>1e0264a</code> больше не входит в эту ветку; немедленного удаления объекта rebase не обещает. Удалённый <code>a36fc4c</code> сохранил хеш и теперь является предком нашей вершины. Поэтому обычный Push будет fast-forward.</p>
+
+<ol class="steps"><li>Проверьте файл: <code>Start: 12:00</code> и <code>Preparation: 11:00</code>. Убедитесь, что в Source Control нет незакоммиченных изменений и rebase завершён.</li>
+<li>Сверьте историю: только один локальный коммит поверх <code>origin/rebase-demo</code>, без лишнего merge-коммита.</li>
+<li>Выполните <b>Git: Push</b>, затем <b>Git: Fetch</b>. Эквиваленты — <code>git push origin rebase-demo</code> и <code>git fetch origin</code>.</li>
+</ol>
+<p>В прогоне обычная отправка ответила <code>a36fc4c..0a140dd rebase-demo → rebase-demo</code>. После неё положение ссылок такое:</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 275" role="img" aria-label="После Push: локальная и удалённая стороны на 0a140dd."><defs><marker id="arrow-12" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M160 57 L160 108" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-12)"/><path d="M160 152 L160 203" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-12)"/><g><title>0a140dd: новый коммит</title><rect x="98" y="13" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="32" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">0a140dd</text><text x="160" y="48" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">новый коммит</text></g><g><title>a36fc4c: удалённый</title><rect x="98" y="108" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="127" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">a36fc4c</text><text x="160" y="143" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">удалённый</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="203" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="222" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="238" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>rebase-demo → 0a140dd</code></div><div><b>Копия</b><code>origin/rebase-demo → 0a140dd</code></div><div><b>HEAD</b><code>→ rebase-demo → 0a140dd</code></div><div><b>Bare</b><code>rebase-demo → 0a140dd</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>После Push: локальная и удалённая стороны на 0a140dd.</figcaption></figure>
+
+<p>Получены чистое дерево и сравнение <code>0 / 0</code>. Чужая опубликованная история сохранена. Реальный репозиторий в опыте не изменялся. Опубликован только новый потомок в одноразовый локальный bare.</p>
+
+<details class="more"><summary>Где увидеть чистое behind: вторая рабочая копия</summary><p>Во второй копии после Fetch ветка <code>rebase-demo</code> всё ещё на <code>a36fc4c</code>, а её <code>origin/rebase-demo</code> уже на <code>0a140dd</code>. Это проверенное <code>[behind 1]</code>: своих уникальных коммитов нет, один полученный коммит ещё не включён.</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 275" role="img" aria-label="Work-b после Fetch: локальная ветка отстаёт на один коммит."><defs><marker id="arrow-13" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M160 57 L160 108" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-13)"/><path d="M160 152 L160 203" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-13)"/><g><title>0a140dd: новый коммит</title><rect x="98" y="13" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="32" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">0a140dd</text><text x="160" y="48" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">новый коммит</text></g><g><title>a36fc4c: удалённый</title><rect x="98" y="108" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="127" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">a36fc4c</text><text x="160" y="143" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">удалённый</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="203" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="222" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="238" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>rebase-demo → a36fc4c</code></div><div><b>Копия</b><code>origin/rebase-demo → 0a140dd</code></div><div><b>HEAD</b><code>→ rebase-demo → a36fc4c</code></div><div><b>Bare</b><code>rebase-demo → 0a140dd</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>Work-b после Fetch: локальная ветка отстаёт на один коммит.</figcaption></figure>
+
+<p>Здесь достаточно fast-forward. Из <code>work-b</code> проверено <code>git merge --ff-only origin/rebase-demo</code>: <code>--ff-only</code> запрещает создание слияния и допускает только передвижение ссылки вперёд. Получен ответ <code>Updating a36fc4c..0a140dd</code> и <code>Fast-forward</code>.</p>
+<figure class="scheme hist45"><svg viewBox="0 0 320 275" role="img" aria-label="Work-b после fast-forward: HEAD и обе ссылки на новой вершине."><defs><marker id="arrow-14" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="var(--ink)"/></marker></defs><path d="M160 57 L160 108" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-14)"/><path d="M160 152 L160 203" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow-14)"/><g><title>0a140dd: новый коммит</title><rect x="98" y="13" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="32" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">0a140dd</text><text x="160" y="48" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">новый коммит</text></g><g><title>a36fc4c: удалённый</title><rect x="98" y="108" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="127" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">a36fc4c</text><text x="160" y="143" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">удалённый</text></g><g><title>ed8f2b4: общий</title><rect x="98" y="203" width="124" height="44" rx="4" fill="var(--page)" stroke="var(--ink)" stroke-width="2"/><text x="160" y="222" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="15" fill="var(--ink)">ed8f2b4</text><text x="160" y="238" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">общий</text></g></svg><div class="refs45"><div><b>Ветка</b><code>rebase-demo → 0a140dd</code></div><div><b>Копия</b><code>origin/rebase-demo → 0a140dd</code></div><div><b>HEAD</b><code>→ rebase-demo → 0a140dd</code></div><div><b>Bare</b><code>rebase-demo → 0a140dd</code></div></div><p class="legend45">Стрелка от коммита ведёт к его родителю. «Копия» — локальная remote-tracking ссылка; это не прямое чтение bare. Показана только ветка этого опыта.</p>
+<figcaption>Work-b после fast-forward: HEAD и обе ссылки на новой вершине.</figcaption></figure>
+
+<p>Ahead означает только свои уникальные коммиты, behind — только недостающие полученные. При diverged есть и те, и другие. Эти состояния определяются относительно выбранной remote-tracking ссылки.</p>
+</details>
+
+<p>Остаётся закрепить порядок действий и ошибки, которые нарушают его.</p>
+
+<h2 id="s10"><span class="sec">§10</span>Частые ошибки</h2>
+<table class="err45"><thead><tr><th>Что произошло</th><th>Что проверить и сделать</th></tr></thead><tbody>
+<tr><td>«Ahead 1 — значит можно отправлять»</td><td>Сведения могли устареть. Выполнить Fetch и проверить историю до включения изменений.</td></tr>
+<tr><td>Несколько повторов Push дают один отказ</td><td>Push не включает чужие коммиты. Fetch → граф → merge либо rebase → проверка → Push.</td></tr>
+<tr><td>После Fetch файл не изменился</td><td>Это ожидаемо: текущая локальная ветка не перемещена. Сначала выбрать и выполнить включение истории.</td></tr>
+<tr><td>Выбрана локальная ветка с тем же именем</td><td>В Merge/Rebase нужна полученная <code>origin/имя</code>. Слияние с самим собой обычно ничего не меняет.</td></tr>
+<tr><td>При rebase выбрано Incoming, потому что «это чужое»</td><td>В этом опыте Incoming — переносимый локальный коммит. Проверять принадлежность версии по строкам и хешу переносимого коммита.</td></tr>
+<tr><td>После Accept Both Changes сразу выполнено продолжение</td><td>Проверить смысл файла: две строки Start могут противоречить друг другу. Только после правки — индекс и продолжение.</td></tr>
+<tr><td>Начат новый Pull во время конфликта</td><td><code>git status</code> покажет незавершённую операцию. Закончить или отменить эту операцию.</td></tr>
+<tr><td>После rebase опубликованной ветки требуется force</td><td>Остановиться: этот случай выходит за границы опыта. Согласовать восстановление с командой, не перезаписывать общий remote.</td></tr>
+<tr><td>Source Control недоступен в Restricted Mode</td><td>Соблюдать правила среды. Не отключать защиту в обход запрета; использовать разрешённый одноразовый стенд и отметить непроверенные кнопки.</td></tr></tbody></table>
+<p>Теперь те же ситуации можно разобрать без подсказки из последовательности действий.</p>
+
+<h2 id="s11"><span class="sec">§11</span>Проверьте себя</h2>
+<details><summary>Почему перед первым Push A видела ahead 1, хотя bare уже содержал другой коммит?</summary><p>Сравнение шло с устаревшей локальной ссылкой <code>origin/merge-demo</code> на <code>ed8f2b4</code>. После Fetch ссылка перешла на <code>c6438d4</code>, и сравнение дало <code>1 / 1</code>.</p>
+</details>
+
+<details><summary>Что запрещает non-fast-forward отказ в этом опыте?</summary><p>Передвинуть удалённую ветку с <code>c6438d4</code> на <code>d6d9d74</code>, чья история не содержит <code>c6438d4</code>. Обычный Push требует включить текущую удалённую вершину в отправляемую историю.</p>
+</details>
+
+<details><summary>Почему после merge ahead 2, хотя выполнена одна команда?</summary><p>В локальной истории сверх <code>c6438d4</code> достижимы два коммита: локальный <code>d6d9d74</code> и новый коммит слияния <code>a1597da</code>.</p>
+</details>
+
+<details><summary>Почему rebase изменил хеш, но не потребовал force push?</summary><p>Пересоздан только неопубликованный локальный коммит. У нового коммита родитель — опубликованный <code>a36fc4c</code>. Удалённую ветку можно продвинуть к потомку обычным Push.</p>
+</details>
+
+<details><summary>Куда указывает HEAD во время конфликта rebase и после его отмены?</summary><p>При остановке HEAD отделён и находится на базе <code>a36fc4c</code>; ветка ещё на <code>1e0264a</code>. После <code>rebase --abort</code> HEAD снова на ветке <code>rebase-demo</code> с вершиной <code>1e0264a</code>.</p>
+</details>
+
+<details><summary>Доказывает ли 0 / 0, что завтра никто не получит отказ Push?</summary><p>Нет. Это совпадение локальной ветки с последними полученными сведениями. Новая отправка другого участника может снова изменить bare после проверки.</p>
+</details>
+
+<p>Для самостоятельного прохождения нужен новый стенд: завершённые ветки этого прогона уже совпадают с origin.</p>
+
+<h2 id="s12"><span class="sec">§12</span>Самостоятельная работа</h2>
+<p>Создайте через <code>lab.py setup</code> новую папку <code>git45-practice</code>. Не используйте завершённую папку и не удаляйте реальный проект ради повтора.</p>
+
+<ol class="steps"><li>На <code>merge-demo</code> получите отказ Push. Запишите хеш HEAD и положение <code>origin/merge-demo</code> до Fetch и после него.</li>
+<li>Нарисуйте граф с хешами, HEAD и двумя ссылками. Укажите ahead и behind. Завершите включение через merge, проверьте оба файла и отправьте.</li>
+<li>Переключитесь на независимую <code>rebase-demo</code>. Получите конфликт rebase, запишите положение HEAD и ветки. Сначала проверьте отмену, затем повторите перенос.</li>
+<li>Разрешите конфликт по условию: начало в 12:00, подготовка в 11:00. Проверьте файл и индекс, продолжите rebase, затем выполните обычный Push.</li>
+<li>Сдайте две итоговые схемы, сравнение старого и нового локального хеша после rebase и результат <code>0 / 0</code> после последнего Fetch. Кадры должны относиться к вашему стенду.</li>
+</ol>
+<details class="more"><summary>Критерии самопроверки</summary><p>После Fetch в первом опыте — <code>d6d9d74</code> против <code>c6438d4</code>, <code>1 / 1</code>. После merge — два родителя; оба файла сохранены. После rebase — одна линия через <code>a36fc4c</code>, старый локальный коммит заменён новым, файл содержит обе согласованные строки. Оба Push обычные, remote — локальный bare. В ручном опыте новые хеши merge и rebase могут отличаться от книги из-за текущего времени коммита; фиксированные хеши итогов воспроизводит <code>replay.py</code>.</p>
+</details>
+
+<p>Для работы с реальным проектом достаточно следующей короткой последовательности.</p>
+
+<h2 id="s13"><span class="sec">§13</span>Шпаргалка</h2>
+<div class="cheat"><div><b>Сначала сведения</b><code>Git: Fetch</code><code>git fetch origin</code><p>Не меняет текущую локальную ветку в этом опыте.</p>
+</div><div><b>Прочитать расхождение</b><code>HEAD...@{u}</code><code>ahead / behind</code><p>Уникальные коммиты с каждой стороны, относительно полученной ссылки.</p>
+</div><div><b>Сохранить две линии</b><code>Git: Merge… → origin/ветка</code><code>git merge origin/ветка</code><p>При расхождении создаёт коммит слияния.</p>
+</div><div><b>Перенести свои коммиты</b><code>Git: Rebase Branch…</code><code>git rebase origin/ветка</code><p>Только неопубликованная локальная работа; хеши меняются.</p>
+</div><div><b>Конфликт rebase</b><code>исправить → сохранить → Stage</code><code>git rebase --continue</code><code>git rebase --abort</code><p>Продолжение и отмена — альтернативы. Skip исключает коммит.</p>
+</div><div><b>Завершить</b><code>файлы → проверки → чистый status</code><code>Git: Push → Git: Fetch</code><code>0 / 0</code><p>При новом отказе снова получить историю; без force.</p>
+</div></div>
+<h3>Итог</h3><ul class="checklist"><li>Fetch отделён от изменения своей истории.</li>
+<li>Merge сохраняет исходные коммиты; rebase пересоздаёт свои неопубликованные.</li>
+<li>При разрешении конфликта проверены обе версии и согласованное содержание.</li>
+<li>Отмена проверена до завершения операции.</li>
+<li>После проверки обе стороны совпадают; демонстрация не отправлялась на GitHub.</li>
+</ul>
+<details class="more"><summary>Откуда взяты факты</summary><ul class="sources"><li><a href="https://git-scm.com/docs/git-push#_note_about_fast_forwards">Git: fast-forward и отказ от обновления ветки</a>.</li>
+<li><a href="https://git-scm.com/docs/git-fetch">Git fetch: получение объектов и обновление ссылок</a>.</li>
+<li><a href="https://git-scm.com/docs/git-merge">Git merge: два родителя, конфликты и abort</a>.</li>
+<li><a href="https://git-scm.com/docs/git-rebase">Git rebase: повторное применение, continue и abort</a>.</li>
+<li><a href="https://git-scm.com/docs/git-rev-list">Git rev-list: left-right и count</a>.</li>
+<li><a href="https://code.visualstudio.com/docs/sourcecontrol/overview">VS Code: Source Control и команды Git</a>.</li>
+<li><a href="https://code.visualstudio.com/docs/sourcecontrol/merge-conflicts">VS Code: разрешение конфликтов</a>.</li>
+<li><a href="assets/replay.log">Фактический журнал стенда</a> — Git 2.51.1; <a href="assets/states.json">снимки ссылок и файлов</a>. Имена кнопок сверены с локальным пакетом встроенного расширения Git VS Code 1.138.0; это не заменяет проверку их работы в интерфейсе.</li>
+</ul></details>
+
+<div class="pager"><a href="../19-readme-markdown/index.html">← 4.3 README и Markdown</a><a href="../../index.html">К содержанию справочника</a></div>
+</main></div></div><script src="../../book.js"></script></body></html>

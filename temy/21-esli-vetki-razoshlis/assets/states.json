@@ -1,0 +1,258 @@
+[
+  {
+    "name": "01-before-push",
+    "git_version": "git version 2.51.1",
+    "status": "## merge-demo...origin/merge-demo [ahead 1]",
+    "graph": "* 1e0264a (rebase-demo) Move start to 11:00\n| * d6d9d74 (HEAD -> merge-demo) Add equipment note\n|/  \n* ed8f2b4 (origin/rebase-demo, origin/merge-demo, origin/main, main) Initial workshop plan",
+    "counts": "1\t0",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\nd6d9d7496d4ebad0d3ed91d351b7750a77c45e3b refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/merge-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/rebase-demo",
+    "head": "d6d9d74",
+    "branch": "merge-demo",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "notes.txt": "Bring laptop\n",
+      "README.md": "Workshop\n",
+      "plan.txt": "Start: 10:00\n"
+    },
+    "in_progress": []
+  },
+  {
+    "name": "02-rejected",
+    "git_version": "git version 2.51.1",
+    "status": "## merge-demo...origin/merge-demo [ahead 1]",
+    "graph": "* 1e0264a (rebase-demo) Move start to 11:00\n| * d6d9d74 (HEAD -> merge-demo) Add equipment note\n|/  \n* ed8f2b4 (origin/rebase-demo, origin/merge-demo, origin/main, main) Initial workshop plan",
+    "counts": "1\t0",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\nd6d9d7496d4ebad0d3ed91d351b7750a77c45e3b refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/merge-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/rebase-demo",
+    "head": "d6d9d74",
+    "branch": "merge-demo",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "notes.txt": "Bring laptop\n",
+      "README.md": "Workshop\n",
+      "plan.txt": "Start: 10:00\n"
+    },
+    "in_progress": []
+  },
+  {
+    "name": "03-fetched",
+    "git_version": "git version 2.51.1",
+    "status": "## merge-demo...origin/merge-demo [ahead 1, behind 1]",
+    "graph": "* a36fc4c (origin/rebase-demo) Move start to 12:00\n| * 1e0264a (rebase-demo) Move start to 11:00\n|/  \n| * c6438d4 (origin/merge-demo) Add room contact\n|/  \n| * d6d9d74 (HEAD -> merge-demo) Add equipment note\n|/  \n* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan",
+    "counts": "1\t1",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\nd6d9d7496d4ebad0d3ed91d351b7750a77c45e3b refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/HEAD\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\nc6438d4faf02b1a6f0a47bdaece536ed2136d587 refs/remotes/origin/merge-demo\na36fc4c0ede6fc192369093b606f2b0a435917a7 refs/remotes/origin/rebase-demo",
+    "head": "d6d9d74",
+    "branch": "merge-demo",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "notes.txt": "Bring laptop\n",
+      "README.md": "Workshop\n",
+      "plan.txt": "Start: 10:00\n"
+    },
+    "in_progress": []
+  },
+  {
+    "name": "04-merged",
+    "git_version": "git version 2.51.1",
+    "status": "## merge-demo...origin/merge-demo [ahead 2]",
+    "graph": "*   a1597da (HEAD -> merge-demo) Merge remote-tracking branch 'origin/merge-demo' into merge-demo\n|\\  \n| * c6438d4 (origin/merge-demo) Add room contact\n* | d6d9d74 Add equipment note\n|/  \n| * a36fc4c (origin/rebase-demo) Move start to 12:00\n|/  \n| * 1e0264a (rebase-demo) Move start to 11:00\n|/  \n* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan",
+    "counts": "2\t0",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\na1597da6d2651805c90c5723c532022332ce6721 refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/HEAD\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\nc6438d4faf02b1a6f0a47bdaece536ed2136d587 refs/remotes/origin/merge-demo\na36fc4c0ede6fc192369093b606f2b0a435917a7 refs/remotes/origin/rebase-demo",
+    "head": "a1597da",
+    "branch": "merge-demo",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "contact.txt": "Room 204\n",
+      "notes.txt": "Bring laptop\n",
+      "README.md": "Workshop\n",
+      "plan.txt": "Start: 10:00\n"
+    },
+    "in_progress": []
+  },
+  {
+    "name": "05-merge-pushed",
+    "git_version": "git version 2.51.1",
+    "status": "## merge-demo...origin/merge-demo",
+    "graph": "*   a1597da (HEAD -> merge-demo, origin/merge-demo) Merge remote-tracking branch 'origin/merge-demo' into merge-demo\n|\\  \n| * c6438d4 Add room contact\n* | d6d9d74 Add equipment note\n|/  \n| * a36fc4c (origin/rebase-demo) Move start to 12:00\n|/  \n| * 1e0264a (rebase-demo) Move start to 11:00\n|/  \n* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan",
+    "counts": "0\t0",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\na1597da6d2651805c90c5723c532022332ce6721 refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/HEAD\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\na1597da6d2651805c90c5723c532022332ce6721 refs/remotes/origin/merge-demo\na36fc4c0ede6fc192369093b606f2b0a435917a7 refs/remotes/origin/rebase-demo",
+    "head": "a1597da",
+    "branch": "merge-demo",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "contact.txt": "Room 204\n",
+      "notes.txt": "Bring laptop\n",
+      "README.md": "Workshop\n",
+      "plan.txt": "Start: 10:00\n"
+    },
+    "in_progress": []
+  },
+  {
+    "name": "06-rebase-start",
+    "git_version": "git version 2.51.1",
+    "status": "## rebase-demo...origin/rebase-demo [ahead 1, behind 1]",
+    "graph": "*   a1597da (origin/merge-demo, merge-demo) Merge remote-tracking branch 'origin/merge-demo' into merge-demo\n|\\  \n| * c6438d4 Add room contact\n* | d6d9d74 Add equipment note\n|/  \n| * a36fc4c (origin/rebase-demo) Move start to 12:00\n|/  \n| * 1e0264a (HEAD -> rebase-demo) Move start to 11:00\n|/  \n* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan",
+    "counts": "1\t1",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\na1597da6d2651805c90c5723c532022332ce6721 refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/HEAD\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\na1597da6d2651805c90c5723c532022332ce6721 refs/remotes/origin/merge-demo\na36fc4c0ede6fc192369093b606f2b0a435917a7 refs/remotes/origin/rebase-demo",
+    "head": "1e0264a",
+    "branch": "rebase-demo",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "README.md": "Workshop\n",
+      "plan.txt": "Start: 11:00\n"
+    },
+    "in_progress": []
+  },
+  {
+    "name": "07-merge-conflict",
+    "git_version": "git version 2.51.1",
+    "status": "## rebase-demo...origin/rebase-demo [ahead 1, behind 1]\nUU plan.txt",
+    "graph": "*   a1597da (origin/merge-demo, merge-demo) Merge remote-tracking branch 'origin/merge-demo' into merge-demo\n|\\  \n| * c6438d4 Add room contact\n* | d6d9d74 Add equipment note\n|/  \n| * a36fc4c (origin/rebase-demo) Move start to 12:00\n|/  \n| * 1e0264a (HEAD -> rebase-demo) Move start to 11:00\n|/  \n* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan",
+    "counts": "1\t1",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\na1597da6d2651805c90c5723c532022332ce6721 refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/HEAD\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\na1597da6d2651805c90c5723c532022332ce6721 refs/remotes/origin/merge-demo\na36fc4c0ede6fc192369093b606f2b0a435917a7 refs/remotes/origin/rebase-demo",
+    "head": "1e0264a",
+    "branch": "rebase-demo",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "README.md": "Workshop\n",
+      "plan.txt": "<<<<<<< HEAD\nStart: 11:00\n=======\nStart: 12:00\n>>>>>>> origin/rebase-demo\n"
+    },
+    "in_progress": [
+      "MERGE_HEAD"
+    ]
+  },
+  {
+    "name": "08-merge-aborted",
+    "git_version": "git version 2.51.1",
+    "status": "## rebase-demo...origin/rebase-demo [ahead 1, behind 1]",
+    "graph": "*   a1597da (origin/merge-demo, merge-demo) Merge remote-tracking branch 'origin/merge-demo' into merge-demo\n|\\  \n| * c6438d4 Add room contact\n* | d6d9d74 Add equipment note\n|/  \n| * a36fc4c (origin/rebase-demo) Move start to 12:00\n|/  \n| * 1e0264a (HEAD -> rebase-demo) Move start to 11:00\n|/  \n* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan",
+    "counts": "1\t1",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\na1597da6d2651805c90c5723c532022332ce6721 refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/HEAD\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\na1597da6d2651805c90c5723c532022332ce6721 refs/remotes/origin/merge-demo\na36fc4c0ede6fc192369093b606f2b0a435917a7 refs/remotes/origin/rebase-demo",
+    "head": "1e0264a",
+    "branch": "rebase-demo",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "README.md": "Workshop\n",
+      "plan.txt": "Start: 11:00\n"
+    },
+    "in_progress": []
+  },
+  {
+    "name": "09-rebase-conflict",
+    "git_version": "git version 2.51.1",
+    "status": "## HEAD (no branch)\nUU plan.txt",
+    "graph": "*   a1597da (origin/merge-demo, merge-demo) Merge remote-tracking branch 'origin/merge-demo' into merge-demo\n|\\  \n| * c6438d4 Add room contact\n* | d6d9d74 Add equipment note\n|/  \n| * a36fc4c (HEAD, origin/rebase-demo) Move start to 12:00\n|/  \n| * 1e0264a (rebase-demo) Move start to 11:00\n|/  \n* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan",
+    "counts": "fatal: HEAD does not point to a branch",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\na1597da6d2651805c90c5723c532022332ce6721 refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/HEAD\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\na1597da6d2651805c90c5723c532022332ce6721 refs/remotes/origin/merge-demo\na36fc4c0ede6fc192369093b606f2b0a435917a7 refs/remotes/origin/rebase-demo",
+    "head": "a36fc4c",
+    "branch": "",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "README.md": "Workshop\n",
+      "plan.txt": "<<<<<<< HEAD\nStart: 12:00\n=======\nStart: 11:00\n>>>>>>> 1e0264a (Move start to 11:00)\n"
+    },
+    "in_progress": [
+      "rebase-merge"
+    ]
+  },
+  {
+    "name": "10-rebase-aborted",
+    "git_version": "git version 2.51.1",
+    "status": "## rebase-demo...origin/rebase-demo [ahead 1, behind 1]",
+    "graph": "*   a1597da (origin/merge-demo, merge-demo) Merge remote-tracking branch 'origin/merge-demo' into merge-demo\n|\\  \n| * c6438d4 Add room contact\n* | d6d9d74 Add equipment note\n|/  \n| * a36fc4c (origin/rebase-demo) Move start to 12:00\n|/  \n| * 1e0264a (HEAD -> rebase-demo) Move start to 11:00\n|/  \n* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan",
+    "counts": "1\t1",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\na1597da6d2651805c90c5723c532022332ce6721 refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/HEAD\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\na1597da6d2651805c90c5723c532022332ce6721 refs/remotes/origin/merge-demo\na36fc4c0ede6fc192369093b606f2b0a435917a7 refs/remotes/origin/rebase-demo",
+    "head": "1e0264a",
+    "branch": "rebase-demo",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "README.md": "Workshop\n",
+      "plan.txt": "Start: 11:00\n"
+    },
+    "in_progress": []
+  },
+  {
+    "name": "11-rebase-retry",
+    "git_version": "git version 2.51.1",
+    "status": "## HEAD (no branch)\nUU plan.txt",
+    "graph": "*   a1597da (origin/merge-demo, merge-demo) Merge remote-tracking branch 'origin/merge-demo' into merge-demo\n|\\  \n| * c6438d4 Add room contact\n* | d6d9d74 Add equipment note\n|/  \n| * a36fc4c (HEAD, origin/rebase-demo) Move start to 12:00\n|/  \n| * 1e0264a (rebase-demo) Move start to 11:00\n|/  \n* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan",
+    "counts": "fatal: HEAD does not point to a branch",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\na1597da6d2651805c90c5723c532022332ce6721 refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/HEAD\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\na1597da6d2651805c90c5723c532022332ce6721 refs/remotes/origin/merge-demo\na36fc4c0ede6fc192369093b606f2b0a435917a7 refs/remotes/origin/rebase-demo",
+    "head": "a36fc4c",
+    "branch": "",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "README.md": "Workshop\n",
+      "plan.txt": "<<<<<<< HEAD\nStart: 12:00\n=======\nStart: 11:00\n>>>>>>> 1e0264a (Move start to 11:00)\n"
+    },
+    "in_progress": [
+      "rebase-merge"
+    ]
+  },
+  {
+    "name": "12-resolved-staged",
+    "git_version": "git version 2.51.1",
+    "status": "## HEAD (no branch)\nM  plan.txt",
+    "graph": "*   a1597da (origin/merge-demo, merge-demo) Merge remote-tracking branch 'origin/merge-demo' into merge-demo\n|\\  \n| * c6438d4 Add room contact\n* | d6d9d74 Add equipment note\n|/  \n| * a36fc4c (HEAD, origin/rebase-demo) Move start to 12:00\n|/  \n| * 1e0264a (rebase-demo) Move start to 11:00\n|/  \n* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan",
+    "counts": "fatal: HEAD does not point to a branch",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\na1597da6d2651805c90c5723c532022332ce6721 refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/HEAD\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\na1597da6d2651805c90c5723c532022332ce6721 refs/remotes/origin/merge-demo\na36fc4c0ede6fc192369093b606f2b0a435917a7 refs/remotes/origin/rebase-demo",
+    "head": "a36fc4c",
+    "branch": "",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "README.md": "Workshop\n",
+      "plan.txt": "Start: 12:00\nPreparation: 11:00\n"
+    },
+    "in_progress": [
+      "rebase-merge"
+    ]
+  },
+  {
+    "name": "13-rebased",
+    "git_version": "git version 2.51.1",
+    "status": "## rebase-demo...origin/rebase-demo [ahead 1]",
+    "graph": "*   a1597da (origin/merge-demo, merge-demo) Merge remote-tracking branch 'origin/merge-demo' into merge-demo\n|\\  \n| * c6438d4 Add room contact\n* | d6d9d74 Add equipment note\n|/  \n| * 0a140dd (HEAD -> rebase-demo) Move start to 11:00\n| * a36fc4c (origin/rebase-demo) Move start to 12:00\n|/  \n* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan",
+    "counts": "1\t0",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\na1597da6d2651805c90c5723c532022332ce6721 refs/heads/merge-demo\n0a140dda18433119e1b20fd8fcbe50dbf11e4d45 refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/HEAD\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\na1597da6d2651805c90c5723c532022332ce6721 refs/remotes/origin/merge-demo\na36fc4c0ede6fc192369093b606f2b0a435917a7 refs/remotes/origin/rebase-demo",
+    "head": "0a140dd",
+    "branch": "rebase-demo",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "README.md": "Workshop\n",
+      "plan.txt": "Start: 12:00\nPreparation: 11:00\n"
+    },
+    "in_progress": []
+  },
+  {
+    "name": "14-rebase-pushed",
+    "git_version": "git version 2.51.1",
+    "status": "## rebase-demo...origin/rebase-demo",
+    "graph": "*   a1597da (origin/merge-demo, merge-demo) Merge remote-tracking branch 'origin/merge-demo' into merge-demo\n|\\  \n| * c6438d4 Add room contact\n* | d6d9d74 Add equipment note\n|/  \n| * 0a140dd (HEAD -> rebase-demo, origin/rebase-demo) Move start to 11:00\n| * a36fc4c Move start to 12:00\n|/  \n* ed8f2b4 (origin/main, origin/HEAD, main) Initial workshop plan",
+    "counts": "0\t0",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\na1597da6d2651805c90c5723c532022332ce6721 refs/heads/merge-demo\n0a140dda18433119e1b20fd8fcbe50dbf11e4d45 refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/HEAD\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\na1597da6d2651805c90c5723c532022332ce6721 refs/remotes/origin/merge-demo\n0a140dda18433119e1b20fd8fcbe50dbf11e4d45 refs/remotes/origin/rebase-demo",
+    "head": "0a140dd",
+    "branch": "rebase-demo",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "README.md": "Workshop\n",
+      "plan.txt": "Start: 12:00\nPreparation: 11:00\n"
+    },
+    "in_progress": []
+  },
+  {
+    "name": "initial",
+    "git_version": "git version 2.51.1",
+    "status": "## merge-demo...origin/merge-demo [ahead 1]",
+    "graph": "* 1e0264a (rebase-demo) Move start to 11:00\n| * d6d9d74 (HEAD -> merge-demo) Add equipment note\n|/  \n* ed8f2b4 (origin/rebase-demo, origin/merge-demo, origin/main, main) Initial workshop plan",
+    "counts": "1\t0",
+    "refs": "ed8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/heads/main\nd6d9d7496d4ebad0d3ed91d351b7750a77c45e3b refs/heads/merge-demo\n1e0264a58b3b08e960713df0c02d7cc7b5ba19eb refs/heads/rebase-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/main\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/merge-demo\ned8f2b4d9285ed32c83f30c37d4619d193d5e57e refs/remotes/origin/rebase-demo",
+    "head": "d6d9d74",
+    "branch": "merge-demo",
+    "remote": "/private/tmp/gh47/aabd2669/reproduction/origin.git",
+    "files": {
+      "notes.txt": "Bring laptop\n",
+      "README.md": "Workshop\n",
+      "plan.txt": "Start: 10:00\n"
+    },
+    "in_progress": []
+  }
+]

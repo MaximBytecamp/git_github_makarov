@@ -1,0 +1,39 @@
+/* Только глава 4.5. Глобальные стили книги не изменяются. */
+.notice45 { border: 3px solid var(--ink); padding: 16px 18px; background: var(--fire-pale); margin: 22px 0; }
+.notice45 p:last-child { margin-bottom: 0; }
+.gist45 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 24px 0; }
+.gist45 > div { border: 2px solid var(--ink); background: var(--page); padding: 14px; }
+.gist45 b { display: block; margin-bottom: 6px; }
+.gist45 p { font-size: 15px; margin: 0; }
+.purpose { color: var(--ink-soft); }
+.hist45 { padding: 14px; }
+.hist45 svg { max-width: 420px; margin: auto; padding: 8px 4px; }
+.hist45 figcaption { margin: 12px -14px -14px; }
+.refs45 { display: grid; gap: 6px; padding: 8px 0; }
+.refs45 div { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.refs45 code { overflow-wrap: anywhere; white-space: normal; }
+.refs45 b { font-family: var(--mono); font-size: 12px; min-width: 52px; }
+.hist45 .legend45 { font-size: 12px; color: var(--ink-soft); margin: 4px 0; }
+.labtree45 { font: 13px/1.7 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; padding: 16px; border: 2px solid var(--ink); }
+.more { margin: 16px 0; }
+.more > summary { font-family: var(--body); font-size: 15px; }
+.leaf pre { max-width: 100%; overflow-x: auto; tab-size: 4; }
+.leaf code { overflow-wrap: anywhere; }
+.code pre { white-space: pre-wrap; word-break: break-word; }
+.shot--detail45 { box-shadow: 4px 4px 0 var(--ink); }
+.shot--detail45 img { min-width: 0; }
+.err45 { width: 100%; border-collapse: collapse; font-size: 15px; }
+.err45 th,.err45 td { text-align: left; vertical-align: top; border: 1px solid var(--rule); padding: 10px; overflow-wrap: anywhere; }
+.err45 th { background: var(--page); }
+.sources a,.checklist a { overflow-wrap: anywhere; }
+@media(max-width:600px) {
+ .gist45 { grid-template-columns: 1fr; }
+ .hist45 { padding: 10px; }
+ .hist45 figcaption { margin: 10px -10px -10px; }
+ .hist45 svg { padding: 6px 0; }
+ .err45,.err45 tbody,.err45 tr,.err45 td { display: block; }
+ .err45 thead { display:none; }
+ .err45 tr { margin-bottom: 12px; border: 1px solid var(--ink); }
+ .err45 td { border: 0; }
+ .err45 td:first-child { font-weight: 700; background: var(--page); }
+}

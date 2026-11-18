@@ -1,0 +1,123 @@
+$ git init --bare --initial-branch=main origin.git
+Initialized empty Git repository in /private/tmp/gh47/aabd2669/reproduction/origin.git/
+
+$ git clone /private/tmp/gh47/aabd2669/reproduction/origin.git work-a
+Cloning into 'work-a'...
+warning: You appear to have cloned an empty repository.
+done.
+
+$ git config user.name Demo
+
+$ git config user.email demo@example.invalid
+
+$ git config git45.localOnly true
+
+$ git add .
+
+$ git commit -m Initial workshop plan
+[main (root-commit) ed8f2b4] Initial workshop plan
+ 2 files changed, 2 insertions(+)
+ create mode 100644 README.md
+ create mode 100644 plan.txt
+
+$ git rev-parse --short=7 HEAD
+ed8f2b4
+
+$ git push -u origin main
+To /private/tmp/gh47/aabd2669/reproduction/origin.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+
+$ git clone /private/tmp/gh47/aabd2669/reproduction/origin.git work-b
+Cloning into 'work-b'...
+done.
+
+$ git config user.name Demo
+
+$ git config user.email demo@example.invalid
+
+$ git branch merge-demo ed8f2b4
+
+$ git push -u origin merge-demo
+To /private/tmp/gh47/aabd2669/reproduction/origin.git
+ * [new branch]      merge-demo -> merge-demo
+branch 'merge-demo' set up to track 'origin/merge-demo'.
+
+$ git branch rebase-demo ed8f2b4
+
+$ git push -u origin rebase-demo
+To /private/tmp/gh47/aabd2669/reproduction/origin.git
+ * [new branch]      rebase-demo -> rebase-demo
+branch 'rebase-demo' set up to track 'origin/rebase-demo'.
+
+$ git fetch origin
+From /private/tmp/gh47/aabd2669/reproduction/origin
+ * [new branch]      merge-demo  -> origin/merge-demo
+ * [new branch]      rebase-demo -> origin/rebase-demo
+
+$ git switch merge-demo
+Switched to branch 'merge-demo'
+Your branch is up to date with 'origin/merge-demo'.
+
+$ git switch --track origin/merge-demo
+Switched to a new branch 'merge-demo'
+branch 'merge-demo' set up to track 'origin/merge-demo'.
+
+$ git add .
+
+$ git commit -m Add equipment note
+[merge-demo d6d9d74] Add equipment note
+ 1 file changed, 1 insertion(+)
+ create mode 100644 notes.txt
+
+$ git rev-parse --short=7 HEAD
+d6d9d74
+
+$ git add .
+
+$ git commit -m Add room contact
+[merge-demo c6438d4] Add room contact
+ 1 file changed, 1 insertion(+)
+ create mode 100644 contact.txt
+
+$ git rev-parse --short=7 HEAD
+c6438d4
+
+$ git push origin merge-demo
+To /private/tmp/gh47/aabd2669/reproduction/origin.git
+   ed8f2b4..c6438d4  merge-demo -> merge-demo
+
+$ git switch rebase-demo
+Switched to branch 'rebase-demo'
+Your branch is up to date with 'origin/rebase-demo'.
+
+$ git switch --track origin/rebase-demo
+Switched to a new branch 'rebase-demo'
+branch 'rebase-demo' set up to track 'origin/rebase-demo'.
+
+$ git add .
+
+$ git commit -m Move start to 11:00
+[rebase-demo 1e0264a] Move start to 11:00
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git rev-parse --short=7 HEAD
+1e0264a
+
+$ git add .
+
+$ git commit -m Move start to 12:00
+[rebase-demo a36fc4c] Move start to 12:00
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git rev-parse --short=7 HEAD
+a36fc4c
+
+$ git push origin rebase-demo
+To /private/tmp/gh47/aabd2669/reproduction/origin.git
+   ed8f2b4..a36fc4c  rebase-demo -> rebase-demo
+
+$ git switch merge-demo
+Switched to branch 'merge-demo'
+Your branch is ahead of 'origin/merge-demo' by 1 commit.
+  (use "git push" to publish your local commits)
