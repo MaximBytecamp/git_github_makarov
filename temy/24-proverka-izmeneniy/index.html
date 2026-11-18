@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>4.8 Проверка изменений на GitHub · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <style>
+    .leaf { min-width: 0; }
+    .leaf a, .leaf code { overflow-wrap: anywhere; }
+    .gh-flow { display: grid; gap: 12px; margin: 22px 0; }
+    .gh-flow__row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 14px; }
+    .gh-node { min-width: 0; padding: 14px 16px; border: 2px solid var(--ink); background: var(--page); }
+    .gh-node b, .gh-node small { display: block; }
+    .gh-node small { color: var(--ink-soft); font-size: 13px; }
+    .gh-node--base { border-style: dashed; }
+    .gh-node--compare { border-width: 4px; }
+    .gh-arrow { font-size: 26px; font-weight: 700; }
+    .gh-diagram { margin: 22px 0; padding: 18px; border: 3px solid var(--ink); background: var(--page); }
+    .gh-diagram figcaption { margin-top: 12px; font-size: 13px; color: var(--ink-soft); }
+    .gh-legend { margin: 8px 0; font-size: 13px; }
+    .gh-diff { width: 100%; border-collapse: collapse; font: 13px/1.65 var(--mono); }
+    .gh-diff td { padding: 8px; vertical-align: top; }
+    .gh-diff .minus { background: #FBE0D8; }
+    .gh-diff .plus { background: #DDE7F1; }
+    .gh-diff td:last-child { overflow-wrap: anywhere; }
+    .gh-diff .line { width: 3em; text-align: right; color: var(--ink-soft); }
+    .gh-diff .sign { width: 2em; font-weight: 700; }
+    .gh-note { font-size: 14px; color: var(--ink-soft); }
+    @media (max-width: 560px) {
+      .gh-flow__row { grid-template-columns: 1fr; gap: 6px; }
+      .gh-arrow { text-align: center; transform: rotate(90deg); line-height: 1; }
+      .gh-diagram { padding: 12px; }
+      .gh-node { padding: 12px; }
+      .gh-diff { font-size: 11px; }
+      .gh-diff td { padding: 5px; }
+    }
+  </style>
+</head>
+<body>
+<div class="book"><div class="book__body">
+  <div class="spine"><span>Модуль 4 · GitHub</span></div>
+  <main class="leaf">
+    <div class="running">
+      <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Справочник по Git и GitHub</a> · модуль 4 · GitHub</p>
+      <p class="running__folio">Глава 4.8</p>
+    </div>
+    <header class="chapter-head">
+      <span class="chapter-num">4.8</span>
+      <h1>Проверка изменений<br>на GitHub</h1>
+      <p class="lead">В главе разобраны история ветки, сведения о коммите и построчная разница файлов на GitHub. Сравнение двух веток покажет, как выбранные стороны и общий предок влияют на результат.</p>
+    </header>
+    <dl class="passport">
+      <div><dt>Категория</dt><dd>GitHub</dd></div>
+      <div><dt>Что уже знакомо</dt><dd>Коммит, граф истории, ветка и merge</dd></div>
+      <div><dt>Что получится</dt><dd>Прочитать diff, выбрать стороны сравнения и передать точную ссылку</dd></div>
+      <div><dt>Сколько занимает</dt><dd>Около сорока минут; достаточно браузера</dd></div>
+    </dl>
+    <section class="gist">
+      <h2>Суть за две минуты</h2>
+      <div class="gh-flow">
+        <div class="gh-node"><b>История — журнал редакций</b><small>Сначала выбираем ветку, затем запись о нужном коммите.</small></div>
+        <div class="gh-node"><b>Diff — лист с правками</b><small>Знаки − и + показывают старые и новые строки. Качество правки проверяют отдельно.</small></div>
+        <div class="gh-node"><b>Сравнение — вопрос с двумя сторонами</b><small>«Что отличается между состояниями?» и «Что сделано после общего предка?» — разные вопросы.</small></div>
+      </div>
+      <p><b>За пару:</b> найдите изменение, объясните его по строкам и сохраните ссылку, которая не будет зависеть от движения ветки.</p>
+    </section>
+    <nav class="contents"><b>Порядок действий</b><ol>
+      <li><a href="#s1">Какие примеры будем читать</a></li>
+      <li><a href="#s2">Выбрать ветку и открыть историю</a></li>
+      <li><a href="#s3">Прочитать сведения о коммите</a></li>
+      <li><a href="#s4">Разобрать diff и переключить его вид</a></li>
+      <li><a href="#s5">Отличить правку, добавление и удаление файла</a></li>
+      <li><a href="#s6">Выбрать base и compare</a></li>
+      <li><a href="#s7">Не перепутать две и три точки</a></li>
+      <li><a href="#s8">Проверить файлы отдельно от истории</a></li>
+      <li><a href="#s9">Сохранить точную ссылку</a></li>
+      <li><a href="#s10">Частые ошибки</a></li>
+      <li><a href="#s11">Самопроверка</a></li>
+      <li><a href="#s12">Самостоятельная работа</a></li>
+      <li><a href="#s13">Шпаргалка и источники</a></li>
+    </ol></nav>
+
+    <h2 id="s1"><span class="sec">§1</span>Какие примеры будем читать</h2>
+    <p>Изменение приветствия можно проверить по ссылке на коммит. Для этого нужны его идентификатор, изменённые строки и исходное состояние для сравнения.</p>
+    <p>Основной пример — публичный репозиторий <a href="https://github.com/octocat/Hello-World">octocat/Hello-World</a>. В нём достаточно двух коротких файлов. Ветка <code>octocat-patch-1</code> меняет <code>Hello World!</code> на <code>Hello world!</code> в README. Ветка <code>test</code> добавляет <code>CONTRIBUTING.md</code> с одной строкой. Эти изменения уже существовали; для главы в чужом репозитории ничего не создавалось.</p>
+    <p>HTML-разметку с контекстом посмотрим в отдельном публичном проекте <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a>. А случай «файлы совпадают, история различается» — на одноразовом <b>локальном стенде</b>. У каждого примера свои хеши и числа; локальный стенд не опубликован на GitHub и не выдаётся за его интерфейс.</p>
+    <p>Примеры разделены по тому, что в них проверяется:</p>
+    <div class="table-scroll"><table><thead><tr><th>Пример</th><th>Что проверяем</th></tr></thead><tbody><tr><td>GitHub · Hello-World</td><td>История, README, CONTRIBUTING.md и направления сравнения</td></tr><tr><td>GitHub · sait-vizitka</td><td>Контекст HTML и номера строк</td></tr><tr><td>Локальный Git-стенд</td><td>Одинаковые деревья при разных коммитах; переименование</td></tr></tbody></table></div>
+    <p>Кадры показывают страницы публичных репозиториев. Локальные результаты подписаны отдельно; начнём с истории Hello-World.</p>
+    <p class="gh-note">Кадры сняты 18 ноября 2026 года без входа в аккаунт. Нажмите кадр, чтобы увеличить; Esc закрывает увеличение. Ссылки с именами веток показывают их текущее состояние, ссылки с полными хешами фиксируют выбранные коммиты.</p>
+
+    <h2 id="s2"><span class="sec">§2</span>Выбрать ветку и открыть историю</h2>
+    <p class="purpose"><b>Зачем этот шаг.</b> Правка могла попасть не в ту ветку, которая открывается по умолчанию. Историю нужно читать для выбранной ветки.</p>
+    <p>Откройте <a href="https://github.com/octocat/Hello-World/commits/octocat-patch-1/">историю octocat-patch-1</a>. На странице <b>Commits</b> селектор под заголовком показывает <code>octocat-patch-1</code>. Если выбрана другая ветка, раскройте селектор и выберите эту. Здесь нет необходимости переключать локальный репозиторий.</p>
+    <figure class="shot"><img src="assets/history.png" alt="Страница Commits репозитория octocat/Hello-World: выбрана ветка octocat-patch-1, верхний коммит sentence case b1b3f97" loading="lazy"><figcaption>История octocat-patch-1. Верхняя запись — sentence case, b1b3f97, 10 мая 2018 года. Ниже — достижимые из этой ветки более ранние коммиты.</figcaption></figure>
+    <p>Название <code>sentence case</code> ведёт на страницу коммита. Короткий идентификатор справа помогает отличить его от другого коммита с таким же сообщением. Аватар и имя связывают запись с аккаунтом, если GitHub установил эту связь. Коммиты сгруппированы по датам. Линии родительства в этом списке не нарисованы.</p>
+    <p>История ветки включает и более ранние коммиты, достижимые через родителей. Она не ограничивается коммитами, созданными «под именем» этой ветки: сам объект коммита не хранит название ветки.</p>
+    <p class="step-done"><b>Что получилось.</b>Найдена запись b1b3f97 в нужной ветке. Откроем её и проверим содержание.</p>
+
+    <h2 id="s3"><span class="sec">§3</span>Прочитать сведения о коммите</h2>
+    <p class="purpose"><b>Зачем этот шаг.</b> Сообщение описывает намерение автора. Идентификатор, родитель и diff позволяют проверить, что сохранено.</p>
+    <p>Откройте <a href="https://github.com/octocat/Hello-World/commit/b1b3f9723831141a31a1a7252a213e216ea76e56">коммит b1b3f97</a>. Вверху видны сообщение <code>sentence case</code>, аккаунт <code>octocat</code>, дата и подпись <b>authored</b>. Ниже находятся <b>1 parent</b>, ссылка <code>7fd1a60</code> на родителя и идентификатор самого коммита.</p>
+    <figure class="shot"><img src="assets/commit.png" alt="Коммит b1b3f97: сообщение sentence case, автор octocat, дата 10 мая 2018, родитель 7fd1a60 и diff README с одной добавленной и одной удалённой строкой" loading="lazy"><figcaption>Страница b1b3f97. Сводка 1 file changed, +1 −1 относится к README. Смысл правки — замена регистра одной буквы.</figcaption></figure>
+    <p><span class="term">Автор</span> — тот, кто первоначально подготовил изменение; <span class="term">коммитер</span> — тот, кто записал этот объект коммита. Эти сведения могут различаться. В b1b3f97 автор записан как <code>The Octocat</code>, коммитер — <code>GitHub</code>: это проверено по данным самого коммита. В показанной шапке есть только <code>octocat authored</code>. Отдельное имя коммитера здесь не выведено.</p>
+    <details class="more"><summary>Где посмотреть раздельное авторство</summary>
+      <p>На некоторых страницах GitHub явно пишет «authored and … committed». Например, в <a href="https://github.com/git/git/compare/v2.45.0...v2.45.1">сравнении тегов git/git</a>, у записи <code>580097b</code> стоят <code>peff authored</code> и <code>dscho committed</code>. Это другой репозиторий и другой коммит, не b1b3f97.</p>
+      <p>Точные поля b1b3f97 доступны для чтения через <a href="https://api.github.com/repos/octocat/Hello-World/git/commits/b1b3f9723831141a31a1a7252a213e216ea76e56">GitHub API</a>: <code>author.name</code> — The Octocat, <code>committer.name</code> — GitHub. По ссылке API открываются структурированные данные коммита. Для чтения строк diff эти поля открывать необязательно.</p>
+      <p>У автора и коммитера бывают разные даты. Здесь обе соответствуют <code>2018-05-10T17:55:19Z</code>. В шапке показано 10 мая 2018 года; часовой пояс отображения может отличаться. Последовательность родительства задают ссылки на родителей. По датам и именам её определить нельзя.</p>
+    </details>
+    <p><span class="term">Родитель</span> — предыдущий коммит, на который ссылается текущий. У b1b3f97 он один: <code>7fd1a60</code>. У merge-коммита родителей может быть несколько, у самого первого — ни одного. Поэтому число родителей проверяют на странице коммита. Соседство записей в списке этого числа не показывает.</p>
+    <p>Свяжем знакомый объект коммита с тем, что только что прочитали на странице. Схема использует реальные идентификаторы основного примера; стрелка означает движение от предыдущего состояния к следующему.</p>
+    <figure class="scheme gh-diagram" aria-label="Схема коммита b1b3f97 и его родителя 7fd1a60">
+      <div class="gh-flow__row">
+        <div class="gh-node"><b>Родитель 7fd1a60</b><small>README: Hello World!</small></div>
+        <div class="gh-arrow" aria-hidden="true">→</div>
+        <div class="gh-node gh-node--compare"><b>Коммит b1b3f97</b><small>README: Hello world!</small></div>
+      </div>
+      <p><b>Изменённый файл:</b> README. <b>Сводка:</b> +1 −1. Полный снимок файлов принадлежит коммиту; diff получен сравнением с родителем.</p>
+      <figcaption>Сообщение — sentence case. Указатель на родителя хранится в b1b3f97; стрелка на схеме показывает порядок состояний. Указатель на родителя направлен обратно.</figcaption>
+    </figure>
+    <details class="simple"><summary>По-простому: запись и лист правок</summary><p>У двух подписанных редакций документа можно составить лист правок. Новая редакция хранится целиком, а лист правок составляют, сравнив её с предыдущей.</p><div class="gh-flow__row"><div class="gh-node">Предыдущая редакция</div><div class="gh-arrow" aria-hidden="true">→</div><div class="gh-node">Новая редакция и ссылка на предыдущую</div></div><p><b>Что есть что:</b> редакция — дерево файлов коммита; подпись — сведения о коммите; лист правок — diff. Аналогия не означает, что Git хранит каждый файл отдельной полной копией на диске.</p></details>
+
+    <p>На схеме обе версии README связаны через родителя. Теперь прочитаем саму разницу строк.</p>
+
+    <h2 id="s4"><span class="sec">§4</span>Разобрать diff и переключить его вид</h2>
+    <p class="purpose"><b>Зачем этот шаг.</b> По размеру правки нельзя понять её смысл. Нужно прочитать старую и новую строки в нужном файле.</p>
+    <p><span class="term">Diff</span> — показ различий между двумя состояниями. На странице b1b3f97 открыт файл <code>README</code>. Строка со знаком <b>−</b> содержит старое <code>Hello World!</code>, со знаком <b>+</b> — новое <code>Hello world!</code>. Изменился регистр буквы W; файл не был удалён и создан заново.</p>
+    <p>В режиме <b>Unified</b> старая и новая строки идут одна под другой. У удалённой строки указан старый номер 1, у добавленной — новый номер 1. Две колонки номеров относятся к разным версиям файла. Удалённые и добавленные строки различаются по цвету и знакам − и +.</p>
+    <p>Для более длинного фрагмента нужен контекст: неизменённые строки рядом с правкой. Перейдём к отдельному HTML-примеру — <a href="https://github.com/MaximBytecamp/sait-vizitka/commit/8da3e92e69e6940a76339e845684613a2d7a2289">коммиту 8da3e92 проекта sait-vizitka</a>.</p>
+    <figure class="shot"><img src="assets/html.png" alt="Коммит 8da3e92 проекта sait-vizitka: в index.html после заголовка добавлен один абзац, вокруг видны неизменённые теги HTML" loading="lazy"><figcaption>Другой пример: sait-vizitka, 8da3e92. В index.html добавлена строка 10 с абзацем об учёбе. Сводка +1 −0 не относится к README из Hello-World.</figcaption></figure>
+    <p>Перед добавлением видны <code>&lt;body&gt;</code> и заголовок страницы; после него — закрывающие теги. Эти строки не помечены + или −: это <span class="term">контекст</span>. Новый абзац занял строку 10. Старый <code>&lt;/body&gt;</code> со строки 10 оказался на новой строке 11: номер изменился, но сам тег не менялся.</p>
+    <details class="more"><summary>Что означает строка @@ −7,5 +7,6 @@</summary><p>Это заголовок показанного фрагмента: в старом файле он начинается со строки 7 и занимает 5 строк, в новом — со строки 7 и занимает 6. В эти числа входит контекст. Количество добавлений указано отдельно: в этом коммите добавлена одна строка.</p></details>
+    <p>Теперь вернитесь к b1b3f97. Чтобы читать две версии рядом, откройте настройки отображения diff — кнопку с шестерёнкой над файлами. В снятом интерфейсе меню содержит <b>Layout</b> с вариантами <b>Unified</b> и <b>Split</b>.</p>
+    <figure class="shot"><img src="assets/layout.png" alt="Меню настроек diff на странице b1b3f97: Layout, Unified и Split" loading="lazy"><figcaption>Настройки отображения на странице коммита. Unified и Split задают расположение строк. Состав коммита сохраняется.</figcaption></figure>
+    <p>Выберите <b>Split</b>. Слева будет прежняя строка <code>Hello World!</code>, справа — новая <code>Hello world!</code>. Номера строк у каждой половины свои.</p>
+    <figure class="shot"><img src="assets/split.png" alt="Тот же diff README коммита b1b3f97 в Split: слева Hello World!, справа Hello world!, обе строки имеют номер 1 в своей версии" loading="lazy"><figcaption>Тот же b1b3f97 в Split. Сводка по-прежнему +1 −1. Unified показан в §3. В обоих режимах видны те же старая и новая строки.</figcaption></figure>
+    <p class="step-done"><b>Что получилось.</b>Прочитаны две правки: в README изменили регистр буквы; в отдельном HTML-примере добавили абзац после заголовка.</p>
+
+    <h2 id="s5"><span class="sec">§5</span>Отличить правку, добавление и удаление файла</h2>
+    <p class="purpose"><b>Зачем этот шаг.</b> Перед чтением строк определите, что произошло с самим файлом. Правка содержимого и отсутствие файла — не одно и то же.</p>
+    <p>На странице коммита слева есть <b>File tree</b>, а над diff — число изменённых файлов и общая сводка добавлений и удалений строк. В b1b3f97 изменён один существующий README. Чтобы увидеть добавление, откройте <a href="https://github.com/octocat/Hello-World/commit/b3cbd5bbd7e81436d2eee04537ea2b4c0cad4cdf">b3cbd5b</a> из ветки <code>test</code>.</p>
+    <figure class="shot"><img src="assets/add.png" alt="Коммит b3cbd5b Create CONTRIBUTING.md: новый файл CONTRIBUTING.md с одной добавленной строкой ## Contributing" loading="lazy"><figcaption>b3cbd5b добавляет CONTRIBUTING.md: старая версия файла отсутствовала, новая содержит одну строку. Поэтому сводка +1 −0.</figcaption></figure>
+    <p>В новом файле есть <code>## Contributing</code> — заголовок «Как внести вклад». Для чтения правки достаточно увидеть: строка помечена +, старого номера у неё нет. Содержимое README этот коммит не меняет.</p>
+    <details class="more"><summary>Когда diff показан не целиком: удаление, изображения и большие файлы</summary>
+      <p>В <a href="https://github.com/octocat/Hello-World/compare/b3cbd5bbd7e81436d2eee04537ea2b4c0cad4cdf..b1b3f9723831141a31a1a7252a213e216ea76e56">прямом сравнении b3cbd5b..b1b3f97</a> файл CONTRIBUTING.md отсутствует на правой стороне. GitHub показывает <b>This file was deleted</b> и кнопку <b>Load diff</b>. После нажатия можно прочитать удалённую строку.</p>
+      <figure class="shot"><img src="assets/deleted.png" alt="Прямое сравнение b3cbd5b..b1b3f97 после Load diff: удалённая строка CONTRIBUTING.md и замена строки README" loading="lazy"><figcaption>Удаление относительно левой стороны сравнения. Это не утверждение, что коммит b1b3f97 исторически удалял CONTRIBUTING.md: файл был добавлен в другой ветке.</figcaption></figure>
+      <p>Текстовый diff не универсален. В отдельном <a href="https://github.com/MaximBytecamp/git_github_makarov/commit/5fc8b7c">коммите 5fc8b7c справочника</a> у PNG-файла показан отдельный блок с размером в KB. Построчной текстовой разницы в нём нет. При этой съёмке область предпросмотра осталась пустой: по ней нельзя проверить содержимое картинки. Содержимое PNG в этом прогоне осталось непроверенным.</p>
+      <figure class="shot"><img src="assets/binary.png" alt="Блок ssh-settings.png в коммите 5fc8b7c: размер 69.7 KB, пустая область предпросмотра и отсутствие построчного текстового diff" loading="lazy"><figcaption>Другой репозиторий: git_github_makarov, 5fc8b7c. Предпросмотр PNG при съёмке не загрузился; видимый размер 69.7 KB не объясняет содержимое изображения.</figcaption></figure>
+      <p>В том же коммите HTML-фрагменты сначала скрыты сообщением <b>Large diffs are not rendered by default</b> и кнопкой <b>Load diff</b>. Видимая страница ещё не означает, что все правки уже развёрнуты. Удалённый файл в предыдущем кадре тоже требовал Load diff, но с другим пояснением.</p>
+      <figure class="shot"><img src="assets/large.png" alt="Коммит 5fc8b7c: большой HTML diff скрыт сообщением Large diffs are not rendered by default и кнопкой Load diff" loading="lazy"><figcaption>Это состояние до загрузки большого diff. Из него нельзя делать вывод «изменений нет» или придумывать, какие строки находятся внутри.</figcaption></figure>
+      <p>На этих кадрах проверены два случая скрытого diff: удалённый файл и большой HTML-фрагмент. Переход между фрагментами проверяют по номерам строк и заголовкам @@. Удаление подтверждает знак − в diff. Предельные размеры GitHub здесь не измерялись; раскрытие любого большого файла не гарантируется.</p>
+    </details>
+    <details class="more"><summary>Переименование: только локально проверенный случай</summary><p>В локальном стенде коммит <code>503a877</code> переименовал <code>help.html</code> в <code>guide.html</code> без изменения содержимого. Git распознал его как <code>R100</code>; numstat дал 0 добавлений и 0 удалений строк. Следующий коммит <code>477f920</code> удалил guide.html: 0 добавлений и 2 удаления. Это результаты локального Git, не кадры GitHub. Отдельного интерфейса переименования на GitHub здесь не демонстрируем.</p><p>Git определяет переименование при сравнении по сходству содержимого. Поэтому нулевой счётчик строк сам по себе не означает, что ни один путь файла не изменился.</p></details>
+
+    <p>После проверки отдельных файлов можно перейти к сравнению двух выбранных веток.</p>
+
+    <h2 id="s6"><span class="sec">§6</span>Выбрать base и compare</h2>
+    <p class="purpose"><b>Зачем этот шаг.</b> Одна ветка меняет приветствие, другая добавляет файл. Нужно понять, какую сторону мы проверяем и от какой точки считаем изменения.</p>
+    <p>Откройте <a href="https://github.com/octocat/Hello-World/compare/test...octocat-patch-1">сравнение test...octocat-patch-1</a>. Над результатом находятся два селектора: <b>base: test</b> и <b>compare: octocat-patch-1</b>. Для такого сравнения <b>base</b> выбирает базовую сторону, а <b>compare</b> — сторону, чьи изменения после общего предка будут показаны.</p>
+    <figure class="shot"><img src="assets/compare-three.png" alt="GitHub Comparing changes: base test, compare octocat-patch-1; один коммит sentence case, один изменённый файл README, одна добавленная и одна удалённая строка" loading="lazy"><figcaption>test...octocat-patch-1. GitHub показывает b1b3f97 и diff README: +1 −1. Между селекторами стоят три точки.</figcaption></figure>
+    <p>Страница содержит и элементы для командной работы, но сейчас они не нужны: не создавайте pull request. Читаем только выбранные стороны, список коммитов и файлы ниже.</p>
+    <p>Обе ветки произошли от <code>7fd1a60</code>. Схема показывает фактический граф примера. Пунктир обозначает выбранную base, двойная толщина рамки — compare; эти подписи работают и без цвета.</p>
+    <figure class="scheme gh-diagram" aria-label="Общий предок 7fd1a60, от него две ветки: test b3cbd5b и octocat-patch-1 b1b3f97">
+      <div class="gh-node"><b>Общий предок 7fd1a60</b><small>README: Hello World! · CONTRIBUTING.md ещё нет</small></div>
+      <div class="gh-flow">
+        <div class="gh-flow__row"><div class="gh-node">От 7fd1a60</div><div class="gh-arrow" aria-hidden="true">→</div><div class="gh-node gh-node--base"><b>base: test · b3cbd5b</b><small>Добавлен CONTRIBUTING.md; README прежний</small></div></div>
+        <div class="gh-flow__row"><div class="gh-node">От 7fd1a60</div><div class="gh-arrow" aria-hidden="true">→</div><div class="gh-node gh-node--compare"><b>compare: octocat-patch-1 · b1b3f97</b><small>README: Hello world!; CONTRIBUTING.md нет</small></div></div>
+      </div>
+      <p class="gh-legend">Пунктир = base; толстая рамка = compare. Стрелки идут от общего предка к потомкам.</p>
+      <figcaption>Для test...octocat-patch-1 diff строится от 7fd1a60 к b1b3f97. Добавление файла в ветке test в этот diff не входит.</figcaption>
+    </figure>
+    <p>В селекторах можно выбирать не только ветки. Доступно также сравнение тегов и конкретных коммитов. Ветка — подвижное имя; тег обычно обозначает выбранную версию; хеш задаёт конкретный объект коммита. Для воспроизводимого обсуждения используйте полные хеши.</p>
+    <details class="more"><summary>Настоящий пример сравнения тегов</summary><p>В <a href="https://github.com/git/git/compare/v2.45.0...v2.45.1">git/git: v2.45.0...v2.45.1</a> стороны заданы именами тегов этого репозитория. На кадре видны выбранные версии и список коммитов. Разбирать программный код этого проекта для упражнения не требуется.</p><figure class="shot"><img src="assets/tags.png" alt="Сравнение тегов git/git: base v2.45.0, compare v2.45.1; в списке есть строки peff authored and dscho committed" loading="lazy"><figcaption>Отдельный пример git/git. У 580097b различаются автор и коммитер: peff authored and dscho committed. Числа этого сравнения не относятся к двум веткам Hello-World.</figcaption></figure><p>Существование тегов и результат страницы проверены чтением GitHub. Съёмка выполнена без создания тегов и веток. Имя тега тоже не равно полному хешу: при необходимости зафиксируйте коммиты, на которые указывают оба тега.</p></details>
+
+    <p>Выбранные стороны задают точки сравнения. Число точек в адресе определяет, какие состояния попадут в diff.</p>
+
+    <h2 id="s7"><span class="sec">§7</span>Не перепутать две и три точки</h2>
+    <p class="purpose"><b>Зачем этот шаг.</b> «Чем отличаются две версии?» и «Что сделала выбранная ветка после расхождения?» могут дать разный список файлов.</p>
+    <p><b>Три точки: <code>base...compare</code>.</b> Для наших веток GitHub берёт общий предок и показывает разницу от него до compare. Поэтому <code>test...octocat-patch-1</code> показывает только замену строки README. Это не прямое вычитание файлов ветки test из файлов ветки octocat-patch-1.</p>
+    <p><b>Две точки: <code>base..compare</code>.</b> На GitHub это прямое сравнение конечных состояний. Откройте <a href="https://github.com/octocat/Hello-World/compare/b3cbd5bbd7e81436d2eee04537ea2b4c0cad4cdf..b1b3f9723831141a31a1a7252a213e216ea76e56">b3cbd5b..b1b3f97</a>. Здесь стороны закреплены полными хешами тех же двух веток.</p>
+    <figure class="shot"><img src="assets/compare-two.png" alt="GitHub direct comparison b3cbd5b..b1b3f97: два изменённых файла, одна добавленная и две удалённые строки; CONTRIBUTING.md отсутствует справа" loading="lazy"><figcaption>Две точки: GitHub прямо сообщает This is a direct comparison. Сводка — 2 changed files, 1 addition, 2 deletions. CONTRIBUTING.md сначала скрыт за Load diff.</figcaption></figure>
+    <p>В левом состоянии есть CONTRIBUTING.md, в правом его нет — поэтому здесь он показан удалённым. README различается одной строкой — поэтому там +1 −1. Получается суммарно +1 −2. Результат описывает переход между выбранными состояниями. Историческую правку b1b3f97 проверяют относительно его родителя.</p>
+    <p>Теперь поменяем стороны трёхточечного сравнения: <a href="https://github.com/octocat/Hello-World/compare/octocat-patch-1...test">octocat-patch-1...test</a>. Общий предок остался 7fd1a60, но compare теперь указывает на b3cbd5b.</p>
+    <figure class="shot"><img src="assets/compare-reverse.png" alt="Обратное трёхточечное сравнение: base octocat-patch-1, compare test; показано добавление CONTRIBUTING.md, одна добавленная строка и ноль удалений" loading="lazy"><figcaption>При перестановке сторон трёхточечного сравнения показан другой набор правок: теперь +1 −0 в CONTRIBUTING.md. README в результат не входит.</figcaption></figure>
+    <p>Если поменять стороны <em>прямого</em> сравнения, добавления и удаления обратятся: CONTRIBUTING.md окажется добавленным, а README вернётся от <code>Hello world!</code> к <code>Hello World!</code>. Для <em>трёх точек</em> это не общее правило: выбирается другая сторона относительно общего предка.</p>
+    <details class="more"><summary>Обратное прямое сравнение на GitHub</summary><p>В <a href="https://github.com/octocat/Hello-World/compare/b1b3f9723831141a31a1a7252a213e216ea76e56..b3cbd5bbd7e81436d2eee04537ea2b4c0cad4cdf">b1b3f97..b3cbd5b</a> стороны переставлены. На кадре CONTRIBUTING.md добавлен, а README меняется обратно. Сводка: +2 −1.</p><figure class="shot"><img src="assets/compare-two-reverse.png" alt="Обратное прямое сравнение b1b3f97..b3cbd5b: добавлен CONTRIBUTING.md, README возвращает Hello World!, сводка две добавленные и одна удалённая строка" loading="lazy"><figcaption>Две точки, обратное направление. Набор файлов тот же, знаки правок обращены.</figcaption></figure><p>Такой результат относится к разнице конечных деревьев. У трёхточечного сравнения при перестановке сторон меняется compare относительно общего предка.</p></details>
+    <details class="simple"><summary>По-простому: две проверки редакций</summary><div class="gh-flow"><div class="gh-node"><b>Две точки — положить рядом две готовые редакции</b><small>Сравнить всё содержимое слева со всем содержимым справа.</small></div><div class="gh-node"><b>Три точки — достать общую исходную редакцию</b><small>Сравнить её с выбранной правой редакцией. Собственные правки левой стороны в лист правок не включать.</small></div></div><p><b>Что есть что:</b> готовые редакции — деревья base и compare; общая исходная редакция — merge base. В этом примере общий предок один. Для сложной истории с несколькими общими предками нужна отдельная проверка.</p></details>
+    <details class="more"><summary>Почему нельзя переносить сюда правило git log A..B</summary><p>В локальном Git <code>git diff A..B</code> сравнивает деревья A и B, а <code>git diff A...B</code> — общий предок с B. Но <code>git log A..B</code> выбирает множество коммитов: достижимые из B, не достижимые из A. Одинаковые точки в разных командах не означают одинаковую операцию. В этой главе обсуждается diff и фактическое поведение страниц GitHub Compare.</p></details>
+    <p class="step-done"><b>Что получилось.</b>Перед чтением сравнения мы называем обе стороны и вопрос: конечные состояния или правки compare после общего предка.</p>
+
+    <h2 id="s8"><span class="sec">§8</span>Проверить файлы отдельно от истории</h2>
+    <p class="purpose"><b>Зачем этот шаг.</b> Сообщение «файлы одинаковые» не отвечает на вопрос «одинаковые ли коммиты и их предки».</p>
+    <p>Дальше — только <b>локальный одноразовый стенд</b>, без кадров GitHub. В исходном коммите <code>cb21ff4</code> файл index.html содержал ссылку <code>Root</code> на <code>/root</code>. Коммит <code>7f42542</code> заменил её на <code>Welcome</code> и <code>/welcome</code>. Другая ветка от исходного коммита добавила help.html. Код стенда нужен только для чтения, запускать сайт не требуется.</p>
+    <p>Ниже показана строка index.html, которая изменилась. Строка <code>&lt;!doctype html&gt;</code> перед ней осталась прежней. Статистика — одна удалённая и одна добавленная строка; внутри строки изменились и текст ссылки, и её адрес.</p>
+    <table class="gh-diff" aria-label="Локальный diff строки 2 файла index.html"><tbody>
+      <tr class="minus"><td class="line">2</td><td class="sign">−</td><td>&lt;html lang="en"&gt;&lt;body&gt;&lt;a href="/root"&gt;Root&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</td></tr>
+      <tr class="plus"><td class="line">2</td><td class="sign">+</td><td>&lt;html lang="en"&gt;&lt;body&gt;&lt;a href="/welcome"&gt;Welcome&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</td></tr>
+    </tbody></table>
+    <p>После 7f42542 создан отдельный коммит <code>7d898dc</code> без изменения файлов. Сравнение этих двух состояний пустое. Чтобы не принять его за доказательство одинаковой истории, отдельно проверим дерево файлов и граф.</p>
+    <figure class="scheme gh-diagram" aria-label="Локальный граф: cb21ff4 ведёт к main 7f42542, затем к same 7d898dc; два последних коммита имеют одно дерево файлов">
+      <div class="gh-node"><b>cb21ff4 · исходное состояние</b><small>index.html: ссылка Root → /root</small></div>
+      <div class="gh-flow">
+        <div class="gh-flow__row"><div class="gh-node"><b>main · 7f42542</b><small>Родитель cb21ff4. Welcome → /welcome.</small></div><div class="gh-arrow" aria-hidden="true">→</div><div class="gh-node gh-node--compare"><b>same · 7d898dc</b><small>Те же файлы; ещё один коммит после main</small></div></div>
+        <div class="gh-node gh-node--base"><b>Отдельная ветка topic · ebdddaa</b><small>Родитель cb21ff4. Добавлен help.html, ссылка в index.html осталась Root → /root.</small></div>
+      </div>
+      <p><b>Одинаковое дерево main и same:</b><br><code>7e18b2ea1c047ccad9fa920f04e73db9460dd65b</code></p>
+      <figcaption>У 7f42542 родитель cb21ff4, у 7d898dc — 7f42542. Поэтому файлы совпадают, но вершины истории и цепочки родителей различаются. topic показана отдельно: она не является родителем main.</figcaption>
+    </figure>
+    <p>Равенство деревьев здесь проверено по полным идентификаторам, а различие истории — по идентификаторам коммитов и их родителям. Пустого diff для второго вывода недостаточно. Вывод о совпадении истории требует отдельной проверки цепочек родителей.</p>
+    <details class="more"><summary>Точные результаты и воспроизведение локального опыта</summary>
+      <p>Проверка выполнена Git 2.51.1. <a href="assets/lab.sh">Сценарий стенда</a> и <a href="assets/local-checks.txt">вывод локальной проверки</a> оставлены для преподавателя; самостоятельная работа не требует терминала. Сценарий создаёт только временные репозитории и читает публичный Hello-World, не выполняя его код.</p>
+      <ul><li>main: <code>7f42542ef01aac2b7b2897e506b79116576dc2df</code>.</li><li>same: <code>7d898dce02a26242b26e74dd027d63fc6d05865e</code>.</li><li>У обоих дерево <code>7e18b2ea1c047ccad9fa920f04e73db9460dd65b</code>.</li><li>Прямые сравнения main..same и same..main пустые; граф всё равно содержит дополнительный коммит.</li></ul>
+      <p>Полные данные отдельно проверенного публичного примера: <a href="assets/public-checks.txt">Git-объекты и diff Hello-World</a>. Git-данные проверены локально, поведение страниц — отдельно в браузере.</p>
+    </details>
+
+    <h2 id="s9"><span class="sec">§9</span>Сохранить точную ссылку</h2>
+    <p class="purpose"><b>Зачем этот шаг.</b> Другой человек должен открыть те состояния, которые вы проверили, даже если завтра ветка сдвинется.</p>
+    <p>Для одного коммита скопируйте адрес его страницы: он содержит <code>/commit/</code> и полный хеш. На кадре §3 рядом с коротким хешем есть значок копирования идентификатора, но хеш и URL — разные вещи. Для отправки ссылки достаточно адресной строки браузера.</p>
+    <p>Для сравнения замените имена веток полными хешами и сохраните нужное число точек. Например, <a href="https://github.com/octocat/Hello-World/compare/b3cbd5bbd7e81436d2eee04537ea2b4c0cad4cdf...b1b3f9723831141a31a1a7252a213e216ea76e56">постоянное трёхточечное сравнение b3cbd5b...b1b3f97</a> и <a href="https://github.com/octocat/Hello-World/compare/b3cbd5bbd7e81436d2eee04537ea2b4c0cad4cdf..b1b3f9723831141a31a1a7252a213e216ea76e56">прямое b3cbd5b..b1b3f97</a> ведут к разным результатам.</p>
+    <p>Проверим адрес с полными хешами на странице GitHub. Между сторонами оставлены три точки.</p>
+    <figure class="shot"><img src="assets/compare-fixed.png" alt="Сравнение на GitHub с полными хешами b3cbd5b и b1b3f97 и тремя точками; результат README +1 −1" loading="lazy"><figcaption>Закреплённые коммиты вместо подвижных имён веток. Результат соответствует test...octocat-patch-1 на дату съёмки.</figcaption></figure>
+    <p>Рядом со ссылкой напишите, что проверяли: «base b3cbd5b, compare b1b3f97, три точки: правка README после общего предка». Эта подпись задаёт направление и смысл сравнения. Ссылка с хешами фиксирует объекты, но не гарантирует вечную доступность: репозиторий могут удалить или закрыть.</p>
+
+    <h2 id="s10"><span class="sec">§10</span>Частые ошибки</h2>
+    <div class="table-scroll"><table><thead><tr><th>Ошибка</th><th>Почему вывод неверен</th><th>Что проверить</th></tr></thead><tbody>
+      <tr><td>«В истории нет правки»</td><td>Открыта другая ветка или включён фильтр</td><td>Название ветки, All users и All time на странице Commits</td></tr>
+      <tr><td>«+1 −1 — два смысловых изменения»</td><td>Счётчик считает строки; одна замена занимает старую и новую строку</td><td>Содержание обеих строк и имя файла</td></tr>
+      <tr><td>«Мало строк — значит, код хороший»</td><td>Размер diff не проверяет правильность ссылки, условия или поведения</td><td>Что изменилось по смыслу; для поведения нужны отдельные проверки</td></tr>
+      <tr><td>«В b1b3f97 удалили CONTRIBUTING.md»</td><td>Так выглядит только переход от b3cbd5b к b1b3f97; у самого b1b3f97 другой родитель</td><td>Страницу коммита и обе стороны сравнения</td></tr>
+      <tr><td>«Три точки — то же самое, что две»</td><td>У разошедшихся веток общий предок отличается от base</td><td>Какие состояния реально сравниваются</td></tr>
+      <tr><td>«Пустой diff — одинаковая история»</td><td>Могут совпасть только деревья файлов</td><td>Хеши коммитов, деревья и родительство отдельно</td></tr>
+      <tr><td>«Все строки уже видны»</td><td>Часть diff может быть ещё не загружена</td><td>Load diff и поясняющие сообщения GitHub</td></tr>
+      <tr><td>«Ссылка на ветку фиксирует результат»</td><td>Ветка может сдвинуться</td><td>Полные хеши, порядок сторон и число точек в URL</td></tr>
+    </tbody></table></div>
+
+    <h2 id="s11"><span class="sec">§11</span>Проверьте себя</h2>
+    <ol><li>Что изменено в b1b3f97: файл целиком или одна строка? Какой родитель?</li><li>Почему в HTML-коммите 8da3e92 у закрывающего тега поменялся номер, хотя сам тег не изменяли?</li><li>Какой файл покажет test...octocat-patch-1? А обратное трёхточечное сравнение?</li><li>Почему прямое b3cbd5b..b1b3f97 показывает удаление CONTRIBUTING.md?</li><li>Что остаётся неизменным при переключении Unified → Split?</li><li>Как доказано, что локальные main и same имеют одинаковые файлы, но разную историю?</li></ol>
+    <details class="more"><summary>Ответы</summary><ol><li>В README заменена строка Hello World! на Hello world!. Родитель — 7fd1a60. Сводка +1 −1.</li><li>Перед тегом добавлен абзац. Строки ниже сдвинулись; контекст не превращается в правку только из-за нового номера.</li><li>Прямое направление с тремя точками показывает README, обратное — добавление CONTRIBUTING.md. В обоих случаях исходная точка diff — 7fd1a60.</li><li>У левого состояния файл есть, у правого нет. Это разница деревьев. Сам b1b3f97 меняет только README относительно своего родителя.</li><li>Коммит, сравниваемые состояния, строки и статистика. Меняется расположение старой и новой версий.</li><li>Совпали полные хеши деревьев. Хеши коммитов различаются; у same есть дополнительный коммит с родителем main. Граф проверен отдельно от diff.</li></ol></details>
+
+    <h2 id="s12"><span class="sec">§12</span>Самостоятельная работа: только чтение</h2>
+    <p>Используйте публичный Hello-World. Вход в аккаунт и разрешение на запись не нужны. Не редактируйте файлы, не отправляйте изменения и не создавайте pull request.</p>
+    <ol class="steps"><li>Откройте историю <code>octocat-patch-1</code>, найдите <code>sentence case</code> и перейдите на страницу коммита. Запишите полный хеш, сообщение, видимые сведения об авторстве, дату и родителя. Если отдельное имя коммитера не показано, так и отметьте; не приписывайте его шапке.</li><li>Назовите файл и объясните старую и новую строки своими словами. Запишите числа добавлений и удалений, не называя их числом смысловых изменений.</li><li>Посмотрите Unified и Split. Укажите старый и новый номера изменённой строки и объясните, почему статистика не изменилась.</li><li>Поставьте base = <code>test</code>, compare = <code>octocat-patch-1</code>. Объясните, почему в трёхточечном сравнении не показано удаление CONTRIBUTING.md. Затем поменяйте стороны и назовите новый результат.</li><li>Откройте прямое сравнение тех же конечных коммитов через две точки. Объясните появление второго файла и, если требуется, нажмите Load diff для чтения удалённой строки.</li><li>Сохраните одну ссылку на коммит и одну на сравнение с полными хешами. Рядом со второй подпишите base, compare, число точек и вопрос, на который отвечает diff.</li></ol>
+    <p><b>Результат:</b> короткая записка с двумя ссылками и объяснением правки и направления сравнения. Достаточно текста; создавать коммиты в чужом проекте не требуется.</p>
+    <details class="more"><summary>Как проверить свою записку</summary><p>Для состояния, снятого в главе: sentence case — b1b3f97, родитель 7fd1a60, README +1 −1. test...octocat-patch-1 показывает README, обратное сравнение — CONTRIBUTING.md +1 −0. Прямое b3cbd5b..b1b3f97 содержит два файла и сводку +1 −2. Если ветки с тех пор сдвинулись, используйте ссылки с полными хешами из главы и укажите это в записке.</p></details>
+
+    <h2 id="s13"><span class="sec">§13</span>Шпаргалка</h2>
+    <ul><li><b>История:</b> сначала проверьте выбранную ветку и фильтры; затем открывайте сообщение коммита.</li><li><b>Коммит:</b> сообщение, авторство, дата, полный хеш, родители, изменённые файлы.</li><li><b>Diff:</b> − означает старую строку, + — новую; контекст помогает понять место правки. У двух версий свои номера строк.</li><li><b>Unified / Split:</b> одна разница, два способа расположить строки.</li><li><b>Две точки:</b> конечное дерево base → конечное дерево compare.</li><li><b>Три точки:</b> общий предок → compare. Перестановка сторон может изменить набор файлов и знаки строк.</li><li><b>Пустой diff:</b> ещё не доказательство совпадения истории.</li><li><b>Ссылка:</b> полные хеши фиксируют стороны; число точек фиксирует смысл сравнения.</li></ul>
+    <details class="more"><summary>Источники и границы проверки</summary><div class="sources"><b>Откуда взяты факты</b><ol>
+      <li>Настоящие страницы GitHub и данные существующих Git-объектов проверены 18.11.2026: <a href="https://github.com/octocat/Hello-World">octocat/Hello-World</a>, <a href="https://github.com/MaximBytecamp/sait-vizitka">sait-vizitka</a>, <a href="https://github.com/git/git/compare/v2.45.0...v2.45.1">git/git, сравнение тегов</a>, <a href="https://github.com/MaximBytecamp/git_github_makarov/commit/5fc8b7c">справочник, коммит 5fc8b7c</a>. Внешние репозитории использованы только на чтение.</li>
+      <li>Две и три точки, сравнение веток, тегов и коммитов — <a href="https://docs.github.com/en/pull-requests/committing-changes-to-your-project/viewing-and-comparing-commits/comparing-commits">GitHub Docs: Comparing commits</a>. Само сравнение не требует создавать pull request.</li>
+      <li>Построчная разница и режимы — <a href="https://docs.github.com/en/pull-requests/committing-changes-to-your-project/viewing-and-comparing-commits/differences-between-commit-views">Differences between commit views</a>.</li>
+      <li>Локальная семантика diff — <a href="https://git-scm.com/docs/git-diff">git-diff</a>; поля коммита и дерево — <a href="https://git-scm.com/docs/git-cat-file">git-cat-file</a>; общий предок — <a href="https://git-scm.com/docs/git-merge-base">git-merge-base</a>.</li>
+    </ol><p>В главе не проверяются создание pull request, комментарии ревью и одобрение. Переименование воспроизведено только локально. Для больших diff зафиксировано наблюдавшееся скрытие; предельные размеры GitHub не измерялись. Возможности интерфейса при входе в аккаунт могут отличаться.</p></div></details>
+    <div class="pager"><a href="../../index.html">← К содержанию справочника</a></div>
+    <div class="colophon"><span>Глава 4.8 · Проверка изменений на GitHub</span><span class="author-line">Автор: Макаров Максим Николаевич</span></div>
+  </main>
+</div></div>
+<script src="../../book.js"></script>
+</body>
+</html>

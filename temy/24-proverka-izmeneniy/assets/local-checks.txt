@@ -1,0 +1,103 @@
+git version 2.51.1
+
+--- commits ---
+commit=cb21ff42eec4fa4a3a1bca459488ea5b7d6b25ec
+parents=
+tree=5bbd7d4c46eef61abedfd957418cb95c24be0833
+author=Demo Student
+committer=Demo Committer
+date=2020-01-01T00:00:00Z
+message=root
+commit=ebdddaa6cf2744111d44714daf7d110f1ccb83fc
+parents=cb21ff42eec4fa4a3a1bca459488ea5b7d6b25ec
+tree=57a312869ce3f607588a6a7c1f005805a661ce55
+author=Demo Student
+committer=Demo Committer
+date=2020-01-02T00:00:00Z
+message=topic: add help page
+commit=7f42542ef01aac2b7b2897e506b79116576dc2df
+parents=cb21ff42eec4fa4a3a1bca459488ea5b7d6b25ec
+tree=7e18b2ea1c047ccad9fa920f04e73db9460dd65b
+author=Demo Student
+committer=Demo Committer
+date=2020-01-03T00:00:00Z
+message=main: update text and link
+commit=7d898dce02a26242b26e74dd027d63fc6d05865e
+parents=7f42542ef01aac2b7b2897e506b79116576dc2df
+tree=7e18b2ea1c047ccad9fa920f04e73db9460dd65b
+author=Demo Student
+committer=Demo Committer
+date=2020-01-04T00:00:00Z
+message=same: record equivalent tree
+commit=503a877017861decc9ceccf29daff6c876e8bc52
+parents=ebdddaa6cf2744111d44714daf7d110f1ccb83fc
+tree=d34b51bcb092cb8a815e6b5bdb9a2d37b9d7a2f5
+author=Demo Student
+committer=Demo Committer
+date=2020-01-05T00:00:00Z
+message=rename: help.html to guide.html
+commit=477f9203a70f9d807387fb29ac5b909fd4c3668b
+parents=503a877017861decc9ceccf29daff6c876e8bc52
+tree=5bbd7d4c46eef61abedfd957418cb95c24be0833
+author=Demo Student
+committer=Demo Committer
+date=2020-01-06T00:00:00Z
+message=delete: guide.html
+
+--- graph ---
+* 477f920 (rename-delete) delete: guide.html
+* 503a877 rename: help.html to guide.html
+| * 7d898dc (same) same: record equivalent tree
+| * 7f42542 (HEAD -> main) main: update text and link
+* | ebdddaa (topic) topic: add help page
+|/
+* cb21ff4 root
+
+--- local numstat (both directions) ---
+
+cb21ff42eec4fa4a3a1bca459488ea5b7d6b25ec..7f42542ef01aac2b7b2897e506b79116576dc2df
+1	1	index.html
+cb21ff42eec4fa4a3a1bca459488ea5b7d6b25ec...7f42542ef01aac2b7b2897e506b79116576dc2df
+1	1	index.html
+
+cb21ff42eec4fa4a3a1bca459488ea5b7d6b25ec..ebdddaa6cf2744111d44714daf7d110f1ccb83fc
+2	0	help.html
+cb21ff42eec4fa4a3a1bca459488ea5b7d6b25ec...ebdddaa6cf2744111d44714daf7d110f1ccb83fc
+2	0	help.html
+
+ebdddaa6cf2744111d44714daf7d110f1ccb83fc..7f42542ef01aac2b7b2897e506b79116576dc2df
+0	2	help.html
+1	1	index.html
+ebdddaa6cf2744111d44714daf7d110f1ccb83fc...7f42542ef01aac2b7b2897e506b79116576dc2df
+1	1	index.html
+
+7f42542ef01aac2b7b2897e506b79116576dc2df..ebdddaa6cf2744111d44714daf7d110f1ccb83fc
+2	0	help.html
+1	1	index.html
+7f42542ef01aac2b7b2897e506b79116576dc2df...ebdddaa6cf2744111d44714daf7d110f1ccb83fc
+2	0	help.html
+
+ebdddaa6cf2744111d44714daf7d110f1ccb83fc..503a877017861decc9ceccf29daff6c876e8bc52
+0	0	help.html => guide.html
+ebdddaa6cf2744111d44714daf7d110f1ccb83fc...503a877017861decc9ceccf29daff6c876e8bc52
+0	0	help.html => guide.html
+
+503a877017861decc9ceccf29daff6c876e8bc52..477f9203a70f9d807387fb29ac5b909fd4c3668b
+0	2	guide.html
+503a877017861decc9ceccf29daff6c876e8bc52...477f9203a70f9d807387fb29ac5b909fd4c3668b
+0	2	guide.html
+
+--- rename status ---
+R100	help.html	guide.html
+
+--- exact HTML diff ---
+diff --git a/index.html b/index.html
+index 42cc72c..4db69e0 100644
+--- a/index.html
++++ b/index.html
+@@ -1,2 +1,2 @@
+ <!doctype html>
+-<html lang="en"><body><a href="/root">Root</a></body></html>
++<html lang="en"><body><a href="/welcome">Welcome</a></body></html>
+
+PASS exact hashes, equal trees, different commits and parents, empty endpoint diffs
