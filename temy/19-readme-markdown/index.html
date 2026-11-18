@@ -12,7 +12,7 @@
   <style>
     .md-pair { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px; margin:20px 0; }
     .md-card { margin:0; min-width:0; border:2px solid var(--ink); background:var(--page); }
-    .md-card__head { display:flex; justify-content:space-between; gap:12px; padding:9px 12px; border-bottom:2px solid var(--ink); background:var(--steel-pale); font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+    .md-card__head { display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px 12px; padding:9px 12px; border-bottom:1px solid var(--ink-faint); background:var(--steel-pale); font-size:.8rem; font-weight:600; }
     .md-card--result .md-card__head { background:var(--fire-pale); }
     .md-source { margin:0; padding:16px;  white-space:pre-wrap; overflow-wrap:anywhere; font:500 .88rem/1.65 'Roboto Mono', monospace; }
     .md-render { padding:18px 20px;  }
@@ -32,9 +32,20 @@
     .line-notes dt { margin-top:10px; font-family:'Roboto Mono', monospace; font-weight:700; }
     .line-notes dd { margin:3px 0 0; }
     .tree { margin:18px 0; padding:16px; border:2px solid var(--ink); background:var(--page); font:500 .9rem/1.65 'Roboto Mono', monospace; white-space:pre-wrap; overflow-wrap:anywhere; }
-    .path-parts { display:flex; flex-wrap:wrap; gap:6px; margin:14px 0; }
-    .path-parts span { border:1px solid var(--ink); padding:6px 8px; background:var(--page); font:500 .85rem 'Roboto Mono', monospace; }
-    .path-parts .path-up { background:var(--fire-pale); }
+    .route { margin:22px 0; padding:20px; border:2px solid var(--ink); background:var(--page); }
+    .route__steps { display:grid; grid-template-columns:1fr 24px 1fr 24px 1fr; align-items:center; gap:8px; }
+    .route__stop { min-width:0; padding:14px 10px; border:1px solid var(--ink); }
+    .route__stop code { display:block; overflow-wrap:anywhere; white-space:normal; margin-bottom:8px; }
+    .route__stop small { display:block; line-height:1.5; }
+    .route__stop--start { background:var(--fire-pale); }
+    .route__stop--end { background:var(--steel-pale); }
+    .route__arrow { text-align:center; font-size:1.3rem; }
+    .route figcaption { margin-top:16px; font-size:.85rem; color:var(--ink-soft); }
+    .outline-demo { margin:22px 0; border-top:2px solid var(--ink); }
+    .outline-demo > div { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:20px; padding:14px 0; border-bottom:1px solid var(--ink-faint); }
+    .outline-demo code { white-space:normal; overflow-wrap:anywhere; }
+    .outline-demo p { margin:0; }
+    @media (max-width:700px) { .outline-demo > div { grid-template-columns:1fr; gap:6px; } .route__steps { grid-template-columns:1fr; } .route__arrow { transform:rotate(90deg); } }
     .compare { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:18px 0; }
     .compare > div { min-width:0; border:2px solid var(--ink); padding:14px; overflow-wrap:anywhere; }
     .compare code { white-space:normal; overflow-wrap:anywhere; }
@@ -75,7 +86,7 @@
 
   <h2 id="s1"><span class="sec">§1</span>Задача README</h2>
   <p>README похож на обложку с краткой инструкцией: по нему определяют содержимое проекта до открытия файлов. <span class="term">README</span> — вводное описание репозитория. Здесь это текстовый файл <code>README.md</code>. Расширение <code>.md</code> означает Markdown — разметку, где заголовок, список и ссылка записываются обычными символами.</p>
-  <p>README служит вводным описанием репозитория. По нему определяют, что находится в папке, как открыть результат, где лежат важные файлы и какие ограничения есть у проекта. Пароли, токены и приватные ключи в README не записывают: файл доступен читателям репозитория.</p>
+  <p>По README определяют, как открыть результат, какие файлы составляют проект и какие ограничения у него есть. Пароли, токены и приватные ключи в README не записывают: файл доступен читателям репозитория.</p>
   <div class="why"><p class="why__head">Что даёт README</p><ul class="why__list"><li><b>Название и назначение.</b> Посетитель понимает, что это за работа.</li><li><b>Состав проекта.</b> Список файлов помогает открыть нужный файл без перебора папок.</li><li><b>Способ запуска.</b> Короткая инструкция сообщает, что нужно открыть или выполнить.</li><li><b>Наглядность.</b> Изображение показывает результат там, где текста недостаточно.</li></ul></div>
   <p>README обычно лежит в корне репозитория — рядом с <code>index.html</code>, <code>src</code> или другими основными файлами. Внутри вложенной папки может находиться второй README для этой части проекта. Пути без начального <code>/</code> считаются от папки самого README. Чтобы проверить результат, файл открывают в просмотрщике Markdown.</p>
 
@@ -91,9 +102,12 @@
   <div class="note"><p><b>Имя файла.</b> GitHub распознаёт распространённые варианты имени README, но в этой главе используется <code>README.md</code>: это привычное имя Markdown-файла. Регистр символов важен для путей к файлам на большинстве серверов, поэтому имя и ссылки пишут одинаково.</p></div><p>Изменить содержимое можно локально или в редакторе GitHub.</p>
 
   <h2 id="s3"><span class="sec">§3</span>Как редактировать и смотреть результат</h2>
-  <p>README можно менять тремя способами. Все они редактируют текст Markdown. Отличается место, где происходит правка и просмотр результата.</p>
-  <div class="table-scroll"><table><thead><tr><th>Способ</th><th>Где изменить</th><th>Где увидеть результат</th><th>Когда подходит</th></tr></thead><tbody><tr><td>VS Code</td><td>Локальный файл <code>README.md</code></td><td>Предпросмотр Markdown в редакторе</td><td>Файл уже клонирован, правок несколько</td></tr><tr><td>Веб-интерфейс GitHub</td><td>Редактор файла на странице репозитория</td><td>Вкладка Preview перед сохранением и страница после коммита</td><td>Небольшая срочная правка одного файла</td></tr><tr><td>Текстовый редактор</td><td>Локальный файл в любой программе для текста</td><td>После открытия репозитория на GitHub или в просмотрщике Markdown</td><td>Нет VS Code, нужна только правка текста</td></tr></tbody></table></div>
-  <p>В VS Code откройте <code>README.md</code>. Кнопка предпросмотра в правом верхнем углу редактора открывает результат Markdown; также используется команда <b>Markdown: Open Preview</b> из палитры команд. Предпросмотр показывает разметку до коммита, но не проверяет, добавлена ли картинка в Git.</p>
+  <p>README можно менять локально в VS Code или на сайте GitHub. В обоих случаях редактируется текст Markdown, а результат проверяется в предпросмотре.</p>
+  <h3>В VS Code: исходник и результат рядом</h3>
+  <p>Откройте <code>README.md</code>. В палитре команд выполните <b>Markdown: Open Preview to the Side</b> — открыть предпросмотр сбоку. Слева останется исходник, справа появится результат.</p>
+  <figure class="shot"><img src="assets/vscode-preview.png" alt="VS Code: слева исходник README.md, справа предпросмотр с заголовками, списком файлов и изображением обложки" loading="lazy"><figcaption>Один README в VS Code: символы Markdown слева и результат их обработки справа</figcaption></figure>
+  <p>На кадре решётки превратились в заголовки, дефисы — в пункты списка. Вместо строки <code>![…](screenshots/home.png)</code> справа показана обложка. Предпросмотр читает PNG с компьютера; наличие файла в коммите проверяют отдельно.</p>
+  <h3>На GitHub: Edit и Preview</h3>
   <p>На GitHub кнопка редактирования файла открывает текстовую вкладку. Вкладка <b>Preview</b> показывает, как GitHub обработает Markdown. При сохранении создаётся коммит в выбранной или новой ветке. Правку из новой ветки можно предложить через pull request — запрос на её включение в другую ветку. Связанные файлы проекта проверяют отдельно.</p>
   <p>На кадре открыт вложенный README примера. Вкладка <b>Edit</b> содержит исходник, <b>Preview</b> — результат. Кнопка <b>Commit changes…</b> сохраняет правку коммитом, <b>Cancel changes</b> возвращает к файлу без сохранения.</p>
   <figure class="shot"><img src="assets/github-edit.png" alt="Редактор GitHub: открыт docs/README.md, показаны исходник Markdown, вкладки Edit и Preview" loading="lazy"><figcaption>Исходник README в веб-редакторе GitHub</figcaption></figure>
@@ -113,15 +127,16 @@
 - `index.html` — главная страница
 - `kontakty.html` — контакты</pre></section><section class="md-card md-card--result"><div class="md-card__head"><span>Результат на GitHub</span><span>HTML-представление</span></div><div class="md-render"><h3>Сайт-визитка</h3><p>Короткая страница с контактами.</p><h4>Что внутри</h4><ul><li><code>index.html</code> — главная страница</li><li><code>kontakty.html</code> — контакты</li></ul></div></section></div>
   <p class="sample-caption">Справа показан результат обработки того же текста. Это схема результата Markdown. Реальные кадры GitHub приведены отдельно.</p>
-  <dl class="line-notes"><dt><code># Сайт-визитка</code></dt><dd>Одна решётка создаёт название README. В одном файле достаточно одного такого заголовка.</dd><dt>Пустая строка</dt><dd>Она отделяет абзацы друг от друга и облегчает чтение исходника. Заголовок с <code>#</code> завершается переводом строки: пустая строка после него для разметки не обязательна.</dd><dt><code>Короткая страница с контактами.</code></dt><dd>Обычная строка образует абзац. Символов разметки перед ней нет.</dd><dt><code>## Что внутри</code></dt><dd>Две решётки создают раздел второго уровня внутри README.</dd><dt><code>- `index.html` — главная страница</code></dt><dd>Дефис и пробел создают элемент списка. Обратные кавычки выделяют имя файла моноширинным шрифтом.</dd><dt><code>- `kontakty.html` — контакты</code></dt><dd>Второй дефис создаёт второй элемент того же списка.</dd></dl>
+  <p>В примере одна решётка задаёт название, две — раздел «Что внутри». Дефисы начинают два пункта списка. Имена файлов выделены обратными кавычками.</p>
+  <details class="more"><summary>Пустые строки и уровни заголовков</summary><p>Пустая строка отделяет абзацы и помогает читать исходник. Заголовок с <code>#</code> завершается переводом строки: пустая строка после него для разметки не обязательна. Для названия README достаточно одного заголовка первого уровня; разделы внутри обозначают двумя решётками.</p></details>
   <details class="simple"><summary>По-простому: как разделяются абзацы</summary><p>Пустая строка похожа на промежуток между абзацами письма. В Markdown она отделяет один абзац от другого. Перенос строки внутри абзаца в README обычно отображается пробелом.</p><div class="compare"><div class="compare__bad"><b>Один абзац</b><p><code>Описание проекта.<br>Способ запуска.</code></p><p>Результат: Описание проекта. Способ запуска.</p></div><div class="compare__good"><b>Два абзаца</b><p><code>Описание проекта.<br><br>Способ запуска.</code></p><p>Результат: два отдельных абзаца.</p></div></div><p><b>Что есть что.</b> Строки исходника — строки письма. Пустая строка — граница абзацев. У заголовков и списков есть собственные маркеры, поэтому правило абзацев не описывает всю разметку.</p></details><p>Внутри абзацев также выделяют слова, команды и ссылки.</p>
 
   <h2 id="s5"><span class="sec">§5</span>Выделение, код и ссылки</h2>
-  <p>Звёздочки выделяют важное слово, обратные кавычки выделяют короткое имя файла или команду. Ссылка состоит из текста в квадратных скобках и адреса в круглых. Квадратные скобки задают видимый текст, круглые — адрес перехода.</p>
+  <p>Две звёздочки с каждой стороны выделяют фразу полужирным, обратные кавычки оформляют короткое имя файла или команду как код. Ссылка состоит из текста в квадратных скобках и адреса в круглых. Квадратные скобки задают видимый текст, круглые — адрес перехода.</p>
   <div class="md-pair"><section class="md-card"><div class="md-card__head"><span>Исходник · README.md</span><span>Markdown</span></div><pre class="md-source">**Как открыть:** дважды щёлкните `index.html`.
 
 [Открыть контакты](kontakty.html)</pre></section><section class="md-card md-card--result"><div class="md-card__head"><span>Результат на GitHub</span><span>HTML-представление</span></div><div class="md-render"><p><strong>Как открыть:</strong> дважды щёлкните <code>index.html</code>.</p><p><span class="demo-link">Открыть контакты</span></p></div></section></div>
-  <dl class="line-notes"><dt><code>**Как открыть:**</code></dt><dd>Две звёздочки до и после фразы делают её полужирной. Так выделяют короткую метку внутри абзаца.</dd><dt><code>`index.html`</code></dt><dd>Одна обратная кавычка с каждой стороны оформляет фрагмент кода. Здесь это имя файла.</dd><dt><code>[Открыть контакты](kontakty.html)</code></dt><dd><code>Открыть контакты</code> — текст, на который нажимают. <code>kontakty.html</code> — относительный путь к файлу в той же папке, что и README.</dd></dl>
+  <p>Две звёздочки с каждой стороны делают фразу полужирной. Одиночные обратные кавычки оформляют имя <code>index.html</code> как код. В ссылке виден текст «Открыть контакты», а адрес <code>kontakty.html</code> ведёт к файлу рядом с README.</p>
   <p>Ссылка не вставляет содержимое файла в README. Она создаёт переход. У строки изображения перед квадратной скобкой стоит восклицательный знак.</p>
 
   <h3>Несколько строк кода</h3>
@@ -131,36 +146,36 @@ git status
 git log --oneline
 ```</pre></figure>
   <p>Кавычки ограничивают блок. Внутренние строки отображаются как код; README сам команды не выполняет. Здесь первая команда проверяет состояние репозитория, вторая выводит краткую историю.</p>
+  <details class="more"><summary>Ещё конструкции Markdown: курсив, цитата и список задач</summary>
   <div class="table-scroll"><table><thead><tr><th>Запись</th><th>Результат</th></tr></thead><tbody><tr><td><code>*курсив*</code></td><td><em>курсив</em></td></tr><tr><td><code>1. Первый шаг</code></td><td>Элемент нумерованного списка</td></tr><tr><td><code>&gt; Примечание</code></td><td>Блок цитаты</td></tr><tr><td><code>- [ ] Проверить снимок</code></td><td>Невыполненный пункт списка задач</td></tr><tr><td><code>- [x] Проверить снимок</code></td><td>Отмеченный пункт списка задач</td></tr><tr><td><code>[Документация](https://docs.github.com/)</code></td><td>Ссылка на внешний сайт</td></tr></tbody></table></div>
-  <h3>Таблица файлов</h3>
+  </details>
+  <details class="more"><summary>Таблица файлов: исходник и результат</summary>
   <p>Когда у каждого файла есть однотипные сведения, их сводят в таблицу. На GitHub столбцы Markdown разделяют символом <code>|</code>. Строка с дефисами отделяет заголовок от данных:</p>
   <div class="md-pair"><section class="md-card"><div class="md-card__head"><span>Исходник</span><span>Markdown</span></div><pre class="md-source">| Файл | Назначение |
 | --- | --- |
 | `index.html` | Начальная страница |
 | `styles.css` | Оформление |</pre></section><section class="md-card md-card--result"><div class="md-card__head"><span>Результат</span><span>Таблица</span></div><div class="md-render"><div class="table-scroll"><table><thead><tr><th>Файл</th><th>Назначение</th></tr></thead><tbody><tr><td><code>index.html</code></td><td>Начальная страница</td></tr><tr><td><code>styles.css</code></td><td>Оформление</td></tr></tbody></table></div></div></section></div>
   <p>В первой строке заданы названия двух столбцов. В двух нижних строках указаны файлы и их назначение. Для короткого перечня достаточно списка; таблица помогает сопоставить несколько свойств.</p>
+  </details>
   <p>В README включают те конструкции, которые помогают объяснить проект. Для описания файлов и запуска соберём заголовки, список и короткую инструкцию.</p>
   <div class="part" role="separator"><span><b>2</b>Текст проекта</span></div>
   <h2 id="s6"><span class="sec">§6</span>Короткая структура README</h2>
   <p>Начальному проекту достаточно короткой структуры: название, одно-два предложения о назначении, состав файлов и способ открытия. Разделы идут в этом порядке, потому что читатель сначала узнаёт предмет, затем решает, нужен ли ему проект, и только после этого ищет файл.</p>
-  <div class="md-pair"><section class="md-card"><div class="md-card__head"><span>Исходник · README.md</span><span>Пример структуры</span></div><pre class="md-source"># Название проекта
-
-Одно предложение о назначении.
-
-## Что внутри
-
-- `index.html` — начальная страница
-- `screenshots/` — изображения для README
-
-## Как открыть
-
-Откройте `index.html` в браузере.</pre></section><section class="md-card md-card--result"><div class="md-card__head"><span>Результат</span><span>HTML-представление</span></div><div class="md-render"><h3>Название проекта</h3><p>Одно предложение о назначении.</p><h4>Что внутри</h4><ul><li><code>index.html</code> — начальная страница</li><li><code>screenshots/</code> — изображения для README</li></ul><h4>Как открыть</h4><p>Откройте <code>index.html</code> в браузере.</p></div></section></div>
+  <figure class="outline-demo" aria-label="Четыре части короткого README с пояснениями">
+    <div><code># Сайт-визитка</code><p><b>Название.</b> Как называется работа.</p></div>
+    <div><span>Короткая страница с контактами.</span><p><b>Назначение.</b> Что находится в проекте.</p></div>
+    <div><code>## Что внутри<br><br>- `index.html` — начальная страница<br>- `screenshots/` — изображения для README</code><p><b>Состав.</b> Какие файлы открыть и где лежат изображения.</p></div>
+    <div><code>## Как открыть<br><br>Откройте `index.html` в браузере.</code><p><b>Действие.</b> Как получить результат из файлов проекта.</p></div>
+    <figcaption>Части README сайта без сборки: от названия к способу открытия</figcaption>
+  </figure>
   <p>Для заголовка выбирают название работы, например «Сайт-визитка». Описание отвечает на вопрос о назначении. Список содержит только то, что нужно человеку, открывшему репозиторий впервые. Инструкция запуска соответствует действительному способу открыть проект; для сайта без сборки достаточно указать HTML-файл.</p>
   <p>Имена разделов делают одинаковыми по уровню: после одного <code>#</code> используют <code>##</code>, а внутри раздела при необходимости — <code>###</code>. Не перескакивают с <code>#</code> сразу на <code>###</code>. Длинные сплошные описания заменяют абзацами и списками, когда перечисляются однотипные вещи. Такое устройство встречается и в существующих README.</p>
 
   <h2 id="s7"><span class="sec">§7</span>Реальные README</h2>
   <p>Структура опирается на два существующих файла: корневой <code>README.md</code> справочника <code>git_github_makarov</code> и README проекта <code>sait-vizitka</code>. Ниже приведены фрагменты из этих файлов.</p>
+  <details class="more"><summary>Какие части взяты из двух существующих README</summary>
   <div class="table-scroll"><table><thead><tr><th>Файл</th><th>Фрагмент</th><th>Зачем он в README</th></tr></thead><tbody><tr><td><code>git_github_makarov/README.md</code></td><td><code># Справочник по Git и GitHub</code>, затем раздел <code>## Устройство</code></td><td>Название сообщает предмет репозитория, раздел перечисляет основные папки и файлы.</td></tr><tr><td><code>sait-vizitka/README.md</code></td><td><code># Сайт-визитка</code>, затем <code>## Что внутри</code> и <code>## Как открыть</code></td><td>Коротко названы назначение сайта, файлы и действие для открытия результата.</td></tr></tbody></table></div>
+  </details>
   <div class="md-pair"><section class="md-card"><div class="md-card__head"><span>Реальный фрагмент</span><span>sait-vizitka/README.md</span></div><pre class="md-source">## Что внутри
 
 - `index.html` — главная страница
@@ -177,12 +192,14 @@ git log --oneline
 └── screenshots/
     └── home.png</div>
   <p>Для этой структуры строка изображения выглядит так:</p>
-  <div class="md-pair"><section class="md-card"><div class="md-card__head"><span>Исходник · README.md</span><span>Markdown</span></div><pre class="md-source">![Главная страница сайта](screenshots/home.png)</pre></section><section class="md-card md-card--result"><div class="md-card__head"><span>Результат</span><span>HTML-представление</span></div><div class="md-render"><img src="primer/screenshots/home.png" alt="Обложка справочника по Git и GitHub, снятая в браузере"></div></section></div>
-  <p class="sample-caption">Справа показан настоящий снимок обложки справочника. Тот же PNG лежит в <a href="primer/README.md">примере README</a> по пути <code>screenshots/home.png</code>. <a href="https://github.com/MaximBytecamp/git_github_makarov/tree/main/temy/19-readme-markdown/primer">Открыть папку примера на GitHub</a>.</p>
+  <figure class="code"><figcaption><span>README.md</span><span>изображение из папки screenshots</span></figcaption><pre>![Главная страница сайта](screenshots/home.png)</pre></figure>
+  <p>Настоящий PNG лежит в <a href="primer/README.md">примере README</a> по пути <code>screenshots/home.png</code>. Его отображение на GitHub показано ниже. <a href="https://github.com/MaximBytecamp/git_github_makarov/tree/main/temy/19-readme-markdown/primer">Открыть папку примера на GitHub</a>.</p>
   <dl class="line-notes"><dt><code>!</code></dt><dd>Восклицательный знак перед квадратной скобкой задаёт изображение.</dd><dt><code>[Главная страница сайта]</code></dt><dd>Это <span class="term">альтернативный текст</span>, или alt-текст. Он описывает изображение, когда файл не загрузился или его читает программа чтения с экрана.</dd><dt><code>(screenshots/home.png)</code></dt><dd>Это относительный путь от <code>README.md</code> к файлу. Сначала указана папка <code>screenshots</code>, затем косая черта и имя <code>home.png</code>.</dd></dl>
   <p>Сравните две похожие строки. Без <code>!</code> Markdown создаёт ссылку, а с <code>!</code> пытается показать сам файл как изображение.</p>
   <div class="compare"><div class="compare__bad"><b>Ссылка</b><p><code>[Открыть снимок](screenshots/home.png)</code></p><p>На странице будет текст «Открыть снимок». Картинка откроется после перехода по ссылке.</p></div><div class="compare__good"><b>Изображение</b><p><code>![Главная страница](screenshots/home.png)</code></p><p>На странице появится изображение, если файл найден и его формат поддерживается браузером.</p></div></div>
   <p>Файл <code>home.png</code> нужно добавить в Git вместе с README. Локально картинка может отображаться из папки на компьютере, но после отправки в удалённый репозиторий файл будет недоступен на GitHub, если он не вошёл в коммит. Перед коммитом проверьте в Source Control, что среди изменений есть и <code>README.md</code>, и <code>screenshots/home.png</code>.</p>
+  <figure class="shot"><img src="assets/vscode-source-control.png" alt="Source Control в VS Code: в Changes два новых файла — README.md и home.png из папки screenshots, оба с меткой U" loading="lazy"><figcaption>Оба файла в Changes: README.md и screenshots/home.png</figcaption></figure>
+  <p>Метка <b>U</b> означает Untracked: Git ещё не отслеживает файл. На кадре оба файла только обнаружены. Перед коммитом добавьте оба в индекс, как при сохранении изменений в модуле 2. Наличие PNG в предпросмотре само по себе этого не подтверждает.</p>
   <p>На GitHub пример выглядит так. Здесь видны название проекта, состав файлов и изображение под заголовком «Снимок результата».</p>
   <figure class="shot"><img src="assets/github-readme.png" alt="Настоящий README на GitHub: описание примера, состав файлов и обложка справочника, загруженная из screenshots/home.png" loading="lazy"><figcaption>README примера с загруженным PNG из папки screenshots</figcaption></figure>
   <p>Тот же файл PNG отображается внутри страницы. Ниже GitHub показывает исходную строку в блоке кода. Папка <code>screenshots</code> выбрана для порядка: специального значения для GitHub это имя не имеет.</p>
@@ -196,10 +213,22 @@ git log --oneline
 └── docs/
     └── README.md</div>
   <p>Здесь README находится в папке <code>docs</code>. До <code>home.png</code> нужно сначала подняться из <code>docs</code> на один уровень, затем войти в <code>screenshots</code>:</p>
-  <div class="path-parts" aria-label="Разбор пути ../screenshots/home.png"><span class="path-up">..</span><span>/</span><span>screenshots</span><span>/</span><span>home.png</span></div>
-  <div class="md-pair"><section class="md-card"><div class="md-card__head"><span>Исходник · docs/README.md</span><span>Markdown</span></div><pre class="md-source">![Главная страница](../screenshots/home.png)</pre></section><section class="md-card md-card--result"><div class="md-card__head"><span>Что означает путь</span><span>Маршрут к файлу</span></div><div class="md-render"><ol><li><code>..</code> — перейти из <code>docs</code> в <code>my-project</code>.</li><li><code>screenshots</code> — открыть эту папку.</li><li><code>home.png</code> — выбрать изображение.</li></ol></div></section></div>
+  <figure class="route">
+    <div class="route__steps">
+      <div class="route__stop route__stop--start"><code>docs/README.md</code><small>Начало: папка <b>docs/</b></small></div>
+      <span class="route__arrow" aria-hidden="true">→</span>
+      <div class="route__stop"><code>../</code><small>На уровень выше: <b>my-project/</b></small></div>
+      <span class="route__arrow" aria-hidden="true">→</span>
+      <div class="route__stop route__stop--end"><code>screenshots/home.png</code><small>Войти в <b>screenshots/</b> и открыть <b>home.png</b></small></div>
+    </div>
+    <figcaption>Маршрут из docs к изображению в соседней папке screenshots</figcaption>
+  </figure>
+  <p>Оранжевый блок отмечает документ, от папки которого считается путь. Две точки выводят из <code>docs</code> в <code>my-project</code>. Голубой блок — файл назначения. В Markdown весь маршрут записывают одной строкой:</p>
+  <figure class="code"><figcaption><span>docs/README.md</span><span>изображение из соседней папки</span></figcaption><pre>![Главная страница](../screenshots/home.png)</pre></figure>
   <p>Путь <code>screenshots/home.png</code> в этом вложенном README ведёт к <code>docs/screenshots/home.png</code>. В показанной структуре такого файла нет. На GitHub начальный <code>/</code> означает корень репозитория: <code>/screenshots/home.png</code> подошёл бы для этой структуры. Вариант с <code>../</code> сохраняет связь между соседними папками при переносе всей структуры в другой каталог.</p>
+  <details class="more"><summary>Сравнение трёх путей: без ../, с ../ и от корня GitHub</summary>
   <div class="table-scroll"><table><thead><tr><th>Запись в README</th><th>Откуда начинается поиск</th><th>Подходит для <code>docs/README.md</code>?</th></tr></thead><tbody><tr><td><code>screenshots/home.png</code></td><td><code>docs/</code></td><td>нет, такого вложенного пути в схеме нет</td></tr><tr><td><code>../screenshots/home.png</code></td><td>сначала на уровень выше <code>docs/</code></td><td>да</td></tr><tr><td><code>/screenshots/home.png</code></td><td>от корня репозитория на GitHub</td><td>да, для показанной структуры; локальный просмотрщик может обрабатывать иначе</td></tr></tbody></table></div>
+  </details>
   <p>В именах файлов учитывают регистр, пробелы и расширение. Если файл называется <code>Home.png</code>, путь <code>home.png</code> может работать на одном компьютере и не работать на GitHub. Пробел в имени делает путь менее читаемым и требует кодирования в адресах, поэтому в примерах используются строчные латинские буквы, цифры и дефисы: <code>home-page.png</code>. Кириллица поддерживается; латиница здесь служит соглашением об именах.</p>
 
   <p>Во <a href="primer/docs/README.md">вложенном README примера</a> используется <code>../screenshots/home.png</code>. На GitHub проверена загрузка того же PNG размером 1280 × 900.</p>
@@ -218,7 +247,7 @@ git log --oneline
   <details><summary>Как записать путь к той же картинке из <code>docs/README.md</code>?</summary><p><code>../screenshots/home.png</code>. Две точки означают переход на уровень выше из <code>docs</code>, затем путь входит в папку <code>screenshots</code>.</p></details>
   <details><summary>Зачем проверять регистр в имени файла?</summary><p>На GitHub путь к <code>Home.png</code> и путь к <code>home.png</code> могут означать разные файлы. Имя в строке Markdown должно совпадать с именем в репозитории символ в символ.</p></details>
   <h3>Самостоятельная работа</h3>
-  <ol class="steps"><li>Создайте в корне своего репозитория <code>README.md</code>. Запишите заголовок, одно предложение о назначении и раздел <code>Что внутри</code> с двумя существующими файлами.</li><li>Откройте предпросмотр Markdown в VS Code. Проверьте, что заголовок, абзац и список отображаются раздельными блоками.</li><li>Создайте папку <code>screenshots</code> и поместите в неё собственное изображение результата работы. Добавьте строку <code>![alt](screenshots/имя-файла.png)</code> с точным именем своего файла.</li><li>Проверьте в Source Control, что README и файл изображения включены в изменения. После коммита откройте README на GitHub и проверьте картинку и ссылку.</li><li>Если в проекте есть папка <code>docs</code>, создайте в ней короткий README и запишите путь к той же картинке через <code>../</code>. Объясните этот путь в одном предложении.</li></ol><p>В результате README должен описывать существующие файлы, а изображение — загружаться на GitHub. Основные записи собраны в шпаргалке.</p>
+  <ol class="steps"><li>Создайте в корне своего репозитория <code>README.md</code>. Запишите заголовок, одно предложение о назначении и раздел <code>Что внутри</code> с двумя существующими файлами.</li><li>Откройте предпросмотр Markdown в VS Code. Проверьте, что заголовок, абзац и список отображаются раздельными блоками.</li><li>Создайте папку <code>screenshots</code> и поместите в неё собственное изображение результата работы. Добавьте строку <code>![alt](screenshots/имя-файла.png)</code> с точным именем своего файла.</li><li>Добавьте ссылку на один из перечисленных файлов: <code>[Текст ссылки](имя-файла)</code>. Проверьте переход в предпросмотре.</li><li>Добавьте README и файл изображения в индекс через Source Control. Создайте коммит и отправьте его на GitHub. Откройте README на GitHub и проверьте картинку и ссылку.</li><li>Если в проекте есть папка <code>docs</code>, создайте в ней короткий README и запишите путь к той же картинке через <code>../</code>. Объясните этот путь в одном предложении.</li></ol><p>В результате README должен описывать существующие файлы, а изображение — загружаться на GitHub. Основные записи собраны в шпаргалке.</p>
 
   <h2 id="s12"><span class="sec">§12</span>Шпаргалка и источники</h2>
   <div class="cheat"><div><b>Название</b><code># Название проекта</code><span>один заголовок первого уровня</span></div><div><b>Раздел</b><code>## Что внутри</code><span>две решётки для раздела</span></div><div><b>Список</b><code>- `index.html` — описание</code><span>дефис, пробел, элемент</span></div><div><b>Ссылка</b><code>[Текст](путь)</code><span>переход по нажатию</span></div><div><b>Изображение</b><code>![alt](screenshots/home.png)</code><span>восклицательный знак перед ссылкой</span></div><div><b>Из docs/README.md</b><code>../screenshots/home.png</code><span><code>..</code> поднимает на один уровень</span></div><div><b>Перед коммитом</b><code>README.md</code><code>screenshots/home.png</code><span>оба файла есть в изменениях</span></div></div>

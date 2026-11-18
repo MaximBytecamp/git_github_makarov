@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>ДЗ по модулю 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1B1A19; --ink-soft: #4A4644; --ink-faint: #918A85;
+  --fire: #F05133; --fire-deep: #C8380F; --fire-pale: #FBE0D8;
+  --steel: #2C5D8F; --steel-pale: #DDE7F1; --moss: #2F7D4F;
+  --paper: #F4F1EC; --rule: rgba(27,26,25,.16);
+  --body: Inter, system-ui, sans-serif;
+  --display: Literata, Georgia, serif;
+  --mono: "Roboto Mono", Consolas, monospace;
+}
+@page { size: A4; margin: 16mm 16mm 18mm; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: var(--ink); font: 10.5pt/1.5 var(--body); }
+.sheet { max-width: 178mm; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.2; margin: 0; }
+h1 { font-size: 23pt; margin: 4mm 0 3mm; }
+h2 { font-size: 15pt; margin: 8mm 0 2mm; padding-top: 3mm; border-top: 2px solid var(--ink); break-after: avoid; }
+h2 .num { color: var(--fire); margin-right: 2mm; }
+h3 { font-size: 11.5pt; margin: 5mm 0 1.5mm; break-after: avoid; }
+p { margin: 0 0 2.2mm; }
+ul, ol { margin: 0 0 2.5mm; padding-left: 6mm; }
+li { margin-bottom: 1mm; }
+code, kbd, .mono { font-family: var(--mono); font-size: .88em; }
+code { background: var(--paper); padding: .5px 4px; border-radius: 3px; }
+kbd { border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 3px; padding: 0 4px; background: #fff; white-space: nowrap; }
+a { color: var(--steel); }
+
+.top { display: flex; justify-content: space-between; align-items: center;
+  font-size: 8.5pt; color: var(--ink-soft); border-bottom: 3px solid var(--fire); padding-bottom: 2mm; }
+.top b { color: var(--ink); letter-spacing: .02em; }
+.lead { font-size: 11pt; color: var(--ink-soft); margin-bottom: 3mm; }
+
+.passport { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--ink); margin: 0 0 4mm; }
+.passport div { padding: 2mm 3mm; border-bottom: 1px solid var(--rule); }
+.passport div:nth-child(odd) { border-right: 1px solid var(--rule); }
+.passport div:nth-last-child(-n+2) { border-bottom: 0; }
+.passport b { display: block; font-size: 7.5pt; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-faint); font-weight: 600; }
+
+.box { border-radius: 4px; padding: 3mm 4mm; margin: 3mm 0; break-inside: avoid; }
+.box > b:first-child { display: block; margin-bottom: 1mm; }
+.box p:last-child, .box ul:last-child { margin-bottom: 0; }
+.box--stop { background: var(--fire-pale); border-left: 4px solid var(--fire-deep); }
+.box--info { background: var(--steel-pale); border-left: 4px solid var(--steel); }
+.box--note { background: var(--paper); border-left: 4px solid var(--ink-faint); }
+
+.shot { display: flex; gap: 3mm; align-items: flex-start; border: 1.5px dashed var(--fire); border-radius: 4px;
+  padding: 2.5mm 3.5mm; margin: 3mm 0; break-inside: avoid; }
+.shot .n { flex: none; background: var(--fire); color: #fff; font-weight: 700; border-radius: 3px; padding: .5mm 2mm; font-size: 9pt; white-space: nowrap; }
+.shot p { margin: 0; }
+.shot .cap { font-size: 9pt; color: var(--ink-soft); margin-top: 1mm; }
+
+figure.code { margin: 2mm 0 3mm; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; break-inside: avoid; }
+figure.code figcaption { display: flex; justify-content: space-between; font: 8pt var(--mono); background: var(--paper); padding: 1mm 3mm; color: var(--ink-soft); border-bottom: 1px solid var(--rule); }
+figure.code figcaption b { color: var(--ink); font-weight: 500; }
+figure.code pre { margin: 0; padding: 2mm 3mm; font: 8.6pt/1.45 var(--mono); white-space: pre-wrap; background: #fff; }
+pre mark { background: #DDF0E3; color: var(--moss); font-weight: 500; }
+pre del { background: var(--fire-pale); color: var(--fire-deep); text-decoration: none; }
+figure.code.term pre { background: #1E1E1E; color: #D4D4D4; }
+.term pre .c { color: #9CDCFE; }
+.term pre .o { color: #B5CEA8; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
+.pair figure.code { margin: 2mm 0 3mm; }
+
+table { width: 100%; border-collapse: collapse; margin: 2mm 0 3mm; font-size: 9.5pt; break-inside: avoid; }
+th, td { text-align: left; vertical-align: top; padding: 1.5mm 2mm; border-bottom: 1px solid var(--rule); }
+th { font-size: 8pt; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); border-bottom: 1.5px solid var(--ink); }
+td.num { font-family: var(--mono); color: var(--fire-deep); font-weight: 500; white-space: nowrap; }
+
+.ref { margin: 3mm 0; break-inside: avoid; }
+.ref img { display: block; max-width: 100%; border: 1px solid var(--rule); border-radius: 3px; }
+.ref figcaption { font-size: 8.5pt; color: var(--ink-soft); margin-top: 1mm; }
+.ref--half img { width: 62%; }
+
+.steps { counter-reset: s; list-style: none; padding-left: 0; }
+.steps > li { counter-increment: s; position: relative; padding-left: 8mm; margin-bottom: 2mm; }
+.steps > li::before { content: counter(s); position: absolute; left: 0; top: .3mm; width: 5.5mm; height: 5.5mm; border-radius: 50%;
+  background: var(--ink); color: #fff; font: 600 8pt/5.5mm var(--mono); text-align: center; }
+
+.grade td:first-child { font-family: var(--display); font-weight: 700; font-size: 13pt; width: 12mm; color: var(--fire-deep); }
+.page-break { break-before: page; }
+.foot { margin-top: 8mm; padding-top: 2mm; border-top: 1px solid var(--rule); font-size: 8.5pt; color: var(--ink-faint); display: flex; justify-content: space-between; }
+</style>
+<style>
+.answers td:last-child { width: 46%; border-left: 1px solid var(--rule); }
+.answers td.num { width: 8mm; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<div class="top"><span><b>Git и GitHub</b> · практическое домашнее задание</span><span>Модуль 3, темы 3.1–3.6</span></div>
+
+<h1>Кофейня «Зерно»: конфликты, rebase и&nbsp;сообщения коммитов</h1>
+<p class="lead">Задание проходит по всему модулю 3 на одном проекте. Часть 1 — ветка и слияние, как в ДЗ 3. Часть 2 — два конфликта: один разбирается вручную, второй — в редакторе слияния. Часть 3 — stash, cherry-pick и rebase. Часть 4 — сообщения коммитов. Сдаётся документ Word со снимками экрана и ответами на вопросы.</p>
+
+<div class="passport">
+  <div><b>Темы справочника</b>3.1–3.3 ветки и слияние · 3.4 конфликты · 3.5 stash, cherry-pick, rebase · 3.6 сообщения коммитов</div>
+  <div><b>Учебный репозиторий</b><span class="mono">github.com/MaximBytecamp/kofeynya</span></div>
+  <div><b>Что нужно на компьютере</b>VS Code и Git, настроенные по главе 1.3: в Git заданы ваши имя и почта. Для шага 3 части 4 — любой чат с моделью</div>
+  <div><b>Что сдаётся</b>Документ Word: двадцать снимков экрана и таблица из семи ответов</div>
+  <div><b>Сколько занимает</b>Около двух часов за компьютером</div>
+  <div><b>Срок</b>До начала следующего практического занятия</div>
+</div>
+
+<div class="box box--stop">
+  <b>На GitHub ничего не отправляем</b>
+  <p>Отправка коммитов и веток — модуль 4. Работа выполняется только на вашем компьютере и сдаётся снимками экрана. Прав на запись в учебный репозиторий у вас нет, поэтому кнопки <b>Sync Changes</b> и <b>Publish Branch</b> оставьте как есть: отправка закончится ошибкой.</p>
+  <p>Это же условие разрешает rebase и amend в частях 3 и 4: обе команды переписывают только коммиты, которых нет на GitHub.</p>
+</div>
+
+<div class="box box--info">
+  <b>Нужен новый клон</b>
+  <p>Задание рассчитано на исходные пять коммитов проекта. Клоны из прошлых ДЗ оставьте на месте: для ДЗ 4 создаётся отдельная папка.</p>
+</div>
+
+<h3>Как делать снимки</h3>
+<ul>
+  <li>Снимается окно VS Code целиком (на снимке 17 — окно чата), текст должен читаться.</li>
+  <li>Снимок в буфер обмена: Windows — <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>; macOS — <kbd>Cmd</kbd> + <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>4</kbd>, затем пробел и щелчок по окну.</li>
+  <li>Под каждым снимком в Word — подпись из оранжевой рамки задания.</li>
+  <li>Терминал: <kbd>Ctrl</kbd> + <kbd>`</kbd> (клавиша «ё»). Длинный ответ, который не помещается в окно, снимается двумя снимками под одним номером.</li>
+  <li>Имена коммитов (хеши) у вас будут свои. Совпадут только имена пяти исходных коммитов проекта: <span class="mono">69a4f0b</span>, <span class="mono">c971be5</span>, <span class="mono">07b88ef</span>, <span class="mono">c016d04</span>, <span class="mono">d451256</span>.</li>
+  <li>Перед каждым коммитом и слиянием посмотрите на имя ветки в строке состояния внизу слева: коммит попадёт в эту ветку, а слияние приведёт другую ветку в эту.</li>
+</ul>
+
+<!-- ============ ЧАСТЬ 1 ============ -->
+<h2><span class="num">1</span>Ветка и слияние</h2>
+<p>Главы 3.1–3.3. Проект клонируется заново. В ветке <code>deserty</code> в меню добавляются десерты, в <code>main</code> тем временем меняются часы работы. Затем ветки сливаются.</p>
+
+<ol class="steps">
+  <li>Создайте папку <code>dz4-familiya</code>, где вместо <code>familiya</code> — ваша фамилия латиницей. Папка должна лежать вне других репозиториев и вне облачных папок (OneDrive, iCloud Drive, Яндекс Диск).</li>
+  <li>В VS Code: <b>File → New Window</b>, палитра команд <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> → <code>Git: Clone</code> → вставить адрес → <kbd>Enter</kbd>:
+    <figure class="code"><figcaption><b>адрес репозитория</b><span>заканчивается на .git</span></figcaption><pre>https://github.com/MaximBytecamp/kofeynya.git</pre></figure></li>
+  <li>В качестве места выберите папку <code>dz4-familiya</code>. Получится <code>dz4-familiya/kofeynya</code>. Нажмите <b>Open</b>.</li>
+  <li>В панели Source Control в заголовке раздела <b>GRAPH</b> нажмите на слово <b>Auto</b>, отметьте <b>All</b> и нажмите <b>OK</b>. Так граф будет показывать все ветки, а не только текущую.</li>
+</ol>
+
+<h3>Шаг 1. Коммит в ветке deserty</h3>
+<p>Нажмите на <code>main</code> в строке состояния → <b>Create new branch…</b> → имя <code>deserty</code> → <kbd>Enter</kbd>. В <code>menu.html</code> после списка напитков добавьте раздел с десертами:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>menu.html</b><span>было, строки 15–17</span></figcaption><pre>    &lt;li&gt;Какао — 170 ₽&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;p&gt;&lt;a href="index.html"&gt;На главную&lt;/a&gt;&lt;/p&gt;</pre></figure>
+<figure class="code"><figcaption><b>menu.html</b><span>стало</span></figcaption><pre>    &lt;li&gt;Какао — 170 ₽&lt;/li&gt;
+  &lt;/ul&gt;
+<mark>
+  &lt;h2&gt;Десерты&lt;/h2&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Чизкейк — 230 ₽&lt;/li&gt;
+    &lt;li&gt;Морковный торт — 250 ₽&lt;/li&gt;
+  &lt;/ul&gt;</mark>
+  &lt;p&gt;&lt;a href="index.html"&gt;На главную&lt;/a&gt;&lt;/p&gt;</pre></figure>
+</div>
+<p>Сохраните файл, отберите его плюсом и сделайте коммит <code>Добавил десерты в меню</code>.</p>
+<figure class="code"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Create new branch…, плюс и Commit</span></figcaption><pre>git switch -c deserty
+git add menu.html
+git commit -m "Добавил десерты в меню"</pre></figure>
+
+<h3>Шаг 2. Коммит в main</h3>
+<p>Перейдите на <code>main</code> через строку состояния. В <code>index.html</code>, строка 11, замените время закрытия и сделайте коммит <code>Продлил часы работы до 21:00</code>:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>index.html</b><span>было</span></figcaption><pre>Часы работы: с 08:00 до <del>20:00</del>, без выходных.</pre></figure>
+<figure class="code"><figcaption><b>index.html</b><span>стало</span></figcaption><pre>Часы работы: с 08:00 до <mark>21:00</mark>, без выходных.</pre></figure>
+</div>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git log --oneline --graph --all -4</span>
+<span class="o">* 7f31a66 Продлил часы работы до 21:00
+| * 2e04958 Добавил десерты в меню
+|/
+* d451256 Добавил какао в меню
+* c016d04 Добавил README с описанием проекта</span></pre></figure>
+<p>Порядок двух верхних строк у вас может быть другим. Важно, что от коммита «Добавил какао в меню» вверх идут две линии.</p>
+
+<div class="shot"><span class="n">Снимок 1</span><div><p>Окно VS Code: в строке состояния <code>main</code>, в графе две линии с метками <code>main</code> и <code>deserty</code>, в терминале ответ <code>git log --oneline --graph --all -4</code>.</p><p class="cap">Подпись: «Рисунок 1 — Ветки разошлись»</p></div></div>
+
+<h3>Шаг 3. Слить ветку десертов</h3>
+<p>Проверьте, что вы на <code>main</code> и список изменений пуст. Палитра команд → <code>Git: Merge...</code> → <code>deserty</code>. Затем удалите слитую ветку: <code>Git: Delete Branch...</code> → <code>deserty</code>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Git: Merge... и Git: Delete Branch...</span></figcaption><pre><span class="c">git merge --no-edit deserty</span>
+<span class="o">Merge made by the 'ort' strategy.
+ menu.html | 6 ++++++
+ 1 file changed, 6 insertions(+)</span>
+<span class="c">git branch -d deserty</span>
+<span class="o">Deleted branch deserty (was 2e04958).</span></pre></figure>
+
+<div class="shot"><span class="n">Снимок 2</span><div><p>Окно VS Code: в графе верхний коммит «Merge branch 'deserty'», к нему сходятся две линии; открыт <code>menu.html</code> с разделом «Десерты».</p><p class="cap">Подпись: «Рисунок 2 — Коммит слияния»</p></div></div>
+
+<!-- ============ ЧАСТЬ 2 ============ -->
+<h2><span class="num">2</span>Конфликты</h2>
+<p>Глава 3.4. Две ветки меняют одну и ту же строку описания кофейни, и Git не может выбрать версию сам. Первый конфликт разбирается вручную в файле. Второй конфликт возникает в конце <code>styles.css</code>: его сначала отменим, а потом разберём в редакторе слияния.</p>
+
+<h3>Шаг 1. Изменить описание в новой ветке</h3>
+<p>Создайте ветку <code>opisanie</code>. В <code>index.html</code>, строка 10, замените описание и сделайте коммит <code>Изменил описание кофейни</code>:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>index.html</b><span>было, строка 10</span></figcaption><pre>&lt;p&gt;Варим кофе и печём булочки <del>у главного корпуса университета</del>.&lt;/p&gt;</pre></figure>
+<figure class="code"><figcaption><b>index.html</b><span>стало в ветке opisanie</span></figcaption><pre>&lt;p&gt;Варим кофе и печём булочки <mark>каждый день с 08:00</mark>.&lt;/p&gt;</pre></figure>
+</div>
+
+<h3>Шаг 2. Изменить ту же строку в main</h3>
+<p>Перейдите на <code>main</code>. В той же строке 10 допишите, где вход, и сделайте коммит <code>Добавил в описание, где вход</code>:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>index.html</b><span>было, строка 10</span></figcaption><pre>&lt;p&gt;Варим кофе и печём булочки у главного корпуса университета.&lt;/p&gt;</pre></figure>
+<figure class="code"><figcaption><b>index.html</b><span>стало в ветке main</span></figcaption><pre>&lt;p&gt;Варим кофе и печём булочки у главного корпуса университета<mark>, вход со двора</mark>.&lt;/p&gt;</pre></figure>
+</div>
+<figure class="code"><figcaption><b>терминал в папке kofeynya</b><span>то же, что шаги 1 и 2 кнопками</span></figcaption><pre>git switch -c opisanie
+git commit -am "Изменил описание кофейни"
+git switch main
+git commit -am "Добавил в описание, где вход"</pre></figure>
+
+<h3>Шаг 3. Получить конфликт</h3>
+<p>Палитра команд → <code>Git: Merge...</code> → <code>opisanie</code>. Слияние остановится:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Git: Merge... → opisanie</span></figcaption><pre><span class="c">git merge opisanie</span>
+<span class="o">Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.</span>
+<span class="c">git status --short</span>
+<span class="o">UU index.html</span></pre></figure>
+<p>Откройте <code>index.html</code>. На месте строки 10 стоят обе версии между метками:</p>
+<figure class="code"><figcaption><b>index.html</b><span>строки 9–15 во время конфликта</span></figcaption><pre>  &lt;h1&gt;Кофейня «Зерно»&lt;/h1&gt;
+<del>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</del>
+  &lt;p&gt;Варим кофе и печём булочки у главного корпуса университета, вход со двора.&lt;/p&gt;
+<del>=======</del>
+  &lt;p&gt;Варим кофе и печём булочки каждый день с 08:00.&lt;/p&gt;
+<del>&gt;&gt;&gt;&gt;&gt;&gt;&gt; opisanie</del>
+  &lt;p&gt;Часы работы: с 08:00 до 21:00, без выходных.&lt;/p&gt;</pre></figure>
+
+<div class="shot"><span class="n">Снимок 3</span><div><p>Окно VS Code: в панели группа <b>Merge Changes</b> с <code>index.html</code>, открыт <code>index.html</code> с метками конфликта и кнопками Accept Current Change, Accept Incoming Change, Accept Both Changes; в терминале ответ <code>git status --short</code> с буквами <span class="mono">UU</span>.</p><p class="cap">Подпись: «Рисунок 3 — Конфликт в описании кофейни»</p></div></div>
+
+<h3>Шаг 4. Исправить файл вручную</h3>
+<p>Кнопки здесь не помогут: нужна строка, в которой есть обе правки. Удалите три строки меток и две старые версии, а вместо них напишите одну строку:</p>
+<figure class="code"><figcaption><b>index.html</b><span>строки 9–11 после разбора</span></figcaption><pre>  &lt;h1&gt;Кофейня «Зерно»&lt;/h1&gt;
+<mark>  &lt;p&gt;Варим кофе и печём булочки каждый день у главного корпуса университета, вход со двора.&lt;/p&gt;</mark>
+  &lt;p&gt;Часы работы: с 08:00 до 21:00, без выходных.&lt;/p&gt;</pre></figure>
+<p>Сохраните файл и проверьте, что в нём не осталось ни одной метки <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>. Отметьте файл разобранным: плюс у <code>index.html</code> в группе Merge Changes.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что плюс</span></figcaption><pre><span class="c">git add index.html</span>
+<span class="c">git status --short</span>
+<span class="o">M  index.html</span></pre></figure>
+
+<div class="shot"><span class="n">Снимок 4</span><div><p>Окно VS Code: <code>index.html</code> без меток, строка 10 с обеими правками; файл в Staged Changes, группы Merge Changes нет.</p><p class="cap">Подпись: «Рисунок 4 — Конфликт разобран вручную»</p></div></div>
+
+<h3>Шаг 5. Завершить слияние</h3>
+<p>Нажмите <b>Continue</b> над списком изменений. Если откроется вкладка <code>COMMIT_EDITMSG</code>, нажмите в ней <b>Commit</b>. Затем удалите ветку <code>opisanie</code> через <code>Git: Delete Branch...</code>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Continue и Git: Delete Branch...</span></figcaption><pre><span class="c">git commit --no-edit</span>
+<span class="o">[main e608687] Merge branch 'opisanie'</span>
+<span class="c">git branch -d opisanie</span>
+<span class="o">Deleted branch opisanie (was bcbca34).</span>
+<span class="c">git log --oneline --graph -5</span>
+<span class="o">*   e608687 Merge branch 'opisanie'
+|\
+| * bcbca34 Изменил описание кофейни
+* | ffe4c0b Добавил в описание, где вход
+|/
+*   1e4a27e Merge branch 'deserty'
+|\
+| * 2e04958 Добавил десерты в меню</span></pre></figure>
+
+<div class="shot"><span class="n">Снимок 5</span><div><p>Терминал с ответом <code>git log --oneline --graph -5</code>: коммит «Merge branch 'opisanie'» соединяет две линии.</p><p class="cap">Подпись: «Рисунок 5 — Слияние после конфликта»</p></div></div>
+
+<h3>Шаг 6. Конфликт в конце файла</h3>
+<p>Создайте ветку <code>stil-ssylok</code>, допишите в конец <code>styles.css</code> правило для ссылок и сделайте коммит <code>Добавил цвет ссылок</code>. Перейдите на <code>main</code>, допишите в конец того же файла правило для подзаголовков, коммит <code>Добавил цвет подзаголовков</code>.</p>
+<div class="pair">
+<figure class="code"><figcaption><b>styles.css</b><span>в ветке stil-ssylok, в конец</span></figcaption><pre>a {
+  color: #7A4A2A;
+}</pre></figure>
+<figure class="code"><figcaption><b>styles.css</b><span>в ветке main, в конец</span></figcaption><pre>h2 {
+  color: #A0522D;
+}</pre></figure>
+</div>
+<p>Палитра команд → <code>Git: Merge...</code> → <code>stil-ssylok</code>. Обе ветки дописали строки в одно место, после строки 11, поэтому слияние снова остановится. Откройте <code>styles.css</code>:</p>
+<figure class="code"><figcaption><b>styles.css</b><span>строки 9–19 во время конфликта</span></figcaption><pre>h1 {
+  color: #7A4A2A;
+}
+<del>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</del>
+h2 {
+  color: #A0522D;
+<del>=======</del>
+a {
+  color: #7A4A2A;
+<del>&gt;&gt;&gt;&gt;&gt;&gt;&gt; stil-ssylok</del>
+}</pre></figure>
+<p>Закрывающая скобка <code>}</code> на строке 19 оказалась за метками: у обоих правил она одинаковая, и Git посчитал её общей строкой.</p>
+
+<div class="shot"><span class="n">Снимок 6</span><div><p>Окно VS Code: открыт <code>styles.css</code> с метками конфликта, скобка <code>}</code> на строке 19 стоит после метки <span class="mono">&gt;&gt;&gt;&gt;&gt;&gt;&gt; stil-ssylok</span>.</p><p class="cap">Подпись: «Рисунок 6 — Конфликт в конце styles.css»</p></div></div>
+
+<p>Файл оставьте как есть: в шаге 7 слияние будет отменено. Что сделала бы с этими строками кнопка <b>Accept Both Changes</b>, определите по строкам 12–19 — это вопрос 2.</p>
+
+<h3>Шаг 7. Отменить слияние</h3>
+<p>Палитра команд → <code>Git: Abort Merge</code>. Окна подтверждения нет.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Git: Abort Merge</span></figcaption><pre><span class="c">git merge --abort</span>
+<span class="c">git status -sb</span>
+<span class="o">## main...origin/main [ahead 7]</span>
+<span class="c">git log --oneline -2</span>
+<span class="o">a27a92a Добавил цвет подзаголовков
+e608687 Merge branch 'opisanie'</span></pre></figure>
+
+<div class="shot"><span class="n">Снимок 7</span><div><p>Окно VS Code: в <code>styles.css</code> нет меток, список изменений пуст, в терминале ответы <code>git status -sb</code> и <code>git log --oneline -2</code>.</p><p class="cap">Подпись: «Рисунок 7 — Слияние отменено»</p></div></div>
+
+<h3>Шаг 8. Разобрать конфликт в редакторе слияния</h3>
+<p>Повторите слияние: <code>Git: Merge...</code> → <code>stil-ssylok</code>. Откройте <code>styles.css</code> и нажмите <b>Resolve in Merge Editor</b> справа внизу. Вверху редактора две версии: <b>Incoming</b> — ветка <code>stil-ssylok</code>, <b>Current</b> — ветка <code>main</code>. Внизу <b>Result</b> — каким станет файл.</p>
+<p>Над версией Current нажмите <b>Accept Combination (Current First)</b>: в Result оба правила, каждое со своей скобкой, счётчик — <span class="mono">0 Conflicts Remaining</span>.</p>
+
+<div class="shot"><span class="n">Снимок 8</span><div><p>Редактор слияния: в части Result правила <code>h2</code> и <code>a</code>, у каждого своя закрывающая скобка; справа надпись <span class="mono">0 Conflicts Remaining</span>.</p><p class="cap">Подпись: «Рисунок 8 — Конфликт в редакторе слияния»</p></div></div>
+
+<p>Нажмите <b>Complete Merge</b>: файл сохранится и перейдёт в Staged Changes. Затем <b>Continue</b> и удаление ветки <code>stil-ssylok</code>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git status --short</span>
+<span class="o">M  styles.css</span>
+<span class="c">git commit --no-edit</span>
+<span class="o">[main cf54f3d] Merge branch 'stil-ssylok'</span>
+<span class="c">git branch -d stil-ssylok</span>
+<span class="o">Deleted branch stil-ssylok (was 2f88e13).</span></pre></figure>
+<figure class="code"><figcaption><b>styles.css</b><span>строки 9–17 после слияния</span></figcaption><pre>h1 {
+  color: #7A4A2A;
+}
+<mark>h2 {
+  color: #A0522D;
+}
+a {
+  color: #7A4A2A;
+}</mark></pre></figure>
+
+<div class="shot"><span class="n">Снимок 9</span><div><p>Окно VS Code: открыт <code>styles.css</code> с правилами <code>h2</code> и <code>a</code> в конце, в графе верхний коммит «Merge branch 'stil-ssylok'».</p><p class="cap">Подпись: «Рисунок 9 — Второе слияние завершено»</p></div></div>
+
+<!-- ============ ЧАСТЬ 3 ============ -->
+<h2><span class="num">3</span>Stash, cherry-pick и rebase</h2>
+<p>Глава 3.5. Работа над адресом кофейни прерывается срочной правкой цены в <code>main</code>. Потом из пробной ветки в <code>main</code> переносится один полезный коммит. В конце ветка с адресом перестраивается на свежий <code>main</code> и сливается прямой линией.</p>
+
+<h3>Шаг 1. Начать правку в новой ветке</h3>
+<p>Создайте ветку <code>adres</code>. В <code>index.html</code> под часами работы начните строку с адресом и сохраните файл. Коммит не делайте: адрес ещё не дописан.</p>
+<figure class="code"><figcaption><b>index.html</b><span>после строки 11</span></figcaption><pre>  &lt;p&gt;Часы работы: с 08:00 до 21:00, без выходных.&lt;/p&gt;
+<mark>  &lt;p&gt;Адрес: ул. Студенческая, 1.&lt;/p&gt;</mark></pre></figure>
+
+<h3>Шаг 2. Убрать правку в stash</h3>
+<p>Пришла срочная задача: в меню неверная цена латте, исправить нужно в <code>main</code>. Палитра команд → <code>Git: Stash</code> → сообщение <code>Адрес не дописан</code> → <kbd>Enter</kbd>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Git: Stash</span></figcaption><pre><span class="c">git stash push -m "Адрес не дописан"</span>
+<span class="o">Saved working directory and index state On adres: Адрес не дописан</span>
+<span class="c">git stash list</span>
+<span class="o">stash@{0}: On adres: Адрес не дописан</span>
+<span class="c">git status --short</span></pre></figure>
+<p>Последняя команда ничего не вывела: список изменений пуст, в <code>index.html</code> строки с адресом нет.</p>
+
+<div class="shot"><span class="n">Снимок 10</span><div><p>Окно VS Code: в строке состояния <code>adres</code>, список изменений пуст, в <code>index.html</code> нет адреса, в терминале ответ <code>git stash list</code>.</p><p class="cap">Подпись: «Рисунок 10 — Правка убрана в stash»</p></div></div>
+
+<h3>Шаг 3. Срочная правка в main</h3>
+<p>Перейдите на <code>main</code>. В <code>menu.html</code>, строка 14, исправьте цену и сделайте коммит <code>Исправил цену латте</code>:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>menu.html</b><span>было, строка 14</span></figcaption><pre>    &lt;li&gt;Латте — <del>210</del> ₽&lt;/li&gt;</pre></figure>
+<figure class="code"><figcaption><b>menu.html</b><span>стало</span></figcaption><pre>    &lt;li&gt;Латте — <mark>220</mark> ₽&lt;/li&gt;</pre></figure>
+</div>
+
+<h3>Шаг 4. Вернуть правку из stash</h3>
+<p>Перейдите на <code>adres</code>. Палитра команд → <code>Git: Pop Latest Stash</code>. Строка с адресом вернулась в файл, запись из хранилища удалена:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что выбор adres и Git: Pop Latest Stash</span></figcaption><pre><span class="c">git switch adres</span>
+<span class="c">git stash pop</span>
+<span class="o">On branch adres
+Changes not staged for commit:
+  (use "git add &lt;file&gt;..." to update what will be committed)
+  (use "git restore &lt;file&gt;..." to discard changes in working directory)
+	modified:   index.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (72a04cef1aa91519134afd303f3dc5b62e56acec)</span>
+<span class="c">git stash list</span></pre></figure>
+
+<div class="shot"><span class="n">Снимок 11</span><div><p>Окно VS Code: в строке состояния <code>adres</code>, в Changes <code>index.html</code>, в файле строка <span class="mono">Адрес: ул. Студенческая, 1.</span>, в терминале ответ <code>git stash pop</code> со строкой <span class="mono">Dropped refs/stash@{0}</span>.</p><p class="cap">Подпись: «Рисунок 11 — Правка вернулась из stash»</p></div></div>
+
+<p>Допишите адрес и сделайте коммит <code>Добавил адрес кофейни</code>:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>index.html</b><span>после stash, строка 12</span></figcaption><pre>  &lt;p&gt;Адрес: ул. Студенческая, 1.&lt;/p&gt;</pre></figure>
+<figure class="code"><figcaption><b>index.html</b><span>стало</span></figcaption><pre>  &lt;p&gt;Адрес: ул. Студенческая, 1<mark>, второй этаж</mark>.&lt;/p&gt;</pre></figure>
+</div>
+<h3>Шаг 5. Пробная ветка</h3>
+<p>Создайте ветку <code>proba-temnoy-temy</code> от <code>main</code>: перейдите на <code>main</code>, затем <b>Create new branch…</b>. В ней два коммита.</p>
+<p>Первый коммит, <code>Попробовал тёмную тему</code>, — в <code>styles.css</code>, строки 6–7:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>styles.css</b><span>было</span></figcaption><pre>  background: <del>#FBF6EE</del>;
+  color: <del>#3B2A1E</del>;</pre></figure>
+<figure class="code"><figcaption><b>styles.css</b><span>стало</span></figcaption><pre>  background: <mark>#2B211B</mark>;
+  color: <mark>#F4E9DD</mark>;</pre></figure>
+</div>
+<p>Второй коммит, <code>Обновил описание проекта в README</code>, — в <code>README.md</code>, строка 3:</p>
+<div class="pair">
+<figure class="code"><figcaption><b>README.md</b><span>было</span></figcaption><pre>Учебный сайт для <del>домашнего задания по темам 2.1–2.3</del></pre></figure>
+<figure class="code"><figcaption><b>README.md</b><span>стало</span></figcaption><pre>Учебный сайт для <mark>домашних заданий по модулям 2 и 3</mark></pre></figure>
+</div>
+<figure class="code"><figcaption><b>терминал в папке kofeynya</b><span>то же, что шаг 5 кнопками</span></figcaption><pre>git switch -c proba-temnoy-temy main
+git commit -am "Попробовал тёмную тему"
+git commit -am "Обновил описание проекта в README"</pre></figure>
+
+<h3>Шаг 6. Перенести один коммит в main</h3>
+<p>Тёмная тема не подошла, а описание в README нужно. Перейдите на <code>main</code>. В разделе GRAPH нажмите правой кнопкой на коммит «Обновил описание проекта в README» ветки <code>proba-temnoy-temy</code> и выберите <b>Cherry Pick</b>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Cherry Pick в меню графа</span></figcaption><pre><span class="c">git cherry-pick e6b1338</span>
+<span class="o">[main 820d137] Обновил описание проекта в README
+ Date: Sun Nov 1 12:54:47 2026 +0300
+ 1 file changed, 1 insertion(+), 1 deletion(-)</span>
+<span class="c">git log --oneline -3</span>
+<span class="o">820d137 Обновил описание проекта в README
+38b77f1 Исправил цену латте
+cf54f3d Merge branch 'stil-ssylok'</span></pre></figure>
+<p>Вместо <span class="mono">e6b1338</span> — имя вашего коммита из ветки <code>proba-temnoy-temy</code>. Удалите пробную ветку через <code>Git: Delete Branch...</code>: VS Code спросит, удалять ли неслитую ветку, — нажмите <b>Delete Branch</b>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Git: Delete Branch...</span></figcaption><pre><span class="c">git branch -d proba-temnoy-temy</span>
+<span class="o">error: the branch 'proba-temnoy-temy' is not fully merged
+hint: If you are sure you want to delete it, run 'git branch -D proba-temnoy-temy'</span>
+<span class="c">git branch -D proba-temnoy-temy</span>
+<span class="o">Deleted branch proba-temnoy-temy (was e6b1338).</span></pre></figure>
+
+<div class="shot"><span class="n">Снимок 12</span><div><p>Окно VS Code: в строке состояния <code>main</code>, открыт <code>README.md</code> с новым описанием в строке 3, в терминале ответы <code>git log --oneline -3</code>, <code>git branch -d</code> и <code>git branch -D</code>.</p><p class="cap">Подпись: «Рисунок 12 — Один коммит перенесён, пробная ветка удалена»</p></div></div>
+
+<h3>Шаг 7. Насколько отстала ветка adres</h3>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git log --oneline --graph --all -5</span>
+<span class="o">* 07755f1 Добавил адрес кофейни
+| * 820d137 Обновил описание проекта в README
+| * 38b77f1 Исправил цену латте
+|/
+*   cf54f3d Merge branch 'stil-ssylok'
+|\
+| * 2f88e13 Добавил цвет ссылок</span>
+<span class="c">git log --oneline adres..main</span>
+<span class="o">820d137 Обновил описание проекта в README
+38b77f1 Исправил цену латте</span></pre></figure>
+<p>В <code>main</code> два коммита, которых нет в <code>adres</code>. Ветка <code>adres</code> начинается от коммита «Merge branch 'stil-ssylok'».</p>
+
+<div class="shot"><span class="n">Снимок 13</span><div><p>Терминал с ответами обеих команд: две линии от коммита «Merge branch 'stil-ssylok'».</p><p class="cap">Подпись: «Рисунок 13 — Ветка adres отстала от main»</p></div></div>
+
+<h3>Шаг 8. Перебазировать ветку adres</h3>
+<p>Перейдите на <code>adres</code>. Палитра команд → <code>Git: Rebase Branch...</code> → на вопрос <span class="mono">Select a branch to rebase onto</span> выберите <code>main</code>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Git: Rebase Branch... → main</span></figcaption><pre><span class="c">git switch adres</span>
+<span class="c">git rebase main</span>
+<span class="o">Successfully rebased and updated refs/heads/adres.</span>
+<span class="c">git log --oneline --graph -4</span>
+<span class="o">* 78f5f25 Добавил адрес кофейни
+* 820d137 Обновил описание проекта в README
+* 38b77f1 Исправил цену латте
+*   cf54f3d Merge branch 'stil-ssylok'</span></pre></figure>
+<p>Коммит «Добавил адрес кофейни» стоит теперь после последнего коммита <code>main</code>, и у него новое имя. Запишите старое имя из шага 7 и новое: они нужны для вопроса 5.</p>
+
+<div class="shot"><span class="n">Снимок 14</span><div><p>Окно VS Code: в строке состояния <code>adres</code>, в графе одна прямая линия сверху — «Добавил адрес кофейни», «Обновил описание проекта в README», «Исправил цену латте»; в терминале ответ <code>git log --oneline --graph -4</code>.</p><p class="cap">Подпись: «Рисунок 14 — Ветка adres после rebase»</p></div></div>
+
+<h3>Шаг 9. Слить ветку прямой линией</h3>
+<p>Перейдите на <code>main</code>, палитра команд → <code>Git: Merge...</code> → <code>adres</code>. Затем удалите <code>adres</code> через <code>Git: Delete Branch...</code>.</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Git: Merge... и Git: Delete Branch...</span></figcaption><pre><span class="c">git switch main</span>
+<span class="c">git merge adres</span>
+<span class="o">Updating 820d137..78f5f25
+Fast-forward
+ index.html | 1 +
+ 1 file changed, 1 insertion(+)</span>
+<span class="c">git branch -d adres</span>
+<span class="o">Deleted branch adres (was 78f5f25).</span></pre></figure>
+
+<div class="shot"><span class="n">Снимок 15</span><div><p>Терминал с ответом <code>git merge adres</code>, в нём строка <span class="mono">Fast-forward</span>, и ответ <code>git branch -d adres</code>.</p><p class="cap">Подпись: «Рисунок 15 — Слияние после rebase»</p></div></div>
+
+<!-- ============ ЧАСТЬ 4 ============ -->
+<h2><span class="num">4</span>Сообщения коммитов</h2>
+<p>Глава 3.6. На главную страницу добавляются телефон и цвет ссылки при наведении. Это две задачи, поэтому и коммитов будет два: один с заголовком и описанием, второй с исправленным через amend сообщением.</p>
+
+<h3>Шаг 1. Включить проверку длины</h3>
+<p>Палитра команд → <code>Preferences: Open Settings (UI)</code> → в поиске <code>git.inputValidation</code> → поставьте флажок <b>Git: Input Validation</b>. Закройте вкладку настроек.</p>
+
+<h3>Шаг 2. Две правки и слишком длинный заголовок</h3>
+<p>В <code>index.html</code> под адресом добавьте телефон, в конец <code>styles.css</code> — цвет ссылки при наведении. Сохраните оба файла.</p>
+<div class="pair">
+<figure class="code"><figcaption><b>index.html</b><span>после строки 12</span></figcaption><pre>  &lt;p&gt;Адрес: ул. Студенческая, 1, второй этаж.&lt;/p&gt;
+<mark>  &lt;p&gt;Телефон: &lt;a href="tel:+79001234567"&gt;+7 900 123-45-67&lt;/a&gt;&lt;/p&gt;</mark></pre></figure>
+<figure class="code"><figcaption><b>styles.css</b><span>в конец файла</span></figcaption><pre><mark>a:hover {
+  color: #C8380F;
+}</mark></pre></figure>
+</div>
+<p>Наберите в поле Message сообщение для обеих правок сразу. Коммит не делайте:</p>
+<figure class="code"><figcaption><b>поле Message</b><span>70 знаков</span></figcaption><pre>Добавил на главную телефон кофейни ссылкой и цвет ссылки при наведении</pre></figure>
+
+<div class="shot"><span class="n">Снимок 16</span><div><p>Панель Source Control: в Changes <code>index.html</code> и <code>styles.css</code>, сообщение в поле Message подчёркнуто волнистой линией, рядом подсказка о числе лишних знаков (наведите на линию мышью).</p><p class="cap">Подпись: «Рисунок 16 — Заголовок длиннее 50 знаков»</p></div></div>
+
+<p>Заголовок длинный, потому что в одном коммите две задачи. Очистите поле Message: правки будут записаны двумя коммитами.</p>
+
+<h3>Шаг 3. Спросить сообщение у модели</h3>
+<p>Отберите плюсом только <code>index.html</code> и выведите, что попадёт в коммит:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команда и ответ</span></figcaption><pre><span class="c">git diff --staged</span>
+<span class="o">diff --git a/index.html b/index.html
+index 498305f..955b07f 100644
+--- a/index.html
++++ b/index.html
+@@ -10,6 +10,7 @@
+   &lt;p&gt;Варим кофе и печём булочки каждый день у главного корпуса университета, вход со двора.&lt;/p&gt;
+   &lt;p&gt;Часы работы: с 08:00 до 21:00, без выходных.&lt;/p&gt;
+   &lt;p&gt;Адрес: ул. Студенческая, 1, второй этаж.&lt;/p&gt;
++  &lt;p&gt;Телефон: &lt;a href="tel:+79001234567"&gt;+7 900 123-45-67&lt;/a&gt;&lt;/p&gt;</span></pre></figure>
+<p>Откройте любой чат с моделью: GigaChat, Алиса, DeepSeek или другой. Отправьте запрос и вставьте под ним ответ команды:</p>
+<figure class="code"><figcaption><b>запрос в чат</b><span>под ним — ответ git diff --staged</span></figcaption><pre>Напиши сообщение коммита на русском: заголовок до 50 знаков
+в прошедшем времени от первого лица («Добавил…»), пустая строка
+и описание в одну-две строки — зачем сделана правка.
+Вот изменения:</pre></figure>
+
+<div class="shot"><span class="n">Снимок 17</span><div><p>Окно чата: ваш запрос с изменениями и ответ модели.</p><p class="cap">Подпись: «Рисунок 17 — Черновик сообщения от модели»</p></div></div>
+
+<p>Сверьте черновик с изменениями: заголовок называет то, что сделано в этом коммите, а в описании нет того, чего в коммите нет. Ответ на вопрос 6 — что вы поменяли в черновике и почему.</p>
+
+<h3>Шаг 4. Заголовок и описание</h3>
+<p>Напишите сообщение в поле Message: заголовок, затем два раза <kbd>Enter</kbd> и описание. Можно взять исправленный черновик модели или образец ниже. Коммит — <kbd>Ctrl</kbd> + <kbd>Enter</kbd> (на macOS <kbd>Cmd</kbd> + <kbd>Enter</kbd>) или кнопка <b>Commit</b>.</p>
+<figure class="code"><figcaption><b>поле Message</b><span>заголовок, пустая строка, описание</span></figcaption><pre>Добавил телефон кофейни на главную
+
+Номер сделан ссылкой tel:, на телефоне она сразу
+открывает набор номера.</pre></figure>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>то же, что Commit; затем полный вид коммита</span></figcaption><pre><span class="c">git commit -m "Добавил телефон кофейни на главную" -m "Номер сделан ссылкой tel:, на телефоне она сразу
+открывает набор номера."</span>
+<span class="o">[main cc6ebd4] Добавил телефон кофейни на главную
+ 1 file changed, 1 insertion(+)</span>
+<span class="c">git log -1</span>
+<span class="o">commit cc6ebd452341d8251ff3f07db54bd341132aee2c
+Author: Иванов Иван &lt;ivanov@example.com&gt;
+Date:   Sun Nov 1 12:54:47 2026 +0300
+
+    Добавил телефон кофейни на главную
+
+    Номер сделан ссылкой tel:, на телефоне она сразу
+    открывает набор номера.</span></pre></figure>
+<p>В строке <code>Author</code> должны стоять ваши имя и почта.</p>
+
+<div class="shot"><span class="n">Снимок 18</span><div><p>Терминал с ответом <code>git log -1</code>: ваше имя в строке Author, заголовок, пустая строка и описание.</p><p class="cap">Подпись: «Рисунок 18 — Коммит с заголовком и описанием»</p></div></div>
+
+<h3>Шаг 5. Исправить сообщение последнего коммита</h3>
+<p>Отберите <code>styles.css</code> и сделайте коммит с неудачным сообщением <code>Обновил стили</code>: по нему не понять, что изменилось. Исправьте сообщение через amend. В индексе ничего нет, поэтому amend заменит только сообщение:</p>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git commit -m "Обновил стили"</span>
+<span class="o">[main 91e1089] Обновил стили
+ 1 file changed, 3 insertions(+)</span>
+<span class="c">git commit --amend -m "Добавил цвет ссылки при наведении"</span>
+<span class="o">[main 7d33447] Добавил цвет ссылки при наведении
+ Date: Sun Nov 1 12:54:47 2026 +0300
+ 1 file changed, 3 insertions(+)</span>
+<span class="c">git log --oneline -3</span>
+<span class="o">7d33447 Добавил цвет ссылки при наведении
+cc6ebd4 Добавил телефон кофейни на главную
+78f5f25 Добавил адрес кофейни</span></pre></figure>
+
+<div class="shot"><span class="n">Снимок 19</span><div><p>Терминал с ответами <code>git commit --amend</code> и <code>git log --oneline -3</code>: коммита «Обновил стили» в списке нет.</p><p class="cap">Подпись: «Рисунок 19 — Сообщение исправлено через amend»</p></div></div>
+
+<h3>Итоговая проверка</h3>
+<figure class="code term"><figcaption><b>терминал в папке kofeynya</b><span>команды и ответ</span></figcaption><pre><span class="c">git status --short</span>
+<span class="c">git branch -a -v</span>
+<span class="o">* main                7d33447 [ahead 14] Добавил цвет ссылки при наведении
+  remotes/origin/HEAD -&gt; origin/main
+  remotes/origin/main d451256 Добавил какао в меню</span>
+<span class="c">git log --oneline --graph</span>
+<span class="o">* 7d33447 Добавил цвет ссылки при наведении
+* cc6ebd4 Добавил телефон кофейни на главную
+* 78f5f25 Добавил адрес кофейни
+* 820d137 Обновил описание проекта в README
+* 38b77f1 Исправил цену латте
+*   cf54f3d Merge branch 'stil-ssylok'
+|\
+| * 2f88e13 Добавил цвет ссылок
+* | a27a92a Добавил цвет подзаголовков
+|/
+*   e608687 Merge branch 'opisanie'
+|\
+| * bcbca34 Изменил описание кофейни
+* | ffe4c0b Добавил в описание, где вход
+|/
+*   1e4a27e Merge branch 'deserty'
+|\
+| * 2e04958 Добавил десерты в меню
+* | 7f31a66 Продлил часы работы до 21:00
+|/
+* d451256 Добавил какао в меню
+* c016d04 Добавил README с описанием проекта
+* 07b88ef Добавил страницу меню
+* c971be5 Подключил файл со стилями
+* 69a4f0b Первая страница кофейни</span></pre></figure>
+<p>Список изменений пуст. Одна ветка, <code>main</code>. Девятнадцать коммитов: пять исходных, одиннадцать ваших и три коммита слияния. Коммитов «Попробовал тёмную тему» и «Обновил стили» в истории нет. Порядок линий у слияний у вас может быть другим.</p>
+
+<div class="shot"><span class="n">Снимок 20</span><div><p>Пустая панель Source Control и терминал с ответами <code>git branch -a -v</code> и <code>git log --oneline --graph</code>.</p><p class="cap">Подпись: «Рисунок 20 — Итоговая история проекта»</p></div></div>
+
+<h3>Вопросы: ответы вписать в таблицу в Word</h3>
+<p>Таблицу перенесите в Word целиком, правый столбец заполните. Ответы ищутся на ваших снимках и в терминале. Имена коммитов пишите по семь знаков.</p>
+<table class="answers">
+  <tr><th>№</th><th>Вопрос</th><th>Ответ</th></tr>
+  <tr><td class="num">1</td><td>В конфликте в <code>index.html</code> какая версия строки стояла между <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> и <code>=======</code>, а какая — между <code>=======</code> и <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; opisanie</code>? Из какой ветки каждая?</td><td></td></tr>
+  <tr><td class="num">2</td><td>Какой стала бы строка 14 файла <code>styles.css</code>, если бы в шаге 6 части 2 вы нажали Accept Both Changes? Почему такой CSS неверный?</td><td></td></tr>
+  <tr><td class="num">3</td><td>Какой коммит был последним в <code>main</code> после <code>Git: Abort Merge</code>? Осталась ли ветка <code>stil-ssylok</code> и её коммит?</td><td></td></tr>
+  <tr><td class="num">4</td><td>Имя коммита «Обновил описание проекта в README» в ветке <code>proba-temnoy-temy</code> и в <code>main</code> после cherry-pick. Почему имена разные? Почему ветку пришлось удалять ключом <code>-D</code>?</td><td></td></tr>
+  <tr><td class="num">5</td><td>Имя коммита «Добавил адрес кофейни» до rebase и после. Почему слияние <code>adres</code> в шаге 9 прошло перемоткой вперёд, без коммита слияния?</td><td></td></tr>
+  <tr><td class="num">6</td><td>Что вы поменяли в черновике сообщения от модели и почему? Если ничего не меняли — по каким признакам решили, что черновик верный?</td><td></td></tr>
+  <tr><td class="num">7</td><td>Почему в шаге 2 части 4 правки <code>index.html</code> и <code>styles.css</code> записаны двумя коммитами, а не одним?</td><td></td></tr>
+</table>
+
+<!-- ============ СДАЧА ============ -->
+<h2><span class="num">5</span>Как сдать работу</h2>
+<ol class="steps">
+  <li>Документ Word: в первой строке ФИО, группа, «ДЗ по Git, модуль 3».</li>
+  <li>Снимки по порядку с подписями. Таблица с ответами на семь вопросов — после снимка 20.</li>
+  <li>Имя файла: <code>Фамилия_Git_ДЗ_модуль_3.docx</code>.</li>
+</ol>
+
+<h3>Критерии оценки</h3>
+<table class="grade">
+  <tr><td>5</td><td>Все снимки и семь верных ответов. В итоговой истории девятнадцать коммитов, из них три коммита слияния, и одна ветка <code>main</code>.</td></tr>
+  <tr><td>4</td><td>Нет двух-трёх снимков или один-два ответа неверны.</td></tr>
+  <tr><td>3</td><td>Выполнены части 1 и 2: оба конфликта разобраны, слияния завершены. В частях 3 и 4 сделаны stash и коммит с заголовком и описанием.</td></tr>
+</table>
+<p>Не принимается, если на снимке 18 в строке <code>Author</code> не ваше имя.</p>
+
+<h3>Если что-то пошло не так</h3>
+<table>
+  <tr><th>Что видно</th><th>Что делать</th></tr>
+  <tr><td>При клонировании ошибка: папка <code>kofeynya</code> уже существует</td><td>Выбрана папка из прошлого ДЗ. Повторить клонирование в <code>dz4-familiya</code>.</td></tr>
+  <tr><td>При коммите сообщение <span class="mono">Please tell me who you are</span></td><td><code>git config --global user.name "Иванов Иван"</code><br><code>git config --global user.email "почта"</code></td></tr>
+  <tr><td>В части 2 слияние прошло без конфликта</td><td>Строка 10 в ветках изменена по-разному не так, как в образце, или правка попала не в ту ветку. Сверить <code>git log --oneline --graph --all -4</code> с шагами 1–2: коммиты «Изменил описание кофейни» и «Добавил в описание, где вход» должны быть в разных ветках.</td></tr>
+  <tr><td>Случайно нажата Accept Both Changes или кнопка над конфликтом</td><td>Палитра команд → <code>Git: Abort Merge</code> (в терминале <code>git merge --abort</code>) и повторить слияние.</td></tr>
+  <tr><td>Continue не нажимается, группа Merge Changes не пропала</td><td>Файл не отмечен разобранным. Убрать все метки, сохранить файл, нажать плюс. На вопрос «stage … with merge conflicts?» ответить <b>Cancel</b> и сначала проверить файл: меток в нём быть не должно.</td></tr>
+  <tr><td>Открылась вкладка <code>COMMIT_EDITMSG</code></td><td>Нажать <b>Commit</b> в правом верхнем углу вкладки или закрыть её с сохранением.</td></tr>
+  <tr><td>Открылся редактор Vim при слиянии или rebase</td><td><kbd>Esc</kbd>, затем <code>:wq</code> и <kbd>Enter</kbd>.</td></tr>
+  <tr><td>После Git: Stash правка осталась в файле</td><td>Правку не сохранили до stash. <code>git stash pop</code>, сохранить файл и повторить шаг 2 части 3.</td></tr>
+  <tr><td>В графе нет коммитов ветки <code>proba-temnoy-temy</code></td><td>Граф показывает только текущую ветку: в заголовке GRAPH нажать <b>Auto</b> → <b>All</b> → <b>OK</b>. Или в терминале <code>git cherry-pick</code> с именем коммита из <code>git log --oneline proba-temnoy-temy -2</code>.</td></tr>
+  <tr><td>Rebase остановился с сообщением <span class="mono">CONFLICT</span></td><td>Адрес и правки <code>main</code> оказались в одних строках. <code>git rebase --abort</code>, сверить файлы с образцами и повторить шаг 8.</td></tr>
+  <tr><td>Удалена не та ветка</td><td>В ответе Git в скобках указан её коммит: <code>git branch имя_ветки коммит</code>, например <code>git branch adres 78f5f25</code>.</td></tr>
+</table>
+
+<p>Справочник: <a href="https://maximbytecamp.github.io/git_github_makarov/">maximbytecamp.github.io/git_github_makarov</a>, главы 3.1–3.6.</p>
+
+<div class="foot"><span>Справочник по Git и GitHub · домашнее задание по модулю 3</span><span>Макаров Максим Николаевич</span></div>
+
+</div>
+</body>
+</html>
