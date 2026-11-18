@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4F1EC">
+  <title>4.4 Публикация, push, pull, fetch и Sync · Справочник по Git и GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="assets/chapter.css">
+</head>
+<body>
+<div class="book"><div class="book__body">
+  <div class="spine"><span>Модуль 4 · GitHub</span></div>
+  <main class="leaf">
+    <div class="running">
+      <p class="eyebrow"><a href="../../index.html">Справочник по Git и GitHub</a> · модуль 4 · GitHub: аккаунт и связь с ним</p>
+      <p class="running__folio">Глава 4.4</p>
+    </div>
+    <header class="chapter-head">
+      <span class="chapter-num">4.4</span>
+      <h1>Публикация, push,<br>pull, fetch и Sync</h1>
+      <p class="lead">В главе разобраны первая публикация ветки, отправка коммитов и получение чужих изменений. Действия показаны кнопками VS Code, а их результат проверен по графу и файлам.</p>
+    </header>
+    <dl class="passport">
+      <div><dt>Категория</dt><dd>Обмен коммитами</dd></div>
+      <div><dt>До начала</dt><dd>Коммиты и ветки из модулей 2–3</dd></div>
+      <div><dt>Что получится</dt><dd>Опубликованная ветка и проверенный обмен изменениями</dd></div>
+      <div><dt>Время</dt><dd>Около 45 минут с практикой</dd></div>
+    </dl>
+    <section class="gist" aria-labelledby="gist-title">
+      <h2 id="gist-title">Суть за две минуты</h2>
+      <p><b>Push</b> отправляет коммиты выбранной ветки. <b>Fetch</b> получает коммиты и обновляет сведения об удалённых ветках, но не включает их в текущую локальную ветку. <b>Pull</b> получает изменения и включает их в текущую ветку.</p>
+      <p><b>Sync Changes</b> объединяет получение и отправку: сначала pull, затем отправка исходящих коммитов. Ни одна из этих кнопок не заменяет создание коммита.</p>
+    </section>
+    <nav class="contents" aria-label="Содержание главы">
+      <b>Порядок действий</b>
+      <ol>
+        <li><a href="#s1">Два репозитория и три имени ветки</a></li>
+        <li><a href="#s2">Первая публикация и upstream</a></li>
+        <li><a href="#s3">Push: что уедет, а что останется</a></li>
+        <li><a href="#s4">Fetch: узнать, не включая в ветку</a></li>
+        <li><a href="#s5">Pull: получить и включить</a></li>
+        <li><a href="#s6">Sync Changes: два действия одной кнопкой</a></li>
+        <li><a href="#s7">Как проверить результат</a></li>
+        <li><a href="#s8">Самостоятельная работа</a></li>
+      </ol>
+    </nav>
+
+    <h2 id="s1"><span class="sec">01</span> Два репозитория и три имени ветки</h2>
+    <p>Сохранение файла и создание коммита происходят на вашем компьютере. Пока мы не отправили коммит, GitHub его не получил. Даже открытая страница репозитория в браузере не связывает локальную историю с сервером автоматически.</p>
+    <p><span class="term">Локальный репозиторий</span> — репозиторий на вашем компьютере: его история и служебные данные находятся в <code>.git</code>. Рядом расположена рабочая папка с файлами, которые вы редактируете. <span class="term">Удалённый репозиторий</span> — другой репозиторий, с которым мы обмениваемся коммитами. Обычно он находится на GitHub, но Git допускает и адрес папки на том же компьютере.</p>
+    <p>Чтобы не вводить длинный адрес при каждом обмене, Git хранит его под коротким именем. Такая запись называется <span class="term">remote</span>. Для remote часто выбирают имя <code>origin</code>. Само имя ничего не говорит о сервере или названии ветки. После клонирования Git обычно создаёт remote с этим именем сам.</p>
+    <div class="lab-note">
+      <p><b>Что показано на настоящих кадрах.</b> Опыты главы выполнены 18.11.2026 в отдельном VS Code на macOS. Наша рабочая копия называется <code>alice</code>, копия коллеги — <code>bob</code>. Общий <code>remote.git</code> — bare-репозиторий: он хранит историю без рабочей папки. Все три находятся в локальном стенде <code>/private/tmp/gh47/lab</code>.</p>
+      <p>Здесь проверяется поведение Git и кнопок VS Code, <b>не подключение к GitHub</b>. Внешний репозиторий для опытов не создавался. Кадры можно открыть нажатием и рассмотреть крупнее; названия кнопок в другой версии или локализации могут отличаться.</p>
+    </div>
+    <p>У одной линии разработки теперь есть три обозначения. Два мы видим в локальном репозитории, третье относится к удалённой стороне.</p>
+    <div class="refs">
+      <div class="ref-box"><strong>main</strong><span>Локальная ветка в <code>alice</code>. В неё мы делаем коммиты и включаем полученные изменения.</span></div>
+      <div class="ref-box"><strong>origin/main</strong><span>Локальная ссылка на последнее известное состояние <code>main</code> у <code>origin</code>. Это не живой просмотр сервера.</span></div>
+    </div>
+    <p>А в самом <code>remote.git</code> есть своя ветка <code>main</code>. Если коллега отправит туда коммит, её указатель переместится сразу. Наш <code>origin/main</code> останется прежним до следующего обмена, который обновит сведения.</p>
+    <p>Расположение этих имён показано ниже. После настройки связи origin хранит адрес второго репозитория; origin/main хранится в нашем .git.</p>
+    <figure class="scheme diagram" aria-label="Локальные main и origin/main находятся в alice, удалённая main — в remote.git">
+      <div class="diagram__title">Где находятся ветки и запись remote</div>
+      <div class="diagram__body">
+        <div class="repo"><h3>Наш компьютер · alice/.git</h3><span class="ref">main — наша ветка</span><span class="ref">origin/main — последняя полученная ссылка</span><p><code>origin</code> хранит адрес <code>/private/tmp/gh47/lab/remote.git</code>.</p></div>
+        <div class="transfer">обмен<b>↔</b>историей</div>
+        <div class="repo"><h3>Другая сторона · remote.git</h3><span class="ref">main — ветка общего репозитория</span><p>В стенде это отдельная папка. В работе её место может занимать репозиторий на GitHub.</p></div>
+      </div>
+      <figcaption>Два репозитория разделены рамками. Origin/main находится внутри локальной рамки: это сохранённое у нас состояние удалённой ветки.</figcaption>
+    </figure>
+    <p>Чтобы обмен заработал, нужно добавить адрес и впервые отправить ветку. При этой отправке также настраивается связь веток.</p>
+    <details class="more simple"><summary>По-простому: история и последняя полученная сводка</summary>
+      <p>У вас есть свой экземпляр документа, у коллег — общий. Рядом лежит запись: «когда я проверял, общий экземпляр был таким». Свой документ — это <code>main</code>, запись о последней проверке — <code>origin/main</code>, общий экземпляр — ветка <code>main</code> в удалённом репозитории.</p>
+      <p>Fetch обновляет сводку и приносит недостающую историю, но ещё не переносит её в вашу ветку. Ограничение аналогии: Git передаёт объекты истории и меняет ссылки. Обмен не сводится к пересылке одного редактируемого документа.</p>
+    </details>
+
+    <p>Начнём с публикации: у нас пока только локальная история.</p>
+
+    <h2 id="s2"><span class="sec">02</span> Первая публикация и upstream</h2>
+    <p class="purpose">Зачем этот шаг: указать место отправки и связать локальную ветку с веткой на другой стороне.</p>
+    <p>В <code>alice</code> уже создан первый коммит <code>45613e9</code> — «Добавить описание проекта». В нём один файл <code>README.md</code>. Удалённый репозиторий пока пуст, а локальная ветка ещё не опубликована. VS Code показывает <b>Publish Branch</b>.</p>
+    <figure class="shot">
+      <img src="assets/01-unpublished-focus.png" alt="VS Code: локальная main с коммитом «Добавить описание проекта» и кнопкой Publish Branch" width="1940" height="1560">
+      <figcaption>До публикации: локальный коммит есть в Graph, но рядом с ним ещё нет метки <code>origin/main</code>. Кадр снят до нажатия Publish Branch; адрес origin к этому моменту уже добавлен.</figcaption>
+    </figure>
+    <p>Первая публикация — это не то же самое, что создание репозитория на сайте. Возможны два исходных состояния.</p>
+    <ol class="steps">
+      <li><b>Репозитория на GitHub ещё нет.</b> В Source Control выберите <b>Publish to GitHub</b> — в некоторых состояниях вход к этому действию начинается с Publish Branch. Проверьте аккаунт, имя и видимость создаваемого репозитория. Не публикуйте секреты и личные файлы. Вход и доступы разобраны в <a href="../18-vhod-tokeny-ssh/index.html">главе 4.2</a>. Это внешний шаг: в нашем локальном опыте он не выполнялся.</li>
+      <li><b>Пустой удалённый репозиторий уже есть.</b> В палитре команд VS Code выберите <b>Git: Add Remote…</b>, вставьте его адрес, затем задайте имя <code>origin</code>. После этого нажмите <b>Publish Branch</b> для текущей ветки. При нескольких remotes внимательно выберите нужный.</li>
+    </ol>
+    <p>В стенде используем второй вариант. Вместо URL GitHub вводим путь к собственному пустому bare-репозиторию. На кадре вводится адрес для настройки remote. Отправки на этом шаге ещё нет.</p>
+    <figure class="shot">
+      <img src="assets/02-add-remote-focus.png" alt="Git: Add Remote в VS Code, введён локальный адрес /private/tmp/gh47/lab/remote.git" width="2140" height="500" loading="lazy">
+      <figcaption>Первый запрос Add Remote — адрес. На следующем шаге введено имя <code>origin</code>. Пока мы только добавляем настройку связи.</figcaption>
+    </figure>
+    <div class="command"><b>Какая команда рядом с кнопкой.</b> Добавление адреса: <code>git remote add origin /private/tmp/gh47/lab/remote.git</code>. Первая публикация ветки: <code>git push -u origin main</code>. Набирать их после действий в интерфейсе не нужно.</div>
+    <p>При публикации Git отправил коммит и создал на другой стороне ветку <code>main</code>. Параметр <code>-u</code> дополнительно сохранил <span class="term">upstream</span> — связь локальной ветки с отслеживаемой удалённой веткой. В нашем случае локальная <code>main</code> отслеживает <code>origin/main</code>. Теперь для обычного Push и Pull не нужно каждый раз выбирать адрес и ветку.</p>
+    <p>На схеме пунктир означает коммит, которого до отправки не было на принимающей стороне. Стрелка показывает передачу истории; нижняя строка в каждом блоке — результат.</p>
+    <figure class="scheme diagram" aria-label="Первая публикация: коммит 45613e9 передан из alice в пустой remote.git">
+      <div class="diagram__title">Создание удалённой main при первой отправке</div>
+      <div class="diagram__body">
+        <div class="repo"><h3>Локально · alice</h3><span class="ref">main</span><div class="chain"><span class="commit" title="Добавить описание проекта">45613e9</span></div><p>После: <code>origin/main → 45613e9</code></p></div>
+        <div class="transfer">push -u<b>→</b>1 коммит</div>
+        <div class="repo"><h3>Удалённо · remote.git</h3><span class="ref">До: ветки main нет</span><div class="chain"><span class="commit commit--new" title="Добавить описание проекта">45613e9</span></div><p>После: <code>main → 45613e9</code></p></div>
+      </div>
+      <figcaption>Хеш не изменился: на другую сторону попал тот же коммит. Настройка upstream хранится локально, она не является новым коммитом.</figcaption>
+    </figure>
+    <p>После завершения операции метки <code>main</code> и <code>origin/main</code> стоят у одного коммита. Вместо Publish Branch — обычная кнопка Commit; исходящих изменений нет.</p>
+    <figure class="shot">
+      <img src="assets/03-published-focus.png" alt="VS Code после первой публикации: у коммита совпадают локальная и удалённая метки" width="1940" height="1560" loading="lazy">
+      <img class="status-shot" src="assets/03-published-status.png" alt="Строка состояния после публикации: main и значок синхронизации без счётчиков" width="1000" height="52" loading="lazy">
+      <figcaption>После публикации: нет счётчика исходящих коммитов. Связь с upstream и хеш на другой стороне дополнительно проверены средствами Git.</figcaption>
+    </figure>
+    <details class="more"><summary>Если история на GitHub уже началась</summary>
+      <p>Репозиторий с добавленным на сайте README уже не пуст. Не добавляйте к нему независимую локальную историю наугад. Для нового рабочего места проще клонировать существующий репозиторий и продолжить его историю — как в главе 2.2. Если обе стороны уже содержат вашу работу, остановитесь и разберите состояние веток. При независимой истории этот сценарий первой публикации не подходит.</p>
+      <p>Наличие remote ещё не означает наличие upstream. Первая запись задаёт адрес репозитория, вторая — с какой веткой сопоставлять конкретную локальную ветку. Проверка связи в терминале, если нужна: <code>git branch -vv</code>; в нашем опыте вывод содержит <code>main … [origin/main]</code>.</p>
+    </details>
+
+    <p>Связь настроена. Теперь проверим отправку следующего коммита вместе с незавершёнными правками в рабочей папке.</p>
+
+    <h2 id="s3"><span class="sec">03</span> Push: что уедет, а что останется</h2>
+    <p class="purpose">Зачем этот шаг: отправить готовую часть работы, не перепутав коммиты с незавершёнными правками.</p>
+    <p>Добавим в README строку «Связь с удалённым репозиторием настроена» и создадим коммит <code>ed46543</code> — «Уточнить описание проекта». Затем оставим ещё три незавершённые правки: одну строку README добавим в индекс, следующую оставим вне индекса, а новый <code>draft.txt</code> вообще не добавим в Git.</p>
+    <p>Перед отправкой в Graph виден один исходящий коммит — <b>Outgoing Changes</b>. Вверху одновременно есть <b>Staged Changes</b> и <b>Changes</b>. Счётчик <code>1↑</code> внизу относится к коммитам для отправки. Изменённые файлы посчитаны отдельно в группах выше.</p>
+    <figure class="shot">
+      <img src="assets/04-before-push-focus.png" alt="До push: один исходящий коммит; README присутствует в Staged Changes и Changes, draft.txt отмечен U" width="1940" height="1560" loading="lazy">
+      <img class="status-shot" src="assets/04-before-push-status.png" alt="До push: main со знаками локальных правок, 0 входящих и 1 исходящий коммит" width="1000" height="52" loading="lazy">
+      <figcaption>До отправки: <code>main → ed46543</code>, <code>origin/main → 45613e9</code>. Значок Source Control показывает три записи правок: README учтён отдельно в индексе и в рабочей папке.</figcaption>
+    </figure>
+    <p><span class="term">Push</span> передаёт в удалённый репозиторий необходимые объекты истории и предлагает обновить выбранную удалённую ветку. В обычной работе это означает отправку коммитов, которых на другой стороне ещё нет. Push не создаёт коммит из текущего содержимого редактора или индекса.</p>
+    <p>В блоке Graph нажмите значок <b>Push</b> со стрелкой вверх. Если подпись не видна, наведите на значок и прочитайте подсказку. Другой путь — палитра команд → <b>Git: Push</b>. Для проверки отправки используем отдельный Push. Большую кнопку Sync Changes пока оставим.</p>
+    <div class="command">Обычная отправка в этом опыте: <code>git push origin main:main</code>. Здесь слева от двоеточия локальная ветка, справа — ветка назначения. При настроенной связи обычный <code>git push</code> также может выбрать эту пару автоматически.</div>
+    <p>В момент отправки у нас есть две последовательные версии истории. На удалённой стороне появится только новый коммит <code>ed46543</code>; содержимое незакоммиченных файлов в эту передачу не входит.</p>
+    <figure class="scheme diagram" aria-label="Push: коммит ed46543 отправлен из локальной main в удалённую main, незакоммиченные правки остаются в alice">
+      <div class="diagram__title">Отправка коммита ed46543</div>
+      <div class="diagram__body">
+        <div class="repo"><h3>Локально · alice</h3><span class="ref">main → ed46543</span><div class="chain"><span class="commit">45613e9</span><span class="link">→</span><span class="commit" title="Уточнить описание проекта">ed46543</span></div><p>Остаются здесь: индекс README, правка README вне индекса, <code>draft.txt</code>.</p></div>
+        <div class="transfer">push<b>→</b>1 коммит</div>
+        <div class="repo"><h3>Удалённо · remote.git</h3><span class="ref">До: main → 45613e9</span><div class="chain"><span class="commit">45613e9</span><span class="link">→</span><span class="commit commit--new">ed46543</span></div><p>После: <code>main → ed46543</code></p></div>
+      </div>
+      <figcaption>Локальный <code>origin/main</code> после успешного push тоже указывает на <code>ed46543</code>. Направление стрелки между хешами здесь — порядок создания коммитов, слева направо.</figcaption>
+    </figure>
+    <p>После Push исходящий коммит исчез из отдельной группы Graph. Обе группы правок остались на месте: они ещё не включены в коммит.</p>
+    <figure class="shot">
+      <img src="assets/05-after-push-focus.png" alt="После push: метки веток совпали, но Staged Changes и Changes с README и draft.txt остались" width="1940" height="1560" loading="lazy">
+      <img class="status-shot" src="assets/05-after-push-status.png" alt="После push: исходящих коммитов нет, признаки незакоммиченных правок остаются" width="1000" height="52" loading="lazy">
+      <figcaption>После отправки: у обеих веток вершина <code>ed46543</code>. Push не очистил индекс и не удалил рабочие правки.</figcaption>
+    </figure>
+    <p>Проверка удалённого README показала строку из <code>ed46543</code>, но не две последующие строки. Файла <code>draft.txt</code> там нет. И сохранённый, и добавленный в индекс файл остаётся локальным, пока его изменение не вошло в отправленный коммит.</p>
+    <details class="more"><summary>Что ещё не публикуется вместе с веткой</summary>
+      <p>Обычный push выбранной ветки не отправляет все остальные локальные ветки, локальные настройки Git, хуки и stash. Теги имеют свои правила отправки; не рассчитывайте, что любой локальный тег автоматически уедет вместе с коммитом. Несохранённый текст редактора тем более не входит в историю.</p>
+      <p>Если секрет попал в коммит, его удаление следующим коммитом не очищает прошлую историю. Вместе с историей Push может передать и старое содержимое файла.</p>
+    </details>
+
+    <p>Наш коммит опубликован. Следующий опыт начнётся с нового коммита на стороне коллеги.</p>
+
+    <h2 id="s4"><span class="sec">04</span> Fetch: узнать, не включая в ветку</h2>
+    <p class="purpose">Зачем этот шаг: увидеть чужие коммиты до того, как они изменят нашу ветку и рабочие файлы.</p>
+    <p>Коллега в <code>bob</code> получил опубликованную историю, добавил <code>news.txt</code> со строкой «Понедельник: занятие по Git» и отправил коммит <code>8ac8f46</code> — «Добавить новость о занятии». В удалённой <code>main</code> он уже есть. У нас пока <code>main</code> и <code>origin/main</code> указывают на <code>ed46543</code>.</p>
+    <p>Отсутствие числа у стрелки вниз ещё ничего не доказывает: локальные сведения могли устареть. В Graph нажмите <b>Fetch From All Remotes</b>. В нашем стенде remote только один — <code>origin</code>. Также можно выбрать <b>Git: Fetch</b> в палитре команд и, если предложено, указать remote.</p>
+    <div class="command">Кнопка Graph в опыте выполнила <code>git fetch --all</code> — обновление из всех настроенных remotes. Для одного <code>origin</code> соответствует задаче <code>git fetch origin</code>.</div>
+    <p><span class="term">Fetch</span> получает недостающие объекты и обновляет локальные ссылки на удалённые ветки. Он не включает полученную историю в текущую локальную ветку и не переписывает её рабочие файлы. Поэтому после Fetch мы можем увидеть новый коммит в Graph, хотя его файла ещё нет в рабочей папке.</p>
+    <figure class="scheme diagram" aria-label="Fetch: origin/main обновляется с ed46543 до 8ac8f46, локальная main остаётся ed46543">
+      <div class="diagram__title">Положение main и origin/main после Fetch</div>
+      <div class="diagram__body">
+        <div class="repo"><h3>Удалённо · remote.git</h3><span class="ref">main → 8ac8f46</span><div class="chain"><span class="commit">ed46543</span><span class="link">→</span><span class="commit" title="Добавить новость о занятии">8ac8f46</span></div><p><code>news.txt</code> есть в этой истории.</p></div>
+        <div class="transfer">fetch<b>→</b>1 новый</div>
+        <div class="repo"><h3>Локально · alice</h3><span class="ref">main → ed46543 · без изменений</span><div class="chain"><span class="commit">ed46543</span><span class="link">→</span><span class="commit commit--new">8ac8f46</span></div><span class="ref">origin/main → 8ac8f46 · обновлён</span><p><code>news.txt</code> в рабочей папке ещё нет.</p></div>
+      </div>
+      <figcaption>В обоих блоках показано продолжение общей истории после <code>45613e9</code>. В локальной базе коммит уже доступен для просмотра, но локальный указатель <code>main</code> не сдвинулся.</figcaption>
+    </figure>
+    <p>После нажатия в Graph появилась группа <b>Incoming Changes</b>, а счётчик стал <code>1↓ 0↑</code>. Наши незакоммиченные правки тоже остались — Fetch их не трогал.</p>
+    <figure class="shot">
+      <img src="assets/06-after-fetch-focus.png" alt="После fetch: Incoming Changes с коммитом коллеги, main ниже origin/main, локальные правки не изменились" width="1940" height="1560" loading="lazy">
+      <img class="status-shot" src="assets/06-after-fetch-status.png" alt="После fetch: 1 входящий коммит и 0 исходящих" width="1000" height="52" loading="lazy">
+      <figcaption><code>main → ed46543</code>, <code>origin/main → 8ac8f46</code>. Проверка рабочей папки: <code>news.txt</code> отсутствует; README и индекс остались прежними.</figcaption>
+    </figure>
+    <details class="more"><summary>Фоновый Fetch и кнопка Refresh — не одно и то же</summary>
+      <p>VS Code может предложить периодический Fetch. Если он включён, входящие коммиты появляются без отдельного нажатия — но всё ещё без включения в вашу ветку. В опыте автоматический Fetch выключен, чтобы момент получения был виден.</p>
+      <p><b>Refresh</b> перечитывает состояние репозитория для интерфейса. Не используйте его как замену Fetch: локальное обновление панели само по себе не проверяет удалённую историю.</p>
+    </details>
+
+    <p>Коммит коллеги уже доступен для просмотра в графе. Чтобы его файл появился в рабочей папке, включим этот коммит в свою ветку.</p>
+
+    <h2 id="s5"><span class="sec">05</span> Pull: получить и включить</h2>
+    <p class="purpose">Зачем этот шаг: включить коммиты коллеги в свою ветку и получить их файлы.</p>
+    <p>Перед изменением текущей ветки сохраните файлы и проверьте Source Control. Незакоммиченные изменения лучше сначала осмысленно завершить коммитом либо отложить; не нажимайте Discard ради «чистого экрана». В стенде пробные правки предыдущего опыта сохранены в отдельный локальный stash вместе с <code>draft.txt</code>. На следующих кадрах рабочая папка и индекс чистые.</p>
+    <p>Проверьте имя текущей ветки внизу слева: <code>main</code>. Затем в Graph нажмите стрелку вниз <b>Pull</b>, либо выберите <b>Git: Pull</b> в палитре команд. Не нажимайте большую Sync Changes, если сейчас хотите выполнить только получение.</p>
+    <figure class="shot">
+      <img src="assets/07-before-pull-focus.png" alt="Перед pull: чистая рабочая папка, один входящий коммит и разные положения main и origin/main" width="1940" height="1560" loading="lazy">
+      <img class="status-shot" src="assets/07-before-pull-status.png" alt="Перед pull: чистая main и счётчик 1 вниз, 0 вверх" width="1000" height="52" loading="lazy">
+      <figcaption>Перед Pull нет Staged Changes и Changes с файлами. Единственное различие с удалённой веткой — входящий коммит <code>8ac8f46</code>.</figcaption>
+    </figure>
+    <p><span class="term">Pull</span> сначала получает удалённую историю, а затем включает её в текущую ветку. Отдельный Fetch перед ним не обязателен: мы выполнили его в предыдущем разделе, чтобы разделить два механизма и увидеть промежуточное состояние.</p>
+    <div class="command">В журнале VS Code: <code>git pull --tags origin main</code>. На уровне обычной задачи — <code>git pull</code> с уже настроенным upstream. Дополнительный <code>--tags</code> относится к получению тегов; он не означает отправку тегов.</div>
+    <p>В этом опыте наша ветка не содержит собственных новых коммитов. Поэтому Git передвигает <code>main</code> вперёд по уже существующей линии — это fast-forward, знакомый по слиянию веток. Нового коммита слияния не возникает.</p>
+    <figure class="scheme diagram" aria-label="Pull после fetch: локальная main перемещается с ed46543 к 8ac8f46 и получает файл news.txt">
+      <div class="diagram__title">Перемещение локальной main при Pull</div>
+      <div class="diagram__body">
+        <div class="repo"><h3>Локально · до</h3><span class="ref">main → ed46543</span><div class="chain"><span class="commit">ed46543</span><span class="link">→</span><span class="commit">8ac8f46</span></div><span class="ref">origin/main → 8ac8f46</span><p>Файла <code>news.txt</code> ещё нет.</p></div>
+        <div class="transfer">pull<b>→</b>fast-forward</div>
+        <div class="repo"><h3>Локально · после</h3><span class="ref">main → 8ac8f46</span><div class="chain"><span class="commit">ed46543</span><span class="link">→</span><span class="commit">8ac8f46</span></div><span class="ref">origin/main → 8ac8f46</span><p>В рабочей папке появился <code>news.txt</code>.</p></div>
+      </div>
+      <figcaption>Здесь оба блока — один и тот же локальный репозиторий в разные моменты. Удалённая <code>main</code> при Pull не меняется: ей ничего не отправляли.</figcaption>
+    </figure>
+    <p>После завершения откройте <code>news.txt</code> через Explorer. В нём появилась строка коллеги. Incoming Changes исчезли, а обе метки веток совпали на коммите «Добавить новость о занятии».</p>
+    <figure class="shot">
+      <img src="assets/08-after-pull-focus.png" alt="После pull: открыт полученный news.txt со строкой о понедельнике, метки веток совпадают" width="1940" height="1560" loading="lazy">
+      <img class="status-shot" src="assets/08-after-pull-status.png" alt="После pull: main, нет входящих и исходящих счётчиков" width="1000" height="52" loading="lazy">
+      <figcaption>Файл получен вместе с коммитом <code>8ac8f46</code>. Совпадение графа и фактического содержимого файла — две независимые проверки результата.</figcaption>
+    </figure>
+    <details class="more"><summary>Когда Pull не сводится к передвижению указателя</summary>
+      <p>Если есть и ваши, и чужие новые коммиты, ветки разошлись. Способ включения истории зависит от настроек. Может потребоваться слияние, перебазирование или выбор стратегии. Возможны конфликты; здесь мы ограничиваемся линейной историей.</p>
+      <p>Локальные правки тоже могут помешать Pull, если получаемые изменения затрагивают те же файлы. При ошибке не повторяйте нажатие вслепую и не используйте force push: откройте вывод Git и разберите состояние.</p>
+    </details>
+
+    <p>Получение и отправка проверены по отдельности. Теперь выполним обмен через составное действие VS Code.</p>
+
+    <h2 id="s6"><span class="sec">06</span> Sync Changes: два действия одной кнопкой</h2>
+    <p class="purpose">Зачем этот шаг: получить и отправить изменения, предварительно проверив направление обмена.</p>
+    <p>После Pull добавим файл <code>faq.txt</code> и создадим коммит <code>bdbe3af</code> — «Добавить вопрос о получении изменений». Ветвь <code>main</code> на один коммит впереди <code>origin/main</code>. Рабочая папка чистая: незавершённых файлов нет, но это ещё не означает, что работа отправлена.</p>
+    <p><span class="term">Sync Changes</span> — составное действие VS Code. В Git нет отдельной команды с таким именем. Оно сначала выполняет Pull для текущей ветки, а затем отправляет исходящие коммиты. Если получение завершилось ошибкой или требует разрешить конфликт, рассчитывать на завершённую отправку нельзя.</p>
+    <p>Перед нажатием проверьте три вещи: имя текущей ветки, отсутствие неожиданных локальных правок и числа у стрелок. В этом опыте ожидаем <code>0↓ 1↑</code> и upstream <code>origin/main</code>. Большая кнопка показывает Sync Changes с одной стрелкой вверх.</p>
+    <figure class="shot">
+      <img src="assets/09-before-sync-focus.png" alt="Перед Sync Changes: чистая рабочая папка и один исходящий коммит с файлом faq.txt" width="1940" height="1560" loading="lazy">
+      <img class="status-shot" src="assets/09-before-sync-status.png" alt="Перед Sync Changes: main, 0 входящих и 1 исходящий коммит" width="1000" height="52" loading="lazy">
+      <figcaption><code>main → bdbe3af</code>, <code>origin/main → 8ac8f46</code>. Перед Sync состояние проверено, но ноль входящих всё равно отражает последнее полученное знание о сервере.</figcaption>
+    </figure>
+    <p>Нажмите <b>Sync Changes</b>. Если появится подтверждение, прочитайте направление обмена: VS Code прямо предупреждает о Pull и Push для <code>origin/main</code>. Подтвердите обычной кнопкой OK; отключать будущие предупреждения для этого опыта не требуется.</p>
+    <figure class="shot shot--dialog">
+      <img src="assets/10-sync-confirm-focus.png" alt="Настоящий диалог VS Code: This action will pull and push commits from and to origin/main; кнопки Cancel и OK" width="1100" height="330" loading="lazy">
+      <figcaption>Реальный диалог из отдельного профиля VS Code. Для съёмки выбран внутривоконный стиль диалогов; текст действия не изменён.</figcaption>
+    </figure>
+    <p>В журнале этого нажатия зафиксированы две операции, в таком порядке. Строки взяты из журнала; вводить их в терминале не требуется:</p>
+    <pre class="evidence" aria-label="Фрагмент настоящего журнала VS Code">03:42:08.855  git pull --tags origin main
+03:42:09.009  git push origin main:main</pre>
+    <p>Pull не нашёл новых коммитов для включения, затем Push отправил <code>bdbe3af</code>. Число исходящих исчезло. Если коллега успел отправить изменения, первый этап Sync может их получить. При выборе отдельного Push этого этапа нет.</p>
+    <figure class="scheme diagram" aria-label="Sync Changes: pull проверяет удалённую ветку, затем push передаёт коммит bdbe3af">
+      <div class="diagram__title">Порядок операций Sync Changes</div>
+      <div class="diagram__body">
+        <div class="repo"><h3>Сначала · pull</h3><p>В <code>remote.git</code>: <code>main → 8ac8f46</code>.</p><p>Новых коммитов для нашей ветки нет. Локальная <code>main</code> остаётся на <code>bdbe3af</code>.</p></div>
+        <div class="transfer">затем<b>→</b>push</div>
+        <div class="repo"><h3>После · обе стороны</h3><div class="chain"><span class="commit">8ac8f46</span><span class="link">→</span><span class="commit" title="Добавить вопрос о получении изменений">bdbe3af</span></div><p>Локальные <code>main</code> и <code>origin/main</code>, удалённая <code>main</code> указывают на <code>bdbe3af</code>.</p></div>
+      </div>
+      <figcaption>Общая предыстория до <code>8ac8f46</code> опущена. Единственный отправленный коммит содержит <code>faq.txt</code>.</figcaption>
+    </figure>
+    <p>Проверим и другую сторону Sync. Коллега сначала получил <code>bdbe3af</code>, затем добавил в <code>news.txt</code> строку «Вторник: практика по веткам» и отправил <code>ace6723</code> — «Добавить второе занятие». После нашего Fetch виден <code>1↓ 0↑</code>; в открытом файле пока только понедельник.</p>
+    <figure class="shot">
+      <img src="assets/12-before-sync-pull-focus.png" alt="Перед вторым Sync: один входящий коммит, news.txt ещё содержит только строку о понедельнике" width="1940" height="1560" loading="lazy">
+      <img class="status-shot" src="assets/12-before-sync-pull-status.png" alt="Перед вторым Sync: 1 входящий и 0 исходящих коммитов" width="1000" height="52" loading="lazy">
+      <figcaption>Теперь <code>main → bdbe3af</code>, <code>origin/main → ace6723</code>. Ни одного собственного исходящего коммита нет.</figcaption>
+    </figure>
+    <p>Повторное нажатие Sync Changes включает <code>ace6723</code> в нашу ветку. В этом прогоне исходящих коммитов не было, и отдельной команды Push в журнале второго нажатия нет. Отправлять нечего. После завершения в файле две строки, а счётчики исчезли.</p>
+    <figure class="shot">
+      <img src="assets/14-final-focus.png" alt="После второго Sync: news.txt содержит понедельник и вторник, метки веток совпали" width="1940" height="1560" loading="lazy">
+      <img class="status-shot" src="assets/14-final-status.png" alt="Итог: чистая main, счётчиков входящих и исходящих коммитов нет" width="1000" height="52" loading="lazy">
+      <figcaption>Проверенный итог: локальные <code>main</code> и <code>origin/main</code>, а также <code>main</code> в <code>remote.git</code> указывают на <code>ace6723</code>. В рабочем <code>news.txt</code> есть обе строки.</figcaption>
+    </figure>
+    <details class="more"><summary>Почему перед Sync полезно отдельно выполнить Fetch</summary>
+      <p>Fetch обновляет граф, и вы видите, ожидается ли только отправка, только получение или обе стороны ушли вперёд. Если одновременно есть входящие и исходящие коммиты, ветки разошлись. Такой случай требует отдельного разбора; здесь мы его не выполняем.</p>
+      <p>Отдельный Fetch не блокирует удалённый репозиторий: после него коллега всё ещё может отправить новый коммит. Поэтому результат каждой операции нужно проверять, даже если до нажатия граф был понятен.</p>
+      <p><b>Settings Sync</b> в меню аккаунта — другой механизм. Он переносит настройки редактора и не заменяет обмен коммитами репозитория.</p>
+    </details>
+
+    <p>В обоих опытах Sync получен ожидаемый результат. Соберём признаки, по которым проверяют и остальные действия обмена.</p>
+
+    <h2 id="s7"><span class="sec">07</span> Как проверить результат</h2>
+    <p>Исчезнувшее уведомление или крутящийся значок — ещё не итог. Дождитесь завершения операции, затем сопоставьте граф, счётчики и файлы. Успешную отправку подтверждают также проверкой удалённой стороны.</p>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Проверка результата команд Git">
+      <table>
+        <thead><tr><th>Действие</th><th>Что ожидаем после</th><th>Что не доказывает успех</th></tr></thead>
+        <tbody>
+          <tr><td>Publish Branch</td><td>Есть upstream, удалённая ветка и тот же хеш опубликованного коммита.</td><td>Одно лишь наличие адреса origin.</td></tr>
+          <tr><td>Push</td><td>Нет исходящих коммитов; удалённая ветка содержит отправленный коммит.</td><td>Чистая рабочая папка: коммит мог остаться только локально.</td></tr>
+          <tr><td>Fetch</td><td>Сведения об удалённых ветках обновились; main и рабочие файлы не изменились.</td><td>Ожидание, что новый файл уже появится в Explorer.</td></tr>
+          <tr><td>Pull</td><td>Полученный коммит входит в текущую ветку; ожидаемые файлы и строки доступны.</td><td>Коммит виден только у origin/main, но main ещё на старом месте.</td></tr>
+          <tr><td>Sync Changes</td><td>Получение завершилось, исходящие отправлены; нет неожиданных различий с upstream на момент проверки.</td><td>Само нажатие большой кнопки без проверки сообщения об ошибке.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Если работаете с GitHub, после Push откройте <b>нужный репозиторий и нужную ветку</b> в браузере, обновите страницу и найдите сообщение и короткий хеш последнего коммита. Откройте изменённый файл: опубликованная версия должна содержать строки из отправленного коммита. Эта проверка относится к GitHub; кадры стенда выше её не подменяют.</p>
+    <p>Если что-то не сошлось, откройте палитру → <b>Git: Show Git Output</b>. Журнал показывает конкретную команду и ответ Git. Ошибка доступа, отклонённый Push и требование разрешить конфликт — разные ситуации. Ни для одной из них не нужно сразу выбирать Force Push.</p>
+    <details class="more"><summary>Протокол опыта: хеши и состояния</summary>
+      <p>В таблице — устойчивые состояния последовательного опыта. Содержимое каждой ячейки — короткий хеш коммита на вершине соответствующей ветки. В истории все пять коммитов идут по одной линии.</p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Точные состояния веток из опыта">
+        <table>
+          <thead><tr><th>После действия</th><th>main в alice</th><th>origin/main в alice</th><th>main в remote.git</th></tr></thead>
+          <tbody>
+            <tr><td>Первая публикация</td><td><code>45613e9</code></td><td><code>45613e9</code></td><td><code>45613e9</code></td></tr>
+            <tr><td>Наш второй коммит</td><td><code>ed46543</code></td><td><code>45613e9</code></td><td><code>45613e9</code></td></tr>
+            <tr><td>Push</td><td><code>ed46543</code></td><td><code>ed46543</code></td><td><code>ed46543</code></td></tr>
+            <tr><td>Коллега отправил новость</td><td><code>ed46543</code></td><td><code>ed46543</code></td><td><code>8ac8f46</code></td></tr>
+            <tr><td>Fetch</td><td><code>ed46543</code></td><td><code>8ac8f46</code></td><td><code>8ac8f46</code></td></tr>
+            <tr><td>Pull</td><td><code>8ac8f46</code></td><td><code>8ac8f46</code></td><td><code>8ac8f46</code></td></tr>
+            <tr><td>Наш коммит с faq.txt</td><td><code>bdbe3af</code></td><td><code>8ac8f46</code></td><td><code>8ac8f46</code></td></tr>
+            <tr><td>Первый Sync</td><td><code>bdbe3af</code></td><td><code>bdbe3af</code></td><td><code>bdbe3af</code></td></tr>
+            <tr><td>Коллега дополнил новость; наш Fetch</td><td><code>bdbe3af</code></td><td><code>ace6723</code></td><td><code>ace6723</code></td></tr>
+            <tr><td>Второй Sync</td><td><code>ace6723</code></td><td><code>ace6723</code></td><td><code>ace6723</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Машинные замеры: <a href="assets/experiment.json">experiment.json</a>. Часть замеров сделана непосредственно после нажатия, пока VS Code ещё обновлял индекс или ссылки; они отмечены как переходные. Окончательные результаты подтверждены дальнейшими состояниями и <a href="assets/vscode-operations.txt">выборкой реальных операций из журнала VS Code</a>. Хеши при повторении опыта будут другими.</p>
+    </details>
+
+    <p>Те же признаки используйте в самостоятельной работе: сравнивайте состояние до нажатия и после завершения операции.</p>
+
+    <section class="self-check" aria-labelledby="s8">
+      <h2 id="s8"><span class="sec">08</span> Самостоятельная работа</h2>
+      <p>Используйте собственный тренировочный репозиторий, который разрешено публиковать, и отдельную рабочую копию. Не проводите опыт с секретами, курсовой или общей веткой команды. Если нет разрешения на внешний репозиторий, последовательность ниже можно разобрать по кадрам; локальный стенд организуется отдельно.</p>
+      <ol>
+        <li>Проверьте remote, текущую ветку и upstream. Если ветка ещё не опубликована, выберите подходящий вариант первой публикации из раздела 2.</li>
+        <li>Измените README, создайте один коммит. Найдите исходящий коммит в Graph, выполните отдельный Push и проверьте другую сторону.</li>
+        <li>Во второй рабочей копии получите этот коммит, затем создайте и отправьте новый файл <code>news.txt</code>. Не делайте в это время новых коммитов в первой копии.</li>
+        <li>В первой копии выполните Fetch. Убедитесь: входящий коммит виден, но <code>news.txt</code> в рабочей папке ещё не появился.</li>
+        <li>Выполните Pull. Проверьте новый файл и совпадение меток веток.</li>
+        <li>Создайте ещё один локальный коммит и выполните Sync Changes. Проверьте, что исходящих больше нет и коммит появился на другой стороне.</li>
+      </ol>
+      <details class="more"><summary>Проверьте понимание: четыре коротких случая</summary>
+        <ol>
+          <li><b>В Source Control нет файлов, но видно 1↑. Всё уже отправлено?</b> Нет. Рабочая папка чистая, но один коммит ещё не опубликован.</li>
+          <li><b>После Fetch видно 1↓, а нового файла нет. Ошибка?</b> Нет. Получена история, но текущая ветка ещё не включает новый коммит.</li>
+          <li><b>После Push файл остался в Staged Changes. Его строка уже на другой стороне?</b> Не обязательно. Индекс не отправляется; проверяйте содержимое коммита.</li>
+          <li><b>Нужен только просмотр чужих коммитов без включения в свою ветку. Что нажать?</b> Fetch. Он оставит текущую ветку на месте.</li>
+        </ol>
+      </details>
+      <h3>Итог</h3>
+      <ul class="checklist">
+        <li>Remote задаёт адрес, upstream связывает конкретную локальную ветку с отслеживаемой веткой.</li>
+        <li>Push отправляет коммиты, не индекс и не текущие правки файлов.</li>
+        <li>Fetch обновляет сведения об удалённых ветках; Pull дополнительно включает изменения в текущую ветку.</li>
+        <li>Sync Changes сначала получает изменения, затем отправляет исходящие. Состояние проверяют до и после нажатия.</li>
+      </ul>
+    </section>
+    <div class="sources">
+      <b>Откуда взяты факты</b>
+      <ol>
+        <li><a href="https://git-scm.com/docs/git-remote">Git: remote</a> — именованные адреса удалённых репозиториев.</li>
+        <li><a href="https://git-scm.com/docs/git-push">Git: push</a> — передача объектов, обновление ссылок, <code>--set-upstream</code>.</li>
+        <li><a href="https://git-scm.com/docs/git-fetch">Git: fetch</a> — получение объектов и обновление remote-tracking refs.</li>
+        <li><a href="https://git-scm.com/docs/git-pull">Git: pull</a> — получение и включение удалённой истории в текущую ветку.</li>
+        <li><a href="https://code.visualstudio.com/docs/sourcecontrol/overview">VS Code: Source Control</a> и <a href="https://code.visualstudio.com/docs/sourcecontrol/repos-remotes#_push-pull-and-sync">Push, pull, and sync</a> — кнопки публикации и обмена.</li>
+        <li>Все кадры действий и хеши в схемах — собственный локальный опыт 18.11.2026. GitHub-публикация через Publish to GitHub в этом опыте не проверялась. Команды второго клона и подготовка стенда выполнялись автором; студенту повторять их в терминале не требуется.</li>
+      </ol>
+    </div>
+    <div class="pager"><a href="../19-readme-markdown/index.html">← 4.3 README.md и Markdown</a><a href="../../index.html">К содержанию справочника</a></div>
+    <div class="colophon"><span>Глава 4.4 · Публикация, push, pull, fetch и Sync</span><span class="author-line">Автор: Макаров Максим Николаевич</span></div>
+  </main>
+</div></div>
+<script src="../../book.js"></script>
+</body>
+</html>

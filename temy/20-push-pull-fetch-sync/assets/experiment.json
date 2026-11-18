@@ -1,0 +1,962 @@
+{
+  "environment": {
+    "kind": "local bare remote, not GitHub",
+    "root": "/private/tmp/gh47/lab",
+    "vscode_cdp": 9480
+  },
+  "states": [
+    {
+      "stage": "published",
+      "time": "2026-11-18T03:29:35.955043+03:00",
+      "alice": [
+        {
+          "command": "git status --short --branch",
+          "exit": 0,
+          "stdout": "## main...origin/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git log --all --format=%h %s --decorate",
+          "exit": 0,
+          "stdout": "45613e9 Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git branch -vv",
+          "exit": 0,
+          "stdout": "* main 45613e9 [origin/main] Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse HEAD",
+          "exit": 0,
+          "stdout": "45613e96895fdec31febcd4ae67887ec1636e025\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse refs/remotes/origin/main",
+          "exit": 0,
+          "stdout": "45613e96895fdec31febcd4ae67887ec1636e025\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-list --left-right --count HEAD...origin/main",
+          "exit": 0,
+          "stdout": "0\t0\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.remote",
+          "exit": 0,
+          "stdout": "origin\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.merge",
+          "exit": 0,
+          "stdout": "refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show :README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n",
+          "stderr": ""
+        }
+      ],
+      "remote": [
+        {
+          "command": "git show-ref",
+          "exit": 0,
+          "stdout": "45613e96895fdec31febcd4ae67887ec1636e025 refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show main:README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n",
+          "stderr": ""
+        }
+      ],
+      "worktree": {
+        "README.md": "# Учебный сайт\n\nСтраница о проекте.\n"
+      },
+      "capture_phase": "settled"
+    },
+    {
+      "stage": "before-push",
+      "time": "2026-11-18T03:29:39.039916+03:00",
+      "alice": [
+        {
+          "command": "git status --short --branch",
+          "exit": 0,
+          "stdout": "## main...origin/main [ahead 1]\nMM README.md\n?? draft.txt\n",
+          "stderr": ""
+        },
+        {
+          "command": "git log --all --format=%h %s --decorate",
+          "exit": 0,
+          "stdout": "ed46543 Уточнить описание проекта\n45613e9 Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git branch -vv",
+          "exit": 0,
+          "stdout": "* main ed46543 [origin/main: ahead 1] Уточнить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse HEAD",
+          "exit": 0,
+          "stdout": "ed465434942c43c9dd2e3de77280eb068d337e92\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse refs/remotes/origin/main",
+          "exit": 0,
+          "stdout": "45613e96895fdec31febcd4ae67887ec1636e025\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-list --left-right --count HEAD...origin/main",
+          "exit": 0,
+          "stdout": "1\t0\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.remote",
+          "exit": 0,
+          "stdout": "origin\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.merge",
+          "exit": 0,
+          "stdout": "refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show :README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n\nЭта строка пока без коммита.\n",
+          "stderr": ""
+        }
+      ],
+      "remote": [
+        {
+          "command": "git show-ref",
+          "exit": 0,
+          "stdout": "45613e96895fdec31febcd4ae67887ec1636e025 refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show main:README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n",
+          "stderr": ""
+        }
+      ],
+      "worktree": {
+        "README.md": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n\nЭта строка пока без коммита.\n\nЭта строка даже не в индексе.\n",
+        "draft.txt": "Цвет заголовка: оранжевый\n"
+      },
+      "capture_phase": "settled"
+    },
+    {
+      "stage": "after-push",
+      "time": "2026-11-18T03:35:14.911201+03:00",
+      "alice": [
+        {
+          "command": "git status --short --branch",
+          "exit": 0,
+          "stdout": "## main...origin/main\nMM README.md\n?? draft.txt\n",
+          "stderr": ""
+        },
+        {
+          "command": "git log --all --format=%h %s --decorate",
+          "exit": 0,
+          "stdout": "ed46543 Уточнить описание проекта\n45613e9 Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git branch -vv",
+          "exit": 0,
+          "stdout": "* main ed46543 [origin/main] Уточнить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse HEAD",
+          "exit": 0,
+          "stdout": "ed465434942c43c9dd2e3de77280eb068d337e92\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse refs/remotes/origin/main",
+          "exit": 0,
+          "stdout": "ed465434942c43c9dd2e3de77280eb068d337e92\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-list --left-right --count HEAD...origin/main",
+          "exit": 0,
+          "stdout": "0\t0\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.remote",
+          "exit": 0,
+          "stdout": "origin\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.merge",
+          "exit": 0,
+          "stdout": "refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show :README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n\nЭта строка пока без коммита.\n",
+          "stderr": ""
+        }
+      ],
+      "remote": [
+        {
+          "command": "git show-ref",
+          "exit": 0,
+          "stdout": "ed465434942c43c9dd2e3de77280eb068d337e92 refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show main:README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "worktree": {
+        "README.md": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n\nЭта строка пока без коммита.\n\nЭта строка даже не в индексе.\n",
+        "draft.txt": "Цвет заголовка: оранжевый\n"
+      },
+      "capture_phase": "settled"
+    },
+    {
+      "stage": "before-fetch",
+      "time": "2026-11-18T03:35:16.613054+03:00",
+      "alice": [
+        {
+          "command": "git status --short --branch",
+          "exit": 0,
+          "stdout": "## main...origin/main\nMM README.md\n?? draft.txt\n",
+          "stderr": ""
+        },
+        {
+          "command": "git log --all --format=%h %s --decorate",
+          "exit": 0,
+          "stdout": "ed46543 Уточнить описание проекта\n45613e9 Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git branch -vv",
+          "exit": 0,
+          "stdout": "* main ed46543 [origin/main] Уточнить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse HEAD",
+          "exit": 0,
+          "stdout": "ed465434942c43c9dd2e3de77280eb068d337e92\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse refs/remotes/origin/main",
+          "exit": 0,
+          "stdout": "ed465434942c43c9dd2e3de77280eb068d337e92\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-list --left-right --count HEAD...origin/main",
+          "exit": 0,
+          "stdout": "0\t0\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.remote",
+          "exit": 0,
+          "stdout": "origin\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.merge",
+          "exit": 0,
+          "stdout": "refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show :README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n\nЭта строка пока без коммита.\n",
+          "stderr": ""
+        }
+      ],
+      "remote": [
+        {
+          "command": "git show-ref",
+          "exit": 0,
+          "stdout": "8ac8f4657f2f4f1a4e7a16592e32c82169529a77 refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show main:README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "worktree": {
+        "README.md": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n\nЭта строка пока без коммита.\n\nЭта строка даже не в индексе.\n",
+        "draft.txt": "Цвет заголовка: оранжевый\n"
+      },
+      "capture_phase": "settled"
+    },
+    {
+      "stage": "after-fetch",
+      "time": "2026-11-18T03:35:17.352275+03:00",
+      "alice": [
+        {
+          "command": "git status --short --branch",
+          "exit": 0,
+          "stdout": "## main...origin/main [behind 1]\nMM README.md\n?? draft.txt\n",
+          "stderr": ""
+        },
+        {
+          "command": "git log --all --format=%h %s --decorate",
+          "exit": 0,
+          "stdout": "8ac8f46 Добавить новость о занятии\ned46543 Уточнить описание проекта\n45613e9 Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git branch -vv",
+          "exit": 0,
+          "stdout": "* main ed46543 [origin/main: behind 1] Уточнить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse HEAD",
+          "exit": 0,
+          "stdout": "ed465434942c43c9dd2e3de77280eb068d337e92\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse refs/remotes/origin/main",
+          "exit": 0,
+          "stdout": "8ac8f4657f2f4f1a4e7a16592e32c82169529a77\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-list --left-right --count HEAD...origin/main",
+          "exit": 0,
+          "stdout": "0\t1\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.remote",
+          "exit": 0,
+          "stdout": "origin\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.merge",
+          "exit": 0,
+          "stdout": "refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show :README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n\nЭта строка пока без коммита.\n",
+          "stderr": ""
+        }
+      ],
+      "remote": [
+        {
+          "command": "git show-ref",
+          "exit": 0,
+          "stdout": "8ac8f4657f2f4f1a4e7a16592e32c82169529a77 refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show main:README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "worktree": {
+        "README.md": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n\nЭта строка пока без коммита.\n\nЭта строка даже не в индексе.\n",
+        "draft.txt": "Цвет заголовка: оранжевый\n"
+      },
+      "capture_phase": "settled"
+    },
+    {
+      "stage": "before-pull",
+      "time": "2026-11-18T03:35:41.078358+03:00",
+      "alice": [
+        {
+          "command": "git status --short --branch",
+          "exit": 0,
+          "stdout": "## main...origin/main [behind 1]\n",
+          "stderr": ""
+        },
+        {
+          "command": "git log --all --format=%h %s --decorate",
+          "exit": 0,
+          "stdout": "991c7c4 On main: Резерв незакоммиченных пробных строк\nbe379d3 index on main: ed46543 Уточнить описание проекта\nb0957e8 untracked files on main: ed46543 Уточнить описание проекта\n8ac8f46 Добавить новость о занятии\ned46543 Уточнить описание проекта\n45613e9 Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git branch -vv",
+          "exit": 0,
+          "stdout": "* main ed46543 [origin/main: behind 1] Уточнить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse HEAD",
+          "exit": 0,
+          "stdout": "ed465434942c43c9dd2e3de77280eb068d337e92\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse refs/remotes/origin/main",
+          "exit": 0,
+          "stdout": "8ac8f4657f2f4f1a4e7a16592e32c82169529a77\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-list --left-right --count HEAD...origin/main",
+          "exit": 0,
+          "stdout": "0\t1\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.remote",
+          "exit": 0,
+          "stdout": "origin\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.merge",
+          "exit": 0,
+          "stdout": "refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show :README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "remote": [
+        {
+          "command": "git show-ref",
+          "exit": 0,
+          "stdout": "8ac8f4657f2f4f1a4e7a16592e32c82169529a77 refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show main:README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "worktree": {
+        "README.md": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n"
+      },
+      "capture_phase": "settled"
+    },
+    {
+      "stage": "after-pull",
+      "time": "2026-11-18T03:35:49.847590+03:00",
+      "alice": [
+        {
+          "command": "git status --short --branch",
+          "exit": 0,
+          "stdout": "## main...origin/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git log --all --format=%h %s --decorate",
+          "exit": 0,
+          "stdout": "991c7c4 On main: Резерв незакоммиченных пробных строк\nbe379d3 index on main: ed46543 Уточнить описание проекта\nb0957e8 untracked files on main: ed46543 Уточнить описание проекта\n8ac8f46 Добавить новость о занятии\ned46543 Уточнить описание проекта\n45613e9 Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git branch -vv",
+          "exit": 0,
+          "stdout": "* main 8ac8f46 [origin/main] Добавить новость о занятии\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse HEAD",
+          "exit": 0,
+          "stdout": "8ac8f4657f2f4f1a4e7a16592e32c82169529a77\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse refs/remotes/origin/main",
+          "exit": 0,
+          "stdout": "8ac8f4657f2f4f1a4e7a16592e32c82169529a77\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-list --left-right --count HEAD...origin/main",
+          "exit": 0,
+          "stdout": "0\t0\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.remote",
+          "exit": 0,
+          "stdout": "origin\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.merge",
+          "exit": 0,
+          "stdout": "refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show :README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "remote": [
+        {
+          "command": "git show-ref",
+          "exit": 0,
+          "stdout": "8ac8f4657f2f4f1a4e7a16592e32c82169529a77 refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show main:README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "worktree": {
+        "news.txt": "Понедельник: занятие по Git.\n",
+        "README.md": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n"
+      },
+      "capture_phase": "settled"
+    },
+    {
+      "stage": "before-sync-push",
+      "time": "2026-11-18T03:36:10.490421+03:00",
+      "alice": [
+        {
+          "command": "git status --short --branch",
+          "exit": 0,
+          "stdout": "## main...origin/main [ahead 1]\n",
+          "stderr": ""
+        },
+        {
+          "command": "git log --all --format=%h %s --decorate",
+          "exit": 0,
+          "stdout": "bdbe3af Добавить вопрос о получении изменений\n991c7c4 On main: Резерв незакоммиченных пробных строк\nbe379d3 index on main: ed46543 Уточнить описание проекта\nb0957e8 untracked files on main: ed46543 Уточнить описание проекта\n8ac8f46 Добавить новость о занятии\ned46543 Уточнить описание проекта\n45613e9 Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git branch -vv",
+          "exit": 0,
+          "stdout": "* main bdbe3af [origin/main: ahead 1] Добавить вопрос о получении изменений\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse HEAD",
+          "exit": 0,
+          "stdout": "bdbe3af1934b7934ca7eeda330f4634f38834cbf\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse refs/remotes/origin/main",
+          "exit": 0,
+          "stdout": "8ac8f4657f2f4f1a4e7a16592e32c82169529a77\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-list --left-right --count HEAD...origin/main",
+          "exit": 0,
+          "stdout": "1\t0\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.remote",
+          "exit": 0,
+          "stdout": "origin\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.merge",
+          "exit": 0,
+          "stdout": "refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show :README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "remote": [
+        {
+          "command": "git show-ref",
+          "exit": 0,
+          "stdout": "8ac8f4657f2f4f1a4e7a16592e32c82169529a77 refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show main:README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "worktree": {
+        "news.txt": "Понедельник: занятие по Git.\n",
+        "README.md": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+        "faq.txt": "Как получить изменения? Использовать Pull.\n"
+      },
+      "capture_phase": "settled"
+    },
+    {
+      "stage": "after-sync-push",
+      "time": "2026-11-18T03:42:08.888182+03:00",
+      "alice": [
+        {
+          "command": "git status --short --branch",
+          "exit": 0,
+          "stdout": "## main...origin/main [ahead 1]\n",
+          "stderr": ""
+        },
+        {
+          "command": "git log --all --format=%h %s --decorate",
+          "exit": 0,
+          "stdout": "bdbe3af Добавить вопрос о получении изменений\n991c7c4 On main: Резерв незакоммиченных пробных строк\nbe379d3 index on main: ed46543 Уточнить описание проекта\nb0957e8 untracked files on main: ed46543 Уточнить описание проекта\n8ac8f46 Добавить новость о занятии\ned46543 Уточнить описание проекта\n45613e9 Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git branch -vv",
+          "exit": 0,
+          "stdout": "* main bdbe3af [origin/main: ahead 1] Добавить вопрос о получении изменений\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse HEAD",
+          "exit": 0,
+          "stdout": "bdbe3af1934b7934ca7eeda330f4634f38834cbf\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse refs/remotes/origin/main",
+          "exit": 0,
+          "stdout": "8ac8f4657f2f4f1a4e7a16592e32c82169529a77\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-list --left-right --count HEAD...origin/main",
+          "exit": 0,
+          "stdout": "0\t0\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.remote",
+          "exit": 0,
+          "stdout": "origin\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.merge",
+          "exit": 0,
+          "stdout": "refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show :README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "remote": [
+        {
+          "command": "git show-ref",
+          "exit": 0,
+          "stdout": "bdbe3af1934b7934ca7eeda330f4634f38834cbf refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show main:README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "worktree": {
+        "news.txt": "Понедельник: занятие по Git.\n",
+        "README.md": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+        "faq.txt": "Как получить изменения? Использовать Pull.\n"
+      },
+      "capture_phase": "transitional",
+      "note": "Immediate measurement while VS Code Git operation was finishing. Use subsequent settled states and vscode-operations.txt to establish final refs and index."
+    },
+    {
+      "stage": "before-sync-pull",
+      "time": "2026-11-18T03:42:11.571728+03:00",
+      "alice": [
+        {
+          "command": "git status --short --branch",
+          "exit": 0,
+          "stdout": "## main...origin/main [behind 1]\n",
+          "stderr": ""
+        },
+        {
+          "command": "git log --all --format=%h %s --decorate",
+          "exit": 0,
+          "stdout": "ace6723 Добавить второе занятие\nbdbe3af Добавить вопрос о получении изменений\n991c7c4 On main: Резерв незакоммиченных пробных строк\nbe379d3 index on main: ed46543 Уточнить описание проекта\nb0957e8 untracked files on main: ed46543 Уточнить описание проекта\n8ac8f46 Добавить новость о занятии\ned46543 Уточнить описание проекта\n45613e9 Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git branch -vv",
+          "exit": 0,
+          "stdout": "* main bdbe3af [origin/main: behind 1] Добавить вопрос о получении изменений\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse HEAD",
+          "exit": 0,
+          "stdout": "bdbe3af1934b7934ca7eeda330f4634f38834cbf\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse refs/remotes/origin/main",
+          "exit": 0,
+          "stdout": "ace672360b530636dc95688cf474c2bd45779442\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-list --left-right --count HEAD...origin/main",
+          "exit": 0,
+          "stdout": "0\t1\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.remote",
+          "exit": 0,
+          "stdout": "origin\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.merge",
+          "exit": 0,
+          "stdout": "refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show :README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "remote": [
+        {
+          "command": "git show-ref",
+          "exit": 0,
+          "stdout": "ace672360b530636dc95688cf474c2bd45779442 refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show main:README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "worktree": {
+        "news.txt": "Понедельник: занятие по Git.\n",
+        "README.md": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+        "faq.txt": "Как получить изменения? Использовать Pull.\n"
+      },
+      "capture_phase": "settled"
+    },
+    {
+      "stage": "after-sync-pull",
+      "time": "2026-11-18T03:42:30.447921+03:00",
+      "alice": [
+        {
+          "command": "git status --short --branch",
+          "exit": 0,
+          "stdout": "## main...origin/main\nM  news.txt\n",
+          "stderr": ""
+        },
+        {
+          "command": "git log --all --format=%h %s --decorate",
+          "exit": 0,
+          "stdout": "ace6723 Добавить второе занятие\nbdbe3af Добавить вопрос о получении изменений\n991c7c4 On main: Резерв незакоммиченных пробных строк\nbe379d3 index on main: ed46543 Уточнить описание проекта\nb0957e8 untracked files on main: ed46543 Уточнить описание проекта\n8ac8f46 Добавить новость о занятии\ned46543 Уточнить описание проекта\n45613e9 Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git branch -vv",
+          "exit": 0,
+          "stdout": "* main ace6723 [origin/main] Добавить второе занятие\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse HEAD",
+          "exit": 0,
+          "stdout": "ace672360b530636dc95688cf474c2bd45779442\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse refs/remotes/origin/main",
+          "exit": 0,
+          "stdout": "ace672360b530636dc95688cf474c2bd45779442\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-list --left-right --count HEAD...origin/main",
+          "exit": 0,
+          "stdout": "0\t0\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.remote",
+          "exit": 0,
+          "stdout": "origin\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.merge",
+          "exit": 0,
+          "stdout": "refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show :README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "remote": [
+        {
+          "command": "git show-ref",
+          "exit": 0,
+          "stdout": "ace672360b530636dc95688cf474c2bd45779442 refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show main:README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "worktree": {
+        "news.txt": "Понедельник: занятие по Git.\nВторник: практика по веткам.\n",
+        "README.md": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+        "faq.txt": "Как получить изменения? Использовать Pull.\n"
+      },
+      "capture_phase": "transitional",
+      "note": "Immediate measurement while VS Code Git operation was finishing. Use subsequent settled states and vscode-operations.txt to establish final refs and index."
+    },
+    {
+      "stage": "final",
+      "time": "2026-11-18T03:42:56.471423+03:00",
+      "alice": [
+        {
+          "command": "git status --short --branch",
+          "exit": 0,
+          "stdout": "## main...origin/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git log --all --format=%h %s --decorate",
+          "exit": 0,
+          "stdout": "ace6723 Добавить второе занятие\nbdbe3af Добавить вопрос о получении изменений\n991c7c4 On main: Резерв незакоммиченных пробных строк\nbe379d3 index on main: ed46543 Уточнить описание проекта\nb0957e8 untracked files on main: ed46543 Уточнить описание проекта\n8ac8f46 Добавить новость о занятии\ned46543 Уточнить описание проекта\n45613e9 Добавить описание проекта\n",
+          "stderr": ""
+        },
+        {
+          "command": "git branch -vv",
+          "exit": 0,
+          "stdout": "* main ace6723 [origin/main] Добавить второе занятие\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse HEAD",
+          "exit": 0,
+          "stdout": "ace672360b530636dc95688cf474c2bd45779442\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-parse refs/remotes/origin/main",
+          "exit": 0,
+          "stdout": "ace672360b530636dc95688cf474c2bd45779442\n",
+          "stderr": ""
+        },
+        {
+          "command": "git rev-list --left-right --count HEAD...origin/main",
+          "exit": 0,
+          "stdout": "0\t0\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.remote",
+          "exit": 0,
+          "stdout": "origin\n",
+          "stderr": ""
+        },
+        {
+          "command": "git config --get branch.main.merge",
+          "exit": 0,
+          "stdout": "refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show :README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "remote": [
+        {
+          "command": "git show-ref",
+          "exit": 0,
+          "stdout": "ace672360b530636dc95688cf474c2bd45779442 refs/heads/main\n",
+          "stderr": ""
+        },
+        {
+          "command": "git show main:README.md",
+          "exit": 0,
+          "stdout": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+          "stderr": ""
+        }
+      ],
+      "worktree": {
+        "news.txt": "Понедельник: занятие по Git.\nВторник: практика по веткам.\n",
+        "README.md": "# Учебный сайт\n\nСтраница о проекте.\n\nСвязь с удалённым репозиторием настроена.\n",
+        "faq.txt": "Как получить изменения? Использовать Pull.\n"
+      },
+      "capture_phase": "settled"
+    }
+  ]
+}
