@@ -53,23 +53,20 @@
     <p>Сохранение файла и создание коммита происходят на вашем компьютере. Пока мы не отправили коммит, GitHub его не получил. Даже открытая страница репозитория в браузере не связывает локальную историю с сервером автоматически.</p>
     <p><span class="term">Локальный репозиторий</span> — репозиторий на вашем компьютере: его история и служебные данные находятся в <code>.git</code>. Рядом расположена рабочая папка с файлами, которые вы редактируете. <span class="term">Удалённый репозиторий</span> — другой репозиторий, с которым мы обмениваемся коммитами. Обычно он находится на GitHub, но Git допускает и адрес папки на том же компьютере.</p>
     <p>Чтобы не вводить длинный адрес при каждом обмене, Git хранит его под коротким именем. Такая запись называется <span class="term">remote</span>. Для remote часто выбирают имя <code>origin</code>. Само имя ничего не говорит о сервере или названии ветки. После клонирования Git обычно создаёт remote с этим именем сам.</p>
-    <div class="lab-note">
-      <p><b>Что показано на настоящих кадрах.</b> Опыты главы выполнены в отдельном VS Code на macOS. Наша рабочая копия называется <code>alice</code>, копия коллеги — <code>bob</code>. Общий <code>remote.git</code> — bare-репозиторий: он хранит историю без рабочей папки. Все три находятся в локальном стенде <code>/private/tmp/gh47/lab</code>.</p>
-      <p>Здесь проверяется поведение Git и кнопок VS Code, <b>не подключение к GitHub</b>. Внешний репозиторий для опытов не создавался. Кадры можно открыть нажатием и рассмотреть крупнее; названия кнопок в другой версии или локализации могут отличаться.</p>
-    </div>
+    <p>В примерах удалённый репозиторий расположен в отдельной папке на том же компьютере. Push, Fetch и Pull работают с ним так же, как с репозиторием на GitHub.</p>
     <p>У одной линии разработки теперь есть три обозначения. Два мы видим в локальном репозитории, третье относится к удалённой стороне.</p>
     <div class="refs">
-      <div class="ref-box"><strong>main</strong><span>Локальная ветка в <code>alice</code>. В неё мы делаем коммиты и включаем полученные изменения.</span></div>
+      <div class="ref-box"><strong>main</strong><span>Локальная ветка в нашем репозитории. В неё мы делаем коммиты и включаем полученные изменения.</span></div>
       <div class="ref-box"><strong>origin/main</strong><span>Локальная ссылка на последнее известное состояние <code>main</code> у <code>origin</code>. Это не живой просмотр сервера.</span></div>
     </div>
     <p>А в самом <code>remote.git</code> есть своя ветка <code>main</code>. Если коллега отправит туда коммит, её указатель переместится сразу. Наш <code>origin/main</code> останется прежним до следующего обмена, который обновит сведения.</p>
     <p>Расположение этих имён показано ниже. После настройки связи origin хранит адрес второго репозитория; origin/main хранится в нашем .git.</p>
-    <figure class="scheme diagram" aria-label="Локальные main и origin/main находятся в alice, удалённая main — в remote.git">
+    <figure class="scheme diagram" aria-label="Локальные main и origin/main находятся у нас, удалённая main — в общем репозитории">
       <div class="diagram__title">Где находятся ветки и запись remote</div>
       <div class="diagram__body">
-        <div class="repo"><h3>Наш компьютер · alice/.git</h3><span class="ref">main — наша ветка</span><span class="ref">origin/main — последняя полученная ссылка</span><p><code>origin</code> хранит адрес <code>/private/tmp/gh47/lab/remote.git</code>.</p></div>
+        <div class="repo"><h3>Наш компьютер · .git</h3><span class="ref">main — наша ветка</span><span class="ref">origin/main — последняя полученная ссылка</span><p><code>origin</code> хранит адрес удалённого репозитория.</p></div>
         <div class="transfer">обмен<b>↔</b>историей</div>
-        <div class="repo"><h3>Другая сторона · remote.git</h3><span class="ref">main — ветка общего репозитория</span><p>В стенде это отдельная папка. В работе её место может занимать репозиторий на GitHub.</p></div>
+        <div class="repo"><h3>Другая сторона · remote.git</h3><span class="ref">main — ветка общего репозитория</span><p>Здесь хранятся опубликованные коммиты.</p></div>
       </div>
       <figcaption>Два репозитория разделены рамками. Origin/main находится внутри локальной рамки: это сохранённое у нас состояние удалённой ветки.</figcaption>
     </figure>
@@ -83,7 +80,7 @@
 
     <h2 id="s2"><span class="sec">02</span> Первая публикация и upstream</h2>
     <p class="purpose">Зачем этот шаг: указать место отправки и связать локальную ветку с веткой на другой стороне.</p>
-    <p>В <code>alice</code> уже создан первый коммит <code>45613e9</code> — «Добавить описание проекта». В нём один файл <code>README.md</code>. Удалённый репозиторий пока пуст, а локальная ветка ещё не опубликована. VS Code показывает <b>Publish Branch</b>.</p>
+    <p>В нашем репозитории уже создан первый коммит <code>45613e9</code> — «Добавить описание проекта». В нём один файл <code>README.md</code>. Удалённый репозиторий пока пуст, а локальная ветка ещё не опубликована. VS Code показывает <b>Publish Branch</b>.</p>
     <figure class="shot">
       <img src="assets/01-unpublished-focus.png" alt="VS Code: локальная main с коммитом «Добавить описание проекта» и кнопкой Publish Branch" width="1940" height="1560">
       <figcaption>До публикации: локальный коммит есть в Graph, но рядом с ним ещё нет метки <code>origin/main</code>. Кадр снят до нажатия Publish Branch; адрес origin к этому моменту уже добавлен.</figcaption>
@@ -101,10 +98,10 @@
     <div class="command"><b>Какая команда рядом с кнопкой.</b> Добавление адреса: <code>git remote add origin /private/tmp/gh47/lab/remote.git</code>. Первая публикация ветки: <code>git push -u origin main</code>. Набирать их после действий в интерфейсе не нужно.</div>
     <p>При публикации Git отправил коммит и создал на другой стороне ветку <code>main</code>. Параметр <code>-u</code> дополнительно сохранил <span class="term">upstream</span> — связь локальной ветки с отслеживаемой удалённой веткой. В нашем случае локальная <code>main</code> отслеживает <code>origin/main</code>. Теперь для обычного Push и Pull не нужно каждый раз выбирать адрес и ветку.</p>
     <p>На схеме пунктир означает коммит, которого до отправки не было на принимающей стороне. Стрелка показывает передачу истории; нижняя строка в каждом блоке — результат.</p>
-    <figure class="scheme diagram" aria-label="Первая публикация: коммит 45613e9 передан из alice в пустой remote.git">
+    <figure class="scheme diagram" aria-label="Первая публикация: коммит 45613e9 передан из локального репозитория в пустой удалённый">
       <div class="diagram__title">Создание удалённой main при первой отправке</div>
       <div class="diagram__body">
-        <div class="repo"><h3>Локально · alice</h3><span class="ref">main</span><div class="chain"><span class="commit" title="Добавить описание проекта">45613e9</span></div><p>После: <code>origin/main → 45613e9</code></p></div>
+        <div class="repo"><h3>Локальный репозиторий</h3><span class="ref">main</span><div class="chain"><span class="commit" title="Добавить описание проекта">45613e9</span></div><p>После: <code>origin/main → 45613e9</code></p></div>
         <div class="transfer">push -u<b>→</b>1 коммит</div>
         <div class="repo"><h3>Удалённо · remote.git</h3><span class="ref">До: ветки main нет</span><div class="chain"><span class="commit commit--new" title="Добавить описание проекта">45613e9</span></div><p>После: <code>main → 45613e9</code></p></div>
       </div>
@@ -136,10 +133,10 @@
     <p>В блоке Graph нажмите значок <b>Push</b> со стрелкой вверх. Если подпись не видна, наведите на значок и прочитайте подсказку. Другой путь — палитра команд → <b>Git: Push</b>. Для проверки отправки используем отдельный Push. Большую кнопку Sync Changes пока оставим.</p>
     <div class="command">Обычная отправка в этом опыте: <code>git push origin main:main</code>. Здесь слева от двоеточия локальная ветка, справа — ветка назначения. При настроенной связи обычный <code>git push</code> также может выбрать эту пару автоматически.</div>
     <p>В момент отправки у нас есть две последовательные версии истории. На удалённой стороне появится только новый коммит <code>ed46543</code>; содержимое незакоммиченных файлов в эту передачу не входит.</p>
-    <figure class="scheme diagram" aria-label="Push: коммит ed46543 отправлен из локальной main в удалённую main, незакоммиченные правки остаются в alice">
+    <figure class="scheme diagram" aria-label="Push: коммит ed46543 отправлен из локальной main в удалённую main, незакоммиченные правки остаются в рабочей папке">
       <div class="diagram__title">Отправка коммита ed46543</div>
       <div class="diagram__body">
-        <div class="repo"><h3>Локально · alice</h3><span class="ref">main → ed46543</span><div class="chain"><span class="commit">45613e9</span><span class="link">→</span><span class="commit" title="Уточнить описание проекта">ed46543</span></div><p>Остаются здесь: индекс README, правка README вне индекса, <code>draft.txt</code>.</p></div>
+        <div class="repo"><h3>Локальный репозиторий</h3><span class="ref">main → ed46543</span><div class="chain"><span class="commit">45613e9</span><span class="link">→</span><span class="commit" title="Уточнить описание проекта">ed46543</span></div><p>Остаются здесь: индекс README, правка README вне индекса, <code>draft.txt</code>.</p></div>
         <div class="transfer">push<b>→</b>1 коммит</div>
         <div class="repo"><h3>Удалённо · remote.git</h3><span class="ref">До: main → 45613e9</span><div class="chain"><span class="commit">45613e9</span><span class="link">→</span><span class="commit commit--new">ed46543</span></div><p>После: <code>main → ed46543</code></p></div>
       </div>
@@ -161,7 +158,7 @@
 
     <h2 id="s4"><span class="sec">04</span> Fetch: узнать, не включая в ветку</h2>
     <p class="purpose">Зачем этот шаг: увидеть чужие коммиты до того, как они изменят нашу ветку и рабочие файлы.</p>
-    <p>Коллега в <code>bob</code> получил опубликованную историю, добавил <code>news.txt</code> со строкой «Понедельник: занятие по Git» и отправил коммит <code>8ac8f46</code> — «Добавить новость о занятии». В удалённой <code>main</code> он уже есть. У нас пока <code>main</code> и <code>origin/main</code> указывают на <code>ed46543</code>.</p>
+    <p>Коллега в своей копии репозитория получил опубликованную историю, добавил <code>news.txt</code> со строкой «Понедельник: занятие по Git» и отправил коммит <code>8ac8f46</code> — «Добавить новость о занятии». В удалённой <code>main</code> он уже есть. У нас пока <code>main</code> и <code>origin/main</code> указывают на <code>ed46543</code>.</p>
     <p>Отсутствие числа у стрелки вниз ещё ничего не доказывает: локальные сведения могли устареть. В Graph нажмите <b>Fetch From All Remotes</b>. В нашем стенде remote только один — <code>origin</code>. Также можно выбрать <b>Git: Fetch</b> в палитре команд и, если предложено, указать remote.</p>
     <div class="command">Кнопка Graph в опыте выполнила <code>git fetch --all</code> — обновление из всех настроенных remotes. Для одного <code>origin</code> соответствует задаче <code>git fetch origin</code>.</div>
     <p><span class="term">Fetch</span> получает недостающие объекты и обновляет локальные ссылки на удалённые ветки. Он не включает полученную историю в текущую локальную ветку и не переписывает её рабочие файлы. Поэтому после Fetch мы можем увидеть новый коммит в Graph, хотя его файла ещё нет в рабочей папке.</p>
@@ -170,7 +167,7 @@
       <div class="diagram__body">
         <div class="repo"><h3>Удалённо · remote.git</h3><span class="ref">main → 8ac8f46</span><div class="chain"><span class="commit">ed46543</span><span class="link">→</span><span class="commit" title="Добавить новость о занятии">8ac8f46</span></div><p><code>news.txt</code> есть в этой истории.</p></div>
         <div class="transfer">fetch<b>→</b>1 новый</div>
-        <div class="repo"><h3>Локально · alice</h3><span class="ref">main → ed46543 · без изменений</span><div class="chain"><span class="commit">ed46543</span><span class="link">→</span><span class="commit commit--new">8ac8f46</span></div><span class="ref">origin/main → 8ac8f46 · обновлён</span><p><code>news.txt</code> в рабочей папке ещё нет.</p></div>
+        <div class="repo"><h3>Локальный репозиторий</h3><span class="ref">main → ed46543 · без изменений</span><div class="chain"><span class="commit">ed46543</span><span class="link">→</span><span class="commit commit--new">8ac8f46</span></div><span class="ref">origin/main → 8ac8f46 · обновлён</span><p><code>news.txt</code> в рабочей папке ещё нет.</p></div>
       </div>
       <figcaption>В обоих блоках показано продолжение общей истории после <code>45613e9</code>. В локальной базе коммит уже доступен для просмотра, но локальный указатель <code>main</code> не сдвинулся.</figcaption>
     </figure>
@@ -289,7 +286,7 @@
       <p>В таблице — устойчивые состояния последовательного опыта. Содержимое каждой ячейки — короткий хеш коммита на вершине соответствующей ветки. В истории все пять коммитов идут по одной линии.</p>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Точные состояния веток из опыта">
         <table>
-          <thead><tr><th>После действия</th><th>main в alice</th><th>origin/main в alice</th><th>main в remote.git</th></tr></thead>
+          <thead><tr><th>После действия</th><th>Наша main</th><th>Наш origin/main</th><th>main в remote.git</th></tr></thead>
           <tbody>
             <tr><td>Первая публикация</td><td><code>45613e9</code></td><td><code>45613e9</code></td><td><code>45613e9</code></td></tr>
             <tr><td>Наш второй коммит</td><td><code>ed46543</code></td><td><code>45613e9</code></td><td><code>45613e9</code></td></tr>
