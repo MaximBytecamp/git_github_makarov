@@ -1,0 +1,151 @@
+{
+  "screenshots": [
+    {
+      "file": "08-after-pull-focus.png",
+      "original": "08-after-pull.png",
+      "original_sha256": "3c9b132c6380101cbff40733489f247e041f11477c891156bde5f181937ff084",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "07-before-pull-focus.png",
+      "original": "07-before-pull.png",
+      "original_sha256": "50d4b420f0cc5e0425d4e3cee627c8ff749eece1a7daa67ccec4aa9f86cbb092",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "02-add-remote-focus.png",
+      "original": "02-add-remote.png",
+      "original_sha256": "56ed4e4e3d2cc828848fde1562d78c889155804d0ac5b8698e0237804afdda5f",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "07-before-pull-status.png",
+      "original": "07-before-pull.png",
+      "original_sha256": "50d4b420f0cc5e0425d4e3cee627c8ff749eece1a7daa67ccec4aa9f86cbb092",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "09-before-sync-focus.png",
+      "original": "09-before-sync.png",
+      "original_sha256": "e5d600ebba4856b081208c1b7627089b4d535a96bd2c5fcee0ab4563c2f8c45d",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "01-unpublished-focus.png",
+      "original": "01-unpublished.png",
+      "original_sha256": "ba7c81e7c7bda562392e251b7263d58c9854be89a4fa4090b940f3d5b4b5d561",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "14-final-focus.png",
+      "original": "14-final.png",
+      "original_sha256": "a67b44fd5c99ed8a3e47e3df162ceada1646792d825edb06e3782ad9c7647a2c",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "12-before-sync-pull-status.png",
+      "original": "12-before-sync-pull.png",
+      "original_sha256": "453cc0b6e118b84895a91f8c2e884e4f82204b268c48f378dcb7e005321c0ac9",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "04-before-push-status.png",
+      "original": "04-before-push.png",
+      "original_sha256": "0fabb710ded93f76bae72fea6b1e725797196d560a5d112c55d22c61cca5d637",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "08-after-pull-status.png",
+      "original": "08-after-pull.png",
+      "original_sha256": "3c9b132c6380101cbff40733489f247e041f11477c891156bde5f181937ff084",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "03-published-focus.png",
+      "original": "03-published.png",
+      "original_sha256": "c453c18afbde33adfde3c4929d9959ee9c314b437a99fb884481f2d5c2980a84",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "14-final-status.png",
+      "original": "14-final.png",
+      "original_sha256": "a67b44fd5c99ed8a3e47e3df162ceada1646792d825edb06e3782ad9c7647a2c",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "12-before-sync-pull-focus.png",
+      "original": "12-before-sync-pull.png",
+      "original_sha256": "453cc0b6e118b84895a91f8c2e884e4f82204b268c48f378dcb7e005321c0ac9",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "04-before-push-focus.png",
+      "original": "04-before-push.png",
+      "original_sha256": "0fabb710ded93f76bae72fea6b1e725797196d560a5d112c55d22c61cca5d637",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "05-after-push-focus.png",
+      "original": "05-after-push.png",
+      "original_sha256": "a10a70ee8a4286b512a18d049b31b7b0f8bcb0ceb51079627a590c4b23a0b60f",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "10-sync-confirm-focus.png",
+      "original": "10-sync-confirm.png",
+      "original_sha256": "52375bac26abb6c620efcb32f5a93a6c02f7335f4573a60a36682175771040c5",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "03-published-status.png",
+      "original": "03-published.png",
+      "original_sha256": "c453c18afbde33adfde3c4929d9959ee9c314b437a99fb884481f2d5c2980a84",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "05-after-push-status.png",
+      "original": "05-after-push.png",
+      "original_sha256": "a10a70ee8a4286b512a18d049b31b7b0f8bcb0ceb51079627a590c4b23a0b60f",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "06-after-fetch-status.png",
+      "original": "06-after-fetch.png",
+      "original_sha256": "98c334f167e8cabde89bb467845c7eac040bc10b667fa83cf168fc0819f36fc0",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "06-after-fetch-focus.png",
+      "original": "06-after-fetch.png",
+      "original_sha256": "98c334f167e8cabde89bb467845c7eac040bc10b667fa83cf168fc0819f36fc0",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    },
+    {
+      "file": "09-before-sync-status.png",
+      "original": "09-before-sync.png",
+      "original_sha256": "e5d600ebba4856b081208c1b7627089b4d535a96bd2c5fcee0ab4563c2f8c45d",
+      "transformation": "native-resolution crop, no resizing, no interface alteration",
+      "capture": "Playwright page.screenshot of isolated VS Code gh47 task instance"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+/* Только глава 4.4: общие файлы книги не изменяются. */
+.chapter-num,.running__folio,h2 .sec,.passport dt,.contents b{font-family:var(--mono)}
+.chapter-head h1{font-size:clamp(32px,4.5vw,54px)}
+.purpose{color:var(--ink-soft);font-style:italic}
+.gist{border-left:5px solid var(--fire);padding:12px 20px;margin:28px 0;background:var(--page)}
+.gist h2{margin:0 0 12px;font-size:24px}.gist p:last-child{margin-bottom:0}
+.command{border-left:3px solid var(--rule);padding:8px 14px;margin:16px 0;color:var(--ink-soft);font-size:15px}
+.command code{color:var(--ink)}
+.lab-note{border:2px dashed var(--ink);padding:16px 18px;margin:24px 0}
+.lab-note p:last-child{margin-bottom:0}
+figure.shot .status-shot{border-top:1px solid var(--rule);width:100%;max-width:500px;cursor:zoom-in}
+figure.shot img{background:var(--page)}
+figure.shot--dialog{max-width:650px}
+.diagram{margin:24px 0;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);background:var(--page)}
+.diagram__title{padding:12px 18px;border-bottom:2px solid var(--ink);font-weight:700}
+.diagram__body{display:grid;grid-template-columns:minmax(0,1fr) 100px minmax(0,1fr);padding:18px;gap:14px;align-items:stretch}
+.repo{border:2px solid var(--ink);padding:14px;min-width:0}
+.repo h3{font:700 15px/1.4 var(--mono);margin:0 0 14px}
+.repo p{font-size:14px;margin:8px 0}
+.ref{display:block;font:500 13px/1.5 var(--mono);padding-bottom:5px;overflow-wrap:anywhere}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:0 0 12px}
+.commit{border:2px solid var(--ink);padding:4px 6px;font:500 12px/1.4 var(--mono);background:var(--page)}
+.commit--new{border-style:dashed}
+.commit[title]{cursor:help}
+.link{font-family:var(--mono);font-size:16px}
+.transfer{align-self:center;text-align:center;font:700 14px/1.4 var(--mono);overflow-wrap:anywhere}
+.transfer b{display:block;font-size:34px;color:var(--fire-deep)}
+.diagram figcaption{padding:12px 18px;border-top:2px solid var(--ink);font-size:14px;color:var(--ink-soft)}
+.diagram .note{padding:0 18px 16px;font-size:14px;margin:0}
+.refs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.ref-box{padding:12px;border:1px solid var(--rule)}
+.ref-box strong{display:block;font:700 15px/1.5 var(--mono)}
+.ref-box span{font-size:14px}
+.table-scroll{overflow-x:auto;max-width:100%;margin:22px 0}
+.table-scroll table{min-width:560px;width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:10px 12px;border:1px solid var(--rule);vertical-align:top}
+th{background:var(--page)}
+.more{margin:20px 0}.more summary{font-weight:700}.more[open]>:not(summary){margin-top:14px}
+.checklist li{padding-left:4px}
+.evidence{font:400 13px/1.6 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;background:var(--page);border:2px solid var(--rule);padding:16px}
+.self-check{border-top:3px solid var(--ink);margin-top:40px;padding-top:6px}
+@media(max-width:650px){.diagram__body{grid-template-columns:minmax(0,1fr);padding:12px;gap:8px}.transfer b{transform:rotate(90deg);font-size:28px;line-height:1}.transfer{padding:3px}.refs{grid-template-columns:1fr}.repo{padding:12px}.gist{padding:12px 14px}.diagram{box-shadow:3px 3px 0 var(--ink)}.diagram__title{padding:10px 12px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
