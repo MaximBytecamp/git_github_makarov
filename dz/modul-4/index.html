@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ДЗ по модулю 4 · GitHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --ink:#1B1A19; --soft:#4A4644; --faint:#918A85; --fire:#F05133; --deep:#C8380F; --pale:#FBE0D8; --steel:#2C5D8F; --steel-pale:#DDE7F1; --moss:#2F7D4F; --paper:#F4F1EC; --rule:rgba(27,26,25,.16); --body:Inter,system-ui,sans-serif; --display:Literata,Georgia,serif; --mono:"Roboto Mono",Consolas,monospace; }
+@page { size:A4; margin:16mm 16mm 18mm; }
+* { box-sizing:border-box; } body { margin:0; background:#fff; color:var(--ink); font:10.5pt/1.5 var(--body); } .sheet { max-width:178mm; margin:0 auto; }
+h1,h2,h3 { font-family:var(--display); line-height:1.2; margin:0; } h1 { font-size:23pt; margin:4mm 0 3mm; } h2 { font-size:15pt; margin:8mm 0 2mm; padding-top:3mm; border-top:2px solid var(--ink); break-after:avoid; } h2 .num { color:var(--fire); margin-right:2mm; } h3 { font-size:11.5pt; margin:5mm 0 1.5mm; break-after:avoid; }
+p { margin:0 0 2.2mm; } ul,ol { margin:0 0 2.5mm; padding-left:6mm; } li { margin-bottom:1mm; } code,kbd,.mono { font-family:var(--mono); font-size:.88em; } code { background:var(--paper); padding:.5px 4px; border-radius:3px; } kbd { border:1px solid var(--rule); border-bottom-width:2px; border-radius:3px; padding:0 4px; background:#fff; white-space:nowrap; }
+.top { display:flex; justify-content:space-between; align-items:center; font-size:8.5pt; color:var(--soft); border-bottom:3px solid var(--fire); padding-bottom:2mm; } .top b { color:var(--ink); letter-spacing:.02em; } .lead { font-size:11pt; color:var(--soft); margin-bottom:3mm; }
+.passport { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--ink); margin:0 0 4mm; } .passport div { padding:2mm 3mm; border-bottom:1px solid var(--rule); } .passport div:nth-child(odd) { border-right:1px solid var(--rule); } .passport div:nth-last-child(-n+2) { border-bottom:0; } .passport b { display:block; font-size:7.5pt; text-transform:uppercase; letter-spacing:.06em; color:var(--faint); font-weight:600; }
+.box { border-radius:4px; padding:3mm 4mm; margin:3mm 0; break-inside:avoid; } .box>b:first-child { display:block; margin-bottom:1mm; } .box p:last-child,.box ul:last-child { margin-bottom:0; } .stop { background:var(--pale); border-left:4px solid var(--deep); } .info { background:var(--steel-pale); border-left:4px solid var(--steel); } .note { background:var(--paper); border-left:4px solid var(--faint); }
+.shot { display:flex; gap:3mm; align-items:flex-start; border:1.5px dashed var(--fire); border-radius:4px; padding:2.5mm 3.5mm; margin:3mm 0; break-inside:avoid; } .shot .n { flex:none; background:var(--fire); color:#fff; font-weight:700; border-radius:3px; padding:.5mm 2mm; font-size:9pt; white-space:nowrap; } .shot p { margin:0; } .shot .cap { font-size:9pt; color:var(--soft); margin-top:1mm; }
+figure.code { margin:2mm 0 3mm; border:1px solid var(--rule); border-radius:4px; overflow:hidden; break-inside:avoid; } figure.code figcaption { display:flex; justify-content:space-between; font:8pt var(--mono); background:var(--paper); padding:1mm 3mm; color:var(--soft); border-bottom:1px solid var(--rule); } figure.code figcaption b { color:var(--ink); font-weight:500; } figure.code pre { margin:0; padding:2mm 3mm; font:8.5pt/1.45 var(--mono); white-space:pre-wrap; background:#fff; } pre mark { background:#DDF0E3; color:var(--moss); font-weight:500; } pre del { background:var(--pale); color:var(--deep); text-decoration:none; }
+.pair { display:grid; grid-template-columns:1fr 1fr; gap:3mm; } .pair figure.code { margin:2mm 0 3mm; }.steps { counter-reset:s; list-style:none; padding-left:0; }.steps>li { counter-increment:s; position:relative; padding-left:8mm; margin-bottom:2mm; }.steps>li::before { content:counter(s); position:absolute; left:0; top:.3mm; width:5.5mm; height:5.5mm; border-radius:50%; background:var(--ink); color:#fff; font:600 8pt/5.5mm var(--mono); text-align:center; }
+table { width:100%; border-collapse:collapse; margin:2mm 0 3mm; font-size:9.5pt; break-inside:avoid; } th,td { text-align:left; vertical-align:top; padding:1.5mm 2mm; border-bottom:1px solid var(--rule); } th { font-size:8pt; text-transform:uppercase; letter-spacing:.05em; color:var(--soft); border-bottom:1.5px solid var(--ink); } td.num { font-family:var(--mono); color:var(--deep); font-weight:500; white-space:nowrap; }.answers td:last-child { width:44%; border-left:1px solid var(--rule); min-height:12mm; }.answers td.num { width:8mm; }.grade td:first-child { font-family:var(--display); font-weight:700; font-size:13pt; width:12mm; color:var(--deep); }.page-break { break-before:page; }.foot { margin-top:8mm; padding-top:2mm; border-top:1px solid var(--rule); font-size:8.5pt; color:var(--faint); display:flex; justify-content:space-between; }
+@media screen and (max-width:650px) { .top,.passport,.pair { display:block; }.top span:last-child { display:block; margin-top:2mm; }.passport div:nth-child(odd) { border-right:0; }.passport div:nth-last-child(-n+2) { border-bottom:1px solid var(--rule); }.passport div:last-child { border-bottom:0; } }
+</style>
+</head>
+<body><div class="sheet">
+<div class="top"><span><b>Git и GitHub</b> · практическое домашнее задание</span><span>Модуль 4, темы 4.1–4.5</span></div>
+<h1>Кофейня «Зерно»: свой репозиторий, README и&nbsp;обмен с GitHub</h1>
+<p class="lead">Задание проходит по всему модулю 4 на новом репозитории в вашем аккаунте GitHub. Вы оформите профиль, создадите проект, напишете README в Markdown, опубликуете коммиты и разберёте расхождение двух версий истории. Сдаётся документ Word со снимками экрана и ответами.</p>
+<div class="passport"><div><b>Темы справочника</b>4.1 аккаунт и профиль · 4.2 вход · 4.3 README и Markdown · 4.4 push, pull, fetch, Sync · 4.5 разошедшиеся ветки</div><div><b>Проект</b><span class="mono">dz-github-4-familiya</span> в вашем аккаунте GitHub</div><div><b>Что нужно</b>Аккаунт GitHub, VS Code и Git. Git уже должен знать ваши имя и почту.</div><div><b>Что сдаётся</b>Ссылка на репозиторий, Word с 14 снимками и таблицей из 6 ответов</div><div><b>Сколько занимает</b>Около двух часов за компьютером</div><div><b>Срок</b>До начала следующего практического занятия</div></div>
+<div class="box stop"><b>Работаем только в своём новом репозитории</b><p>Не меняйте репозиторий <code>MaximBytecamp/kofeynya</code> и не отправляйте в него коммиты. Все Push в этом задании идут в репозиторий, который вы создадите под своим аккаунтом. Перед каждой отправкой проверьте имя репозитория и ветки.</p><p>Не добавляйте токены, пароли, ключи, файл <code>.env</code> или личные документы. В поле выбора видимости создайте <b>public</b> репозиторий: преподаватель откроет ссылку без запроса доступа.</p></div>
+<div class="box info"><b>Как делать снимки</b><p>Снимайте окно VS Code или браузера целиком, чтобы читались адрес страницы, имя репозитория, ветка и результат действия. Под каждым снимком в Word поставьте подпись из оранжевой рамки. Windows: <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>; macOS: <kbd>Cmd</kbd> + <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>4</kbd>, затем пробел и щелчок по окну.</p></div>
+
+<h2><span class="num">1</span>Аккаунт и безопасная связь</h2>
+<p>Главы 4.1–4.2. Сначала проверим, что GitHub покажет преподавателю и какой адрес будет у созданного проекта.</p>
+<h3>Шаг 1. Оформить профиль</h3>
+<ol class="steps"><li>Откройте GitHub в браузере и войдите в свой аккаунт. Щёлкните по аватару → <b>Your profile</b>.</li><li>Вкладка <b>Overview</b> должна показывать ваш логин. В <b>Edit profile</b> заполните <b>Name</b> или <b>Bio</b> одной нейтральной строкой о том, что вы изучаете разработку. Не указывайте адрес, номер телефона или пароль.</li><li>Вернитесь на страницу профиля и обновите её.</li></ol>
+<div class="shot"><span class="n">Снимок 1</span><div><p>Страница вашего профиля GitHub: видны логин, имя или Bio и вкладка Overview.</p><p class="cap">Подпись: «Рисунок 1 — Оформленный профиль GitHub»</p></div></div>
+<h3>Шаг 2. Проверить способ входа</h3>
+<p>В VS Code откройте палитру команд <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> и найдите <code>GitHub: Sign in</code>. Если рядом написано, что вы уже вошли, ничего не переавторизовывайте. Если VS Code просит открыть браузер, завершите вход только через страницу GitHub. Токен вручную создавать и вставлять в задание не нужно.</p>
+<div class="box note"><b>Почему так</b><p>GitHub подтверждает доступ через браузер или SSH-ключ. Токен похож на пароль: его нельзя показывать на снимке, в сообщении, в README и тем более записывать в файл проекта.</p></div>
+<div class="shot"><span class="n">Снимок 2</span><div><p>VS Code после входа: виден ваш аккаунт GitHub в меню Accounts либо сообщение, что вход уже выполнен. Токенов и паролей на снимке быть не должно.</p><p class="cap">Подпись: «Рисунок 2 — VS Code связан с аккаунтом GitHub»</p></div></div>
+
+<h2><span class="num">2</span>Новый репозиторий и README</h2>
+<p>Главы 4.1 и 4.3. Создадим пустой проект на GitHub, затем наполним его локально. Название сделает ссылку на вашу работу понятной.</p>
+<h3>Шаг 1. Создать репозиторий</h3>
+<ol class="steps"><li>На GitHub нажмите <b>+</b> в правом верхнем углу → <b>New repository</b>.</li><li>В поле <b>Repository name</b> напишите <code>dz-github-4-familiya</code>, заменив <code>familiya</code> своей фамилией латиницей. Например: <code>dz-github-4-ivanov</code>.</li><li>Поставьте <b>Public</b>. Не отмечайте <b>Add a README file</b>, <b>.gitignore</b> и лицензию: первый README мы создадим локально и опубликуем сами.</li><li>Нажмите <b>Create repository</b>. Скопируйте HTTPS-адрес из блока <b>Quick setup</b>; он заканчивается на <code>.git</code>.</li></ol>
+<div class="shot"><span class="n">Снимок 3</span><div><p>Страница нового пустого репозитория: видны владелец, имя <code>dz-github-4-familiya</code> и HTTPS-адрес, оканчивающийся на <code>.git</code>.</p><p class="cap">Подпись: «Рисунок 3 — Создан пустой репозиторий на GitHub»</p></div></div>
+<h3>Шаг 2. Создать локальную папку и первый коммит</h3>
+<p>Создайте на компьютере отдельную папку <code>dz-github-4-familiya</code> и откройте её в VS Code. В панели Source Control выберите <b>Initialize Repository</b>. После этого создайте два файла. В <code>README.md</code> вставьте шаблон, а в <code>about.md</code> — одну строку о проекте.</p>
+<div class="pair"><figure class="code"><figcaption><b>README.md</b><span>замените текст в квадратных скобках</span></figcaption><pre># Кофейня «Зерно»
+
+Проект по Git и GitHub.
+
+## Что есть в проекте
+
+- главная страница кофейни;
+- меню напитков;
+- <mark>контакты и часы работы.</mark>
+
+[Открыть GitHub](https://github.com/)</pre></figure><figure class="code"><figcaption><b>about.md</b><span>одна строка</span></figcaption><pre><mark>Проект создан для домашней работы по модулю 4.</mark></pre></figure></div>
+<p>В панели Source Control отберите оба файла плюсом и сделайте коммит <code>Создал описание проекта</code>. Затем откройте терминал в этой папке и добавьте адрес своего пустого репозитория. Удалённая запись <code>origin</code> хранит адрес репозитория, а <code>origin/main</code> позже станет локальной записью о ветке <code>main</code> на GitHub. Вместо адреса в образце вставьте свой HTTPS-адрес.</p>
+<figure class="code"><figcaption><b>терминал в папке dz-github-4-familiya</b><span>первая связь с GitHub</span></figcaption><pre>git remote add origin https://github.com/<mark>ваш-логин/dz-github-4-familiya.git</mark>
+git remote -v</pre></figure>
+<p>В выводе <code>git remote -v</code> один и тот же адрес будет дважды: для получения (<code>fetch</code>) и отправки (<code>push</code>).</p>
+<div class="shot"><span class="n">Снимок 4</span><div><p>VS Code: открыт README с заголовком, списком и ссылкой; в терминале виден ответ <code>git remote -v</code> с вашим адресом.</p><p class="cap">Подпись: «Рисунок 4 — Локальный проект связан с пустым репозиторием»</p></div></div>
+
+<h2><span class="num">3</span>Первая публикация и Markdown</h2>
+<p>Глава 4.4. Отправим первый коммит и проверим, что GitHub показывает именно его содержимое.</p>
+<h3>Шаг 1. Опубликовать ветку main</h3>
+<p>Внизу слева проверьте, что текущая ветка называется <code>main</code>. Нажмите <b>Publish Branch</b> в Source Control или выполните <code>Git: Push</code> через палитру команд. Если VS Code просит выбрать удалённую ветку, выберите <code>origin</code> и <code>main</code>. Не выбирайте чужой репозиторий.</p>
+<figure class="code"><figcaption><b>терминал</b><span>эквивалент Publish Branch, набирать после кнопки не нужно</span></figcaption><pre>git push -u origin main</pre></figure>
+<div class="shot"><span class="n">Снимок 5</span><div><p>Граф VS Code после публикации: метки <code>main</code> и <code>origin/main</code> стоят у коммита «Создал описание проекта».</p><p class="cap">Подпись: «Рисунок 5 — Первый коммит опубликован»</p></div></div>
+<h3>Шаг 2. Проверить README на GitHub</h3>
+<p>Откройте страницу репозитория в браузере и обновите её. Под списком файлов отрисуется README: заголовок крупный, список с маркерами, а ссылка открывается при нажатии. Так Markdown превращается в страницу GitHub.</p>
+<div class="shot"><span class="n">Снимок 6</span><div><p>Главная страница вашего репозитория GitHub: видны два файла и отрисованный README с заголовком, списком и ссылкой.</p><p class="cap">Подпись: «Рисунок 6 — README отображается на GitHub»</p></div></div>
+<h3>Шаг 3. Добавить изображение по относительному пути</h3>
+<p>Сделайте снимок страницы репозитория без личных вкладок браузера и сохраните его как <code>home.png</code>. В VS Code создайте папку <code>screenshots</code> и поместите файл в неё. В конец README добавьте раздел:</p>
+<figure class="code"><figcaption><b>README.md</b><span>в конец файла</span></figcaption><pre>## Снимок проекта
+
+![Главная страница репозитория](screenshots/home.png)</pre></figure>
+<p>Отберите <code>README.md</code> и <code>screenshots/home.png</code>, сделайте коммит <code>Добавил снимок в README</code> и нажмите <b>Push</b>. На GitHub обновите страницу: изображение должно быть видно внутри README. Если оно не видно, проверьте имя папки, имя файла и регистр букв.</p>
+<div class="shot"><span class="n">Снимок 7</span><div><p>README на GitHub: в разделе «Снимок проекта» отображается ваше изображение, а не текст пути к нему.</p><p class="cap">Подпись: «Рисунок 7 — Изображение найдено по относительному пути»</p></div></div>
+
+<div class="page-break"></div>
+<h2><span class="num">4</span>Push, Fetch и Pull</h2>
+<p>Глава 4.4. Теперь коммиты появятся по обе стороны: один создадим локально, другой — через веб-интерфейс GitHub. Важно заметить, когда файл уже есть на сервере, но ещё отсутствует в вашей папке.</p>
+<h3>Шаг 1. Отправить локальный коммит</h3>
+<p>В <code>about.md</code> после первой строки добавьте:</p>
+<figure class="code"><figcaption><b>about.md</b><span>после первой строки</span></figcaption><pre><mark>Автор подготовил Markdown-описание и проверил публикацию.</mark></pre></figure>
+<p>Сделайте коммит <code>Уточнил цель проекта</code>. До отправки в графе <code>main</code> будет выше <code>origin/main</code>. Нажмите отдельную кнопку <b>Push</b>, не <b>Sync Changes</b>, и обновите сайт GitHub.</p>
+<div class="shot"><span class="n">Снимок 8</span><div><p>GitHub: открыт <code>about.md</code>, в нём две строки; сверху видны сообщение и короткий хеш последнего коммита «Уточнил цель проекта».</p><p class="cap">Подпись: «Рисунок 8 — Локальный коммит отправлен на GitHub»</p></div></div>
+<h3>Шаг 2. Создать коммит на GitHub</h3>
+<ol class="steps"><li>На странице репозитория нажмите <b>Add file → Create new file</b>.</li><li>В имени файла напишите <code>news.md</code>, в поле содержимого — <code>Новости проекта.</code>.</li><li>В поле сообщения напишите <code>Добавил новость через GitHub</code> и нажмите <b>Commit changes</b>. В поле ветки должна быть <code>main</code>.</li><li>Вернитесь в VS Code. Файла <code>news.md</code> в проводнике пока нет: GitHub получил его, но ваша локальная история ещё не знает о коммите.</li></ol>
+<div class="shot"><span class="n">Снимок 9</span><div><p>GitHub: открыт <code>news.md</code>, сверху видно сообщение коммита «Добавил новость через GitHub».</p><p class="cap">Подпись: «Рисунок 9 — Коммит создан на GitHub»</p></div></div>
+<h3>Шаг 3. Получить сведения через Fetch</h3>
+<p>В VS Code выполните <b>Git: Fetch</b> через палитру команд. Откройте граф. В нём появится <code>origin/main</code> с новым коммитом, но локальная <code>main</code> останется на предыдущей вершине. Файл <code>news.md</code> всё ещё отсутствует в проводнике: Fetch скачивает сведения и коммиты, но не включает их в текущую ветку.</p>
+<div class="shot"><span class="n">Снимок 10</span><div><p>Граф VS Code после Fetch: <code>origin/main</code> стоит на коммите «Добавил новость через GitHub», а <code>main</code> — ниже; <code>news.md</code> нет в проводнике.</p><p class="cap">Подпись: «Рисунок 10 — Fetch обновил сведения, но не файлы»</p></div></div>
+<h3>Шаг 4. Включить полученный коммит</h3>
+<p>У вас нет своих новых коммитов после последнего Push, поэтому можно выполнить <b>Git: Pull</b>. После Pull откройте <code>news.md</code>: файл появился в рабочей папке. В графе <code>main</code> и <code>origin/main</code> снова стоят на одном коммите.</p>
+<div class="shot"><span class="n">Снимок 11</span><div><p>VS Code после Pull: открыт <code>news.md</code> со строкой «Новости проекта.», а метки <code>main</code> и <code>origin/main</code> совпадают.</p><p class="cap">Подпись: «Рисунок 11 — Pull получил файл и передвинул ветку»</p></div></div>
+
+<h2><span class="num">5</span>Когда ветки разошлись</h2>
+<p>Глава 4.5. Создадим по одному новому коммиту локально и на GitHub. Они затронут разные файлы, поэтому слияние пройдёт без конфликта. Не используйте <b>Force Push</b>.</p>
+<h3>Шаг 1. Сделать свой локальный коммит</h3>
+<p>В <code>about.md</code> допишите третью строку <code>История проекта проверена в графе Git.</code> и сделайте коммит <code>Добавил итог проекта</code>. Не отправляйте его. В графе локальная <code>main</code> будет на один коммит впереди <code>origin/main</code>.</p>
+<div class="shot"><span class="n">Снимок 12</span><div><p>Граф VS Code: <code>main</code> выше <code>origin/main</code>, верхний локальный коммит называется «Добавил итог проекта».</p><p class="cap">Подпись: «Рисунок 12 — Есть один локальный исходящий коммит»</p></div></div>
+<h3>Шаг 2. Сделать независимый коммит на сайте</h3>
+<p>Не закрывая VS Code, откройте GitHub. Через <b>Add file → Create new file</b> создайте <code>contacts.md</code> со строкой <code>Связь: репозиторий на GitHub.</code>. Сообщение коммита — <code>Добавил контакты через GitHub</code>, ветка — <code>main</code>.</p>
+<p>Вернитесь в VS Code и нажмите <b>Push</b>. Git отклонит отправку: на сервере появился коммит, которого нет в вашей локальной истории. Сначала нужно получить и включить этот коммит. Нажмите <b>Cancel</b>, если VS Code предлагает Sync, и не выбирайте Force Push.</p>
+<div class="shot"><span class="n">Снимок 13</span><div><p>Вывод Git в VS Code либо терминал с отказом Push: видны <span class="mono">rejected</span> и <span class="mono">fetch first</span> или <span class="mono">non-fast-forward</span>.</p><p class="cap">Подпись: «Рисунок 13 — Push отклонён из-за нового коммита на GitHub»</p></div></div>
+<h3>Шаг 3. Fetch, Merge и обычный Push</h3>
+<ol class="steps"><li>Выполните <b>Git: Fetch</b>. В графе теперь две линии: на одной «Добавил итог проекта», на другой «Добавил контакты через GitHub».</li><li>Проверьте, что текущая ветка — <code>main</code>. Через палитру выберите <b>Git: Merge…</b>, затем <code>origin/main</code>. Не выбирайте собственную <code>main</code>.</li><li>Git создаст коммит слияния. Откройте <code>about.md</code> и <code>contacts.md</code>: оба файла должны быть в рабочей папке.</li><li>Нажмите обычный <b>Push</b>. Теперь удалённый коммит входит в историю вашей ветки, поэтому отправка будет fast-forward.</li></ol>
+<div class="shot"><span class="n">Снимок 14</span><div><p>Граф VS Code после Push: сверху коммит слияния соединяет две линии; метки <code>main</code> и <code>origin/main</code> находятся на нём. В проводнике есть <code>contacts.md</code>.</p><p class="cap">Подпись: «Рисунок 14 — Расходящиеся истории объединены без Force Push»</p></div></div>
+
+<h2><span class="num">6</span>Итоговая проверка и сдача</h2>
+<h3>Проверьте репозиторий</h3>
+<ul><li>В репозитории есть <code>README.md</code>, <code>about.md</code>, <code>news.md</code>, <code>contacts.md</code> и <code>screenshots/home.png</code>.</li><li>На главной странице GitHub README показывает изображение.</li><li>В истории на GitHub видны ваши коммиты, веб-коммиты и коммит слияния.</li><li>В VS Code нет незакоммиченных файлов и нет счётчиков входящих/исходящих коммитов.</li><li>В репозитории нет токена, ключа, <code>.env</code>, личного документа или пароля.</li></ul>
+<figure class="code"><figcaption><b>терминал</b><span>проверка перед сдачей</span></figcaption><pre>git status -sb
+git log --oneline --graph -8
+git remote -v</pre></figure>
+<p>Первый ответ должен начинаться с <code>## main...origin/main</code> и не содержать <code>ahead</code> или <code>behind</code>. Второй показывает линии истории, третий — адрес вашего репозитория.</p>
+<h3>Вопросы: перенесите таблицу в Word и заполните правый столбец</h3>
+<table class="answers"><tr><th>№</th><th>Вопрос</th><th>Ответ</th></tr><tr><td class="num">1</td><td>Почему в задании для первого Push выбирается пустой репозиторий без README на GitHub?</td><td></td></tr><tr><td class="num">2</td><td>Чем адрес <code>origin</code> отличается от <code>origin/main</code>?</td><td></td></tr><tr><td class="num">3</td><td>Почему после Fetch файл <code>news.md</code> ещё отсутствовал в проводнике?</td><td></td></tr><tr><td class="num">4</td><td>Что изменил Pull в шаге 4 и чего он не отправлял на GitHub?</td><td></td></tr><tr><td class="num">5</td><td>Почему Push в части 5 был отклонён и почему Force Push был бы неправильным решением?</td><td></td></tr><tr><td class="num">6</td><td>Какие два коммита объединил ваш коммит слияния? Напишите их короткие хеши и сообщения.</td><td></td></tr></table>
+<h3>Что отправить преподавателю</h3>
+<ol><li>Ссылку на репозиторий формата <code>https://github.com/ваш-логин/dz-github-4-familiya</code>.</li><li>Документ Word: 14 снимков в порядке задания, подписи и заполненная таблица ответов.</li></ol>
+<table class="grade"><tr><th>Баллы</th><th>Критерий</th></tr><tr><td>5</td><td>Все 14 снимков подтверждают действия, ответы полные, README и изображение отображаются, история опубликована.</td></tr><tr><td>4</td><td>Все главные действия выполнены, но 1–2 снимка или ответ требуют уточнения.</td></tr><tr><td>3</td><td>Есть репозиторий и публикация, но часть обмена или Markdown не подтверждены.</td></tr><tr><td>2</td><td>Работа неполная: нет большинства снимков, репозиторий пустой или ссылка недоступна.</td></tr></table>
+<div class="box info"><b>Если что-то пошло не так</b><ul><li><b>Push отклонён.</b> Не используйте Force Push. Выполните Fetch, посмотрите граф и включите <code>origin/main</code> через merge либо обратитесь к преподавателю, если появились незнакомые изменения.</li><li><b>Картинка не видна в README.</b> Сверьте путь, имя и регистр букв: <code>screenshots/home.png</code> отличается от <code>Screenshots/Home.png</code>.</li><li><b>VS Code просит войти снова.</b> Войдите через официальный браузерный экран GitHub. Не присылайте токен и не добавляйте его в проект.</li><li><b>В графе нет раздела GRAPH.</b> Откройте Source Control и выполните палитру <code>Git: Show Graph</code>; если команды нет, используйте <code>git log --oneline --graph --all</code> в терминале.</li></ul></div>
+<div class="foot"><span>Git и GitHub · модуль 4</span><span>Домашняя работа: свой репозиторий GitHub</span></div>
+</div></body></html>
